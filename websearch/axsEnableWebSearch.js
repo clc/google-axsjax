@@ -1,3 +1,15 @@
+// Copyright 2007 Google Inc.
+// All Rights Reserved.
+
+/**
+ * @fileoverview Greasemonkey JavaScript to enhance accessibility
+ * of Google Web Search. 
+ * Note that these are Greasemonkey scripts for Firefox and are not intended
+ * to work for other browsers.
+ * @author clchen@google.com (Charles L. Chen)
+ */
+
+
 
 // create namespace
 var axsWebSearch = {};

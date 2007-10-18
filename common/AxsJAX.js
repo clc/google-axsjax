@@ -1,4 +1,13 @@
+// Copyright 2007 Google Inc.
+// All Rights Reserved.
 
+/**
+ * @fileoverview AxsJAX - JavaScript library for enhancing the accessibility 
+ * of AJAX apps through WAI-ARIA.
+ * Note that IE does not implement WAI-ARIA; thus these scripts are specific 
+ * to Firefox.
+ * @author clchen@google.com (Charles L. Chen)
+ */
 
 /**
  * Class of scripts for improving accessibility of Google Apps.
@@ -146,7 +155,3 @@ AxsJAX.prototype.sendKey = function(targetNode, theKey,
 AxsJAX.prototype.generateIdString = function(){
   return "AxsJAX_ID_" + this.ID_NUM_++;
 };
-
-/**
- * End of AxsJAX class code
- */

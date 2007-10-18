@@ -3,34 +3,12 @@
 
 /**
  * @fileoverview Greasemonkey JavaScript to enhance accessibility
- * of Google Reader. Some of these scripts will be reused for other Google apps.
+ * of Google Reader. 
  * Note that these are Greasemonkey scripts for Firefox and are not intended
  * to work for other browsers.
  * @author clchen@google.com (Charles L. Chen)
  */
 
-// --------------------------------------------------------------------
-//
-// This is a Greasemonkey user script.
-//
-// To install, you need Greasemonkey: http://greasemonkey.mozdev.org/
-// Then restart Firefox and revisit this script.
-// Under Tools, there will be a new menu item to "Install User Script".
-// Accept the default configuration and install.
-//
-// To uninstall, go to Tools/Greasemonkey/Manage User Scripts,
-// select "Google Reader Accessibility Improvement", and click Uninstall.
-//
-// --------------------------------------------------------------------
-
-// ==UserScript==
-// @name          Google Reader Accessibility Improvement
-// @namespace     http://www.google.com/accessible/
-// @description   Uses WAI-ARIA live regions to enhance Google Reader
-//                accessibility for any AT which supports WAI-ARIA live
-//                regions (such as Fire Vox).
-// @include       http://www.google.com/reader/*
-// ==/UserScript==
 
 
 
