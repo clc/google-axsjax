@@ -49,7 +49,7 @@ AxsJAX.prototype.speakNode = function(targetNode){
     Firefox 3 is ready. Use Live Regions for now as that works on Fire Vox.*/
   /**
   if (!targetNode.id){
-    targetNode.id = "AxsJAX_ID_" + this.ID_NUM_++;
+    this.assignId(targetNode);
   }
   var theBody = window.content.document.body;
   theBody.tabIndex = 0;
@@ -151,7 +151,26 @@ AxsJAX.prototype.sendKey = function(targetNode, theKey,
   targetNode.dispatchEvent(evt);
 };
 
-
-AxsJAX.prototype.generateIdString = function(){
-  return "AxsJAX_ID_" + this.ID_NUM_++;
-};
+/**
+ * Assigns an ID to the targetNode and returns the ID that the node has after
+ * the operation. If the targetNode already has an ID, that ID will not
+ * be changed; the returned ID will be the original ID.
+ * @param {Node} targetNode The target node of this operation.
+ * @param {String} opt_prefixString
+                            Prefix to help ensure the uniqueness of the ID.
+ *                          This is optional; if null, it will use "AxsJAX_ID_".
+ * @return {String} The ID that the targetNode now has.
+ */
+AxsJAX.prototype.assignId = function(targetNode,prefixString){
+  if (!targetNode){
+    return '';
+  }
+  if (targetNode.id){
+    return targetNode.id;
+  }
+  if (!prefixString){
+    prefixString = "AxsJAX_ID_";
+  }
+  targetNode.id = prefixString + this.ID_NUM_++;
+  return targetNode.id;
+}
