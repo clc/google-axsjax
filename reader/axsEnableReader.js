@@ -112,7 +112,7 @@ axsReader.domInsertionHandler = function(event){
   //Handle tag navigation
   if (event.target.className ==
           'banner banner-background label-keyboard-selector'){
-    event.target.id = axsReader.axsJAXObj.generateIdString();
+    axsReader.axsJAXObj.assignId(event.target);
     axsReader.tagSelectorTopDivId = event.target.id;
     //Must be done as a timeout as the childNodes do not exist at this point
     window.setTimeout(axsReader.announceSelectedTag,100);
@@ -258,7 +258,7 @@ axsReader.extraKeyboardNavHandler = function(event){
       }
       if (event.keyCode == 13){  //Enter - workaround for broken check/uncheck
         axsReader.axsJAXObj.clickElem(event.target);
-        event.target.id = axsReader.axsJAXObj.generateIdString();
+        axsReader.axsJAXObj.assignId(event.target);
         window.setTimeout("document.getElementById('"
                            + event.target.id + "').focus();",0);
       }
