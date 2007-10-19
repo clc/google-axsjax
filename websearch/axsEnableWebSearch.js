@@ -18,6 +18,8 @@ var axsWebSearch = {};
 //These are strings to be spoken to the user
 axsWebSearch.NO_ONE_BOX_STRING = 'There is no one box on this page.';
 axsWebSearch.NO_ADS_STRING = 'There are no advertisments on this page.';
+axsWebSearch.NO_NEXT_PAGE_STRING = 'There is no next page.';
+axsWebSearch.NO_PREV_PAGE_STRING = 'There is no previous page.';
 
 
 
@@ -198,6 +200,7 @@ axsWebSearch.buildResultsArray = function(){
 axsWebSearch.goToNextResult = function(){
   axsWebSearch.resultsIndex++;
   if(axsWebSearch.resultsIndex >= axsWebSearch.resultsArray.length){
+    axsWebSearch.resultsIndex = axsWebSearch.resultsArray.length - 1;
     axsWebSearch.goToNextPage();
   } else {
     var currentResult = axsWebSearch.resultsArray[axsWebSearch.resultsIndex];
@@ -210,6 +213,7 @@ axsWebSearch.goToNextResult = function(){
 axsWebSearch.goToPrevResult = function(){
   axsWebSearch.resultsIndex--;
   if(axsWebSearch.resultsIndex < 0){
+    axsWebSearch.resultsIndex = 0;
     axsWebSearch.goToPrevPage();
   } else {
     var currentResult = axsWebSearch.resultsArray[axsWebSearch.resultsIndex];
@@ -222,11 +226,21 @@ axsWebSearch.goToPrevResult = function(){
 
 
 axsWebSearch.goToNextPage = function(){
-  alert('Go to next page.');
+  var nextPageDiv = document.getElementById('nn');
+  if (!nextPageDiv){
+    axsWebSearch.axsJAXObj.speakText(axsWebSearch.NO_NEXT_PAGE_STRING);
+    return;
+  }
+  document.location = nextPageDiv.parentNode.href;
 };
 
 axsWebSearch.goToPrevPage = function(){
-  alert('Go to prev page.');
+  var prevPageDiv = document.getElementById('np');
+  if (!prevPageDiv){
+    axsWebSearch.axsJAXObj.speakText(axsWebSearch.NO_PREV_PAGE_STRING);
+    return;
+  }
+  document.location = prevPageDiv.parentNode.href;
 };
 
 
