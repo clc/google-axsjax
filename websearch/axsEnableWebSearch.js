@@ -32,6 +32,8 @@ axsWebSearch.adAreaId = null;
 axsWebSearch.adIndex = 0;
 axsWebSearch.inputFocused = false;
 
+axsWebSearch.currentLink = null;
+
 
 
 
@@ -49,10 +51,10 @@ axsWebSearch.init = function(){
   }
 
   //Add event listeners
-  window.addEventListener('DOMAttrModified', axsWebSearch.domAttrModifiedHandler, true);
-  window.addEventListener('keypress', axsWebSearch.extraKeyboardNavHandler, true);
-  window.addEventListener('focus', axsWebSearch.focusHandler, true);
-  window.addEventListener('blur', axsWebSearch.blurHandler, true);
+  document.addEventListener('DOMAttrModified', axsWebSearch.domAttrModifiedHandler, true);
+  document.addEventListener('keypress', axsWebSearch.extraKeyboardNavHandler, true);
+  document.addEventListener('focus', axsWebSearch.focusHandler, true);
+  document.addEventListener('blur', axsWebSearch.blurHandler, true);
 
   //Do any necessary preparations for browsing here
   axsWebSearch.formatAdsArea();
@@ -90,6 +92,7 @@ axsWebSearch.domAttrModifiedHandler = function(evt){
   if ((target.tagName == 'IMG') && (newVal.indexOf('visibility: visible') != -1)){
     axsWebSearch.axsJAXObj.putNullForNoAltImages(target.parentNode);
     axsWebSearch.axsJAXObj.speakNode(target.parentNode);
+    axsWebSearch.currentLink = target.parentNode.getElementsByTagName('a')[0];
   }
 };
 
@@ -103,6 +106,9 @@ axsWebSearch.extraKeyboardNavHandler = function(evt){
   }
   if (evt.charCode == 97){ // a
     axsWebSearch.cycleThroughAds();
+  }
+  if (evt.charCode == 103){ // g
+    axsWebSearch.goToCurrentLink();
   }
 };
 
@@ -157,6 +163,7 @@ axsWebSearch.formatAdsArea = function(){
   //Clean up by deleting the first child which is a blank node
   adArea.removeChild(adArea.firstChild);
   axsWebSearch.adAreaId = axsWebSearch.axsJAXObj.assignId(adArea);
+  axsWebSearch.adIndex = -1;
 };
 
 
@@ -166,13 +173,22 @@ axsWebSearch.cycleThroughAds = function(){
     return;
   }
   var adArea = document.getElementById(axsWebSearch.adAreaId);
+  axsWebSearch.adIndex++;
   if (axsWebSearch.adIndex >= adArea.childNodes.length){
     axsWebSearch.adIndex = 0;
   }  
-  var currentAd = adArea.childNodes[axsWebSearch.adIndex++];
+  var currentAd = adArea.childNodes[axsWebSearch.adIndex];
+  axsWebSearch.currentLink = currentAd.getElementsByTagName('a')[0];
   axsWebSearch.axsJAXObj.speakNode(currentAd);
 };
 
 
+axsWebSearch.goToCurrentLink = function(){
+  document.location = axsWebSearch.currentLink.href;
+};
+
+axsWebSearch.goToCurrentLinkInNewWindow = function(){
+  window.open(axsWebSearch.currentLink.href);
+};
 
 axsWebSearch.init();
