@@ -35,26 +35,12 @@ axsWebSearch.adIndex = 0;
 axsWebSearch.inputFocused = false;
 axsWebSearch.lastFocusedNode = null;
 
-axsWebSearch.currentLink = null;
-
-
-
 
 
 axsWebSearch.init = function(){
   axsWebSearch.axsJAXObj = new AxsJAX();
-  //If the keyboard shortcut experiment is not running, run it
-//  var locationString = window.content.document.location.toString();
-//  if (locationString.indexOf('http://www.google.com/search') != 0){
-//    window.content.document.location = 'http://www.google.com/search?hl=en&esrch=BetaShortcuts&q=google&btnG=Search';
-//  }
-//  if ( (locationString.indexOf('http://www.google.com/search') == 0) &&
-//       (locationString.indexOf('&esrch=BetaShortcuts') == -1) ){
-//    window.content.document.location = locationString + '&esrch=BetaShortcuts';
-//  }
 
   //Add event listeners
-  document.addEventListener('DOMAttrModified', axsWebSearch.domAttrModifiedHandler, true);
   document.addEventListener('keypress', axsWebSearch.extraKeyboardNavHandler, true);
   document.addEventListener('focus', axsWebSearch.focusHandler, true);
   document.addEventListener('blur', axsWebSearch.blurHandler, true);
@@ -90,18 +76,6 @@ axsWebSearch.blurHandler = function (evt){
   }
 };
 
-axsWebSearch.domAttrModifiedHandler = function(evt){
-  var attrib = evt.attrName;
-  var newVal = evt.newValue;
-  var oldVal = evt.prevValue;
-  var target = evt.target;
-  if ((target.tagName == 'IMG') && (newVal.indexOf('visibility: visible') != -1)){
-    axsWebSearch.axsJAXObj.putNullForNoAltImages(target.parentNode);
-    axsWebSearch.axsJAXObj.speakNode(target.parentNode);
-    axsWebSearch.currentLink = target.parentNode.getElementsByTagName('a')[0].href;
-  }
-};
-
 
 axsWebSearch.extraKeyboardNavHandler = function(evt){
   if (evt.keyCode == 27){ // ESC
@@ -116,29 +90,24 @@ axsWebSearch.extraKeyboardNavHandler = function(evt){
   if (evt.charCode == 97){ // a
     axsWebSearch.cycleThroughAds();
   }
-
   if (evt.charCode == 106){ // j
     axsWebSearch.goToNextResult();
+  }
+  if (evt.charCode == 107){ // k
+    axsWebSearch.goToPrevResult();
   }  
-
   if (evt.charCode == 47){ // / (slash symbol)
     document.getElementsByName('q')[0].focus();  //Focus on the top search blank
   }
 
-  if ((evt.keyCode == 13) && axsWebSearch.currentLink){ // Enter
-    if (evt.shiftKey){
-      axsWebSearch.goToCurrentLinkInNewWindow();    
-    } else{
-      axsWebSearch.goToCurrentLink();
-    }
-
-  }
 };
 
 
 axsWebSearch.readOneBox = function(){
   if (document.getElementById('res').childNodes[1].tagName == 'P'){
-    axsWebSearch.axsJAXObj.speakNode(document.getElementById('res').childNodes[1]);
+    var oneBox = document.getElementById('res').childNodes[1];
+    oneBox.scrollIntoView(true);
+    axsWebSearch.axsJAXObj.speakNode(oneBox);
   } else{
     axsWebSearch.axsJAXObj.speakText(axsWebSearch.NO_ONE_BOX_STRING);
   }
@@ -203,8 +172,8 @@ axsWebSearch.cycleThroughAds = function(){
     axsWebSearch.adIndex = 0;
   }  
   var currentAd = adArea.childNodes[axsWebSearch.adIndex];
-  axsWebSearch.currentLink = currentAd.getElementsByTagName('a')[0].href;
   currentAd.scrollIntoView(true);
+  currentAd.getElementsByTagName('a')[0].focus();
   axsWebSearch.axsJAXObj.speakNode(currentAd);
 };
 
@@ -233,6 +202,19 @@ axsWebSearch.goToNextResult = function(){
   } else {
     var currentResult = axsWebSearch.resultsArray[axsWebSearch.resultsIndex];
     currentResult.scrollIntoView(true);
+    currentResult.getElementsByTagName('a')[0].focus();
+    axsWebSearch.axsJAXObj.speakNode(currentResult);
+  }
+};
+
+axsWebSearch.goToPrevResult = function(){
+  axsWebSearch.resultsIndex--;
+  if(axsWebSearch.resultsIndex < 0){
+    axsWebSearch.goToPrevPage();
+  } else {
+    var currentResult = axsWebSearch.resultsArray[axsWebSearch.resultsIndex];
+    currentResult.scrollIntoView(true);
+    currentResult.getElementsByTagName('a')[0].focus();
     axsWebSearch.axsJAXObj.speakNode(currentResult);
   }
 };
@@ -243,15 +225,9 @@ axsWebSearch.goToNextPage = function(){
   alert('Go to next page.');
 };
 
-
-
-
-axsWebSearch.goToCurrentLink = function(){
-  document.location = axsWebSearch.currentLink;
+axsWebSearch.goToPrevPage = function(){
+  alert('Go to prev page.');
 };
 
-axsWebSearch.goToCurrentLinkInNewWindow = function(){
-  window.open(axsWebSearch.currentLink);
-};
 
 axsWebSearch.init();
