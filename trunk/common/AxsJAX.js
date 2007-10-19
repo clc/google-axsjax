@@ -47,24 +47,27 @@ AxsJAX.prototype.speakNode = function(targetNode){
     focus and make it work for JAWS and Window Eyes. However, Firefox 2 does
     not handle this correctly yet. Therefore, hold off on using this code until
     Firefox 3 is ready. Use Live Regions for now as that works on Fire Vox.*/
-  /**
+
+
   if (!targetNode.id){
     this.assignId(targetNode);
   }
   var theBody = window.content.document.body;
-  theBody.tabIndex = 0;
+  theBody.tabIndex = -1;
   theBody.blur();
   theBody.setAttribute("role","wairole:listbox")
-  theBody.setAttributeNS(this.ARIA_NAMESPACE_STRING_, "activedescendant", '');
+  theBody.setAttribute("aria-activedescendant", '');
   theBody.focus();
-  theBody.setAttributeNS(this.ARIA_NAMESPACE_STRING_, "activedescendant", targetNode.id);
-  **/
+  theBody.setAttribute("aria-activedescendant", targetNode.id);
+
+
+
 //--------------
-  targetNode.setAttributeNS(this.ARIA_NAMESPACE_STRING_,
-      this.ARIA_LIVE_STRING_, this.ARIA_RUDE_STRING_);
-  targetNode.setAttributeNS(this.ARIA_NAMESPACE_STRING_, 'atomic', 'true');
-  targetNode.appendChild(this.EMPTY_NODE_);
-  targetNode.removeChild(this.EMPTY_NODE_);
+//  targetNode.setAttributeNS(this.ARIA_NAMESPACE_STRING_,
+//      this.ARIA_LIVE_STRING_, this.ARIA_RUDE_STRING_);
+//  targetNode.setAttributeNS(this.ARIA_NAMESPACE_STRING_, 'atomic', 'true');
+//  targetNode.appendChild(this.EMPTY_NODE_);
+//  targetNode.removeChild(this.EMPTY_NODE_);
 };
 
 
