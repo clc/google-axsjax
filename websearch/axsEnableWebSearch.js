@@ -92,7 +92,7 @@ axsWebSearch.domAttrModifiedHandler = function(evt){
   if ((target.tagName == 'IMG') && (newVal.indexOf('visibility: visible') != -1)){
     axsWebSearch.axsJAXObj.putNullForNoAltImages(target.parentNode);
     axsWebSearch.axsJAXObj.speakNode(target.parentNode);
-    axsWebSearch.currentLink = target.parentNode.getElementsByTagName('a')[0];
+    axsWebSearch.currentLink = target.parentNode.getElementsByTagName('a')[0].href;
   }
 };
 
@@ -107,8 +107,13 @@ axsWebSearch.extraKeyboardNavHandler = function(evt){
   if (evt.charCode == 97){ // a
     axsWebSearch.cycleThroughAds();
   }
-  if (evt.charCode == 103){ // g
-    axsWebSearch.goToCurrentLink();
+  if ((evt.keyCode == 13) && axsWebSearch.currentLink){ // Enter
+    if (evt.shiftKey){
+      axsWebSearch.goToCurrentLinkInNewWindow();    
+    } else{
+      axsWebSearch.goToCurrentLink();
+    }
+
   }
 };
 
@@ -178,17 +183,17 @@ axsWebSearch.cycleThroughAds = function(){
     axsWebSearch.adIndex = 0;
   }  
   var currentAd = adArea.childNodes[axsWebSearch.adIndex];
-  axsWebSearch.currentLink = currentAd.getElementsByTagName('a')[0];
+  axsWebSearch.currentLink = currentAd.getElementsByTagName('a')[0].href;
   axsWebSearch.axsJAXObj.speakNode(currentAd);
 };
 
 
 axsWebSearch.goToCurrentLink = function(){
-  document.location = axsWebSearch.currentLink.href;
+  document.location = axsWebSearch.currentLink;
 };
 
 axsWebSearch.goToCurrentLinkInNewWindow = function(){
-  window.open(axsWebSearch.currentLink.href);
+  window.open(axsWebSearch.currentLink);
 };
 
 axsWebSearch.init();
