@@ -37,6 +37,7 @@ axsWebSearch.adIndex = 0;
 axsWebSearch.inputFocused = false;
 axsWebSearch.lastFocusedNode = null;
 
+axsWebSearch.currentLink = null;
 
 
 axsWebSearch.init = function(){
@@ -100,6 +101,14 @@ axsWebSearch.extraKeyboardNavHandler = function(evt){
   }  
   if (evt.charCode == 47){ // / (slash symbol)
     document.getElementsByName('q')[0].focus();  //Focus on the top search blank
+  }
+  if ((evt.keyCode == 13) && axsWebSearch.currentLink){ // Enter
+    if (evt.shiftKey){
+      axsWebSearch.goToCurrentLinkInNewWindow();
+    } else{
+      axsWebSearch.goToCurrentLink();
+    }
+
   }
 
 };
@@ -175,7 +184,7 @@ axsWebSearch.cycleThroughAds = function(){
   }  
   var currentAd = adArea.childNodes[axsWebSearch.adIndex];
   currentAd.scrollIntoView(true);
-  currentAd.getElementsByTagName('a')[0].focus();
+  axsWebSearch.currentLink = currentAd.getElementsByTagName('a')[0].href;
   axsWebSearch.axsJAXObj.speakNode(currentAd);
 };
 
@@ -205,7 +214,7 @@ axsWebSearch.goToNextResult = function(){
   } else {
     var currentResult = axsWebSearch.resultsArray[axsWebSearch.resultsIndex];
     currentResult.scrollIntoView(true);
-    currentResult.getElementsByTagName('a')[0].focus();
+    axsWebSearch.currentLink = currentResult.getElementsByTagName('a')[0].href;
     axsWebSearch.axsJAXObj.speakNode(currentResult);
   }
 };
@@ -218,7 +227,7 @@ axsWebSearch.goToPrevResult = function(){
   } else {
     var currentResult = axsWebSearch.resultsArray[axsWebSearch.resultsIndex];
     currentResult.scrollIntoView(true);
-    currentResult.getElementsByTagName('a')[0].focus();
+    axsWebSearch.currentLink = currentResult.getElementsByTagName('a')[0].href;
     axsWebSearch.axsJAXObj.speakNode(currentResult);
   }
 };
@@ -243,5 +252,13 @@ axsWebSearch.goToPrevPage = function(){
   document.location = prevPageDiv.parentNode.href;
 };
 
+axsWebSearch.goToCurrentLink = function(){
+  document.location = axsWebSearch.currentLink;
+};
+
+axsWebSearch.goToCurrentLinkInNewWindow = function(){
+  window.open(axsWebSearch.currentLink);
+};
+                                
 
 axsWebSearch.init();
