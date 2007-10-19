@@ -27,13 +27,10 @@ axsWebSearch.NO_ADS_STRING = 'There are no advertisments on this page.';
  */
 axsWebSearch.axsJAXObj = null;
 
-axsWebSearch.resultsArray = null;
-axsWebSearch.resultsIndex = 0;
 
 axsWebSearch.adAreaId = null;
 axsWebSearch.adIndex = 0;
 axsWebSearch.inputFocused = false;
-axsWebSearch.lastFocusedNode = null;
 
 axsWebSearch.currentLink = null;
 
@@ -44,14 +41,14 @@ axsWebSearch.currentLink = null;
 axsWebSearch.init = function(){
   axsWebSearch.axsJAXObj = new AxsJAX();
   //If the keyboard shortcut experiment is not running, run it
-//  var locationString = window.content.document.location.toString();
-//  if (locationString.indexOf('http://www.google.com/search') != 0){
-//    window.content.document.location = 'http://www.google.com/search?hl=en&esrch=BetaShortcuts&q=google&btnG=Search';
-//  }
-//  if ( (locationString.indexOf('http://www.google.com/search') == 0) &&
-//       (locationString.indexOf('&esrch=BetaShortcuts') == -1) ){
-//    window.content.document.location = locationString + '&esrch=BetaShortcuts';
-//  }
+  var locationString = window.content.document.location.toString();
+  if (locationString.indexOf('http://www.google.com/search') != 0){
+    window.content.document.location = 'http://www.google.com/search?hl=en&esrch=BetaShortcuts&q=google&btnG=Search';
+  }
+  if ( (locationString.indexOf('http://www.google.com/search') == 0) &&
+       (locationString.indexOf('&esrch=BetaShortcuts') == -1) ){
+    window.content.document.location = locationString + '&esrch=BetaShortcuts';
+  }
 
   //Add event listeners
   document.addEventListener('DOMAttrModified', axsWebSearch.domAttrModifiedHandler, true);
@@ -60,7 +57,6 @@ axsWebSearch.init = function(){
   document.addEventListener('blur', axsWebSearch.blurHandler, true);
 
   //Do any necessary preparations for browsing here
-  axsWebSearch.buildResultsArray();
   axsWebSearch.formatAdsArea();
 };
 
@@ -70,7 +66,6 @@ axsWebSearch.init = function(){
  * @param {event} A Focus event
  */
 axsWebSearch.focusHandler = function(evt){
-  axsWebSearch.lastFocusedNode = evt.target;
   if ((evt.target.tagName == 'INPUT') ||
       (evt.target.tagName == 'TEXTAREA')){
     axsWebSearch.inputFocused = true;
@@ -83,7 +78,6 @@ axsWebSearch.focusHandler = function(evt){
  * @param {event} A Blur event
  */
 axsWebSearch.blurHandler = function (evt){
-  axsWebSearch.lastFocusedNode = null;
   if ((evt.target.tagName == 'INPUT') ||
       (evt.target.tagName == 'TEXTAREA')){
     axsWebSearch.inputFocused = false;
@@ -104,9 +98,6 @@ axsWebSearch.domAttrModifiedHandler = function(evt){
 
 
 axsWebSearch.extraKeyboardNavHandler = function(evt){
-  if (evt.keyCode == 27){ // ESC
-    axsWebSearch.lastFocusedNode.blur();
-  }
   if (axsWebSearch.inputFocused){
     return;
   }
@@ -116,15 +107,6 @@ axsWebSearch.extraKeyboardNavHandler = function(evt){
   if (evt.charCode == 97){ // a
     axsWebSearch.cycleThroughAds();
   }
-
-  if (evt.charCode == 106){ // j
-    axsWebSearch.goToNextResult();
-  }  
-
-  if (evt.charCode == 47){ // / (slash symbol)
-    document.getElementsByName('q')[0].focus();  //Focus on the top search blank
-  }
-
   if ((evt.keyCode == 13) && axsWebSearch.currentLink){ // Enter
     if (evt.shiftKey){
       axsWebSearch.goToCurrentLinkInNewWindow();    
@@ -146,9 +128,7 @@ axsWebSearch.readOneBox = function(){
 
 
 
-//************
-//Functions for Ads
-//************
+
 
 axsWebSearch.formatAdsArea = function(){
   var adTable = window.content.document.getElementById('mbEnd');
@@ -204,46 +184,8 @@ axsWebSearch.cycleThroughAds = function(){
   }  
   var currentAd = adArea.childNodes[axsWebSearch.adIndex];
   axsWebSearch.currentLink = currentAd.getElementsByTagName('a')[0].href;
-  currentAd.scrollIntoView(true);
   axsWebSearch.axsJAXObj.speakNode(currentAd);
 };
-
-
-
-//************
-//Functions for results
-//************
-
-axsWebSearch.buildResultsArray = function(){
-  axsWebSearch.resultsArray = new Array();
-  axsWebSearch.resultsIndex = -1;
-  var resDiv = window.content.document.getElementById('res');
-  var divsArray = resDiv.getElementsByTagName('DIV');
-  for (var i=0; i<divsArray.length; i++){
-    if (divsArray[i].className == 'g'){
-      axsWebSearch.resultsArray.push(divsArray[i]);
-    }
-  }
-};
-
-axsWebSearch.goToNextResult = function(){
-  axsWebSearch.resultsIndex++;
-  if(axsWebSearch.resultsIndex >= axsWebSearch.resultsArray.length){
-    axsWebSearch.goToNextPage();
-  } else {
-    var currentResult = axsWebSearch.resultsArray[axsWebSearch.resultsIndex];
-    currentResult.scrollIntoView(true);
-    axsWebSearch.axsJAXObj.speakNode(currentResult);
-  }
-};
-
-
-
-axsWebSearch.goToNextPage = function(){
-  alert('Go to next page.');
-};
-
-
 
 
 axsWebSearch.goToCurrentLink = function(){
