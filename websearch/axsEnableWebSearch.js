@@ -17,7 +17,7 @@ var axsWebSearch = {};
 
 //These are strings to be spoken to the user
 axsWebSearch.NO_ONE_BOX_STRING = 'There is no one box on this page.';
-axsWebSearch.NO_ADS_STRING = 'There are no advertisments on this page.';
+axsWebSearch.NO_ADS_STRING = 'There are no advertisements on this page.';
 axsWebSearch.NO_NEXT_PAGE_STRING = 'There is no next page.';
 axsWebSearch.NO_PREV_PAGE_STRING = 'There is no previous page.';
 
@@ -32,8 +32,10 @@ axsWebSearch.axsJAXObj = null;
 axsWebSearch.resultsArray = null;
 axsWebSearch.resultsIndex = 0;
 
-axsWebSearch.adAreaId = null;
-axsWebSearch.adIndex = 0;
+axsWebSearch.adAreaSideId = null;
+axsWebSearch.adsArray = null;
+axsWebSearch.adsIndex = 0;
+
 axsWebSearch.inputFocused = false;
 axsWebSearch.lastFocusedNode = null;
 
@@ -50,7 +52,7 @@ axsWebSearch.init = function(){
 
   //Do any necessary preparations for browsing here
   axsWebSearch.buildResultsArray();
-  axsWebSearch.formatAdsArea();
+  axsWebSearch.buildAdsArray();
 };
 
 /**
@@ -115,8 +117,15 @@ axsWebSearch.extraKeyboardNavHandler = function(evt){
 
 
 axsWebSearch.readOneBox = function(){
-  if (document.getElementById('res').childNodes[1].tagName == 'P'){
-    var oneBox = document.getElementById('res').childNodes[1];
+  var oneBox = null;
+  var resDivChildren = document.getElementById('res').childNodes;
+  for (var i=0; i<resDivChildren.length; i++){
+    if ((resDivChildren[i].tagName == 'P') && resDivChildren[i].textContent){
+      oneBox = resDivChildren[i];
+      break;
+    }
+  }
+  if (oneBox){
     oneBox.scrollIntoView(true);
     axsWebSearch.axsJAXObj.speakNode(oneBox);
   } else{
@@ -130,7 +139,32 @@ axsWebSearch.readOneBox = function(){
 //Functions for Ads
 //************
 
-axsWebSearch.formatAdsArea = function(){
+
+
+axsWebSearch.buildAdsArray = function(){
+  axsWebSearch.formatAdAreaSide();
+  axsWebSearch.adsArray = new Array();
+  var adAreaTop = document.getElementById('tads');
+  if (adAreaTop){
+    for(var i=0; i<adAreaTop.childNodes.length; i++){
+      if(adAreaTop.childNodes[i].tagName == 'DIV'){
+        axsWebSearch.adsArray.push(adAreaTop.childNodes[i]);
+      }
+    }
+  }
+  var adAreaSide = document.getElementById(axsWebSearch.adAreaSideId);
+  if(adAreaSide){
+     for(var i=0; i<adAreaSide.childNodes.length; i++){
+       axsWebSearch.adsArray.push(adAreaSide.childNodes[i]);
+     }
+  }
+  axsWebSearch.adsIndex = -1;
+};
+
+//The Ads area on the right side is inside one big FONT tag.
+//There is no structure that groups the individual ads.
+//Add this structure to make it possible to speak these ads individually.
+axsWebSearch.formatAdAreaSide = function(){
   var adTable = window.content.document.getElementById('mbEnd');
   var adArea = null; //This is the FONT tag that contains all the ads
                      //However, it is non-trivial to locate as the TR
@@ -167,22 +201,20 @@ axsWebSearch.formatAdsArea = function(){
   adArea.appendChild(adSpan);
   //Clean up by deleting the first child which is a blank node
   adArea.removeChild(adArea.firstChild);
-  axsWebSearch.adAreaId = axsWebSearch.axsJAXObj.assignId(adArea);
-  axsWebSearch.adIndex = -1;
+  axsWebSearch.adAreaSideId = axsWebSearch.axsJAXObj.assignId(adArea);
 };
 
 
 axsWebSearch.cycleThroughAds = function(){
-  if (!axsWebSearch.adAreaId){
+  if (axsWebSearch.adsArray.length < 1){
     axsWebSearch.axsJAXObj.speakText(axsWebSearch.NO_ADS_STRING);
     return;
   }
-  var adArea = document.getElementById(axsWebSearch.adAreaId);
-  axsWebSearch.adIndex++;
-  if (axsWebSearch.adIndex >= adArea.childNodes.length){
-    axsWebSearch.adIndex = 0;
+  axsWebSearch.adsIndex++;
+  if (axsWebSearch.adsIndex >= axsWebSearch.adsArray.length){
+    axsWebSearch.adsIndex = 0;
   }  
-  var currentAd = adArea.childNodes[axsWebSearch.adIndex];
+  var currentAd = axsWebSearch.adsArray[axsWebSearch.adsIndex];
   currentAd.scrollIntoView(true);
   axsWebSearch.currentLink = currentAd.getElementsByTagName('a')[0].href;
   axsWebSearch.axsJAXObj.speakNode(currentAd);
