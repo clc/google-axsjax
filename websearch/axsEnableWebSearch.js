@@ -20,6 +20,8 @@ axsWebSearch.NO_ONE_BOX_STRING = 'There is no one box on this page.';
 axsWebSearch.NO_ADS_STRING = 'There are no advertisements on this page.';
 axsWebSearch.NO_NEXT_PAGE_STRING = 'There is no next page.';
 axsWebSearch.NO_PREV_PAGE_STRING = 'There is no previous page.';
+axsWebSearch.SEARCH_WITHIN_STRING = 'Search within ';
+axsWebSearch.NO_ALT_SEARCH_CAT_STRING = 'There are no other categories to search within.'
 
 
 
@@ -42,6 +44,11 @@ axsWebSearch.lastFocusedNode = null;
 axsWebSearch.currentLink = null;
 
 
+axsWebSearch.altSearchCatArray = null;
+axsWebSearch.altSearchCatIndex = 0;
+
+
+
 axsWebSearch.init = function(){
   axsWebSearch.axsJAXObj = new AxsJAX();
 
@@ -53,6 +60,7 @@ axsWebSearch.init = function(){
   //Do any necessary preparations for browsing here
   axsWebSearch.buildResultsArray();
   axsWebSearch.buildAdsArray();
+  axsWebSearch.buildAltSearchCatArray();
 };
 
 /**
@@ -94,6 +102,9 @@ axsWebSearch.extraKeyboardNavHandler = function(evt){
   }
   if (evt.charCode == 97){ // a
     axsWebSearch.cycleThroughAds();
+  }
+  if (evt.charCode == 99){ // c
+    axsWebSearch.cycleThroughAltSearchCat();
   }
   if (evt.charCode == 106){ // j
     axsWebSearch.goToNextResult();
@@ -166,6 +177,9 @@ axsWebSearch.buildAdsArray = function(){
 //Add this structure to make it possible to speak these ads individually.
 axsWebSearch.formatAdAreaSide = function(){
   var adTable = window.content.document.getElementById('mbEnd');
+  if(!adTable){
+    return;
+  }
   var adArea = null; //This is the FONT tag that contains all the ads
                      //However, it is non-trivial to locate as the TR
                      //that it is under is not always the same TR.
@@ -229,7 +243,7 @@ axsWebSearch.cycleThroughAds = function(){
 axsWebSearch.buildResultsArray = function(){
   axsWebSearch.resultsArray = new Array();
   axsWebSearch.resultsIndex = -1;
-  var resDiv = window.content.document.getElementById('res');
+  var resDiv = document.getElementById('res');
   var divsArray = resDiv.getElementsByTagName('DIV');
   for (var i=0; i<divsArray.length; i++){
     if (divsArray[i].className == 'g'){
@@ -265,7 +279,6 @@ axsWebSearch.goToPrevResult = function(){
 };
 
 
-
 axsWebSearch.goToNextPage = function(){
   var nextPageDiv = document.getElementById('nn');
   if (!nextPageDiv){
@@ -291,6 +304,43 @@ axsWebSearch.goToCurrentLink = function(){
 axsWebSearch.goToCurrentLinkInNewWindow = function(){
   window.open(axsWebSearch.currentLink);
 };
-                                
+
+
+//************
+//Functions for alternative search categories
+//************
+
+axsWebSearch.buildAltSearchCatArray = function(){
+  axsWebSearch.altSearchCatArray = new Array();
+  axsWebSearch.altSearchCatIndex = -1;
+  var altSearchCatArea = document.getElementById('sd').nextSibling;
+  if (altSearchCatArea){
+    for(var i=0; i<altSearchCatArea.childNodes.length; i++){
+      if (altSearchCatArea.childNodes[i].tagName=='A'){
+        axsWebSearch.altSearchCatArray.push(altSearchCatArea.childNodes[i]);
+      }
+    }
+  }
+};
+
+
+axsWebSearch.cycleThroughAltSearchCat = function(){
+  if (axsWebSearch.altSearchCatArray.length < 1){
+    axsWebSearch.axsJAXObj.speakText(axsWebSearch.NO_ALT_SEARCH_CAT_STRING);
+    return;
+  }
+  axsWebSearch.altSearchCatIndex++;
+  if (axsWebSearch.altSearchCatIndex >= axsWebSearch.altSearchCatArray.length){
+    axsWebSearch.altSearchCatIndex = 0;
+  }
+  var currentAltSearch = axsWebSearch.altSearchCatArray[axsWebSearch.altSearchCatIndex];
+  currentAltSearch.scrollIntoView(true);
+  axsWebSearch.currentLink = currentAltSearch.href;
+  axsWebSearch.axsJAXObj.speakText(axsWebSearch.SEARCH_WITHIN_STRING + currentAltSearch.textContent);
+};
+
+
+
+
 
 axsWebSearch.init();
