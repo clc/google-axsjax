@@ -14,6 +14,13 @@ function pickScript(){
   var theLib = document.createElement('script');
   theLib.type = 'text/javascript';
   theLib.src = 'http://google-axsjax.googlecode.com/svn/trunk/common/AxsJAX.js';
+  //Do not insert anything if the scripts are already inserted.
+  var scriptArray = document.getElementsByTagName('script');
+  for (var i=0; i<scriptArray[i]; i++){
+    if(scriptArray[i].src == theLib.src){
+      return;
+    }
+  }
   var shouldInsertScripts = false;
   var theScript = document.createElement('script');
   theScript.type = 'text/javascript';
