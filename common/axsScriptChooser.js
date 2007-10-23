@@ -16,7 +16,7 @@ function pickScript(){
   theLib.src = 'http://google-axsjax.googlecode.com/svn/trunk/common/AxsJAX.js';
   //Do not insert anything if the scripts are already inserted.
   var scriptArray = document.getElementsByTagName('script');
-  for (var i=0; i<scriptArray[i]; i++){
+  for (var i=0; i<scriptArray.length; i++){
     if(scriptArray[i].src == theLib.src){
       return;
     }
