@@ -23,6 +23,26 @@ axsWebSearch.NO_PREV_PAGE_STRING = 'There is no previous page.';
 axsWebSearch.SEARCH_WITHIN_STRING = 'Search within ';
 axsWebSearch.NO_ALT_SEARCH_CAT_STRING = 'There are no other categories to search within.'
 axsWebSearch.NO_RELATED_SEARCHES_STRING = 'There are no related searches.'
+axsWebSearch.HELP_STRING = 'The following shortcut keys are available. ' +
+                        'J, go to the next result. ' +
+                        'K, go to the previous result. ' +
+                        'Enter, open the current item. ' +
+                        'Shift and Enter, open the current item in a new window. ' +
+                        'Slash, jump to search blank. ' +
+                        'Escape, leave search blank. ' +
+                        '1, read the one box. ' +
+                        'A, cycle through advertisements. ' +
+                        'C, cycle through alternate categories to search in. ' +
+                        'R, cycle through related searches. ' +
+                        'Page up, go to the previous page. ' +
+                        'Page down, go to the next page. ' +
+                        'Up arrow, go to the previous result. ' +
+                        'Down arrow, go to the next result. ' +
+                        'Left arrow, cycle to the previous result. ' +
+                        'Right arrow, cycle to the next result. ';
+
+
+
 
 axsWebSearch.PAGECONTENT_RELATED_SEARCH_STRING = 'Searches related to:';
 
@@ -113,10 +133,10 @@ axsWebSearch.extraKeyboardNavHandler = function(evt){
     axsWebSearch.cycleThroughAltSearchCat();
   }
   if (evt.charCode == 106){ // j
-    axsWebSearch.goToNextResult();
+    axsWebSearch.goToNextResult(false);
   }
   if (evt.charCode == 107){ // k
-    axsWebSearch.goToPrevResult();
+    axsWebSearch.goToPrevResult(false);
   }
   if (evt.charCode == 114){ // r
     axsWebSearch.cycleThroughRelatedSearches();
@@ -131,10 +151,38 @@ axsWebSearch.extraKeyboardNavHandler = function(evt){
     } else{
       axsWebSearch.goToCurrentLink();
     }
+  }
+  if (evt.keyCode == 33){ // Page Up
+    axsWebSearch.goToPrevPage();
+  }
+  if (evt.keyCode == 34){ // Page Down
+    axsWebSearch.goToNextPage();
+  }
+  if (evt.keyCode == 38){ // Up arrow
+    axsWebSearch.goToPrevResult(false);
+  }
+  if (evt.keyCode == 37){ // Left arrow
+    axsWebSearch.goToPrevResult(true);
+  }
+  if (evt.keyCode == 40){ // Down arrow
+    axsWebSearch.goToNextResult(false);
+  }
+  if (evt.keyCode == 39){ // Right arrow
+    axsWebSearch.goToNextResult(true);
+  }
+  
 
+  if (evt.charCode == 63){ // ? (question mark)
+    axsWebSearch.axsJAXObj.speakText(axsWebSearch.HELP_STRING);
   }
 
 };
+
+
+
+//************
+//Functions for OneBox
+//************
 
 
 axsWebSearch.readOneBox = function(){
@@ -273,30 +321,42 @@ axsWebSearch.buildResultsArray = function(){
 
 };
 
-axsWebSearch.goToNextResult = function(){
+axsWebSearch.goToNextResult = function(cycleBool){
   axsWebSearch.resultsIndex++;
   if(axsWebSearch.resultsIndex >= axsWebSearch.resultsArray.length){
-    axsWebSearch.resultsIndex = -1;
-    axsWebSearch.goToNextPage();
-  } else {
-    var currentResult = axsWebSearch.resultsArray[axsWebSearch.resultsIndex];
-    currentResult.scrollIntoView(true);
-    axsWebSearch.axsJAXObj.speakNode(currentResult);
-    axsWebSearch.currentLink = currentResult.getElementsByTagName('a')[0].href;
+    if (!cycleBool){
+      axsWebSearch.resultsIndex = -1;
+      axsWebSearch.goToNextPage();
+      return;
+    } else{
+      axsWebSearch.resultsIndex = 0;
+    }
   }
+  var currentResult = axsWebSearch.resultsArray[axsWebSearch.resultsIndex];
+  currentResult.tabIndex = -1;
+  currentResult.focus();
+  currentResult.scrollIntoView(true);
+  axsWebSearch.axsJAXObj.speakNode(currentResult);
+  axsWebSearch.currentLink = currentResult.getElementsByTagName('a')[0].href;
 };
 
-axsWebSearch.goToPrevResult = function(){
+axsWebSearch.goToPrevResult = function(cycleBool){
   axsWebSearch.resultsIndex--;
   if(axsWebSearch.resultsIndex < 0){
-    axsWebSearch.resultsIndex = -1;
-    axsWebSearch.goToPrevPage();
-  } else {
-    var currentResult = axsWebSearch.resultsArray[axsWebSearch.resultsIndex];
-    currentResult.scrollIntoView(true);
-    axsWebSearch.axsJAXObj.speakNode(currentResult);
-    axsWebSearch.currentLink = currentResult.getElementsByTagName('a')[0].href;
+    if (!cycleBool){
+      axsWebSearch.resultsIndex = -1;
+      axsWebSearch.goToNextPage();
+      return;
+    } else{
+      axsWebSearch.resultsIndex = axsWebSearch.resultsArray.length-1;
+    }
   }
+  var currentResult = axsWebSearch.resultsArray[axsWebSearch.resultsIndex];
+  currentResult.tabIndex = -1;
+  currentResult.focus();
+  currentResult.scrollIntoView(true);
+  axsWebSearch.axsJAXObj.speakNode(currentResult);
+  axsWebSearch.currentLink = currentResult.getElementsByTagName('a')[0].href;
 };
 
 
