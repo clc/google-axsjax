@@ -24,8 +24,10 @@ axsWebSearch.SEARCH_WITHIN_STRING = 'Search within ';
 axsWebSearch.NO_ALT_SEARCH_CAT_STRING = 'There are no other categories to search within.'
 axsWebSearch.NO_RELATED_SEARCHES_STRING = 'There are no related searches.'
 axsWebSearch.HELP_STRING = 'The following shortcut keys are available. ' +
-                        'J, go to the next result. ' +
-                        'K, go to the previous result. ' +
+                        'Down arrow or N, go to the next result. ' +
+                        'Up arrow or P, go to the previous result. ' +
+                        'Right arrow or J, cycle to the next result. ' +
+                        'Left arrow or K, cycle to the previous result. ' +
                         'Enter, open the current item. ' +
                         'Shift and Enter, open the current item in a new window. ' +
                         'Slash, jump to search blank. ' +
@@ -35,11 +37,7 @@ axsWebSearch.HELP_STRING = 'The following shortcut keys are available. ' +
                         'C, cycle through alternate categories to search in. ' +
                         'R, cycle through related searches. ' +
                         'Page up, go to the previous page. ' +
-                        'Page down, go to the next page. ' +
-                        'Up arrow, go to the previous result. ' +
-                        'Down arrow, go to the next result. ' +
-                        'Left arrow, cycle to the previous result. ' +
-                        'Right arrow, cycle to the next result. ';
+                        'Page down, go to the next page. ';
 
 
 
@@ -133,9 +131,15 @@ axsWebSearch.extraKeyboardNavHandler = function(evt){
     axsWebSearch.cycleThroughAltSearchCat();
   }
   if (evt.charCode == 106){ // j
-    axsWebSearch.goToNextResult(false);
+    axsWebSearch.goToNextResult(true);
   }
   if (evt.charCode == 107){ // k
+    axsWebSearch.goToPrevResult(true);
+  }
+  if (evt.charCode == 110){ // n
+    axsWebSearch.goToNextResult(false);
+  }
+  if (evt.charCode == 112){ // p
     axsWebSearch.goToPrevResult(false);
   }
   if (evt.charCode == 114){ // r
@@ -333,8 +337,6 @@ axsWebSearch.goToNextResult = function(cycleBool){
     }
   }
   var currentResult = axsWebSearch.resultsArray[axsWebSearch.resultsIndex];
-  currentResult.tabIndex = -1;
-  currentResult.focus();
   currentResult.scrollIntoView(true);
   axsWebSearch.axsJAXObj.speakNode(currentResult);
   axsWebSearch.currentLink = currentResult.getElementsByTagName('a')[0].href;
@@ -352,8 +354,6 @@ axsWebSearch.goToPrevResult = function(cycleBool){
     }
   }
   var currentResult = axsWebSearch.resultsArray[axsWebSearch.resultsIndex];
-  currentResult.tabIndex = -1;
-  currentResult.focus();
   currentResult.scrollIntoView(true);
   axsWebSearch.axsJAXObj.speakNode(currentResult);
   axsWebSearch.currentLink = currentResult.getElementsByTagName('a')[0].href;
