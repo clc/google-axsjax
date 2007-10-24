@@ -22,6 +22,9 @@ axsWebSearch.NO_NEXT_PAGE_STRING = 'There is no next page.';
 axsWebSearch.NO_PREV_PAGE_STRING = 'There is no previous page.';
 axsWebSearch.SEARCH_WITHIN_STRING = 'Search within ';
 axsWebSearch.NO_ALT_SEARCH_CAT_STRING = 'There are no other categories to search within.'
+axsWebSearch.NO_RELATED_SEARCHES_STRING = 'There are no related searches.'
+
+axsWebSearch.PAGECONTENT_RELATED_SEARCH_STRING = 'Searches related to:';
 
 
 
@@ -43,10 +46,12 @@ axsWebSearch.lastFocusedNode = null;
 
 axsWebSearch.currentLink = null;
 
-
 axsWebSearch.altSearchCatArray = null;
 axsWebSearch.altSearchCatIndex = 0;
 
+
+axsWebSearch.relatedSearchesArray = null;
+axsWebSearch.relatedSearchesIndex = 0;
 
 
 axsWebSearch.init = function(){
@@ -61,6 +66,7 @@ axsWebSearch.init = function(){
   axsWebSearch.buildResultsArray();
   axsWebSearch.buildAdsArray();
   axsWebSearch.buildAltSearchCatArray();
+  axsWebSearch.buildRelatedSearchesArray();
 };
 
 /**
@@ -111,9 +117,13 @@ axsWebSearch.extraKeyboardNavHandler = function(evt){
   }
   if (evt.charCode == 107){ // k
     axsWebSearch.goToPrevResult();
-  }  
+  }
+  if (evt.charCode == 114){ // r
+    axsWebSearch.cycleThroughRelatedSearches();
+  }        
   if (evt.charCode == 47){ // / (slash symbol)
     document.getElementsByName('q')[0].focus();  //Focus on the top search blank
+    document.getElementsByName('q')[0].select(); //and select all text
   }
   if ((evt.keyCode == 13) && axsWebSearch.currentLink){ // Enter
     if (evt.shiftKey){
@@ -142,6 +152,7 @@ axsWebSearch.readOneBox = function(){
   } else{
     axsWebSearch.axsJAXObj.speakText(axsWebSearch.NO_ONE_BOX_STRING);
   }
+  axsWebSearch.currentLink = oneBox.getElementsByTagName('a')[0].href;
 };
 
 
@@ -250,31 +261,41 @@ axsWebSearch.buildResultsArray = function(){
       axsWebSearch.resultsArray.push(divsArray[i]);
     }
   }
+  //There were no results
+  if (axsWebSearch.resultsArray.length == 0){
+    var noResultsTD = resDiv.getElementsByTagName('TD')[0];
+    if (noResultsTD && (noResultsTD.className == 'j')){
+      axsWebSearch.resultsArray.push(noResultsTD);
+      noResultsTD.tabIndex = -1;
+      noResultsTD.focus();
+    }
+  }
+
 };
 
 axsWebSearch.goToNextResult = function(){
   axsWebSearch.resultsIndex++;
   if(axsWebSearch.resultsIndex >= axsWebSearch.resultsArray.length){
-    axsWebSearch.resultsIndex = axsWebSearch.resultsArray.length - 1;
+    axsWebSearch.resultsIndex = -1;
     axsWebSearch.goToNextPage();
   } else {
     var currentResult = axsWebSearch.resultsArray[axsWebSearch.resultsIndex];
     currentResult.scrollIntoView(true);
-    axsWebSearch.currentLink = currentResult.getElementsByTagName('a')[0].href;
     axsWebSearch.axsJAXObj.speakNode(currentResult);
+    axsWebSearch.currentLink = currentResult.getElementsByTagName('a')[0].href;
   }
 };
 
 axsWebSearch.goToPrevResult = function(){
   axsWebSearch.resultsIndex--;
   if(axsWebSearch.resultsIndex < 0){
-    axsWebSearch.resultsIndex = 0;
+    axsWebSearch.resultsIndex = -1;
     axsWebSearch.goToPrevPage();
   } else {
     var currentResult = axsWebSearch.resultsArray[axsWebSearch.resultsIndex];
     currentResult.scrollIntoView(true);
-    axsWebSearch.currentLink = currentResult.getElementsByTagName('a')[0].href;
     axsWebSearch.axsJAXObj.speakNode(currentResult);
+    axsWebSearch.currentLink = currentResult.getElementsByTagName('a')[0].href;
   }
 };
 
@@ -339,6 +360,41 @@ axsWebSearch.cycleThroughAltSearchCat = function(){
   axsWebSearch.axsJAXObj.speakText(axsWebSearch.SEARCH_WITHIN_STRING + currentAltSearch.textContent);
 };
 
+
+//************
+//Functions for related searches
+//************
+
+axsWebSearch.buildRelatedSearchesArray = function(){
+  axsWebSearch.relatedSearchesArray = new Array();
+  axsWebSearch.relatedSearchesIndex = -1;
+  var relatedSearchesH2 = null;
+  var resDiv = document.getElementById('res');
+  for (var i=0; i<resDiv.childNodes.length; i++){
+    if ( (resDiv.childNodes[i].tagName=='H2') && (resDiv.childNodes[i].className=='r') && (resDiv.childNodes[i].firstChild.textContent == axsWebSearch.PAGECONTENT_RELATED_SEARCH_STRING)){
+      relatedSearchesH2 = resDiv.childNodes[i];
+    }
+  }
+  if (relatedSearchesH2){
+    axsWebSearch.relatedSearchesArray = relatedSearchesH2.nextSibling.getElementsByTagName('A');
+  }
+};
+
+
+axsWebSearch.cycleThroughRelatedSearches = function(){
+  if (axsWebSearch.relatedSearchesArray.length < 1){
+    axsWebSearch.axsJAXObj.speakText(axsWebSearch.NO_RELATED_SEARCHES_STRING);
+    return;
+  }
+  axsWebSearch.relatedSearchesIndex++;
+  if (axsWebSearch.relatedSearchesIndex >= axsWebSearch.relatedSearchesArray.length){
+    axsWebSearch.relatedSearchesIndex = 0;
+  }
+  var currentRelSearch = axsWebSearch.relatedSearchesArray[axsWebSearch.relatedSearchesIndex];
+  currentRelSearch.scrollIntoView(true);
+  axsWebSearch.currentLink = currentRelSearch.href;
+  axsWebSearch.axsJAXObj.speakNode(currentRelSearch);
+};
 
 
 
