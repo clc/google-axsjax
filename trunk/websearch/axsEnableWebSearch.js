@@ -21,7 +21,8 @@ axsWebSearch.NO_ADS_STRING = 'There are no advertisements on this page.';
 axsWebSearch.NO_NEXT_PAGE_STRING = 'There is no next page.';
 axsWebSearch.NO_PREV_PAGE_STRING = 'There is no previous page.';
 axsWebSearch.SEARCH_WITHIN_STRING = 'Search within ';
-axsWebSearch.NO_ALT_SEARCH_CAT_STRING = 'There are no other categories to search within.'
+axsWebSearch.NO_ALT_SEARCH_CAT_STRING = 'There are no other categories to ' +
+                                        'search within.'
 axsWebSearch.NO_RELATED_SEARCHES_STRING = 'There are no related searches.'
 axsWebSearch.HELP_STRING = 'The following shortcut keys are available. ' +
                         'Down arrow or N, go to the next result. ' +
@@ -29,7 +30,8 @@ axsWebSearch.HELP_STRING = 'The following shortcut keys are available. ' +
                         'Right arrow or J, cycle to the next result. ' +
                         'Left arrow or K, cycle to the previous result. ' +
                         'Enter, open the current item. ' +
-                        'Shift and Enter, open the current item in a new window. ' +
+                        'Shift and Enter, open the current item ' +
+                        'in a new window. ' +
                         'Slash, jump to search blank. ' +
                         'Escape, leave search blank. ' +
                         '1, read the one box. ' +
@@ -76,7 +78,8 @@ axsWebSearch.init = function(){
   axsWebSearch.axsJAXObj = new AxsJAX();
 
   //Add event listeners
-  document.addEventListener('keypress', axsWebSearch.extraKeyboardNavHandler, true);
+  document.addEventListener('keypress', axsWebSearch.extraKeyboardNavHandler,
+                             true);
   document.addEventListener('focus', axsWebSearch.focusHandler, true);
   document.addEventListener('blur', axsWebSearch.blurHandler, true);
 
@@ -174,8 +177,6 @@ axsWebSearch.extraKeyboardNavHandler = function(evt){
   if (evt.keyCode == 39){ // Right arrow
     axsWebSearch.goToNextResult(true);
   }
-  
-
   if (evt.charCode == 63){ // ? (question mark)
     axsWebSearch.axsJAXObj.speakText(axsWebSearch.HELP_STRING);
   }
@@ -191,10 +192,10 @@ axsWebSearch.extraKeyboardNavHandler = function(evt){
 
 axsWebSearch.readOneBox = function(){
   var oneBox = null;
-  var resDivChildren = document.getElementById('res').childNodes;
-  for (var i=0; i<resDivChildren.length; i++){
-    if ((resDivChildren[i].tagName == 'P') && resDivChildren[i].textContent){
-      oneBox = resDivChildren[i];
+  var resDiv = document.getElementById('res');
+  for (var child = resDiv.firstChild; child; child = child.nextSibling){
+    if ((child.tagName == 'P') && child.textContent){
+      oneBox = child;
       break;
     }
   }
@@ -220,16 +221,16 @@ axsWebSearch.buildAdsArray = function(){
   axsWebSearch.adsArray = new Array();
   var adAreaTop = document.getElementById('tads');
   if (adAreaTop){
-    for(var i=0; i<adAreaTop.childNodes.length; i++){
-      if(adAreaTop.childNodes[i].tagName == 'DIV'){
-        axsWebSearch.adsArray.push(adAreaTop.childNodes[i]);
+    for (var child = adAreaTop.firstChild; child; child = child.nextSibling){
+      if(child.tagName == 'DIV'){
+        axsWebSearch.adsArray.push(child);
       }
     }
   }
   var adAreaSide = document.getElementById(axsWebSearch.adAreaSideId);
   if(adAreaSide){
-     for(var i=0; i<adAreaSide.childNodes.length; i++){
-       axsWebSearch.adsArray.push(adAreaSide.childNodes[i]);
+     for (var child = adAreaSide.firstChild; child; child = child.nextSibling){
+       axsWebSearch.adsArray.push(child);
      }
   }
   axsWebSearch.adsIndex = -1;
@@ -249,9 +250,9 @@ axsWebSearch.formatAdAreaSide = function(){
                      //There are also very few identifiers here to key off of.
   //This is an ugly way to find the adArea, but it works reliably.
   var spanArray = adTable.getElementsByTagName('SPAN');
-  for (var i=0; i<spanArray.length; i++){
-    if (spanArray[i].className == 'a'){
-      adArea = spanArray[i].parentNode;
+  for (var i=0, currentSpan; currentSpan = spanArray[i]; i++){
+    if (currentSpan.className == 'a'){
+      adArea = currentSpan.parentNode;
       break;
     }
   }
@@ -308,9 +309,9 @@ axsWebSearch.buildResultsArray = function(){
   axsWebSearch.resultsIndex = -1;
   var resDiv = document.getElementById('res');
   var divsArray = resDiv.getElementsByTagName('DIV');
-  for (var i=0; i<divsArray.length; i++){
-    if (divsArray[i].className == 'g'){
-      axsWebSearch.resultsArray.push(divsArray[i]);
+  for (var i=0, currentDiv; currentDiv = divsArray[i]; i++){
+    if (currentDiv.className == 'g'){
+      axsWebSearch.resultsArray.push(currentDiv);
     }
   }
   //There were no results
@@ -396,9 +397,10 @@ axsWebSearch.buildAltSearchCatArray = function(){
   axsWebSearch.altSearchCatIndex = -1;
   var altSearchCatArea = document.getElementById('sd').nextSibling;
   if (altSearchCatArea){
-    for(var i=0; i<altSearchCatArea.childNodes.length; i++){
-      if (altSearchCatArea.childNodes[i].tagName=='A'){
-        axsWebSearch.altSearchCatArray.push(altSearchCatArea.childNodes[i]);
+    for (var child = altSearchCatArea.firstChild; child;
+            child = child.nextSibling){
+      if (child.tagName=='A'){
+        axsWebSearch.altSearchCatArray.push(child);
       }
     }
   }
@@ -414,10 +416,12 @@ axsWebSearch.cycleThroughAltSearchCat = function(){
   if (axsWebSearch.altSearchCatIndex >= axsWebSearch.altSearchCatArray.length){
     axsWebSearch.altSearchCatIndex = 0;
   }
-  var currentAltSearch = axsWebSearch.altSearchCatArray[axsWebSearch.altSearchCatIndex];
+  var currentAltSearch =
+      axsWebSearch.altSearchCatArray[axsWebSearch.altSearchCatIndex];
   currentAltSearch.scrollIntoView(true);
   axsWebSearch.currentLink = currentAltSearch.href;
-  axsWebSearch.axsJAXObj.speakText(axsWebSearch.SEARCH_WITHIN_STRING + currentAltSearch.textContent);
+  axsWebSearch.axsJAXObj.speakText(axsWebSearch.SEARCH_WITHIN_STRING +
+                                   currentAltSearch.textContent);
 };
 
 
@@ -430,13 +434,17 @@ axsWebSearch.buildRelatedSearchesArray = function(){
   axsWebSearch.relatedSearchesIndex = -1;
   var relatedSearchesH2 = null;
   var resDiv = document.getElementById('res');
-  for (var i=0; i<resDiv.childNodes.length; i++){
-    if ( (resDiv.childNodes[i].tagName=='H2') && (resDiv.childNodes[i].className=='r') && (resDiv.childNodes[i].firstChild.textContent == axsWebSearch.PAGECONTENT_RELATED_SEARCH_STRING)){
-      relatedSearchesH2 = resDiv.childNodes[i];
+  for (var child = resDiv.firstChild; child; child = child.nextSibling){
+    if ( (child.tagName =='H2') &&
+         (child.className =='r') &&
+         (child.firstChild.textContent ==
+             axsWebSearch.PAGECONTENT_RELATED_SEARCH_STRING)){
+      relatedSearchesH2 = child;
     }
   }
   if (relatedSearchesH2){
-    axsWebSearch.relatedSearchesArray = relatedSearchesH2.nextSibling.getElementsByTagName('A');
+    axsWebSearch.relatedSearchesArray =
+        relatedSearchesH2.nextSibling.getElementsByTagName('A');
   }
 };
 
@@ -447,10 +455,12 @@ axsWebSearch.cycleThroughRelatedSearches = function(){
     return;
   }
   axsWebSearch.relatedSearchesIndex++;
-  if (axsWebSearch.relatedSearchesIndex >= axsWebSearch.relatedSearchesArray.length){
+  if (axsWebSearch.relatedSearchesIndex >=
+          axsWebSearch.relatedSearchesArray.length){
     axsWebSearch.relatedSearchesIndex = 0;
   }
-  var currentRelSearch = axsWebSearch.relatedSearchesArray[axsWebSearch.relatedSearchesIndex];
+  var currentRelSearch =
+      axsWebSearch.relatedSearchesArray[axsWebSearch.relatedSearchesIndex];
   currentRelSearch.scrollIntoView(true);
   axsWebSearch.currentLink = currentRelSearch.href;
   axsWebSearch.axsJAXObj.speakNode(currentRelSearch);
