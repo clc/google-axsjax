@@ -31,6 +31,7 @@ axsReader.ITEM_STARRED_STRING = 'Star added.';
 axsReader.ITEM_UNSTARRED_STRING = 'Star removed.';
 axsReader.ITEM_SHARED_STRING = 'Shared.';
 axsReader.ITEM_UNSHARED_STRING = 'Not shared.';
+axsReader.THERE_ARE_STRING = 'There are ';
 axsReader.HELP_STRING = 'N, read the next item. ' +
                         'P, read the previous item. ' +
                         'Shift plus N, navigate to the next feed. ' +
@@ -511,25 +512,31 @@ axsReader.navigateToPrevResult = function(){
  */
 axsReader.announceCurrentFeedResult = function(){
   var currentFeedResultNode =
-      axsReader.feedResultsArray[axsReader.currentFeedResult].childNodes[2];
+      axsReader.feedResultsArray[axsReader.currentFeedResult];
   var announcementString = "";
   if(currentFeedResultNode.id == 'directory-search-results-previous-page'){
     announcementString = axsReader.GOTO_PREV_PAGE_STRING;
   } else if (currentFeedResultNode.id == 'directory-search-results-next-page'){
     announcementString = axsReader.GOTO_NEXT_PAGE_STRING;
   } else {
+    var theFeedStats = currentFeedResultNode.childNodes[0];
+    var theFeedResult = currentFeedResultNode.childNodes[2];
     var subscriptionStatus = axsReader.SUBSCRIBED_STRING;
-    if (currentFeedResultNode.className.indexOf('result-subscribed') == -1){
+    if (theFeedResult.className.indexOf('result-subscribed') == -1){
       subscriptionStatus = axsReader.NOT_SUBSCRIBED_STRING;
       }
     announcementString = subscriptionStatus
-                         + currentFeedResultNode.childNodes[0].textContent
+                         + theFeedResult.childNodes[0].textContent
                          + ' '
-                         + currentFeedResultNode.childNodes[2].textContent
+                         + theFeedResult.childNodes[2].textContent
                          + ' '
-                         + currentFeedResultNode.childNodes[4].textContent;
+                         + axsReader.THERE_ARE_STRING
+                         + theFeedStats.textContent
+                         + ' '
+                         + theFeedResult.childNodes[4].textContent;
     }
   axsReader.axsJAXObj.speakText(announcementString);
+  currentFeedResultNode.scrollIntoView(true);
 };
 
 /**
@@ -546,7 +553,7 @@ axsReader.actOnCurrentResult = function(){
     axsReader.feedResultsArray = new Array();
     axsReader.currentFeedResult = -1;
   } else {
-    var subscribeButton = currentFeedResultNode.childNodes[8];
+    var subscribeButton = currentFeedResultNode.childNodes[2].childNodes[8];
     axsReader.axsJAXObj.clickElem(subscribeButton);
     axsReader.axsJAXObj.speakText(axsReader.SUBSCRIBING_STRING);
   }
