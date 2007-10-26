@@ -110,6 +110,16 @@ axsReader.domInsertionHandler = function(event){
       axsReader.axsJAXObj.speakText(axsReader.NO_RESULTS_STRING);
     }
   }
+  //Autofocus on the email input blank if the email this story function is used.
+  if (event.target.className == 'action-area'){
+    var inputArray = event.target.getElementsByTagName('INPUT');
+    for (var i=0; i<inputArray.length; i++){
+      if (inputArray[i].className == 'email-this-to'){
+        inputArray[i].focus();
+        return;
+      }
+    }
+  }
   //Handle tag navigation
   if (event.target.className ==
           'banner banner-background label-keyboard-selector'){
