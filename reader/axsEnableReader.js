@@ -142,8 +142,6 @@ axsReader.findSelectedTag = function(tagSelectorTopDiv){
 
 
 
-
-
 /**
  * When an input blank has focus, the keystrokes should go into the blank
  * and should not trigger hot key commands.
@@ -463,8 +461,8 @@ axsReader.findFeedResults = function(){
   axsReader.feedResultsArray = new Array();
   var resultsList = document.getElementById('directory-search-results');
   var divArray = resultsList.getElementsByTagName('div');
-  for (var i = 0, result; result = divArray[i]; i++) { // Good
-    if (result.className == 'result'){
+  for (var i = 0, result; result = divArray[i]; i++) {
+    if (result.className == 'row'){
       axsReader.feedResultsArray.push(result);
     }
   }
@@ -513,7 +511,7 @@ axsReader.navigateToPrevResult = function(){
  */
 axsReader.announceCurrentFeedResult = function(){
   var currentFeedResultNode =
-      axsReader.feedResultsArray[axsReader.currentFeedResult];
+      axsReader.feedResultsArray[axsReader.currentFeedResult].childNodes[2];
   var announcementString = "";
   if(currentFeedResultNode.id == 'directory-search-results-previous-page'){
     announcementString = axsReader.GOTO_PREV_PAGE_STRING;
