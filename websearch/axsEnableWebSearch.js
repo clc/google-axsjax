@@ -25,6 +25,7 @@ axsWebSearch.NO_ALT_SEARCH_CAT_STRING = 'There are no other categories to ' +
                                         'search within.'
 axsWebSearch.NO_RELATED_SEARCHES_STRING = 'There are no related searches.'
 axsWebSearch.HELP_STRING = 'The following shortcut keys are available. ' +
+                        'G, use guided mode. ' +   
                         'Down arrow or N, go to the next result. ' +
                         'Up arrow or P, go to the previous result. ' +
                         'Right arrow or J, cycle to the next result. ' +
@@ -40,6 +41,9 @@ axsWebSearch.HELP_STRING = 'The following shortcut keys are available. ' +
                         'R, cycle through related searches. ' +
                         'Page up, go to the previous page. ' +
                         'Page down, go to the next page. ';
+axsWebSearch.GUIDE_MODE_END = 'You have reached the end of this page. ' +
+                              'Press the page down key to go to the next page. ' +
+                              'Or press G again to go back to the start of this page.';
 
 
 
@@ -73,6 +77,9 @@ axsWebSearch.altSearchCatIndex = 0;
 axsWebSearch.relatedSearchesArray = null;
 axsWebSearch.relatedSearchesIndex = 0;
 
+axsWebSearch.guideModeArray = null;
+axsWebSearch.guideModeIndex = 0;
+
 
 axsWebSearch.init = function(){
   axsWebSearch.axsJAXObj = new AxsJAX();
@@ -88,6 +95,7 @@ axsWebSearch.init = function(){
   axsWebSearch.buildAdsArray();
   axsWebSearch.buildAltSearchCatArray();
   axsWebSearch.buildRelatedSearchesArray();
+  axsWebSearch.buildGuideModeArray();
 };
 
 /**
@@ -132,6 +140,9 @@ axsWebSearch.extraKeyboardNavHandler = function(evt){
   }
   if (evt.charCode == 99){ // c
     axsWebSearch.cycleThroughAltSearchCat();
+  }
+  if (evt.charCode == 103){ // g
+    axsWebSearch.cycleThroughGuideMode();
   }
   if (evt.charCode == 106){ // j
     axsWebSearch.goToNextResult(true);
@@ -189,16 +200,18 @@ axsWebSearch.extraKeyboardNavHandler = function(evt){
 //Functions for OneBox
 //************
 
-
-axsWebSearch.readOneBox = function(){
-  var oneBox = null;
+axsWebSearch.getOneBoxNode = function(){
   var resDiv = document.getElementById('res');
   for (var child = resDiv.firstChild; child; child = child.nextSibling){
     if ((child.tagName == 'P') && child.textContent){
-      oneBox = child;
-      break;
+      return child
     }
   }
+  return null;
+}
+
+axsWebSearch.readOneBox = function(){
+  var oneBox = axsWebSearch.getOneBoxNode();
   if (oneBox){
     oneBox.scrollIntoView(true);
     axsWebSearch.axsJAXObj.speakNode(oneBox);
@@ -466,6 +479,81 @@ axsWebSearch.cycleThroughRelatedSearches = function(){
   axsWebSearch.axsJAXObj.speakNode(currentRelSearch);
 };
 
+
+//************
+//Functions for guided mode experiment
+//************
+
+axsWebSearch.buildGuideModeArray = function(){
+  axsWebSearch.guideModeArray = new Array();
+  var oneBox = axsWebSearch.getOneBoxNode();
+  if (oneBox){
+    axsWebSearch.guideModeArray.push(oneBox);
+  }
+  var rInd = 0;
+  var aInd = 0;
+  var resultsAdded = 0;
+
+  //Add search results interspersed with ads
+  var result = axsWebSearch.resultsArray[rInd++];
+  while (result){
+    axsWebSearch.guideModeArray.push(result);
+    if ((resultsAdded >= 3) && (axsWebSearch.adsArray[aInd])){
+      resultsAdded = 0;
+      result = axsWebSearch.adsArray[aInd++];
+    } else {
+      resultsAdded++;
+      result = axsWebSearch.resultsArray[rInd++];
+    }
+  }
+
+  //Add an ad here if there are still ads not added
+  result = axsWebSearch.adsArray[aInd++];
+  if (result){
+    axsWebSearch.guideModeArray.push(result);
+  }
+
+  //Add related searches interspersed with ads
+  rInd = 0;
+  resultsAdded = 0;
+  result = axsWebSearch.relatedSearchesArray[rInd++];
+  while (result){
+    axsWebSearch.guideModeArray.push(result);
+    if ((resultsAdded >= 3) && (axsWebSearch.adsArray[aInd])){
+      resultsAdded = 0;
+      result = axsWebSearch.adsArray[aInd++];
+    } else {
+      resultsAdded++;
+      result = axsWebSearch.relatedSearchesArray[rInd++];
+    }
+  }
+
+  //Add any remaining ads
+  result = axsWebSearch.adsArray[aInd++];
+  while (result){
+    axsWebSearch.guideModeArray.push(result);
+    result = axsWebSearch.adsArray[aInd++];
+  }
+  axsWebSearch.guideModeIndex = -1;
+};
+
+
+axsWebSearch.cycleThroughGuideMode = function(){
+  axsWebSearch.guideModeIndex++;
+  if (axsWebSearch.guideModeIndex >= axsWebSearch.guideModeArray.length){
+    axsWebSearch.guideModeIndex = -1;
+    axsWebSearch.axsJAXObj.speakText(axsWebSearch.GUIDE_MODE_END);
+    return;
+  }
+  var currentItem = axsWebSearch.guideModeArray[axsWebSearch.guideModeIndex];
+  currentItem.scrollIntoView(true);
+  axsWebSearch.axsJAXObj.speakNode(currentItem);
+  if (currentItem.tagName == 'A'){
+    axsWebSearch.currentLink = currentItem.href;
+  } else {
+    axsWebSearch.currentLink = currentItem.getElementsByTagName('a')[0].href;
+  }
+};
 
 
 
