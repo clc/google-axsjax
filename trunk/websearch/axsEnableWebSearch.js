@@ -49,6 +49,9 @@ axsWebSearch.GUIDE_MODE_END = 'You have reached the end of this page. ' +
                               'Or press G again to go back to the start of this page.';
 axsWebSearch.PAGECONTENT_RELATED_SEARCH_STRING = 'Searches related to:';
 
+axsWebSearch.ON_ACCESSIBLE_SEARCH = 'You are already on Google accessible search.'
+axsWebSearch.ON_WEB_SEARCH = 'You are already on Google web search.'
+
 
 
 /**
@@ -503,6 +506,10 @@ axsWebSearch.getCurrentURLQueryString = function(){
 
 
 axsWebSearch.switchToAccessibleSearch = function(){
+  if (document.baseURI.indexOf('http://www.google.com/custom') == 0){
+    axsWebSearch.axsJAXObj.speakText(axsWebSearch.ON_ACCESSIBLE_SEARCH);
+    return;
+  }
   var searchQuery = axsWebSearch.getCurrentURLQueryString();
   document.location = axsWebSearch.ACCESSIBLE_SEARCH_URL + searchQuery;
 }
@@ -511,6 +518,10 @@ axsWebSearch.switchToAccessibleSearch = function(){
 
 
 axsWebSearch.switchToWebSearch = function(){
+  if (document.baseURI.indexOf('http://www.google.com/search') == 0){
+    axsWebSearch.axsJAXObj.speakText(axsWebSearch.ON_WEB_SEARCH);
+    return;
+  }
   var searchQuery = axsWebSearch.getCurrentURLQueryString();
   document.location = axsWebSearch.WEB_SEARCH_URL + searchQuery;
 }
