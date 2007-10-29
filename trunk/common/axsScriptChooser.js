@@ -29,7 +29,7 @@ function pickScript(){
     theScript.src = 'http://google-axsjax.googlecode.com/svn/trunk/reader/axsEnableReader.js';
     shouldInsertScripts = true;
   }
-  if ((currentURL == 'http://www.google.com/') || (currentURL.indexOf('http://www.google.com/search') == 0)){
+  if ((currentURL == 'http://www.google.com/') || (currentURL.indexOf('http://www.google.com/search') == 0) || (currentURL.indexOf('http://www.google.com/custom') == 0)){
     theScript.src = 'http://google-axsjax.googlecode.com/svn/trunk/websearch/axsEnableWebSearch.js';
     shouldInsertScripts = true;    
   }
