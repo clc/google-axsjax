@@ -15,6 +15,9 @@
 var axsWebSearch = {};
 
 
+axsWebSearch.ACCESSIBLE_SEARCH_URL = 'http://www.google.com/custom?hl=en&client=google-coop-np&cof=AH%3Aleft%3BCX%3AGoogle%2520Accessible%2520Search%3BL%3Ahttp%3A%2F%2Fgoogle.com%2Fcoop%2Fimages%2Fcustom_search_sm.gif%3BLH%3A65%3BLP%3A1%3BGFNT%3A%23666666%3BDIV%3A%23cccccc%3B&btnG=Search&cx=000183394137052953072%3Azc1orsc6mbq&q=';
+axsWebSearch.WEB_SEARCH_URL = 'http://www.google.com/search?&q=';
+
 //These are strings to be spoken to the user
 axsWebSearch.NO_ONE_BOX_STRING = 'There is no one box on this page.';
 axsWebSearch.NO_ADS_STRING = 'There are no advertisements on this page.';
@@ -44,10 +47,6 @@ axsWebSearch.HELP_STRING = 'The following shortcut keys are available. ' +
 axsWebSearch.GUIDE_MODE_END = 'You have reached the end of this page. ' +
                               'Press the page down key to go to the next page. ' +
                               'Or press G again to go back to the start of this page.';
-
-
-
-
 axsWebSearch.PAGECONTENT_RELATED_SEARCH_STRING = 'Searches related to:';
 
 
@@ -96,6 +95,7 @@ axsWebSearch.init = function(){
   axsWebSearch.buildAltSearchCatArray();
   axsWebSearch.buildRelatedSearchesArray();
   axsWebSearch.buildGuideModeArray();
+
 };
 
 /**
@@ -138,6 +138,9 @@ axsWebSearch.extraKeyboardNavHandler = function(evt){
   if (evt.charCode == 97){ // a
     axsWebSearch.cycleThroughAds();
   }
+  if (evt.charCode == 65){ // A
+    axsWebSearch.switchToAccessibleSearch();
+  }
   if (evt.charCode == 99){ // c
     axsWebSearch.cycleThroughAltSearchCat();
   }
@@ -158,7 +161,10 @@ axsWebSearch.extraKeyboardNavHandler = function(evt){
   }
   if (evt.charCode == 114){ // r
     axsWebSearch.cycleThroughRelatedSearches();
-  }        
+  }
+  if (evt.charCode == 87){ // W
+    axsWebSearch.switchToWebSearch();
+  }
   if (evt.charCode == 47){ // / (slash symbol)
     document.getElementsByName('q')[0].focus();  //Focus on the top search blank
     document.getElementsByName('q')[0].select(); //and select all text
@@ -478,6 +484,37 @@ axsWebSearch.cycleThroughRelatedSearches = function(){
   axsWebSearch.currentLink = currentRelSearch.href;
   axsWebSearch.axsJAXObj.speakNode(currentRelSearch);
 };
+
+
+//************
+//Functions switching to accessible search experiment
+//************
+
+axsWebSearch.getCurrentURLQueryString = function(){
+  var URL = document.baseURI;
+  var searchQueryStart = URL.indexOf('q=') + 2;
+  var searchQueryEnd = URL.indexOf('&',searchQueryStart);
+  if (searchQueryEnd == -1){
+    searchQueryEnd = URL.length; 
+  }
+  return URL.substring(searchQueryStart, searchQueryEnd);
+}
+
+
+
+axsWebSearch.switchToAccessibleSearch = function(){
+  var searchQuery = axsWebSearch.getCurrentURLQueryString();
+  document.location = axsWebSearch.ACCESSIBLE_SEARCH_URL + searchQuery;
+}
+
+
+
+
+axsWebSearch.switchToWebSearch = function(){
+  var searchQuery = axsWebSearch.getCurrentURLQueryString();
+  document.location = axsWebSearch.WEB_SEARCH_URL + searchQuery;
+}
+
 
 
 //************
