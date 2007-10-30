@@ -1,0 +1,134 @@
+#    -*- mode: org -*-
+* Introduction To AxsJAX 
+
+** What Is AxsJAX?
+
+
+Web 2.0 is powered by AJAX --- Asynchronous JavaScript And
+XML. AxsJAX leverages AJAX techniques to inject accessibility
+support into  Web 2.0 applications.
+
+** What New Opportunities Does AxsJAX  Open Up?
+
+AJAX techniques have helped Web developers create live
+applications within Web browsers. The AxsJAX framework helps
+inject accessibility features into these applications so that
+users of adaptive technologies such as screen-readers and
+self-voicing browsers experience the same level of interactivity
+that is now taken for granted by users of Web 2.0 applications.
+
+** What Are Its Accessibility Goals?
+
+Our  accessibility goals include but are not limited to:
+
+  - Discover and codify design patterns  for access-enabling AJAX applications.
+  - Serve as a test-bed for implementors of adaptive technologies
+    in extending their tools to handle Web 2.0 applications.
+  - Help discover and fill-in  gaps  in the various
+    standards  that deal with the accessibility of AJAX
+    applications.
+
+    
+** AxsJAX Uses JavaScript --- Isn't That Inaccessible?
+
+Web applications that use JavaScript have traditionally proven an
+access barrier to screen-reader users for the following reasons:
+
+  - Adaptive technologies cannot always interpret the meaning of
+    actions invoked via JavaScript.
+  - Asynchronous page updates leave screenreaders  at a loss as
+    to what to speak.
+
+A set of W3C specifications collectively refered to as 
+W3C ARIA is addressing these issues. Though AJAX applications will
+continue to remain unusable from legacy browsers like lynx,
+there is no reason why they should remain forever inaccessible to
+users of adaptive technologies.
+
+Finally, JavaScript in the browser is a powerful mechanism that
+has enabled us turn the Web from a world of static documents to a
+platform for deploying dynamic end-user applications. The primary
+goal of the AxsJAX framework 
+is to leverage these same advantages presented by JavaScript in
+the browser to create flexible, powerful accessibility solutions.
+
+** Is AxsJAX Specific To Google Applications?
+
+
+We are open-sourcing the AxsJAX framework early in its
+development to foster a healthy community around the concept of
+access-enabling Web applications by injecting accessibility
+enhancements  via JavaScript.
+
+AxsJAX  initially targets  Google applications. As we
+discover design patterns that work, we are refactoring these into
+common modules that foster code reuse. Notice that these common
+modules are not Google specific, and can be leveraged to inject
+accessibility enhancements to *any* application deployed on the
+Web.
+
+
+** What Are The Long-term Goals For AxsJAX?
+
+
+The long-term goals of AxsJAX  will be largely end-user driven.
+This initial release hints at the type of end-user benefits that
+can be enabled via such a framework.
+Our goal is to create a healthy community built on an open
+framework for enhancing the accessibility of Web 2.0
+applications.
+
+** How Is AxsJAX Pronounced?
+
+AxsJAX is pronounced Access Jax  to rhyme with AJAX.
+
+* AxsJAX Technical Overview
+
+** How Does AxsJAX Leverage W3C ARIA?
+
+
+W3C ARIA is a collection of specifications that is presently
+under development at the W3C.
+Early support for W3C ARIA is available in Firefox 2.0, and its
+features are beginning to be leveraged by newer versions of
+screenreaders.
+
+W3C ARIA works by enhancing the  DOM with accessibility specific
+properties. The AxsJAX framework enables the injection of such
+DOM properties into existing Web applications via JavaScript.
+It provides a light-weight yet flexibile mechanism for
+experimenting with various design patterns for enhancing the
+accessibility of AJAX applications.
+
+** What Google Applications Does It presently Enhance?
+
+
+  - Google Reader
+  - Google Search 
+
+** How Does  AxsJAX  Help Screenreader Vendors?
+
+
+The set of specifications collectively known as W3C ARIA 
+is still under active development. Applications that have been
+enhanced via AxsJAX provide real-life examples for testing ARIA
+support within new versions of screen-readers.
+Thus, whereas individual test-suites help screen-reader
+developers test support for a given feature, AxsJAX  enabled
+applications provide 
+live examples for carrying out end-to-end testing.
+
+** How Does AxsJAX Help The Evolution Of Access Standards?
+
+
+W3C ARIA is still under active development. By access-enabling
+complete applications, AxsJAX helps in the development of the W3C
+ARIA specifications by discovering what works and by identifying
+gaps that  need to be filled.
+
+
+#+TITLE:     AxsJAX Frequently Asked Questions
+#+AUTHOR:    T.V Raman, Charles L Chen
+#+EMAIL:     raman@google.com, clchen@google.com
+#+LANGUAGE:  en
+#+OPTIONS:   H:3 num:t toc:t \n:nil @:t ::t |:t ^:t f:t *:t TeX:t LaTeX:nil skip:t p:nil
