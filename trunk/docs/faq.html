@@ -6,7 +6,7 @@ lang="en" xml:lang="en">
 <title>AxsJAX Frequently Asked Questions</title>
 <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
 <meta name="generator" content="Org-mode"/>
-<meta name="generated" content="2007/10/30 11:33:54"/>
+<meta name="generated" content="2007/10/30 11:48:00"/>
 <meta name="author" content="T.V. Raman, Charles L. Chen"/>
 <style type="text/css">
   html {
@@ -53,15 +53,16 @@ lang="en" xml:lang="en">
 <li><a href="#sec-11">2.2 What Google Applications Does It Presently Enhance?</a></li>
 <li><a href="#sec-12">2.3 How Does  AxsJAX  Help Screen Reader Vendors?</a></li>
 <li><a href="#sec-13">2.4 How Does AxsJAX Help The Evolution Of Access Standards?</a></li>
+<li><a href="#sec-14">2.5 How Does AxsJAX Inject Accessibility?</a></li>
 </ul>
 </li>
 </ul>
 
-<h2><a name="sec-1">1 Introduction To AxsJAX </a></h2>
+<h2 id="sec-1">1 Introduction To AxsJAX </h2>
 
 
 
-<h3><a name="sec-2">1.1 What Is AxsJAX?</a></h3>
+<h3 id="sec-2">1.1 What Is AxsJAX?</h3>
 
 
 
@@ -71,7 +72,7 @@ XML. AxsJAX leverages AJAX techniques to inject accessibility
 support into  Web 2.0 applications.
 </p>
 
-<h3><a name="sec-3">1.2 What New Opportunities Does AxsJAX  Open Up?</a></h3>
+<h3 id="sec-3">1.2 What New Opportunities Does AxsJAX  Open Up?</h3>
 
 
 <p>
@@ -83,7 +84,7 @@ self-voicing browsers experience the same level of interactivity
 that is now taken for granted by users of Web 2.0 applications.
 </p>
 
-<h3><a name="sec-4">1.3 What Are Its Accessibility Goals?</a></h3>
+<h3 id="sec-4">1.3 What Are Its Accessibility Goals?</h3>
 
 
 <p>
@@ -105,7 +106,7 @@ applications.
 
 </li>
 </ul>
-<h3><a name="sec-5">1.4 AxsJAX Uses JavaScript --- Isn't That Inaccessible?</a></h3>
+<h3 id="sec-5">1.4 AxsJAX Uses JavaScript --- Isn't That Inaccessible?</h3>
 
 
 <p>
@@ -122,12 +123,13 @@ Asynchronous page updates leave screen readers at a loss as
 to what to speak.
 
 </li>
-</ul>A set of W3C specifications collectively refered to as 
-W3C ARIA is addressing these issues. Though AJAX applications will
+</ul>
+<p>A set of W3C specifications collectively refered to as 
+<a href="http://www.w3.org/TR/2007/WD-aria-roadmap-20071019/">W3C ARIA</a> is addressing these issues. Though AJAX applications will
 continue to remain unusable from legacy browsers like lynx,
 there is no reason why they should remain forever inaccessible to
 users of adaptive technologies.
-
+</p>
 <p>
 Finally, JavaScript in the browser is a powerful mechanism that
 has enabled us to turn the Web from a world of static documents to a
@@ -137,7 +139,7 @@ is to leverage these same advantages presented by JavaScript in
 the browser to create flexible, powerful accessibility solutions.
 </p>
 
-<h3><a name="sec-6">1.5 Is AxsJAX Specific To Google Applications?</a></h3>
+<h3 id="sec-6">1.5 Is AxsJAX Specific To Google Applications?</h3>
 
 
 
@@ -157,7 +159,7 @@ Web.
 </p>
 
 
-<h3><a name="sec-7">1.6 What Are The Long-term Goals For AxsJAX?</a></h3>
+<h3 id="sec-7">1.6 What Are The Long-term Goals For AxsJAX?</h3>
 
 
 
@@ -170,18 +172,18 @@ framework for enhancing the accessibility of Web 2.0
 applications.
 </p>
 
-<h3><a name="sec-8">1.7 How Is AxsJAX Pronounced?</a></h3>
+<h3 id="sec-8">1.7 How Is AxsJAX Pronounced?</h3>
 
 
 <p>
 AxsJAX is pronounced Access Jax  to rhyme with AJAX.
 </p>
 
-<h2><a name="sec-9">2 AxsJAX Technical Overview</a></h2>
+<h2 id="sec-9">2 AxsJAX Technical Overview</h2>
 
 
 
-<h3><a name="sec-10">2.1 How Does AxsJAX Leverage W3C ARIA?</a></h3>
+<h3 id="sec-10">2.1 How Does AxsJAX Leverage W3C ARIA?</h3>
 
 
 
@@ -201,7 +203,7 @@ experimenting with various design patterns for enhancing the
 accessibility of AJAX applications.
 </p>
 
-<h3><a name="sec-11">2.2 What Google Applications Does It Presently Enhance?</a></h3>
+<h3 id="sec-11">2.2 What Google Applications Does It Presently Enhance?</h3>
 
 
 
@@ -214,7 +216,7 @@ Google Search
 
 </li>
 </ul>
-<h3><a name="sec-12">2.3 How Does  AxsJAX  Help Screen Reader Vendors?</a></h3>
+<h3 id="sec-12">2.3 How Does  AxsJAX  Help Screen Reader Vendors?</h3>
 
 
 
@@ -229,7 +231,7 @@ applications provide
 live examples for carrying out end-to-end testing.
 </p>
 
-<h3><a name="sec-13">2.4 How Does AxsJAX Help The Evolution Of Access Standards?</a></h3>
+<h3 id="sec-13">2.4 How Does AxsJAX Help The Evolution Of Access Standards?</h3>
 
 
 
@@ -240,9 +242,35 @@ ARIA specifications by discovering what works and by identifying
 gaps that  need to be filled.
 </p>
 
+<h3 id="sec-14">2.5 How Does AxsJAX Inject Accessibility?</h3>
+
+
+<p>
+The AxsJAX framework  can inject accessibility enhancements into
+existing Web 2.0 applications using any of several standard Web
+techniques:
+</p><ul>
+<li>
+As <i>bookmarklets</i> --- small snippets of JavaScript that are
+used to create <b>smart</b> bookmarks.
+</li>
+<li>
+Using GreaseMonkey --- a powerful browser extension that
+allows end-users to customize the look and feel of Web sites
+via custom scripts.
+
+</li>
+</ul>
+<p>In particular, the accessibility enhancements provided by AxsJAX
+are not tied to any single injection technique, and we  are
+looking to the Open Source community to come up with additional
+innovative means for  performing 
+such enhancements.
+</p>
+
 <p class="author"> Author: T.V. Raman, Charles L. Chen
 <a href="mailto:raman@google.com, clchen@google.com">&lt;raman@google.com, clchen@google.com&gt;</a>
 </p>
-<p class="date"> Date: 2007/10/30 11:33:54</p>
+<p class="date"> Date: 2007/10/30 11:48:00</p>
 </body>
 </html>
