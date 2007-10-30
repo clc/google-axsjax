@@ -6,7 +6,7 @@ lang="en" xml:lang="en">
 <title>AxsJAX Frequently Asked Questions</title>
 <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
 <meta name="generator" content="Org-mode"/>
-<meta name="generated" content="2007/10/30 11:57:35"/>
+<meta name="generated" content="2007/10/30 12:12:55"/>
 <meta name="author" content="T.V. Raman, Charles L. Chen"/>
 <style type="text/css">
   html {
@@ -49,11 +49,13 @@ lang="en" xml:lang="en">
 </li>
 <li><a href="#sec-9">2 AxsJAX Technical Overview</a>
 <ul>
-<li><a href="#sec-10">2.1 How Does AxsJAX Leverage W3C ARIA?</a></li>
-<li><a href="#sec-11">2.2 What Google Applications Does It Presently Enhance?</a></li>
-<li><a href="#sec-12">2.3 How Does  AxsJAX  Help Screen Reader Vendors?</a></li>
-<li><a href="#sec-13">2.4 How Does AxsJAX Help The Evolution Of Access Standards?</a></li>
-<li><a href="#sec-14">2.5 How Does AxsJAX Inject Accessibility?</a></li>
+<li><a href="#sec-10">2.1 What Prerequisites Does AxsJAX Assume?</a></li>
+<li><a href="#sec-11">2.2 How Does AxsJAX Leverage W3C ARIA?</a></li>
+<li><a href="#sec-12">2.3 What Google Applications Does It Presently Enhance?</a></li>
+<li><a href="#sec-13">2.4 How Does  AxsJAX  Help Screen Reader Vendors?</a></li>
+<li><a href="#sec-14">2.5 How Does AxsJAX Help The Evolution Of Access Standards?</a></li>
+<li><a href="#sec-15">2.6 How Does AxsJAX Inject Accessibility?</a></li>
+<li><a href="#sec-16">2.7 How Can Web Developers Experience AxsJAX Enhancements?</a></li>
 </ul>
 </li>
 </ul>
@@ -180,8 +182,33 @@ AxsJAX is pronounced Access Jax  to rhyme with AJAX.
 <h2 id="sec-9">2 AxsJAX Technical Overview</h2>
 
 
+<h3 id="sec-10">2.1 What Prerequisites Does AxsJAX Assume?</h3>
 
-<h3 id="sec-10">2.1 How Does AxsJAX Leverage W3C ARIA?</h3>
+
+<p>
+AxsJAX injects accessibility enhancements as defined by <a href="http://www.w3.org/TR/2007/WD-aria-roadmap-20071019/">W3C ARIA</a>.
+The prerequisites for experiencing its benefits include:
+</p>
+<ol>
+<li>
+A modern Web browser like Firefox 2.0 or later that supports
+W3C ARIA.
+</li>
+<li>
+Adaptive technologies that respond correctly to the
+accessibility enhancements introduced by W3C ARIA.
+</li>
+<li>
+In particular, many of the enhancements injected by AxsJAX
+depend on support for <i>live regions</i> a feature that enables
+adaptive technologies like screen-readers and self-voicing
+browsers deal correctly with asynchronous updates to
+portions of a Web page.
+
+</li>
+</ol>
+
+<h3 id="sec-11">2.2 How Does AxsJAX Leverage W3C ARIA?</h3>
 
 
 
@@ -201,7 +228,7 @@ experimenting with various design patterns for enhancing the
 accessibility of AJAX applications.
 </p>
 
-<h3 id="sec-11">2.2 What Google Applications Does It Presently Enhance?</h3>
+<h3 id="sec-12">2.3 What Google Applications Does It Presently Enhance?</h3>
 
 
 
@@ -214,22 +241,21 @@ Google Search
 
 </li>
 </ul>
-<h3 id="sec-12">2.3 How Does  AxsJAX  Help Screen Reader Vendors?</h3>
+<h3 id="sec-13">2.4 How Does  AxsJAX  Help Screen Reader Vendors?</h3>
 
 
 
 <p>
-The set of specifications collectively known as W3C ARIA 
-is still under active development. Applications that have been
-enhanced via AxsJAX provide real-life examples for testing ARIA
-support within new versions of screen readers.
-Thus, whereas individual test-suites help screen reader
-developers test support for a given feature, AxsJAX  enabled
-applications provide 
-live examples for carrying out end-to-end testing.
+The set of specifications collectively known as <a href="http://www.w3.org/TR/2007/WD-aria-roadmap-20071019/%20GMT%3B%20Path%3D/ Set-Cookie:%20TPExits%3Dnull|null|null|10|null|null|%3B%20Expires%3DWed,%2001-Oct-2008%2022:22:31%20GMT%3B%20Path%3D/ Connection:%20close Content-Type:%20text/html%3B%20charset%3DISO-8859-1 ">W3C ARIA</a> is still
+under active development. Applications that have been enhanced
+via AxsJAX provide real-life examples for testing ARIA support
+within new versions of screen readers. Thus, whereas individual
+test-suites help screen reader developers test support for a
+given feature, AxsJAX enabled applications provide live examples
+for carrying out end-to-end testing.
 </p>
 
-<h3 id="sec-13">2.4 How Does AxsJAX Help The Evolution Of Access Standards?</h3>
+<h3 id="sec-14">2.5 How Does AxsJAX Help The Evolution Of Access Standards?</h3>
 
 
 
@@ -240,7 +266,7 @@ ARIA specifications by discovering what works and by identifying
 gaps that  need to be filled.
 </p>
 
-<h3 id="sec-14">2.5 How Does AxsJAX Inject Accessibility?</h3>
+<h3 id="sec-15">2.6 How Does AxsJAX Inject Accessibility?</h3>
 
 
 <p>
@@ -266,9 +292,19 @@ innovative means for  performing
 such enhancements.
 </p>
 
-<p class="author"> Author: T.V. Raman, Charles L. Chen
+
+<h3 id="sec-16">2.7 How Can Web Developers Experience AxsJAX Enhancements?</h3>
+
+
+<p>
+The Open Source Fire-vox extension to Firefox
+provides an ideal tool for  Web developers who may not necessarily have commercial
+screen-readers available for testing.
+Fire-vox is a cross-platform self-voicing  extension to Firefox
+that includes early support for most leading edge features of W3C ARIA.
+</p><p class="author"> Author: T.V. Raman, Charles L. Chen
 <a href="mailto:raman@google.com, clchen@google.com">&lt;raman@google.com, clchen@google.com&gt;</a>
 </p>
-<p class="date"> Date: 2007/10/30 11:57:35</p>
+<p class="date"> Date: 2007/10/30 12:12:55</p>
 </body>
 </html>

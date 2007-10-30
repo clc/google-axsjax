@@ -82,6 +82,20 @@ applications.
 AxsJAX is pronounced Access Jax  to rhyme with AJAX.
 
 * AxsJAX Technical Overview
+** What Prerequisites Does AxsJAX Assume?
+
+AxsJAX injects accessibility enhancements as defined by [[http://www.w3.org/TR/2007/WD-aria-roadmap-20071019/][W3C ARIA]].
+The prerequisites for experiencing its benefits include:
+
+  1. A modern Web browser like Firefox 2.0 or later that supports
+     W3C ARIA.
+  2. Adaptive technologies that respond correctly to the
+     accessibility enhancements introduced by W3C ARIA.
+  3. In particular, many of the enhancements injected by AxsJAX
+     depend on support for /live regions/ a feature that enables
+     adaptive technologies like screen-readers and self-voicing
+     browsers deal correctly with asynchronous updates to
+     portions of a Web page.
 
 ** How Does AxsJAX Leverage W3C ARIA?
 
@@ -108,14 +122,13 @@ accessibility of AJAX applications.
 ** How Does  AxsJAX  Help Screen Reader Vendors?
 
 
-The set of specifications collectively known as W3C ARIA 
-is still under active development. Applications that have been
-enhanced via AxsJAX provide real-life examples for testing ARIA
-support within new versions of screen readers.
-Thus, whereas individual test-suites help screen reader
-developers test support for a given feature, AxsJAX  enabled
-applications provide 
-live examples for carrying out end-to-end testing.
+The set of specifications collectively known as [[http://www.w3.org/TR/2007/WD-aria-roadmap-20071019/%20GMT%3B%20Path%3D/ Set-Cookie:%20TPExits%3Dnull|null|null|10|null|null|%3B%20Expires%3DWed,%2001-Oct-2008%2022:22:31%20GMT%3B%20Path%3D/ Connection:%20close Content-Type:%20text/html%3B%20charset%3DISO-8859-1 ][W3C ARIA]] is still
+under active development. Applications that have been enhanced
+via AxsJAX provide real-life examples for testing ARIA support
+within new versions of screen readers. Thus, whereas individual
+test-suites help screen reader developers test support for a
+given feature, AxsJAX enabled applications provide live examples
+for carrying out end-to-end testing.
 
 ** How Does AxsJAX Help The Evolution Of Access Standards?
 
@@ -143,6 +156,13 @@ innovative means for  performing
 such enhancements.
 
 
+** How Can Web Developers Experience AxsJAX Enhancements?
+
+The Open Source Fire-vox extension to Firefox
+provides an ideal tool for  Web developers who may not necessarily have commercial
+screen-readers available for testing.
+Fire-vox is a cross-platform self-voicing  extension to Firefox
+that includes early support for most leading edge features of W3C ARIA.
 #+TITLE:     AxsJAX Frequently Asked Questions
 #+AUTHOR:    T.V. Raman, Charles L. Chen
 #+EMAIL:     raman@google.com, clchen@google.com
