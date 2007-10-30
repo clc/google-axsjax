@@ -1,6 +1,6 @@
 // Copyright 2007 Google Inc.
 // All Rights Reserved.
-
+ 
 /**
  * @fileoverview Greasemonkey JavaScript to enhance accessibility
  * of Google Web Search. 
