@@ -13,7 +13,7 @@ support into  Web 2.0 applications.
 AJAX techniques have helped Web developers create live
 applications within Web browsers. The AxsJAX framework helps
 inject accessibility features into these applications so that
-users of adaptive technologies such as screen-readers and
+users of adaptive technologies such as screen readers and
 self-voicing browsers experience the same level of interactivity
 that is now taken for granted by users of Web 2.0 applications.
 
@@ -32,11 +32,11 @@ Our  accessibility goals include but are not limited to:
 ** AxsJAX Uses JavaScript --- Isn't That Inaccessible?
 
 Web applications that use JavaScript have traditionally proven an
-access barrier to screen-reader users for the following reasons:
+access barrier to screen reader users for the following reasons:
 
   - Adaptive technologies cannot always interpret the meaning of
     actions invoked via JavaScript.
-  - Asynchronous page updates leave screenreaders  at a loss as
+  - Asynchronous page updates leave screen readers at a loss as
     to what to speak.
 
 A set of W3C specifications collectively refered to as 
@@ -91,7 +91,7 @@ W3C ARIA is a collection of specifications that is presently
 under development at the W3C.
 Early support for W3C ARIA is available in Firefox 2.0, and its
 features are beginning to be leveraged by newer versions of
-screenreaders.
+screen readers.
 
 W3C ARIA works by enhancing the  DOM with accessibility specific
 properties. The AxsJAX framework enables the injection of such
@@ -106,14 +106,14 @@ accessibility of AJAX applications.
   - Google Reader
   - Google Search 
 
-** How Does  AxsJAX  Help Screenreader Vendors?
+** How Does  AxsJAX  Help Screen Reader Vendors?
 
 
 The set of specifications collectively known as W3C ARIA 
 is still under active development. Applications that have been
 enhanced via AxsJAX provide real-life examples for testing ARIA
-support within new versions of screen-readers.
-Thus, whereas individual test-suites help screen-reader
+support within new versions of screen readers.
+Thus, whereas individual test-suites help screen reader
 developers test support for a given feature, AxsJAX  enabled
 applications provide 
 live examples for carrying out end-to-end testing.
