@@ -158,11 +158,11 @@ such enhancements.
 
 ** How Can Web Developers Experience AxsJAX Enhancements?
 
-The Open Source Fire-vox extension to Firefox
+The open source [[http://firevox.clcworld.net/][Fire Vox]] extension to Firefox
 provides an ideal tool for  Web developers who may not necessarily have commercial
 screen readers available for testing.
-Fire-vox is a cross-platform self-voicing  extension to Firefox
-that includes early support for most leading edge features of W3C ARIA.
+Fire Vox is a cross-platform self-voicing extension to Firefox
+that includes early support for most of the leading edge features of W3C ARIA.
 #+TITLE:     AxsJAX Frequently Asked Questions
 #+AUTHOR:    T.V. Raman, Charles L. Chen
 #+EMAIL:     raman@google.com, clchen@google.com
