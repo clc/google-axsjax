@@ -1,6 +1,6 @@
 // Copyright 2007 Google Inc.
 // All Rights Reserved.
- 
+
 /**
  * @fileoverview Greasemonkey JavaScript to enhance accessibility
  * of Google Web Search. 
@@ -51,6 +51,7 @@ axsWebSearch.PAGECONTENT_RELATED_SEARCH_STRING = 'Searches related to:';
 
 axsWebSearch.ON_ACCESSIBLE_SEARCH = 'You are already on Google accessible search.'
 axsWebSearch.ON_WEB_SEARCH = 'You are already on Google web search.'
+axsWebSearch.SPONSORED_LINK = 'Sponsored link. '
 
 
 
@@ -543,44 +544,62 @@ axsWebSearch.buildGuideModeArray = function(){
   var resultsAdded = 0;
 
   //Add search results interspersed with ads
-  var result = axsWebSearch.resultsArray[rInd++];
-  while (result){
+  var result = new Object();
+  result.node = axsWebSearch.resultsArray[rInd++];
+  result.isAd = false;
+  while (result.node){
     axsWebSearch.guideModeArray.push(result);
     if ((resultsAdded >= 3) && (axsWebSearch.adsArray[aInd])){
       resultsAdded = 0;
-      result = axsWebSearch.adsArray[aInd++];
+      result = new Object();
+      result.node = axsWebSearch.adsArray[aInd++];
+      result.isAd = true;
     } else {
       resultsAdded++;
-      result = axsWebSearch.resultsArray[rInd++];
+      result = new Object();
+      result.node = axsWebSearch.resultsArray[rInd++];
+      result.isAd = false;
     }
   }
 
   //Add an ad here if there are still ads not added
-  result = axsWebSearch.adsArray[aInd++];
-  if (result){
+  result = new Object();
+  result.node = axsWebSearch.adsArray[aInd++];
+  result.isAd = true;
+  if (result.node){
     axsWebSearch.guideModeArray.push(result);
   }
 
   //Add related searches interspersed with ads
   rInd = 0;
   resultsAdded = 0;
-  result = axsWebSearch.relatedSearchesArray[rInd++];
-  while (result){
+  result = new Object();
+  result.node = axsWebSearch.relatedSearchesArray[rInd++];
+  result.isAd = false;
+  while (result.node){
     axsWebSearch.guideModeArray.push(result);
     if ((resultsAdded >= 3) && (axsWebSearch.adsArray[aInd])){
       resultsAdded = 0;
-      result = axsWebSearch.adsArray[aInd++];
+      result = new Object();
+      result.node = axsWebSearch.adsArray[aInd++];
+      result.isAd = true;
     } else {
       resultsAdded++;
-      result = axsWebSearch.relatedSearchesArray[rInd++];
+      result = new Object();
+      result.node = axsWebSearch.relatedSearchesArray[rInd++];
+      result.isAd = false;
     }
   }
 
   //Add any remaining ads
-  result = axsWebSearch.adsArray[aInd++];
-  while (result){
+  result = new Object();
+  result.node = axsWebSearch.adsArray[aInd++];
+  result.isAd = true;
+  while (result.node){
     axsWebSearch.guideModeArray.push(result);
-    result = axsWebSearch.adsArray[aInd++];
+    result = new Object();
+    result.node = axsWebSearch.adsArray[aInd++];
+    result.isAd = true;
   }
   axsWebSearch.guideModeIndex = -1;
 };
@@ -593,9 +612,15 @@ axsWebSearch.cycleThroughGuideMode = function(){
     axsWebSearch.axsJAXObj.speakText(axsWebSearch.GUIDE_MODE_END);
     return;
   }
-  var currentItem = axsWebSearch.guideModeArray[axsWebSearch.guideModeIndex];
+  var currentGuideObj = axsWebSearch.guideModeArray[axsWebSearch.guideModeIndex];
+  var currentItem = currentGuideObj.node;
   currentItem.scrollIntoView(true);
-  axsWebSearch.axsJAXObj.speakNode(currentItem);
+  if (currentGuideObj.isAd){
+    axsWebSearch.axsJAXObj.speakText(axsWebSearch.SPONSORED_LINK + currentItem.textContent);
+  }
+  else {
+    axsWebSearch.axsJAXObj.speakNode(currentItem);
+  }
   if (currentItem.tagName == 'A'){
     axsWebSearch.currentLink = currentItem.href;
   } else {
