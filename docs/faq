@@ -46,7 +46,7 @@ there is no reason why they should remain forever inaccessible to
 users of adaptive technologies.
 
 Finally, JavaScript in the browser is a powerful mechanism that
-has enabled us turn the Web from a world of static documents to a
+has enabled us to turn the Web from a world of static documents to a
 platform for deploying dynamic end-user applications. The primary
 goal of the AxsJAX framework 
 is to leverage these same advantages presented by JavaScript in
@@ -100,7 +100,7 @@ It provides a light-weight yet flexibile mechanism for
 experimenting with various design patterns for enhancing the
 accessibility of AJAX applications.
 
-** What Google Applications Does It presently Enhance?
+** What Google Applications Does It Presently Enhance?
 
 
   - Google Reader
@@ -128,7 +128,7 @@ gaps that  need to be filled.
 
 
 #+TITLE:     AxsJAX Frequently Asked Questions
-#+AUTHOR:    T.V Raman, Charles L Chen
+#+AUTHOR:    T.V. Raman, Charles L. Chen
 #+EMAIL:     raman@google.com, clchen@google.com
 #+LANGUAGE:  en
 #+OPTIONS:   H:3 num:t toc:t \n:nil @:t ::t |:t ^:t f:t *:t TeX:t LaTeX:nil skip:t p:nil
