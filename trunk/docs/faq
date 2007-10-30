@@ -93,7 +93,7 @@ The prerequisites for experiencing its benefits include:
      accessibility enhancements introduced by W3C ARIA.
   3. In particular, many of the enhancements injected by AxsJAX
      depend on support for /live regions/ a feature that enables
-     adaptive technologies like screen-readers and self-voicing
+     adaptive technologies like screen readers and self-voicing
      browsers deal correctly with asynchronous updates to
      portions of a Web page.
 
@@ -160,7 +160,7 @@ such enhancements.
 
 The Open Source Fire-vox extension to Firefox
 provides an ideal tool for  Web developers who may not necessarily have commercial
-screen-readers available for testing.
+screen readers available for testing.
 Fire-vox is a cross-platform self-voicing  extension to Firefox
 that includes early support for most leading edge features of W3C ARIA.
 #+TITLE:     AxsJAX Frequently Asked Questions
