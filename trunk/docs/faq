@@ -4,7 +4,7 @@
 ** What Is AxsJAX?
 
 
-Web 2.0 is powered by AJAX --- Asynchronous JavaScript And
+Web 2.0 applications are  powered by AJAX --- Asynchronous JavaScript And
 XML. AxsJAX leverages AJAX techniques to inject accessibility
 support into  Web 2.0 applications.
 
@@ -18,7 +18,6 @@ self-voicing browsers experience the same level of interactivity
 that is now taken for granted by users of Web 2.0 applications.
 
 ** What Are Its Accessibility Goals?
-
 Our  accessibility goals include but are not limited to:
 
   - Discover and codify design patterns  for access-enabling AJAX applications.
