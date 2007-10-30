@@ -40,7 +40,7 @@ access barrier to screen reader users for the following reasons:
     to what to speak.
 
 A set of W3C specifications collectively refered to as 
-W3C ARIA is addressing these issues. Though AJAX applications will
+[[http://www.w3.org/TR/2007/WD-aria-roadmap-20071019/][W3C ARIA]] is addressing these issues. Though AJAX applications will
 continue to remain unusable from legacy browsers like lynx,
 there is no reason why they should remain forever inaccessible to
 users of adaptive technologies.
@@ -125,6 +125,23 @@ W3C ARIA is still under active development. By access-enabling
 complete applications, AxsJAX helps in the development of the W3C
 ARIA specifications by discovering what works and by identifying
 gaps that  need to be filled.
+
+** How Does AxsJAX Inject Accessibility?
+
+The AxsJAX framework  can inject accessibility enhancements into
+existing Web 2.0 applications using any of several standard Web
+techniques:
+  - As /bookmarklets/ --- small snippets of JavaScript that are
+    used to create *smart* bookmarks.
+  - Using GreaseMonkey --- a powerful browser extension that
+    allows end-users to customize the look and feel of Web sites
+    via custom scripts.
+
+In particular, the accessibility enhancements provided by AxsJAX
+are not tied to any single injection technique, and we  are
+looking to the Open Source community to come up with additional
+innovative means for  performing 
+such enhancements.
 
 
 #+TITLE:     AxsJAX Frequently Asked Questions
