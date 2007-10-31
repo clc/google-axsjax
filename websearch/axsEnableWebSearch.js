@@ -15,8 +15,8 @@
 var axsWebSearch = {};
 
 
-axsWebSearch.ACCESSIBLE_SEARCH_URL = 'http://www.google.com/custom?hl=en&client=google-coop-np&cof=AH%3Aleft%3BCX%3AGoogle%2520Accessible%2520Search%3BL%3Ahttp%3A%2F%2Fgoogle.com%2Fcoop%2Fimages%2Fcustom_search_sm.gif%3BLH%3A65%3BLP%3A1%3BGFNT%3A%23666666%3BDIV%3A%23cccccc%3B&btnG=Search&cx=000183394137052953072%3Azc1orsc6mbq&q=';
-axsWebSearch.WEB_SEARCH_URL = 'http://www.google.com/search?&q=';
+axsWebSearch.ACCESSIBLE_SEARCH_URL = 
+    'http://www.google.com/cse?cx=000183394137052953072%3Azc1orsc6mbq&q="';
 
 //These are strings to be spoken to the user
 axsWebSearch.NO_ONE_BOX_STRING = 'There is no one box on this page.';
