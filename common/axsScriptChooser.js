@@ -11,10 +11,10 @@
 
 
 function pickScript(){
+  var baseURL = 'http://google-axsjax.googlecode.com/svn/trunk/';
   var theLib = document.createElement('script');
   theLib.type = 'text/javascript';
-  theLib.src =
-      'http://google-axsjax.googlecode.com/svn/trunk/common/AxsJAX.js';
+  theLib.src = baseURL + 'common/AxsJAX.js';
   //Do not insert anything if the scripts are already inserted.
   var scriptArray = document.getElementsByTagName('script');
   for (var i=0; i<scriptArray.length; i++){
@@ -27,15 +27,13 @@ function pickScript(){
   theScript.type = 'text/javascript';
   var currentURL = document.baseURI;
   if (currentURL.indexOf('http://www.google.com/reader/') == 0){
-    theScript.src =
-        'http://google-axsjax.googlecode.com/svn/trunk/reader/axsEnableReader.js';
+    theScript.src = baseURL + 'reader/axsEnableReader.js';
     shouldInsertScripts = true;
   }
   if ((currentURL == 'http://www.google.com/')
       || (currentURL.indexOf('http://www.google.com/search') == 0)
       || (currentURL.indexOf('http://www.google.com/custom') == 0)){
-    theScript.src =
-        'http://google-axsjax.googlecode.com/svn/trunk/websearch/axsEnableWebSearch.js';
+    theScript.src = baseURL + 'websearch/axsEnableWebSearch.js';
     shouldInsertScripts = true;    
   }
   if (shouldInsertScripts){
