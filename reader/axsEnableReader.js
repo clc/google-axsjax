@@ -364,7 +364,7 @@ axsReader.unsubscribeFromFeedCurrentlyOpen = function(){
     var unsubscribeMenuItem = document.getElementById('stream-unsubscribe');
     axsReader.axsJAXObj.clickElem(unsubscribeMenuItem);
   }
-}
+};
 
 
 /**
@@ -380,7 +380,7 @@ axsReader.browseFeedBundles = function(){
     'http://www.google.com/reader/view/#directory-page';
   axsReader.axsJAXObj.speakText(axsReader.BUNDLES_LOADED_STRING);
   axsReader.feedBundlesArray = new Array();
-}
+};
 
  /**
  * Load the feed bundles that are shown into an array that can be more easily
@@ -467,7 +467,7 @@ axsReader.subscribeToCurrentFeedBundle = function(){
  */
 axsReader.focusFeedsSearch = function(){
   document.getElementById('directory-search-query').focus();
-}
+};
 
  /**
  * Load the results that are shown into an array that can be more easily
@@ -592,7 +592,7 @@ axsReader.navigateToClosestCancelButton = function(enterButtonSpan){
   var enterButtonRow = enterButtonSpan.parentNode.parentNode.parentNode;
   var enterButtonTable = enterButtonRow.parentNode.parentNode; //Expect TD
   var cancelButtonTable = enterButtonTable.nextSibling;
-  var cancelButton = cancelButtonTable.getElementsByTagName('span')[0]
+  var cancelButton = cancelButtonTable.getElementsByTagName('span')[0];
   cancelButton.tabIndex = 0;
   cancelButton.setAttribute('role','wairole:button');
   cancelButton.focus();
