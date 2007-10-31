@@ -16,7 +16,7 @@ var axsWebSearch = {};
 
 
 axsWebSearch.ACCESSIBLE_SEARCH_URL = 
-    'http://www.google.com/cse?cx=000183394137052953072%3Azc1orsc6mbq&q="';
+    'http://www.google.com/cse?cx=000183394137052953072%3Azc1orsc6mbq&q=';
 
 //These are strings to be spoken to the user
 axsWebSearch.NO_ONE_BOX_STRING = 'There is no one box on this page.';
