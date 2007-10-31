@@ -44,9 +44,10 @@ AxsJAX.prototype.speakNode = function(targetNode){
 //---------
   /*Something to try for Firefox 3 once it stabilizes.*/
   /*Theoretically, this code should work better as active descendant will set
-    focus and make it work for JAWS and Window Eyes. However, Firefox 2 does
-    not handle this correctly yet. Therefore, hold off on using this code until
-    Firefox 3 is ready. Use Live Regions for now as that works on Fire Vox.*/
+   * focus and make it work for JAWS and Window Eyes. However, Firefox 2 does
+   * not handle this correctly yet. Therefore, hold off on this until
+   *Firefox 3 is ready. Use Live Regions for now as that works on Fire Vox.
+   */
 
 
   if (!targetNode.id){
@@ -160,8 +161,8 @@ AxsJAX.prototype.sendKey = function(targetNode, theKey,
  * be changed; the returned ID will be the original ID.
  * @param {Node} targetNode The target node of this operation.
  * @param {String} opt_prefixString
-                            Prefix to help ensure the uniqueness of the ID.
- *                          This is optional; if null, it will use "AxsJAX_ID_".
+ * Prefix to help ensure the uniqueness of the ID.
+ *This is optional; if null, it will use "AxsJAX_ID_".
  * @return {String} The ID that the targetNode now has.
  */
 AxsJAX.prototype.assignId = function(targetNode,prefixString){
