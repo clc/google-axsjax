@@ -55,10 +55,10 @@ axsWebSearch.init = function(){
   axsWebSearch.axsJAXObj = new AxsJAX();
   //If the keyboard shortcut experiment is not running, run it
   var locationString = window.content.document.location.toString();
-  if (locationString.indexOf('http://www.google.com/search') != 0){
+  if (locationString.indexOf('http://www.google.com/search') !== 0){
     window.content.document.location = 'http://www.google.com/search?hl=en&esrch=BetaShortcuts&q=google&btnG=Search';
   }
-  if ( (locationString.indexOf('http://www.google.com/search') == 0) &&
+  if ( (locationString.indexOf('http://www.google.com/search') === 0) &&
        (locationString.indexOf('&esrch=BetaShortcuts') == -1) ){
     window.content.document.location = locationString + '&esrch=BetaShortcuts';
   }

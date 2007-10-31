@@ -37,8 +37,8 @@ axsWebSearch.NO_NEXT_PAGE_STRING = 'There is no next page.';
 axsWebSearch.NO_PREV_PAGE_STRING = 'There is no previous page.';
 axsWebSearch.SEARCH_WITHIN_STRING = 'Search within ';
 axsWebSearch.NO_ALT_SEARCH_CAT_STRING = 'There are no other categories to ' +
-                                        'search within.'
-axsWebSearch.NO_RELATED_SEARCHES_STRING = 'There are no related searches.'
+                                        'search within.';
+axsWebSearch.NO_RELATED_SEARCHES_STRING = 'There are no related searches.';
 axsWebSearch.HELP_STRING = 'The following shortcut keys are available. ' +
                         'G, use guided mode. ' +   
                         'Down arrow or N, go to the next result. ' +
@@ -61,9 +61,9 @@ axsWebSearch.GUIDE_MODE_END = 'You have reached the end of this page. ' +
                               'Or press G again to go back to the start of this page.';
 axsWebSearch.PAGECONTENT_RELATED_SEARCH_STRING = 'Searches related to:';
 
-axsWebSearch.ON_ACCESSIBLE_SEARCH = 'You are already on Google accessible search.'
-axsWebSearch.ON_WEB_SEARCH = 'You are already on Google web search.'
-axsWebSearch.SPONSORED_LINK = 'Sponsored link. '
+axsWebSearch.ON_ACCESSIBLE_SEARCH = 'You are already on Google accessible search.';
+axsWebSearch.ON_WEB_SEARCH = 'You are already on Google web search.';
+axsWebSearch.SPONSORED_LINK = 'Sponsored link. ';
 
 
 
@@ -226,11 +226,11 @@ axsWebSearch.getOneBoxNode = function(){
   var resDiv = document.getElementById('res');
   for (var child = resDiv.firstChild; child; child = child.nextSibling){
     if ((child.tagName == 'P') && child.textContent){
-      return child
+      return child;
     }
   }
   return null;
-}
+};
 
 axsWebSearch.readOneBox = function(){
   var oneBox = axsWebSearch.getOneBoxNode();
@@ -350,7 +350,7 @@ axsWebSearch.buildResultsArray = function(){
     }
   }
   //There were no results
-  if (axsWebSearch.resultsArray.length == 0){
+  if (axsWebSearch.resultsArray.length === 0){
     var noResultsTD = resDiv.getElementsByTagName('TD')[0];
     if (noResultsTD && (noResultsTD.className == 'j')){
       axsWebSearch.resultsArray.push(noResultsTD);
@@ -514,30 +514,30 @@ axsWebSearch.getCurrentURLQueryString = function(){
     searchQueryEnd = URL.length; 
   }
   return URL.substring(searchQueryStart, searchQueryEnd);
-}
+};
 
 
 
 axsWebSearch.switchToAccessibleSearch = function(){
-  if (document.baseURI.indexOf('http://www.google.com/custom') == 0){
+  if (document.baseURI.indexOf('http://www.google.com/custom') === 0){
     axsWebSearch.axsJAXObj.speakText(axsWebSearch.ON_ACCESSIBLE_SEARCH);
     return;
   }
   var searchQuery = axsWebSearch.getCurrentURLQueryString();
   document.location = axsWebSearch.ACCESSIBLE_SEARCH_URL + searchQuery;
-}
+};
 
 
 
 
 axsWebSearch.switchToWebSearch = function(){
-  if (document.baseURI.indexOf('http://www.google.com/search') == 0){
+  if (document.baseURI.indexOf('http://www.google.com/search') === 0){
     axsWebSearch.axsJAXObj.speakText(axsWebSearch.ON_WEB_SEARCH);
     return;
   }
   var searchQuery = axsWebSearch.getCurrentURLQueryString();
   document.location = axsWebSearch.WEB_SEARCH_URL + searchQuery;
-}
+};
 
 
 

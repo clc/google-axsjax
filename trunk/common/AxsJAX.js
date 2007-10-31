@@ -32,7 +32,7 @@ AxsJAX = function(){
     emptyNode.textContent = ' ';
     return emptyNode;
   };
-}
+};
 
 
 /**
@@ -55,7 +55,7 @@ AxsJAX.prototype.speakNode = function(targetNode){
   var theBody = window.content.document.body;
   theBody.tabIndex = -1;
   theBody.blur();
-  theBody.setAttribute("role","wairole:listbox")
+  theBody.setAttribute("role","wairole:listbox");
   theBody.setAttribute("aria-activedescendant", '');
   theBody.focus();
   theBody.setAttribute("aria-activedescendant", targetNode.id);
@@ -164,6 +164,6 @@ AxsJAX.prototype.assignId = function(targetNode,prefixString){
   if (!prefixString){
     prefixString = "AxsJAX_ID_";
   }
-  targetNode.id = prefixString + this.ID_NUM_++;
+  targetNode.id = prefixString + this.ID_NUM_++;        
   return targetNode.id;
-}
+};
