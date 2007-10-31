@@ -73,9 +73,6 @@ axsReader.lastFocusedObject = null;
 
 axsReader.tagSelectorTopDivId = null;
 
-
-
-
 /**
  * Initializes the scripts for Google Reader
  */
@@ -150,8 +147,6 @@ axsReader.findSelectedTag = function(tagSelectorTopDiv){
   }
   return null;
 };
-
-
 
 /**
  * When an input blank has focus, the keystrokes should go into the blank
@@ -238,9 +233,6 @@ axsReader.domAttrModifiedHandler = function(evt){
 
 };
 
-
-
-
 /**
  * Reader does not have full keyboard support for all important functions.
  * This key handler extends the support to cover what is missing.
@@ -257,7 +249,7 @@ axsReader.extraKeyboardNavHandler = function(event){
   }
 
 
-  //**The following code corrects broken keyboard handling
+  // The following code corrects broken keyboard handling
   if (axsReader.inputFocused){
     //Fix the "cc me" checkbox
     if (axsReader.lastFocusedObject &&
@@ -365,7 +357,8 @@ axsReader.unsubscribeFromFeedCurrentlyOpen = function(){
 
 /**
  * Start: Code for working with Feed Bundles
- **/
+ *
+ */
 
 /**
  * Open the "Browse feed bundles" panel
@@ -465,7 +458,7 @@ axsReader.focusFeedsSearch = function(){
 }
 
  /**
- * Load the results that are shown into an array that can be more easily.
+ * Load the results that are shown into an array that can be more easily
  * traversed. Consider the next/prev page links as part of this array.
  */
 axsReader.findFeedResults = function(){
@@ -567,14 +560,11 @@ axsReader.actOnCurrentResult = function(){
     axsReader.axsJAXObj.clickElem(subscribeButton);
     axsReader.axsJAXObj.speakText(axsReader.SUBSCRIBING_STRING);
   }
-}
+};
 
 /**
  * End: Code for working with Feed Search
  */
-
-
-
 
 axsReader.navigateToClosestSendButton = function(checkboxNode){
   var emailBodyArea = checkboxNode.parentNode.parentNode.parentNode;//Expect TD
