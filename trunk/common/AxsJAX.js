@@ -14,9 +14,6 @@
  * @constructor
  */
 AxsJAX = function(){
-  this.ARIA_NAMESPACE_STRING_ = 'http://www.w3.org/2005/07/aaa';
-  this.ARIA_LIVE_STRING_ = 'live';
-  this.ARIA_RUDE_STRING_ = 'rude';
   this.ID_NUM_ = 0;
   //Empty node used for tickling existing nodes into speaking
   this.EMPTY_NODE_ = new function(){
@@ -41,15 +38,6 @@ AxsJAX = function(){
  * @param {Node} targetNode The HTML node to be spoken.
  */
 AxsJAX.prototype.speakNode = function(targetNode){
-//---------
-  /*Something to try for Firefox 3 once it stabilizes.*/
-  /*Theoretically, this code should work better as active descendant will set
-   * focus and make it work for JAWS and Window Eyes. However, Firefox 2 does
-   * not handle this correctly yet. Therefore, hold off on this until
-   *Firefox 3 is ready. Use Live Regions for now as that works on Fire Vox.
-   */
-
-
   if (!targetNode.id){
     this.assignId(targetNode);
   }
@@ -60,15 +48,6 @@ AxsJAX.prototype.speakNode = function(targetNode){
   theBody.setAttribute("aria-activedescendant", '');
   theBody.focus();
   theBody.setAttribute("aria-activedescendant", targetNode.id);
-
-
-
-//--------------
-//  targetNode.setAttributeNS(this.ARIA_NAMESPACE_STRING_,
-//      this.ARIA_LIVE_STRING_, this.ARIA_RUDE_STRING_);
-//  targetNode.setAttributeNS(this.ARIA_NAMESPACE_STRING_, 'atomic', 'true');
-//  targetNode.appendChild(this.EMPTY_NODE_);
-//  targetNode.removeChild(this.EMPTY_NODE_);
 };
 
 
@@ -86,8 +65,7 @@ AxsJAX.prototype.speakText = function(textString){
   var audioNode = document.createElement('span');
   audioNode.id = 'AxsJAX_audioNode';
   audioNode.style.visibility = 'hidden';
-  audioNode.setAttributeNS(this.ARIA_NAMESPACE_STRING_,
-      this.ARIA_LIVE_STRING_, this.ARIA_RUDE_STRING_);
+  audioNode.setAttribute('aria-live', 'rude');
   var oldAudioNode = document.getElementById(audioNode.id);
   if (oldAudioNode){
     document.body.removeChild(oldAudioNode);
