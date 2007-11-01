@@ -556,20 +556,22 @@ axsWebSearch.buildGuideModeArray = function(){
   if (oneBox){
     axsWebSearch.guideModeArray.push(oneBox);
   }
-  var rInd = 0;
+  var rInd = 1;
   var aInd = 0;
   var resultsAdded = 0;
 
   //Add search results interspersed with ads
   var result = new Object();
-  result.node = axsWebSearch.resultsArray[rInd++];
+  result.node = axsWebSearch.resultsArray[rInd];
   result.isAd = false;
   while (result.node){
     axsWebSearch.guideModeArray.push(result);
-    if ((resultsAdded >= 3) && (axsWebSearch.adsArray[aInd])){
+    if ((resultsAdded >= 3) &&
+        (axsWebSearch.adsArray[aInd])){
       resultsAdded = 0;
       result = new Object();
-      result.node = axsWebSearch.adsArray[aInd++];
+      result.node = axsWebSearch.adsArray[aInd];
+      aInd++;
       result.isAd = true;
     } else {
       resultsAdded++;
