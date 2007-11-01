@@ -39,29 +39,33 @@ axsWebSearch.SEARCH_WITHIN_STRING = 'Search within ';
 axsWebSearch.NO_ALT_SEARCH_CAT_STRING = 'There are no other categories to ' +
                                         'search within.';
 axsWebSearch.NO_RELATED_SEARCHES_STRING = 'There are no related searches.';
-axsWebSearch.HELP_STRING = 'The following shortcut keys are available. ' +
-                        'G, use guided mode. ' +   
-                        'Down arrow or N, go to the next result. ' +
-                        'Up arrow or P, go to the previous result. ' +
-                        'Right arrow or J, cycle to the next result. ' +
-                        'Left arrow or K, cycle to the previous result. ' +
-                        'Enter, open the current item. ' +
-                        'Shift and Enter, open the current item ' +
-                        'in a new window. ' +
-                        'Slash, jump to search blank. ' +
-                        'Escape, leave search blank. ' +
-                        '1, read the one box. ' +
-                        'A, cycle through advertisements. ' +
-                        'C, cycle through alternate categories to search in. ' +
-                        'R, cycle through related searches. ' +
-                        'Page up, go to the previous page. ' +
-                        'Page down, go to the next page. ';
-axsWebSearch.GUIDE_MODE_END = 'You have reached the end of this page. ' +
-                              'Press the page down key to go to the next page. ' +
-                              'Or press G again to go back to the start of this page.';
+axsWebSearch.HELP_STRING =
+    'The following shortcut keys are available. ' +
+    'G, use guided mode. ' +   
+    'Down arrow or N, go to the next result. ' +
+    'Up arrow or P, go to the previous result. ' +
+    'Right arrow or J, cycle to the next result. ' +
+    'Left arrow or K, cycle to the previous result. ' +
+    'Enter, open the current item. ' +
+    'Shift and Enter, open the current item ' +
+    'in a new window. ' +
+    'Slash, jump to search blank. ' +
+    'Escape, leave search blank. ' +
+    '1, read the one box. ' +
+    'A, cycle through advertisements. ' +
+    'C, cycle through alternate categories to search in. ' +
+    'R, cycle through related searches. ' +
+    'Page up, go to the previous page. ' +
+    'Page down, go to the next page. ';
+axsWebSearch.GUIDE_MODE_END =
+    'You have reached the end of this page. ' +
+    'Press  page down  to go to the next page. ' +
+    'Or press G again' +
+    'to return to the start of this page.';
 axsWebSearch.PAGECONTENT_RELATED_SEARCH_STRING = 'Searches related to:';
 
-axsWebSearch.ON_ACCESSIBLE_SEARCH = 'You are already on Google accessible search.';
+axsWebSearch.ON_ACCESSIBLE_SEARCH =
+    'You are already on Google accessible search.';
 axsWebSearch.ON_WEB_SEARCH = 'You are already on Google web search.';
 axsWebSearch.SPONSORED_LINK = 'Sponsored link. ';
 
@@ -182,7 +186,8 @@ axsWebSearch.extraKeyboardNavHandler = function(evt){
     axsWebSearch.switchToWebSearch();
   }
   if (evt.charCode == 47){ // / (slash symbol)
-    document.getElementsByName('q')[0].focus();  //Focus on the top search blank
+    // Focus on the top search blank
+    document.getElementsByName('q')[0].focus();  
     document.getElementsByName('q')[0].select(); //and select all text
   }
   if ((evt.keyCode == 13) && axsWebSearch.currentLink){ // Enter
@@ -624,11 +629,13 @@ axsWebSearch.cycleThroughGuideMode = function(){
     axsWebSearch.axsJAXObj.speakText(axsWebSearch.GUIDE_MODE_END);
     return;
   }
-  var currentGuideObj = axsWebSearch.guideModeArray[axsWebSearch.guideModeIndex];
+  var currentGuideObj = axsWebSearch.guideModeArray[
+      axsWebSearch.guideModeIndex];
   var currentItem = currentGuideObj.node;
   currentItem.scrollIntoView(true);
   if (currentGuideObj.isAd){
-    axsWebSearch.axsJAXObj.speakText(axsWebSearch.SPONSORED_LINK + currentItem.textContent);
+    axsWebSearch.axsJAXObj.speakText(axsWebSearch.SPONSORED_LINK +
+                                     currentItem.textContent);
   }
   else {
     axsWebSearch.axsJAXObj.speakNode(currentItem);
