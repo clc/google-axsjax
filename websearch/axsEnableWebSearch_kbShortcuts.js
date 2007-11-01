@@ -56,7 +56,8 @@ axsWebSearch.init = function(){
   //If the keyboard shortcut experiment is not running, run it
   var locationString = window.content.document.location.toString();
   if (locationString.indexOf('http://www.google.com/search') !== 0){
-    window.content.document.location = 'http://www.google.com/search?hl=en&esrch=BetaShortcuts&q=google&btnG=Search';
+    window.content.document.location =
+        'http://www.google.com/search?hl=en&esrch=BetaShortcuts&q=google&btnG=Search';
   }
   if ( (locationString.indexOf('http://www.google.com/search') === 0) &&
        (locationString.indexOf('&esrch=BetaShortcuts') == -1) ){
@@ -64,8 +65,12 @@ axsWebSearch.init = function(){
   }
 
   //Add event listeners
-  document.addEventListener('DOMAttrModified', axsWebSearch.domAttrModifiedHandler, true);
-  document.addEventListener('keypress', axsWebSearch.extraKeyboardNavHandler, true);
+  document.addEventListener('DOMAttrModified',
+                            axsWebSearch.domAttrModifiedHandler,
+                            true);
+  document.addEventListener('keypress',
+                            axsWebSearch.extraKeyboardNavHandler,
+                            true);
   document.addEventListener('focus', axsWebSearch.focusHandler, true);
   document.addEventListener('blur', axsWebSearch.blurHandler, true);
 
@@ -102,10 +107,12 @@ axsWebSearch.domAttrModifiedHandler = function(evt){
   var newVal = evt.newValue;
   var oldVal = evt.prevValue;
   var target = evt.target;
-  if ((target.tagName == 'IMG') && (newVal.indexOf('visibility: visible') != -1)){
+  if ((target.tagName == 'IMG') &&
+      (newVal.indexOf('visibility: visible') != -1)){
     axsWebSearch.axsJAXObj.putNullForNoAltImages(target.parentNode);
     axsWebSearch.axsJAXObj.speakNode(target.parentNode);
-    axsWebSearch.currentLink = target.parentNode.getElementsByTagName('a')[0].href;
+    axsWebSearch.currentLink =
+        target.parentNode.getElementsByTagName('a')[0].href;
   }
 };
 
@@ -133,7 +140,8 @@ axsWebSearch.extraKeyboardNavHandler = function(evt){
 
 axsWebSearch.readOneBox = function(){
   if (document.getElementById('res').childNodes[1].tagName == 'P'){
-    axsWebSearch.axsJAXObj.speakNode(document.getElementById('res').childNodes[1]);
+    axsWebSearch.axsJAXObj.speakNode(
+        document.getElementById('res').childNodes[1]);
   } else{
     axsWebSearch.axsJAXObj.speakText(axsWebSearch.NO_ONE_BOX_STRING);
   }
