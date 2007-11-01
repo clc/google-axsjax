@@ -45,7 +45,7 @@ function pickScript(){
   if ((currentURL == 'http://www.google.com/')
       || (currentURL.indexOf('http://www.google.com/search') == 0)
       || (currentURL.indexOf('http://www.google.com/custom') == 0)
-      || (currentURL.indexOf('http://www.google.com/cse') == 0)){
+      || (currentURL.indexOf('http://www.google.com/cse') === 0)){
     theScript.src = baseURL + 'websearch/axsEnableWebSearch.js';
     shouldInsertScripts = true;    
   }
