@@ -1,0 +1,64 @@
+#    -*- mode: org -*-
+* Introduction To AxsJAX-Enhanced Google Web Search
+
+** What Is AxsJAX-Enhanced Google Web Search?
+
+
+AxsJAX-Enhanced Google Web Search is the same as regular Google Web Search with the following additional features:
+  -Quick jump to the search box
+  -Quick navigation through the search results
+  -Automatically go to the next page of results when at the end of the current page
+  -Quick navigation to the next/previous page
+  -Quick reading of the one box
+  -Ability to switch between regular Google Web Search and the accessible Google Web Search experiment
+  -Cycle through related searches
+  -Cycle through alternative categories (videos, news, etc.) for repeating the same search
+  -Cycle through sponsored links
+  -A guided mode that takes the user through the most interesting parts of a results page
+
+
+** How Can I Start Using AxsJAX-Enhanced Google Web Search?
+
+The simplest way to get started is use [[http://firevox.clcworld.net/][Fire Vox]] and check the "Site Specific Enhancements" option. By default, this option is checked, so if you did not change it, then you should be ready to go. To start using AxsJAX-Enhanced Google Web Search, all you need to do is go to [[http://www.google.com][Google]] - the AxsJAX enhancements will automatically be added for you. 
+There is nothing Fire Vox specific about AxsJAX - to use a different setup, all you need to do is make sure that you have the following:
+
+  1. A modern Web browser like Firefox 2.0 or later that supports
+     W3C ARIA.
+  2. An adaptive technology that will respond correctly to the
+     accessibility enhancements introduced by W3C ARIA.
+     In particular, many of the enhancements injected by AxsJAX
+     depend on support for /live regions/ a feature that enables
+     adaptive technologies like screen readers and self-voicing
+     browsers deal correctly with asynchronous updates to
+     portions of a Web page.
+
+If your setup meets these requirements, you can either install [[http://addons.mozilla.org/firefox/748][GreaseMonkey]] and install the [[http://google-axsjax.googlecode.com/svn/trunk/googleScriptLoader.user.js][GreaseMonkey script for AxsJAX enhancements]] OR you can install [[https://www.google.com/accounts/Login?continue=http%3A%2F%2Fcode.google.com%2Fp%2Fgoogle-axsjax%2Fdownloads%2Flist][the bookmarklet for AxsJAX enhancements.]] Keep in mind that if you use the bookmarklet approach, you will have to activate the bookmarklet when you visit the Google Web Search page in order to use the AxsJAX enhanced version.
+
+
+
+** How Do I Use These Features?
+
+All of the AxsJAX enhancements are activated through the keyboard. If your assistive technology uses modes, please switch to the mode that you use for working with forms and web applications so that your keystrokes will be sent to the web page itself. When you are on the Google Web Search Page, the following keys are available:
+
+ - / (slash): Puts focus on the search box
+ - Esc: Takes focus away from the search box
+ - Enter: Open the current item that has focus.
+ - Shift and Enter: Open the current item that has focus in a new window.
+ - n or Down Arrow: Puts focus on the next result. If you are on the last result of the page, the next page will be loaded for you automatically.
+ - p or Up Arrow: Puts focus on the previous result. If you are on the first result of the page, the previous page will be laoded for you automatically.
+ - j or Right Arrow: Puts focus on the next result. If you are on the last result of the page, you will be taken to the first result of the page.
+ - k or Left Arrow: Puts focus on the previous result. If you are on the first result of the page, you will be taken to the last result of the page.
+ - 1: Puts focus on the One Box. The One Box is a result that Google believes is especially relevant to your search; for example, if you typed in "weather in my city, my state" (where you replaced "my city" and "my state" with your city and state), Google will have a One Box that gives you your local weather.
+ - r: Puts focus on the first related search term; subsequent presses will cycle through the list of related search terms.  
+ - c: Puts focus on the first alternate category for the same search; subsequent presses will cycle through the list of alternate categories.
+ - a: Puts focus on the first advertisment; subsequent presses will cycle through the list of advertisments on the page.
+ - g: Guided mode will move the focus through the page so that it takes the user through all of the interesting parts with the most interesting parts first. Currently, it takes the user to the One Box on the first press, followed by the top four search results, followed by the top sponsored link, followed by the next three search results and the next sponsored link and so on until there are no more results, at which point it will switch to the next three related search terms and next sponsored link.
+ - A (capital A): Switches to the accessible Google Web Search experiment and automatically repeats your search. Accessible Search is an early Google Labs product designed to identify and prioritize search results that are more easily usable by blind and visually impaired users.
+ - W (capital W): Switches to regular Google Web Search and automatically repeats your search.
+
+
+#+TITLE:     AxsJAX Frequently Asked Questions
+#+AUTHOR:    T.V. Raman, Charles L. Chen
+#+EMAIL:     raman@google.com, clchen@google.com
+#+LANGUAGE:  en
+#+OPTIONS:   H:3 num:t toc:t \n:nil @:t ::t |:t ^:t f:t *:t TeX:t LaTeX:nil skip:t p:nil
