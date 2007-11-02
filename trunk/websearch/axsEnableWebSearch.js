@@ -146,6 +146,10 @@ axsWebSearch.blurHandler = function (evt){
 
 
 axsWebSearch.extraKeyboardNavHandler = function(evt){
+  if (evt.ctrlKey){ //None of these commands involve Ctrl.
+                    //If Ctrl is held, it must be for some AT. 
+    return true;
+  }
   if (evt.keyCode == 27){ // ESC
     axsWebSearch.lastFocusedNode.blur();
   }
@@ -218,7 +222,6 @@ axsWebSearch.extraKeyboardNavHandler = function(evt){
   if (evt.charCode == 63){ // ? (question mark)
     axsWebSearch.axsJAXObj.speakText(axsWebSearch.HELP_STRING);
   }
-
 };
 
 
