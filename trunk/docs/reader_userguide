@@ -4,17 +4,25 @@
 ** What Is AxsJAX-Enhanced Google Reader?
 
 
-AxsJAX-Enhanced Google Web Search is the same as regular Google Reader with the following additional features:
-  -Focus is placed on the current article/tree item when you navigate to it using the built in Reader navigation keys
-  -Quick jump to the "Browse for Feeds" panel
-  -Keyboard navigation for feed bundles and feed search results
-  -Focus is placed on the currently selected tag when you bring up tag navigation
+AxsJAX-Enhanced Google Reader is the same as  Google Reader with
+the following additional features:
+
+  - Focus is placed on the current article/tree item when you navigate to it using the built in Reader navigation keys
+  - Quick jump to the "Browse for Feeds" panel
+  - Keyboard navigation for feed bundles and feed search results
+  - Focus is placed on the currently selected tag when you bring up tag navigation
 
 
 ** How Can I Start Using AxsJAX-Enhanced Google Reader?
 
-The simplest way to get started is use [[http://firevox.clcworld.net/][Fire Vox]] and check the "Site Specific Enhancements" option. By default, this option is checked, so if you did not change it, then you should be ready to go. To start using AxsJAX-Enhanced Google Web Search, all you need to do is go to [[http://www.google.com][Google]] - the AxsJAX enhancements will automatically be added for you. 
-There is nothing Fire Vox specific about AxsJAX - to use a different setup, all you need to do is make sure that you have the following:
+The simplest way to get started is to use [[http://firevox.clcworld.net/][Fire Vox]] and check the
+"Site Specific Enhancements" option. By default, this option is
+checked, so if you did not change it, then you should be ready to
+go. To start using AxsJAX-Enhanced Google Reader, all you
+need to do is go to [[http://www.google.com/reader][Google Reader ]] - the AxsJAX enhancements will
+automatically be added for you. There is nothing Fire Vox
+specific about AxsJAX - to use a different setup, all you need to
+do is make sure that you have the following:
 
   1. A modern Web browser like Firefox 2.0 or later that supports
      W3C ARIA.
@@ -26,36 +34,49 @@ There is nothing Fire Vox specific about AxsJAX - to use a different setup, all 
      browsers deal correctly with asynchronous updates to
      portions of a Web page.
 
-If your setup meets these requirements, you can either install [[http://addons.mozilla.org/firefox/748][GreaseMonkey]] and install the [[http://google-axsjax.googlecode.com/svn/trunk/googleScriptLoader.user.js][GreaseMonkey script for AxsJAX enhancements]] OR you can install [[https://www.google.com/accounts/Login?continue=http%3A%2F%2Fcode.google.com%2Fp%2Fgoogle-axsjax%2Fdownloads%2Flist][the bookmarklet for AxsJAX enhancements.]] Keep in mind that if you use the bookmarklet approach, you will have to activate the bookmarklet when you visit the Google Web Search page in order to use the AxsJAX enhanced version.
-
-
+If your setup meets these requirements, you can either install
+[[http://addons.mozilla.org/firefox/748][GreaseMonkey]] and install the [[http://google-axsjax.googlecode.com/svn/trunk/googleScriptLoader.user.js][GreaseMonkey script for AxsJAX
+enhancements]] or you can install [[https://www.google.com/accounts/Login?continue=http%3A%2F%2Fcode.google.com%2Fp%2Fgoogle-axsjax%2Fdownloads%2Flist][the bookmarklet for AxsJAX
+enhancements.]] Keep in mind that if you use the bookmarklet
+approach, you will have to activate the bookmarklet when you
+visit the Google Reader start page  in order to activate the AxsJAX
+enhancements.
 
 ** How Do I Use These Features?
 
-All of the AxsJAX enhancements are designed to enhance the existing keyboard support present in regular Google Reader by generating additiional focus events so that the assistive technology will speak what the user is focused on. If your assistive technology uses modes, please switch to the mode that you use for working with forms and web applications so that your keystrokes will be sent to the web page itself. When you are on the Google Reader page, the following keys are available:
+All of the AxsJAX enhancements are designed to augment the
+existing keyboard support present in regular Google Reader by
+generating additional focus events so that the assistive
+technology automatically speaks the item having focus. If your
+assistive technology uses different modes e.g., /browse-mode/ in
+JFW, please switch to the mode that you use for working with
+forms and web applications so that your keystrokes will be sent
+to the web page itself. When you are on the Google Reader page,
+the following keys are available:
 
- - ? (question mark): Brings up a list of keyboard commands
- - / (slash): Puts focus on the search articles  box
- - n: Go to the next item (article, search result, or feed bundle - depending on what is currently open)
- - p: Go to the previous item (article, search result, or feed bundle - depending on what is currently open)
- - Shift and n: Go to the next feed in the subscription list
- - Shift and p: Go to the previous feed in the subscription list
- - Shift and o: Open the current feed
- - b: Go to the "Browse for Feeds" panel
- - s: If you are on an article, pressing s will star that article. If you are on the "Browse for Feeds" panel, pressing s will put focus on the search for feeds box.
- - t: Brings up the tag article box
- - Shift and s: Share the current article
- - e: Email the current article
- - v: View the original article; this will open a new window
- - . (period): Unsubscribe from the feed that is currently open
- - g then a: Goes to all items
- - g then t: Brings up tag navigation
+  -  ? (question mark): Brings up a list of keyboard commands
+  -  / (slash): Puts focus on the search articles  box
+  -  n: Go to the next item (article, search result, or feed bundle - depending on what is currently open)
+  -  p: Go to the previous item (article, search result, or feed bundle - depending on what is currently open)
+  -  Shift and n: Go to the next feed in the subscription list
+  -  Shift and p: Go to the previous feed in the subscription list
+  -  Shift and o: Open the current feed
+  -  b: Go to the "Browse for Feeds" panel
+  -  s: If you are on an article, pressing s will star that article. If you are on the "Browse for Feeds" panel, pressing s will put focus on the search for feeds box.
+  -  t: Brings up the tag article box
+  -  Shift and s: Share the current article
+  -  e: Email the current article
+  -  v: View the original article; this will open a new window
+  -  . (period): Unsubscribe from the feed that is currently open
+  -  g then a: Goes to all items
+  -  g then t: Brings up tag navigation
 
-.
+
 
 
 #+TITLE:     AxsJAX-Enhanced Google Reader User Guide
 #+AUTHOR:    T.V. Raman, Charles L. Chen
-#+EMAIL:     raman@google.com, clchen@google.com
+#+EMAIL:     raman@google.com
+#+EMAIL: clchen@google.com
 #+LANGUAGE:  en
 #+OPTIONS:   H:3 num:t toc:t \n:nil @:t ::t |:t ^:t f:t *:t TeX:t LaTeX:nil skip:t p:nil
