@@ -116,7 +116,26 @@ axsWebSearch.init = function(){
   axsWebSearch.buildRelatedSearchesArray();
   axsWebSearch.buildGuideModeArray();
 
+  //Read the first thing on the page.
+  //Use a set time out just in case the browser is not entirely ready yet.
+  window.setTimeout(axsWebSearch.readTheFirstThing,100);
+
 };
+
+
+
+/**
+ * Reads the first thing on the page.
+ */
+axsWebSearch.readTheFirstThing = function(evt){
+  //Read the one box or the first result
+  if (axsWebSearch.getOneBoxNode()){
+    axsWebSearch.readOneBox();
+  } else {
+    axsWebSearch.goToNextResult(true);
+  }
+};
+
 
 /**
  * When an input blank has focus, the keystrokes should go into the blank
