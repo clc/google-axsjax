@@ -40,6 +40,7 @@ If your setup meets these requirements, you can either install [[http://addons.m
 
 All of the AxsJAX enhancements are activated through the keyboard. If your assistive technology uses modes, please switch to the mode that you use for working with forms and web applications so that your keystrokes will be sent to the web page itself. When you are on the Google Web Search Page, the following keys are available:
 
+ - ? (question mark): Brings up a list of the keyboard commands
  - / (slash): Puts focus on the search box
  - Esc: Takes focus away from the search box
  - Enter: Open the current item that has focus.
@@ -57,7 +58,7 @@ All of the AxsJAX enhancements are activated through the keyboard. If your assis
  - W (capital W): Switches to regular Google Web Search and automatically repeats your search.
 
 
-#+TITLE:     AxsJAX Frequently Asked Questions
+#+TITLE:     AxsJAX-Enhanced Google Web Search User Guide
 #+AUTHOR:    T.V. Raman, Charles L. Chen
 #+EMAIL:     raman@google.com, clchen@google.com
 #+LANGUAGE:  en
