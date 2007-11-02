@@ -251,6 +251,11 @@ axsReader.domAttrModifiedHandler = function(evt){
  * @param {event} A Keypress event
  */
 axsReader.extraKeyboardNavHandler = function(event){
+  if (evt.ctrlKey){ //None of these commands involve Ctrl.
+                    //If Ctrl is held, it must be for some AT. 
+    return true;
+  }
+
   //Handle navigation in the tag selector
   if (axsReader.tagSelectorTopDivId){
     if ((event.keyCode >= 37) || (event.keyCode <= 40)){     //Is an arrow key
