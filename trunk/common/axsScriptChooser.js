@@ -49,6 +49,10 @@ function pickScript(){
     theScript.src = baseURL + 'websearch/axsEnableWebSearch.js';
     shouldInsertScripts = true;    
   }
+  if (currentURL === 'http://www.minijuegosgratis.com/juegos/jawbreaker/jawbreaker.htm'){
+    theScript.src = baseURL + 'jawbreaker/axsEnableJawbreaker.js';
+    shouldInsertScripts = true;    
+  }
   if (shouldInsertScripts){
     document.getElementsByTagName('head')[0].appendChild(theLib);
     document.getElementsByTagName('head')[0].appendChild(theScript);
