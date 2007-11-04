@@ -251,7 +251,7 @@ axsReader.domAttrModifiedHandler = function(evt){
  * @param {event} A Keypress event
  */
 axsReader.extraKeyboardNavHandler = function(event){
-  if (evt.ctrlKey){ //None of these commands involve Ctrl.
+  if (event.ctrlKey){ //None of these commands involve Ctrl.
                     //If Ctrl is held, it must be for some AT. 
     return true;
   }
