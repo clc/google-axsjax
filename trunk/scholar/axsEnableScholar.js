@@ -28,9 +28,32 @@ var axsScholar = {};
 
 
 
+axsScholar.scholarResultObj = function(){
+  this.mainLink = null;
+  this.versionsLink = null;
+  this.citationLink = null;
+  this.relatedArticlesLink = null;
+  this.webSearchLink = null;
+  this.librarySearchLink = null;
+  this.HTMLVerLink = null;
+  this.BLDirectLink = null;
+};
+
+
+
+//These are strings used to find specific links
+axsScholar.CITED_BY_STRING = 'Cited by';
+axsScholar.RELATED_ARTICLES_STRING = 'Related Articles';
+axsScholar.WEB_SEARCH_STRING = 'Web Search';
+axsScholar.LIBRARY_SEARCH_STRING = 'Library Search';
+axsScholar.VIEW_AS_HTML_STRING = 'View as HTML';
+axsScholar.BL_DIRECT_STRING = 'BL Direct';
+
 
 //These are strings to be spoken to the user
-
+axsScholar.NO_MAIN_LINK_STRING = 'There is no main link.';
+axsScholar.UNAVAILABLE_STRING = ' unavailable.';
+axsScholar.ONLY_ONE_VERSION_STRING = 'There is only one version.'
 
 axsScholar.HELP_STRING =
     'The following shortcut keys are available. ' +
@@ -66,6 +89,12 @@ axsScholar.inputFocused = false;
 axsScholar.lastFocusedNode = null;
 
 
+
+axsScholar.currentResult = null;
+
+
+
+
 axsScholar.init = function(){
   axsScholar.axsJAXObj = new AxsJAX();
 
@@ -76,6 +105,7 @@ axsScholar.init = function(){
   document.addEventListener('blur', axsScholar.blurHandler, true);
 
   //Do any necessary preparations for browsing here
+  axsScholar.currentResult = new axsScholar.scholarResultObj();
   axsScholar.buildResultsArray();
 
   //Read the first thing on the page.
@@ -156,13 +186,84 @@ axsScholar.extraKeyboardNavHandler = function(evt){
     axsScholar.goToNextPage();
   }
 
+
+  //Keys for working with the current result.
+  //Capitals will be checked to allow for going to the link in a new window
+  //since shift clicking usually opens in a new window.
+  if (evt.keyCode == 13){ // Enter
+    if (axsScholar.currentResult.mainLink){
+      axsScholar.axsJAXObj.clickElem(axsScholar.currentResult.mainLink, evt.shiftKey);
+    } else{
+      axsScholar.axsJAXObj.speakText(axsScholar.NO_MAIN_LINK_STRING);
+    }
+  }
+
+  if ((evt.charCode == 118) || (evt.charCode == 86)){ // v
+    if (axsScholar.currentResult.versionsLink){
+      axsScholar.axsJAXObj.clickElem(axsScholar.currentResult.versionsLink, evt.shiftKey);
+    } else{
+      axsScholar.axsJAXObj.speakText(axsScholar.ONLY_ONE_VERSION_STRING);
+    }
+  }
+
+  if ((evt.charCode == 99) || (evt.charCode == 67)){ // c
+    if (axsScholar.currentResult.citationLink){
+      axsScholar.axsJAXObj.clickElem(axsScholar.currentResult.citationLink, evt.shiftKey);
+    } else{
+      axsScholar.axsJAXObj.speakText(axsScholar.CITED_BY_STRING + axsScholar.UNAVAILABLE_STRING);
+    }
+  }
+
+  if ((evt.charCode == 114) || (evt.charCode == 82)){ // r
+    if (axsScholar.currentResult.relatedArticlesLink){
+      axsScholar.axsJAXObj.clickElem(axsScholar.currentResult.relatedArticlesLink, evt.shiftKey);
+    } else{
+      axsScholar.axsJAXObj.speakText(axsScholar.RELATED_ARTICLES_STRING + axsScholar.UNAVAILABLE_STRING);
+    }
+  }
+
+  if ((evt.charCode == 119) || (evt.charCode == 87)){ // w
+    if (axsScholar.currentResult.webSearchLink){
+      axsScholar.axsJAXObj.clickElem(axsScholar.currentResult.webSearchLink, evt.shiftKey);
+    } else{
+      axsScholar.axsJAXObj.speakText(axsScholar.WEB_SEARCH_STRING + axsScholar.UNAVAILABLE_STRING);
+    }
+  }
+
+  if ((evt.charCode == 108) || (evt.charCode == 76)){ // l
+    if (axsScholar.currentResult.librarySearchLink){
+      axsScholar.axsJAXObj.clickElem(axsScholar.currentResult.librarySearchLink, evt.shiftKey);
+    } else{
+      axsScholar.axsJAXObj.speakText(axsScholar.LIBRARY_SEARCH_STRING + axsScholar.UNAVAILABLE_STRING);
+    }
+  }
+
+  if ((evt.charCode == 104) || (evt.charCode == 72)){ // h
+    if (axsScholar.currentResult.HTMLVerLink){
+      axsScholar.axsJAXObj.clickElem(axsScholar.currentResult.HTMLVerLink, evt.shiftKey);
+    } else{
+      axsScholar.axsJAXObj.speakText(axsScholar.VIEW_AS_HTML_STRING + axsScholar.UNAVAILABLE_STRING);
+    }
+  }
+
+  if ((evt.charCode == 98) || (evt.charCode == 66)){ // b
+    if (axsScholar.currentResult.BLDirectLink){
+      axsScholar.axsJAXObj.clickElem(axsScholar.currentResult.BLDirectLink, evt.shiftKey);
+    } else{
+      axsScholar.axsJAXObj.speakText(axsScholar.BL_DIRECT_STRING + axsScholar.UNAVAILABLE_STRING);
+    }
+  }
+
+
+
+
 };
 
 
 
 
 //************
-//Functions for results
+//Functions for traversing results
 //************
 
 axsScholar.buildResultsArray = function(){
@@ -189,9 +290,10 @@ axsScholar.goToNextResult = function(cycleBool){
       axsScholar.resultsIndex = 0;
     }
   }
-  var currentResult = axsScholar.resultsArray[axsScholar.resultsIndex];
-  currentResult.scrollIntoView(true);
-  axsScholar.axsJAXObj.speakNode(currentResult);
+  var currentResultNode = axsScholar.resultsArray[axsScholar.resultsIndex];
+  currentResultNode.scrollIntoView(true);
+  axsScholar.axsJAXObj.speakNode(currentResultNode);
+  axsScholar.buildCurrentResultInfo();
 };
 
 axsScholar.goToPrevResult = function(cycleBool){
@@ -205,9 +307,10 @@ axsScholar.goToPrevResult = function(cycleBool){
       axsScholar.resultsIndex = axsScholar.resultsArray.length-1;
     }
   }
-  var currentResult = axsScholar.resultsArray[axsScholar.resultsIndex];
-  currentResult.scrollIntoView(true);
-  axsScholar.axsJAXObj.speakNode(currentResult);
+  var currentResultNode = axsScholar.resultsArray[axsScholar.resultsIndex];
+  currentResultNode.scrollIntoView(true);
+  axsScholar.axsJAXObj.speakNode(currentResultNode);
+  axsScholar.buildCurrentResultInfo();
 };
 
 
@@ -230,6 +333,50 @@ axsScholar.goToPrevPage = function(){
     }
   }
 };
+
+
+//************
+//Functions for working with results
+//************
+axsScholar.buildCurrentResultInfo = function(){
+  axsScholar.currentResult = new axsScholar.scholarResultObj();
+  var currentResultNode = axsScholar.resultsArray[axsScholar.resultsIndex];
+  //Find main link
+  if (currentResultNode.childNodes[0].getElementsByTagName('A').length > 0){
+    axsScholar.currentResult.mainLink = currentResultNode.childNodes[0].getElementsByTagName('A')[0];
+  }
+  //Find alternative versions
+  if ((currentResultNode.childNodes[2].tagName == 'A') && (currentResultNode.childNodes[2].className == 'fl')){
+    axsScholar.currentResult.versionsLink = currentResultNode.childNodes[2];
+  }
+  //Find links in the snippet area
+  var resultSnippet = null;
+  for (var i=0; i<currentResultNode.childNodes.length; i++){
+    if ((currentResultNode.childNodes[i].tagName == 'FONT') && (currentResultNode.childNodes[i].getElementsByTagName('A').length > 0)){
+      resultSnippet = currentResultNode.childNodes[i];
+      break;
+    }
+  }
+  var links = resultSnippet.getElementsByTagName('A');
+  for (var i=0; i<links.length; i++){
+    if (links[i].className == 'fl'){
+      if (links[i].textContent.indexOf(axsScholar.CITED_BY_STRING) === 0){
+        axsScholar.currentResult.citationLink = links[i];
+      } else if (links[i].textContent == axsScholar.RELATED_ARTICLES_STRING){
+        axsScholar.currentResult.relatedArticlesLink = links[i];
+      } else if (links[i].textContent == axsScholar.WEB_SEARCH_STRING){
+        axsScholar.currentResult.webSearchLink = links[i];
+      } else if (links[i].textContent == axsScholar.LIBRARY_SEARCH_STRING){
+        axsScholar.currentResult.librarySearchLink = links[i];
+      } else if (links[i].textContent == axsScholar.VIEW_AS_HTML_STRING){
+        axsScholar.currentResult.HTMLVerLink = links[i];
+      } else if (links[i].textContent == axsScholar.BL_DIRECT_STRING){
+        axsScholar.currentResult.BLDirectLink = links[i];
+      }
+    }
+  }
+};
+
 
 
 
