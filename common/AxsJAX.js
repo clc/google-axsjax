@@ -108,16 +108,20 @@ AxsJAX.prototype.putNullForNoAltImages = function(targetNode){
  * Dispatches a left click event on the element that is the targetNode.
  * @param {Node} targetNode The target node of this operation.
  */
-AxsJAX.prototype.clickElem = function(targetNode){
+AxsJAX.prototype.clickElem = function(targetNode, shiftKey){
   var evt = document.createEvent('MouseEvents');
   evt.initMouseEvent('click',true,true,document.defaultView,
-                     1,0,0,0,0,false,false,false,false,0,null);
+                     1,0,0,0,0,false,false,shiftKey,false,0,null);
   targetNode.dispatchEvent(evt);
   //Clicking on a link does not cause traversal because of script
   //privilege limitations. The traversal has to be done by setting
   //document.location.
   if ((targetNode.tagName == 'A') && targetNode.href && (targetNode.href.indexOf('http') === 0)){
-    document.location = targetNode.href;
+    if (shiftKey){
+      window.open(targetNode.href);
+    } else {
+      document.location = targetNode.href;
+    }
   }
 };
 
