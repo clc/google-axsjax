@@ -410,7 +410,7 @@ axsWebSearch.goToPrevResult = function(cycleBool){
   if(axsWebSearch.resultsIndex < 0){
     if (!cycleBool){
       axsWebSearch.resultsIndex = -1;
-      axsWebSearch.goToNextPage();
+      axsWebSearch.goToPrevPage();
       return;
     } else{
       axsWebSearch.resultsIndex = axsWebSearch.resultsArray.length-1;
