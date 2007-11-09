@@ -48,6 +48,7 @@ axsScholar.WEB_SEARCH_STRING = 'Web Search';
 axsScholar.LIBRARY_SEARCH_STRING = 'Library Search';
 axsScholar.VIEW_AS_HTML_STRING = 'View as HTML';
 axsScholar.BL_DIRECT_STRING = 'BL Direct';
+axsScholar.TRY_WEB_QUERY_STRING = 'Try your query on the entire web';
 
 
 //These are strings to be spoken to the user
@@ -57,20 +58,21 @@ axsScholar.ONLY_ONE_VERSION_STRING = 'There is only one version.';
 
 axsScholar.HELP_STRING =
     'The following shortcut keys are available. ' +
-    'G, use guided mode. ' +   
     'Down arrow or N, go to the next result. ' +
     'Up arrow or P, go to the previous result. ' +
     'Right arrow or J, cycle to the next result. ' +
     'Left arrow or K, cycle to the previous result. ' +
-    'Enter, open the current item. ' +
-    'Shift and Enter, open the current item ' +
-    'in a new window. ' +
+    'Enter, go to the current result. ' +
     'Slash, jump to search blank. ' +
     'Escape, leave search blank. ' +
-    '1, read the one box. ' +
-    'A, cycle through advertisements. ' +
-    'C, cycle through alternate categories to search in. ' +
-    'R, cycle through related searches. ' +
+    'O, hear the available options for the current result. ' +
+    'C, go to works that cite the current result. ' +
+    'V, go to all the versions of the current result. ' +
+    'L, find the current result at a local library. ' +
+    'R, find related works to the current result. ' +
+    'H, go to an H T M L version of the current result. ' +
+    'B, find the current result at B L direct. ' +
+    'W, perform a web search on the current result. ' +
     'Page up, go to the previous page. ' +
     'Page down, go to the next page. ';
 
@@ -110,7 +112,7 @@ axsScholar.init = function(){
 
   //Read the first thing on the page.
   //Use a set time out just in case the browser is not entirely ready yet.
- // window.setTimeout(axsScholar.readTheFirstThing,100);
+  window.setTimeout(axsScholar.readTheFirstThing,100);
 
 };
 
@@ -163,7 +165,12 @@ axsScholar.extraKeyboardNavHandler = function(evt){
     return;
   }
 
-
+  if (evt.charCode == 106){ // j
+    axsScholar.goToNextResult(true);
+  }
+  if (evt.charCode == 107){ // k
+    axsScholar.goToPrevResult(true);
+  }
   if (evt.charCode == 110){ // n
     axsScholar.goToNextResult(false);
   }
@@ -185,7 +192,21 @@ axsScholar.extraKeyboardNavHandler = function(evt){
   if (evt.keyCode == 34){ // Page Down
     axsScholar.goToNextPage();
   }
-
+  if (evt.keyCode == 38){ // Up arrow
+    axsScholar.goToPrevResult(false);
+  }
+  if (evt.keyCode == 37){ // Left arrow
+    axsScholar.goToPrevResult(true);
+  }
+  if (evt.keyCode == 40){ // Down arrow
+    axsScholar.goToNextResult(false);
+  }
+  if (evt.keyCode == 39){ // Right arrow
+    axsScholar.goToNextResult(true);
+  }
+  if (evt.charCode == 63){ // ? (question mark)
+    axsScholar.axsJAXObj.speakText(axsScholar.HELP_STRING);
+  }
 
   //Keys for working with the current result.
   //Capitals will be checked when it should be possible to open the link in a
@@ -257,10 +278,6 @@ axsScholar.extraKeyboardNavHandler = function(evt){
       axsScholar.axsJAXObj.speakText(axsScholar.BL_DIRECT_STRING + axsScholar.UNAVAILABLE_STRING);
     }
   }
-
-
-
-
 };
 
 
@@ -271,25 +288,35 @@ axsScholar.extraKeyboardNavHandler = function(evt){
 //************
 
 axsScholar.buildResultsArray = function(){
-  var resultsTd = null;
-  var paragraphs = window.content.document.getElementsByTagName('P');
-  for (var i=0; i<paragraphs.length; i++){
-    if (paragraphs[i].className == 'g'){
-      resultsTd = paragraphs[i].parentNode;
-      break;
-    }
-  }
   axsScholar.resultsArray = new Array();
-  paragraphs = resultsTd.getElementsByTagName('P');
+  var paragraphs = document.getElementsByTagName('P');
   for (var i = 0; i<paragraphs.length; i++){
     if (paragraphs[i].className == 'g'){
       axsScholar.resultsArray.push(paragraphs[i]);
     }
   }
   axsScholar.resultsIndex = -1;
+  //There were no results
+  if (axsScholar.resultsArray.length === 0){
+    axsScholar.jumpToTryQueryOnEntireWebLink();
+  }
+};
+
+//Only used when there are no results
+axsScholar.jumpToTryQueryOnEntireWebLink = function(){
+  var links = document.getElementsByTagName('A');
+  for (var i=0; i<links.length; i++){
+    if (links[i].textContent == axsScholar.TRY_WEB_QUERY_STRING){
+      links[i].blur();
+      links[i].focus();
+    }
+  }
 };
 
 axsScholar.goToNextResult = function(cycleBool){
+  if (axsScholar.resultsArray.length === 0){
+    axsScholar.jumpToTryQueryOnEntireWebLink();
+  }
   axsScholar.resultsIndex++;
   if(axsScholar.resultsIndex >= axsScholar.resultsArray.length){
     if (!cycleBool){
@@ -307,6 +334,9 @@ axsScholar.goToNextResult = function(cycleBool){
 };
 
 axsScholar.goToPrevResult = function(cycleBool){
+  if (axsScholar.resultsArray.length === 0){
+    axsScholar.jumpToTryQueryOnEntireWebLink();
+  }
   axsScholar.resultsIndex--;
   if(axsScholar.resultsIndex < 0){
     if (!cycleBool){
@@ -368,7 +398,7 @@ axsScholar.buildCurrentResultInfo = function(){
     }
   }
   var links = resultSnippet.getElementsByTagName('A');
-  for (var i=0; i<links.length; i++){
+  for (i=0; i<links.length; i++){
     if (links[i].className == 'fl'){
       if (links[i].textContent.indexOf(axsScholar.CITED_BY_STRING) === 0){
         axsScholar.currentResult.citationLink = links[i];
