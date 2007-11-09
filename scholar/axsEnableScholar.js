@@ -101,6 +101,8 @@ axsScholar.init = function(){
   axsScholar.axsJAXObj = new AxsJAX();
 
   //Add event listeners
+  document.addEventListener('keypress', function(event){axsScholar.axsJAXObj.tabKeyHandler(event,axsScholar.axsJAXObj);},
+                             true);
   document.addEventListener('keypress', axsScholar.extraKeyboardNavHandler,
                              true);
   document.addEventListener('focus', axsScholar.focusHandler, true);
@@ -161,8 +163,9 @@ axsScholar.extraKeyboardNavHandler = function(evt){
   if (evt.keyCode == 27){ // ESC
     axsScholar.lastFocusedNode.blur();
   }
+
   if (axsScholar.inputFocused){
-    return;
+    return true;
   }
 
   if (evt.charCode == 106){ // j
@@ -331,6 +334,7 @@ axsScholar.goToNextResult = function(cycleBool){
   currentResultNode.scrollIntoView(true);
   axsScholar.axsJAXObj.speakNode(currentResultNode);
   axsScholar.buildCurrentResultInfo();
+  axsScholar.axsJAXObj.markPosition(currentResultNode);
 };
 
 axsScholar.goToPrevResult = function(cycleBool){
@@ -351,6 +355,7 @@ axsScholar.goToPrevResult = function(cycleBool){
   currentResultNode.scrollIntoView(true);
   axsScholar.axsJAXObj.speakNode(currentResultNode);
   axsScholar.buildCurrentResultInfo();
+  axsScholar.axsJAXObj.markPosition(currentResultNode);
 };
 
 
