@@ -32,6 +32,7 @@ AxsJAX = function(){
     emptyNode.textContent = ' ';
     return emptyNode;
   };
+  this.tabbingStartPosNode = null;
 };
 
 
@@ -177,3 +178,61 @@ AxsJAX.prototype.assignId = function(targetNode,prefixString){
   targetNode.id = prefixString + this.ID_NUM_++;        
   return targetNode.id;
 };
+
+
+
+
+
+/**
+ * Marks the current position by remembering what the last focusable node was.
+ * The focusable node will be the targetNode if it has a focus() function, or
+ * if it does not, the first descendent node that it has which does.
+ * If the targetNode itself and all of its descendents have no focus() function,
+ * this function will complete with failure.
+ * If the AxsJAX.tabKeyHandler is used, then it will put the focus on this node.
+ * @param {Node} targetNode The target node of this operation.
+ * @return {Boolean} True if the position was marked successfully.
+ *                   False if failed.
+ */
+AxsJAX.prototype.markPosition = function(targetNode){
+  if (!targetNode){
+    return false;
+  }
+  if ((targetNode.tagName == 'A') || (targetNode.tagName == 'INPUT')){
+    this.tabbingStartPosNode = targetNode;
+    return true;
+  }
+  var allDescendants = targetNode.getElementsByTagName('*');
+  for (var i = 0, currentNode; currentNode = allDescendants[i]; i++){
+    if ((currentNode.tagName == 'A') || (currentNode.tagName == 'INPUT')){
+      this.tabbingStartPosNode = currentNode;
+      return true;
+    }
+  }
+  return false;
+};
+
+
+/**
+ * Restores the focus .
+ * Usage:
+ *   var myAxsJAXObj = new AxsJAX();
+ *   document.addEventListener('keypress',
+ *       function(event){
+ *         myAxsJAXObj.tabKeyHandler(event,myAxsJAXObj);
+ *       },
+ *       true);
+ * @param {Event} evt The event
+ * @param {Object} selfRef The AxsJAX object. A self reference is needed here
+ *                         since this in an event handler does NOT refer to the
+ *                         AxsJAX object.
+ * @return {Boolean} Always returns true to pass the tab key along.
+ */
+AxsJAX.prototype.tabKeyHandler = function(evt, selfRef){
+  if ((evt.keyCode == 9) && (this.tabbingStartPosNode)){
+    selfRef.tabbingStartPosNode.focus();
+    selfRef.tabbingStartPosNode = null;
+  }
+  return true;
+};
+

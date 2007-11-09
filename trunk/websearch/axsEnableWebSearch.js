@@ -104,6 +104,8 @@ axsWebSearch.init = function(){
   axsWebSearch.axsJAXObj = new AxsJAX();
 
   //Add event listeners
+  document.addEventListener('keypress', function(event){axsWebSearch.axsJAXObj.tabKeyHandler(event,axsWebSearch.axsJAXObj);},
+                             true);
   document.addEventListener('keypress', axsWebSearch.extraKeyboardNavHandler,
                              true);
   document.addEventListener('focus', axsWebSearch.focusHandler, true);
@@ -171,7 +173,8 @@ axsWebSearch.extraKeyboardNavHandler = function(evt){
   }
   if (evt.keyCode == 27){ // ESC
     axsWebSearch.lastFocusedNode.blur();
-  }
+  }                       
+
   if (axsWebSearch.inputFocused){
     return;
   }
@@ -268,6 +271,7 @@ axsWebSearch.readOneBox = function(){
     axsWebSearch.axsJAXObj.speakText(axsWebSearch.NO_ONE_BOX_STRING);
   }
   axsWebSearch.currentLink = oneBox.getElementsByTagName('a')[0].href;
+  axsWebSearch.axsJAXObj.markPosition(oneBox);
 };
 
 
@@ -358,6 +362,7 @@ axsWebSearch.cycleThroughAds = function(){
   currentAd.scrollIntoView(true);
   axsWebSearch.currentLink = currentAd.getElementsByTagName('a')[0].href;
   axsWebSearch.axsJAXObj.speakNode(currentAd);
+  axsWebSearch.axsJAXObj.markPosition(currentAd);
 };
 
 
@@ -403,6 +408,7 @@ axsWebSearch.goToNextResult = function(cycleBool){
   currentResult.scrollIntoView(true);
   axsWebSearch.axsJAXObj.speakNode(currentResult);
   axsWebSearch.currentLink = currentResult.getElementsByTagName('a')[0].href;
+  axsWebSearch.axsJAXObj.markPosition(currentResult);
 };
 
 axsWebSearch.goToPrevResult = function(cycleBool){
@@ -420,6 +426,7 @@ axsWebSearch.goToPrevResult = function(cycleBool){
   currentResult.scrollIntoView(true);
   axsWebSearch.axsJAXObj.speakNode(currentResult);
   axsWebSearch.currentLink = currentResult.getElementsByTagName('a')[0].href;
+  axsWebSearch.axsJAXObj.markPosition(currentResult);
 };
 
 
@@ -484,6 +491,7 @@ axsWebSearch.cycleThroughAltSearchCat = function(){
   axsWebSearch.currentLink = currentAltSearch.href;
   axsWebSearch.axsJAXObj.speakText(axsWebSearch.SEARCH_WITHIN_STRING +
                                    currentAltSearch.textContent);
+  axsWebSearch.axsJAXObj.markPosition(currentAltSearch);
 };
 
 
@@ -526,6 +534,7 @@ axsWebSearch.cycleThroughRelatedSearches = function(){
   currentRelSearch.scrollIntoView(true);
   axsWebSearch.currentLink = currentRelSearch.href;
   axsWebSearch.axsJAXObj.speakNode(currentRelSearch);
+  axsWebSearch.axsJAXObj.markPosition(currentRelSearch);
 };
 
 
@@ -669,6 +678,7 @@ axsWebSearch.cycleThroughGuideMode = function(){
   } else {
     axsWebSearch.currentLink = currentItem.getElementsByTagName('a')[0].href;
   }
+  axsWebSearch.axsJAXObj.markPosition(currentItem);
 };
 
 
