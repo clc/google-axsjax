@@ -53,7 +53,7 @@ axsScholar.BL_DIRECT_STRING = 'BL Direct';
 //These are strings to be spoken to the user
 axsScholar.NO_MAIN_LINK_STRING = 'There is no main link.';
 axsScholar.UNAVAILABLE_STRING = ' unavailable.';
-axsScholar.ONLY_ONE_VERSION_STRING = 'There is only one version.'
+axsScholar.ONLY_ONE_VERSION_STRING = 'There is only one version.';
 
 axsScholar.HELP_STRING =
     'The following shortcut keys are available. ' +
@@ -188,8 +188,12 @@ axsScholar.extraKeyboardNavHandler = function(evt){
 
 
   //Keys for working with the current result.
-  //Capitals will be checked to allow for going to the link in a new window
-  //since shift clicking usually opens in a new window.
+  //Capitals will be checked when it should be possible to open the link in a
+  //new window since shift clicking usually opens in a new window.
+  if (evt.charCode == 111){ // o
+    axsScholar.announceOptions();
+  }
+
   if (evt.keyCode == 13){ // Enter
     if (axsScholar.currentResult.mainLink){
       axsScholar.axsJAXObj.clickElem(axsScholar.currentResult.mainLink, evt.shiftKey);
@@ -275,7 +279,13 @@ axsScholar.buildResultsArray = function(){
       break;
     }
   }
-  axsScholar.resultsArray = resultsTd.childNodes;
+  axsScholar.resultsArray = new Array();
+  paragraphs = resultsTd.getElementsByTagName('P');
+  for (var i = 0; i<paragraphs.length; i++){
+    if (paragraphs[i].className == 'g'){
+      axsScholar.resultsArray.push(paragraphs[i]);
+    }
+  }
   axsScholar.resultsIndex = -1;
 };
 
@@ -377,6 +387,32 @@ axsScholar.buildCurrentResultInfo = function(){
   }
 };
 
+
+axsScholar.announceOptions = function(){
+  var messageString = "";
+  if (axsScholar.currentResult.citationLink){
+    messageString = messageString + 'C, ' + axsScholar.currentResult.citationLink.textContent + '. ';
+  }
+  if (axsScholar.currentResult.versionsLink){
+    messageString = messageString + 'V, ' + axsScholar.currentResult.versionsLink.textContent + '. ';
+  }
+  if (axsScholar.currentResult.librarySearchLink){
+    messageString = messageString + 'L, ' + axsScholar.currentResult.librarySearchLink.textContent + '. ';
+  }
+  if (axsScholar.currentResult.relatedArticlesLink){
+    messageString = messageString + 'R, ' + axsScholar.currentResult.relatedArticlesLink.textContent + '. ';
+  }
+  if (axsScholar.currentResult.HTMLVerLink){
+    messageString = messageString + 'H, ' + axsScholar.currentResult.HTMLVerLink.textContent; + '. ';
+  }
+  if (axsScholar.currentResult.BLDirectLink){
+    messageString = messageString + 'B, ' + axsScholar.currentResult.BLDirectLink.textContent; + '. ';
+  }
+  if (axsScholar.currentResult.webSearchLink){
+    messageString = messageString + 'W, ' + axsScholar.currentResult.webSearchLink.textContent; + '. ';
+  }
+  axsScholar.axsJAXObj.speakText(messageString);
+};
 
 
 
