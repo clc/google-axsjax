@@ -291,7 +291,7 @@ axsWebSearch.buildAdsArray = function(){
   }
   var adAreaSide = document.getElementById(axsWebSearch.adAreaSideId);
   if(adAreaSide){
-     for (var child = adAreaSide.firstChild; child; child = child.nextSibling){
+     for (child = adAreaSide.firstChild; child; child = child.nextSibling){
        axsWebSearch.adsArray.push(child);
      }
   }
