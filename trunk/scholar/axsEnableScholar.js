@@ -37,6 +37,7 @@ axsScholar.scholarResultObj = function(){
   this.librarySearchLink = null;
   this.HTMLVerLink = null;
   this.BLDirectLink = null;
+  this.importLink = null;
 };
 
 
@@ -49,6 +50,7 @@ axsScholar.LIBRARY_SEARCH_STRING = 'Library Search';
 axsScholar.VIEW_AS_HTML_STRING = 'View as HTML';
 axsScholar.BL_DIRECT_STRING = 'BL Direct';
 axsScholar.TRY_WEB_QUERY_STRING = 'Try your query on the entire web';
+axsScholar.IMPORT_INTO_STRING = 'Import into';
 
 
 //These are strings to be spoken to the user
@@ -73,6 +75,7 @@ axsScholar.HELP_STRING =
     'H, go to an H T M L version of the current result. ' +
     'B, find the current result at B L direct. ' +
     'W, perform a web search on the current result. ' +
+    'I, import the current result into a citation format. ' +
     'Page up, go to the previous page. ' +
     'Page down, go to the next page. ';
 
@@ -274,6 +277,14 @@ axsScholar.extraKeyboardNavHandler = function(evt){
     }
   }
 
+  if ((evt.charCode == 105) || (evt.charCode == 73)){ // i
+    if (axsScholar.currentResult.importLink){
+      axsScholar.axsJAXObj.clickElem(axsScholar.currentResult.importLink, evt.shiftKey);
+    } else{
+      axsScholar.axsJAXObj.speakText(axsScholar.IMPORT_INTO_STRING + axsScholar.UNAVAILABLE_STRING);
+    }
+  }
+
   if ((evt.charCode == 98) || (evt.charCode == 66)){ // b
     if (axsScholar.currentResult.BLDirectLink){
       axsScholar.axsJAXObj.clickElem(axsScholar.currentResult.BLDirectLink, evt.shiftKey);
@@ -417,6 +428,8 @@ axsScholar.buildCurrentResultInfo = function(){
         axsScholar.currentResult.HTMLVerLink = links[i];
       } else if (links[i].textContent == axsScholar.BL_DIRECT_STRING){
         axsScholar.currentResult.BLDirectLink = links[i];
+      } else if (links[i].textContent.indexOf(axsScholar.IMPORT_INTO_STRING) === 0){
+        axsScholar.currentResult.importLink = links[i];
       }
     }
   }
@@ -445,6 +458,9 @@ axsScholar.announceOptions = function(){
   }
   if (axsScholar.currentResult.webSearchLink){
     messageString = messageString + 'W, ' + axsScholar.currentResult.webSearchLink.textContent; + '. ';
+  }
+  if (axsScholar.currentResult.importLink){
+    messageString = messageString + 'I, ' + axsScholar.currentResult.importLink.textContent; + '. ';
   }
   axsScholar.axsJAXObj.speakText(messageString);
 };
