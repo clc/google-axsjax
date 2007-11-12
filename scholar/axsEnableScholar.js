@@ -101,11 +101,9 @@ axsScholar.currentResult = null;
 
 
 axsScholar.init = function(){
-  axsScholar.axsJAXObj = new AxsJAX();
+  axsScholar.axsJAXObj = new AxsJAX(true);
 
   //Add event listeners
-  document.addEventListener('keypress', function(event){axsScholar.axsJAXObj.tabKeyHandler(event,axsScholar.axsJAXObj);},
-                             true);
   document.addEventListener('keypress', axsScholar.extraKeyboardNavHandler,
                              true);
   document.addEventListener('focus', axsScholar.focusHandler, true);
@@ -342,10 +340,8 @@ axsScholar.goToNextResult = function(cycleBool){
     }
   }
   var currentResultNode = axsScholar.resultsArray[axsScholar.resultsIndex];
-  currentResultNode.scrollIntoView(true);
-  axsScholar.axsJAXObj.speakNode(currentResultNode);
+  axsScholar.axsJAXObj.goTo(currentResultNode);
   axsScholar.buildCurrentResultInfo();
-  axsScholar.axsJAXObj.markPosition(currentResultNode);
 };
 
 axsScholar.goToPrevResult = function(cycleBool){
@@ -363,10 +359,8 @@ axsScholar.goToPrevResult = function(cycleBool){
     }
   }
   var currentResultNode = axsScholar.resultsArray[axsScholar.resultsIndex];
-  currentResultNode.scrollIntoView(true);
-  axsScholar.axsJAXObj.speakNode(currentResultNode);
+  axsScholar.axsJAXObj.goTo(currentResultNode);
   axsScholar.buildCurrentResultInfo();
-  axsScholar.axsJAXObj.markPosition(currentResultNode);
 };
 
 
