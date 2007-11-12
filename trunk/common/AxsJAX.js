@@ -60,6 +60,8 @@ AxsJAX.prototype.speakNode = function(targetNode){
   if (!targetNode.id){
     this.assignId(targetNode);
   }
+  var oldRole = targetNode.getAttribute("role");
+  targetNode.setAttribute("role","wairole:option");
   var theBody = window.content.document.body;
   theBody.tabIndex = -1;
   theBody.blur();
