@@ -61,11 +61,11 @@ AxsJAX.prototype.speakNode = function(targetNode){
     this.assignId(targetNode);
   }
   var oldRole = targetNode.getAttribute("role");
-  targetNode.setAttribute("role","wairole:option");
+  targetNode.setAttribute("role","wairole:row");
   var theBody = window.content.document.body;
   theBody.tabIndex = -1;
   theBody.blur();
-  theBody.setAttribute("role","wairole:listbox");
+  theBody.setAttribute("role","wairole:group");
   theBody.setAttribute("aria-activedescendant", '');
   theBody.focus();
   theBody.setAttribute("aria-activedescendant", targetNode.id);
