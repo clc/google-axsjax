@@ -22,9 +22,12 @@
 
 /**
  * Class of scripts for improving accessibility of Google Apps.
+ * @param {boolean} useTabKeyFix  Whether or not to try syncing to the last
+ *                                marked position when the user presses the
+ *                                tab key.
  * @constructor
  */
-AxsJAX = function(){
+AxsJAX = function(useTabKeyFix){
   this.ID_NUM_ = 0;
   //Empty node used for tickling existing nodes into speaking
   this.EMPTY_NODE_ = new function(){
@@ -33,6 +36,10 @@ AxsJAX = function(){
     return emptyNode;
   };
   this.tabbingStartPosNode = null;
+  var self = this;
+  if (useTabKeyFix){
+    document.addEventListener('keypress', function(event){self.tabKeyHandler(event,self);}, true);
+  }
 };
 
 
@@ -236,3 +243,14 @@ AxsJAX.prototype.tabKeyHandler = function(evt, selfRef){
   return true;
 };
 
+/**
+ * Scrolls to the targetNode and speaks it.
+ * This will automatically mark the position; this should be used if you are
+ * trying to do navigation.
+ * @param {Node} targetNode The HTML node to be spoken.
+ */
+AxsJAX.prototype.goTo = function(targetNode){
+  targetNode.scrollIntoView(true);
+  this.speakNode(targetNode);
+  this.markPosition(targetNode);
+};
