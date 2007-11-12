@@ -69,13 +69,15 @@ AxsJAX.prototype.speakNode = function(targetNode){
   theBody.setAttribute("aria-activedescendant", '');
   theBody.focus();
   theBody.setAttribute("aria-activedescendant", targetNode.id);
-  window.setTimeout(function(){ targetNode.removeAttribute("role"); },0);
-  //if (oldRole){
-//    targetNode.setAttribute("role",oldRole);
-//  } else {
-//    targetNode.removeAttribute("role");
-//  }
-
+  //Restore the original role of the targetNode
+  window.setTimeout(
+      function(){
+        if (oldRole){
+          targetNode.setAttribute("role",oldRole);
+        } else {
+        targetNode.removeAttribute("role");
+        }
+      },0);
 };
 
 
