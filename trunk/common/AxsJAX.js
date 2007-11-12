@@ -69,6 +69,12 @@ AxsJAX.prototype.speakNode = function(targetNode){
   theBody.setAttribute("aria-activedescendant", '');
   theBody.focus();
   theBody.setAttribute("aria-activedescendant", targetNode.id);
+  if (oldRole){
+    targetNode.setAttribute("role",oldRole);
+  } else {
+    targetNode.removeAttribute("role");
+  }
+
 };
 
 
