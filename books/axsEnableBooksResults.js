@@ -31,9 +31,11 @@ var axsBooksResults = {};
 
 //These are strings used to find specific links
 axsBooksResults.ABOUT_THIS_BOOK_STRING = 'About this book';
-
+axsBooksResults.MORE_EDITIONS_STRING = 'More editions';
 
 //These are strings to be spoken to the user
+axsBooksResults.NO_OTHER_EDITIONS_STRING = 'There are no other editions available.';
+
 axsBooksResults.HELP_STRING =
     'The following shortcut keys are available. ' +
     'Down arrow or N, go to the next result. ' +
@@ -183,7 +185,33 @@ axsBooksResults.extraKeyboardNavHandler = function(evt){
   //Keys for working with the current result.
   //Capitals will be checked when it should be possible to open the link in a
   //new window since shift clicking usually opens in a new window.
-
+  if (evt.keyCode == 13){ // Enter
+    var currentResultNode = axsBooksResults.resultsArray[axsBooksResults.resultsIndex];
+    var mainLink = currentResultNode.getElementsByTagName('H2')[0].firstChild;
+    axsBooksResults.axsJAXObj.clickElem(mainLink, evt.shiftKey);
+  }
+  if ((evt.charCode == 97) || (evt.charCode == 65)){ // a
+    var currentResultNode = axsBooksResults.resultsArray[axsBooksResults.resultsIndex];
+    var linksArray = currentResultNode.getElementsByTagName('A');
+    for (var i=0; i<linksArray.length; i++){
+      if (linksArray[i].textContent == axsBooksResults.ABOUT_THIS_BOOK_STRING){
+        axsBooksResults.axsJAXObj.clickElem(linksArray[i], evt.shiftKey);
+        return;
+      }
+    }
+  }
+  if ((evt.charCode == 101) || (evt.charCode == 69)){ // e
+    var currentResultNode = axsBooksResults.resultsArray[axsBooksResults.resultsIndex];
+    var linksArray = currentResultNode.getElementsByTagName('A');
+    for (var i=0; i<linksArray.length; i++){
+      if (linksArray[i].textContent == axsBooksResults.MORE_EDITIONS_STRING){
+        axsBooksResults.axsJAXObj.clickElem(linksArray[i], evt.shiftKey);
+        return;
+      }
+    }
+    axsBooksResults.axsJAXObj.speakText(axsBooksResults.NO_OTHER_EDITIONS_STRING);
+  }
+  
 
 };
 
@@ -207,7 +235,6 @@ axsBooksResults.goToNextResult = function(cycleBool){
   }
   var currentResultNode = axsBooksResults.resultsArray[axsBooksResults.resultsIndex];
   axsBooksResults.axsJAXObj.goTo(currentResultNode);
-  axsBooksResults.buildCurrentResultInfo();
 };
 
 axsBooksResults.goToPrevResult = function(cycleBool){
@@ -223,7 +250,6 @@ axsBooksResults.goToPrevResult = function(cycleBool){
   }
   var currentResultNode = axsBooksResults.resultsArray[axsBooksResults.resultsIndex];
   axsBooksResults.axsJAXObj.goTo(currentResultNode);
-  axsBooksResults.buildCurrentResultInfo();
 };
 
 
@@ -251,6 +277,10 @@ axsBooksResults.goToPrevPage = function(){
 //************
 //Functions for working with results
 //************
+
+
+
+
 
 
 
