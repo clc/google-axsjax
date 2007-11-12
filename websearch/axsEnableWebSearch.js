@@ -101,11 +101,9 @@ axsWebSearch.guideModeIndex = 0;
 
 
 axsWebSearch.init = function(){
-  axsWebSearch.axsJAXObj = new AxsJAX();
+  axsWebSearch.axsJAXObj = new AxsJAX(true);
 
   //Add event listeners
-  document.addEventListener('keypress', function(event){axsWebSearch.axsJAXObj.tabKeyHandler(event,axsWebSearch.axsJAXObj);},
-                             true);
   document.addEventListener('keypress', axsWebSearch.extraKeyboardNavHandler,
                              true);
   document.addEventListener('focus', axsWebSearch.focusHandler, true);
@@ -265,13 +263,11 @@ axsWebSearch.getOneBoxNode = function(){
 axsWebSearch.readOneBox = function(){
   var oneBox = axsWebSearch.getOneBoxNode();
   if (oneBox){
-    oneBox.scrollIntoView(true);
-    axsWebSearch.axsJAXObj.speakNode(oneBox);
+    axsWebSearch.axsJAXObj.goTo(oneBox);
   } else{
     axsWebSearch.axsJAXObj.speakText(axsWebSearch.NO_ONE_BOX_STRING);
   }
   axsWebSearch.currentLink = oneBox.getElementsByTagName('a')[0].href;
-  axsWebSearch.axsJAXObj.markPosition(oneBox);
 };
 
 
@@ -359,10 +355,8 @@ axsWebSearch.cycleThroughAds = function(){
     axsWebSearch.adsIndex = 0;
   }  
   var currentAd = axsWebSearch.adsArray[axsWebSearch.adsIndex];
-  currentAd.scrollIntoView(true);
   axsWebSearch.currentLink = currentAd.getElementsByTagName('a')[0].href;
-  axsWebSearch.axsJAXObj.speakNode(currentAd);
-  axsWebSearch.axsJAXObj.markPosition(currentAd);
+  axsWebSearch.axsJAXObj.goTo(currentAd);
 };
 
 
@@ -405,10 +399,8 @@ axsWebSearch.goToNextResult = function(cycleBool){
     }
   }
   var currentResult = axsWebSearch.resultsArray[axsWebSearch.resultsIndex];
-  currentResult.scrollIntoView(true);
-  axsWebSearch.axsJAXObj.speakNode(currentResult);
   axsWebSearch.currentLink = currentResult.getElementsByTagName('a')[0].href;
-  axsWebSearch.axsJAXObj.markPosition(currentResult);
+  axsWebSearch.axsJAXObj.goTo(currentResult);
 };
 
 axsWebSearch.goToPrevResult = function(cycleBool){
@@ -423,10 +415,8 @@ axsWebSearch.goToPrevResult = function(cycleBool){
     }
   }
   var currentResult = axsWebSearch.resultsArray[axsWebSearch.resultsIndex];
-  currentResult.scrollIntoView(true);
-  axsWebSearch.axsJAXObj.speakNode(currentResult);
+  axsWebSearch.axsJAXObj.goTo(currentResult);
   axsWebSearch.currentLink = currentResult.getElementsByTagName('a')[0].href;
-  axsWebSearch.axsJAXObj.markPosition(currentResult);
 };
 
 
@@ -531,10 +521,8 @@ axsWebSearch.cycleThroughRelatedSearches = function(){
   }
   var currentRelSearch =
       axsWebSearch.relatedSearchesArray[axsWebSearch.relatedSearchesIndex];
-  currentRelSearch.scrollIntoView(true);
   axsWebSearch.currentLink = currentRelSearch.href;
-  axsWebSearch.axsJAXObj.speakNode(currentRelSearch);
-  axsWebSearch.axsJAXObj.markPosition(currentRelSearch);
+  axsWebSearch.axsJAXObj.goTo(currentRelSearch);
 };
 
 
