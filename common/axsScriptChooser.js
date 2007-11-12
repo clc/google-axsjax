@@ -41,18 +41,18 @@ function pickScript(){
   if (currentURL.indexOf('http://www.google.com/reader/') === 0){
     theScript.src = baseURL + 'reader/axsEnableReader.js';
     shouldInsertScripts = true;
-  }
-  else if ((currentURL === 'http://www.google.com/')
+  }  else if ((currentURL === 'http://www.google.com/')
       || (currentURL.indexOf('http://www.google.com/search') === 0)
       || (currentURL.indexOf('http://www.google.com/custom') === 0)){
     theScript.src = baseURL + 'websearch/axsEnableWebSearch.js';
     shouldInsertScripts = true;
-  }
-  else if (currentURL.indexOf('http://scholar.google.com/scholar') === 0){
+  }  else if (currentURL.indexOf('http://scholar.google.com/scholar') === 0){
     theScript.src = baseURL + 'scholar/axsEnableScholar.js';
     shouldInsertScripts = true;
-  }
-  else if (currentURL === 'http://www.minijuegosgratis.com/juegos/jawbreaker/jawbreaker.htm'){
+  }  else if (currentURL.indexOf('http://books.google.com') === 0){
+    theScript.src = baseURL + 'books/axsEnableBooks.js';
+    shouldInsertScripts = true;
+  }  else if (currentURL === 'http://www.minijuegosgratis.com/juegos/jawbreaker/jawbreaker.htm'){
     theScript.src = baseURL + 'jawbreaker/axsEnableJawbreaker.js';
     shouldInsertScripts = true;
   }
