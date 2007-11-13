@@ -174,7 +174,7 @@ axsWebSearch.extraKeyboardNavHandler = function(evt){
   }                       
 
   if (axsWebSearch.inputFocused){
-    return;
+    return true;
   }
   if (evt.charCode == 49){ // 1
     axsWebSearch.readOneBox();
@@ -242,6 +242,7 @@ axsWebSearch.extraKeyboardNavHandler = function(evt){
   if (evt.charCode == 63){ // ? (question mark)
     axsWebSearch.axsJAXObj.speakText(axsWebSearch.HELP_STRING);
   }
+  return false;
 };
 
 

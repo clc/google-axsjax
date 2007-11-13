@@ -290,6 +290,7 @@ axsScholar.extraKeyboardNavHandler = function(evt){
       axsScholar.axsJAXObj.speakText(axsScholar.BL_DIRECT_STRING + axsScholar.UNAVAILABLE_STRING);
     }
   }
+  return false;
 };
 
 

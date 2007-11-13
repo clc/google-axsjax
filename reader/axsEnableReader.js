@@ -282,7 +282,7 @@ axsReader.extraKeyboardNavHandler = function(event){
       }
     }
     //For all other inputs, do nothing
-    return;
+    return true;
   }
 
   //Fix the "Send" article email button
@@ -294,7 +294,7 @@ axsReader.extraKeyboardNavHandler = function(event){
     if (event.keyCode == 13){      //Enter
       axsReader.axsJAXObj.clickElem(axsReader.lastFocusedObject);
     }
-    return;
+    return false;
   }
 
   //Fix the "Cancel" article email button
@@ -303,7 +303,7 @@ axsReader.extraKeyboardNavHandler = function(event){
     if (event.keyCode == 13){      //Enter
       axsReader.axsJAXObj.clickElem(axsReader.lastFocusedObject);
     }
-    return;
+    return false;
   }
   //**The following code adds keyboard shortcuts that do not exist
 
@@ -356,6 +356,7 @@ axsReader.extraKeyboardNavHandler = function(event){
       axsReader.actOnCurrentResult();
     }
   }
+  return false;
 
 };
 
