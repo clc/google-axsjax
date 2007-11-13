@@ -146,7 +146,7 @@ axsReader.domInsertionHandler = function(event){
 axsReader.announceSelectedTag = function(){
   var topDiv = document.getElementById(axsReader.tagSelectorTopDivId);
   var selectedTag = axsReader.findSelectedTag(topDiv);
-  axsReader.axsJAXObj.speakNode(selectedTag);
+  axsReader.axsJAXObj.speakText(selectedTag.textContent);
 };
 
 
@@ -262,9 +262,10 @@ axsReader.extraKeyboardNavHandler = function(event){
       //Must be done as a timeout as the "selected" class
       //has not been set at this point
       window.setTimeout(axsReader.announceSelectedTag,100);
+      return false;
     }
+    return true;
   }
-
 
   // The following code corrects broken keyboard handling
   if (axsReader.inputFocused){
@@ -273,12 +274,14 @@ axsReader.extraKeyboardNavHandler = function(event){
         (axsReader.lastFocusedObject.name == 'ccMe')){
       if (event.keyCode == 9){   //Tab
         axsReader.navigateToClosestSendButton(event.target);
+        return false;
       }
       if (event.keyCode == 13){  //Enter - workaround for broken check/uncheck
         axsReader.axsJAXObj.clickElem(event.target);
         axsReader.axsJAXObj.assignId(event.target);
         window.setTimeout("document.getElementById('"
                            + event.target.id + "').focus();",0);
+        return false;
       }
     }
     //For all other inputs, do nothing
@@ -290,11 +293,13 @@ axsReader.extraKeyboardNavHandler = function(event){
        (axsReader.lastFocusedObject.textContent == 'Send')){
     if (event.keyCode == 9){      //Tab
       axsReader.navigateToClosestCancelButton(axsReader.lastFocusedObject);
+      return false;
     }
     if (event.keyCode == 13){      //Enter
       axsReader.axsJAXObj.clickElem(axsReader.lastFocusedObject);
+      return false;
     }
-    return false;
+    return true;
   }
 
   //Fix the "Cancel" article email button
@@ -302,21 +307,25 @@ axsReader.extraKeyboardNavHandler = function(event){
        (axsReader.lastFocusedObject.textContent == 'Cancel')){
     if (event.keyCode == 13){      //Enter
       axsReader.axsJAXObj.clickElem(axsReader.lastFocusedObject);
+      return false;
     }
-    return false;
+    return true;
   }
   //**The following code adds keyboard shortcuts that do not exist
 
   if (event.charCode == 98){      // b
     axsReader.browseFeedBundles();
+    return false;
   }
 
   if (event.charCode == 46){      // .
     axsReader.unsubscribeFromFeedCurrentlyOpen();
+    return false;
   }
 
   if (event.charCode == 63){      // ?
     axsReader.axsJAXObj.speakText(axsReader.HELP_STRING);
+    return false;
   }
 
   //**The following code is specific to certain contexts
@@ -332,15 +341,19 @@ axsReader.extraKeyboardNavHandler = function(event){
        (containerContent.id == 'directory-box') ){
     if (event.charCode == 110 ){   // n
       axsReader.navigateToNextFeedBundle();
+      return false;
     }
     if (event.charCode == 112){   // p
       axsReader.navigateToPrevFeedBundle();
+      return false;
     }
     if (event.charCode == 115){   //  s
       window.setTimeout(axsReader.focusFeedsSearch,10);
+      return false;
     }
     if (event.keyCode == 13){         // Enter
       axsReader.subscribeToCurrentFeedBundle();
+      return false;
     }
   }
   //Only on the feed search results page
@@ -348,16 +361,18 @@ axsReader.extraKeyboardNavHandler = function(event){
        (containerContent.id == 'directory-search-results') ){
     if (event.charCode == 110){    // n
       axsReader.navigateToNextResult();
+      return false;
     }
     if (event.charCode == 112 ){   //  p
       axsReader.navigateToPrevResult();
+      return false;
     }
     if (event.keyCode == 13){      // Enter
       axsReader.actOnCurrentResult();
+      return false;
     }
   }
-  return false;
-
+  return true;
 };
 
 /**
@@ -589,7 +604,7 @@ axsReader.navigateToClosestSendButton = function(checkboxNode){
   var tablesArray = emailBodyArea.getElementsByTagName('table');
   var sendButton = tablesArray[0].getElementsByTagName('span')[0];
   sendButton.tabIndex = 0;
-  sendButton.setAttribute('role','wairole:button');
+  axsReader.axsJAXObj.setAttributeOf(sendButton,'role','button');
   sendButton.focus();
 };
 
@@ -599,8 +614,8 @@ axsReader.navigateToClosestCancelButton = function(enterButtonSpan){
   var enterButtonTable = enterButtonRow.parentNode.parentNode; //Expect TD
   var cancelButtonTable = enterButtonTable.nextSibling;
   var cancelButton = cancelButtonTable.getElementsByTagName('span')[0];
-  cancelButton.tabIndex = 0;
-  cancelButton.setAttribute('role','wairole:button');
+  cancelButton.tabIndex = 0;  
+  axsReader.axsJAXObj.setAttributeOf(cancelButton,'role','button');
   cancelButton.focus();
 };
 
