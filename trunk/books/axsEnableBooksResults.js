@@ -191,28 +191,27 @@ axsBooksResults.extraKeyboardNavHandler = function(evt){
     axsBooksResults.axsJAXObj.clickElem(mainLink, evt.shiftKey);
   }
   if ((evt.charCode == 97) || (evt.charCode == 65)){ // a
-    var currentResultNode = axsBooksResults.resultsArray[axsBooksResults.resultsIndex];
-    var linksArray = currentResultNode.getElementsByTagName('A');
-    for (var i=0; i<linksArray.length; i++){
-      if (linksArray[i].textContent == axsBooksResults.ABOUT_THIS_BOOK_STRING){
-        axsBooksResults.axsJAXObj.clickElem(linksArray[i], evt.shiftKey);
-        return;
+    currentResultNode = axsBooksResults.resultsArray[axsBooksResults.resultsIndex];
+    linksArray = currentResultNode.getElementsByTagName('A');
+    for (var i=0, currentLink; currentLink = linksArray[i]; i++){
+      if (currentLink.textContent == axsBooksResults.ABOUT_THIS_BOOK_STRING){
+        axsBooksResults.axsJAXObj.clickElem(currentLink, evt.shiftKey);
+        return false;
       }
     }
   }
   if ((evt.charCode == 101) || (evt.charCode == 69)){ // e
-    var currentResultNode = axsBooksResults.resultsArray[axsBooksResults.resultsIndex];
-    var linksArray = currentResultNode.getElementsByTagName('A');
-    for (var i=0; i<linksArray.length; i++){
-      if (linksArray[i].textContent == axsBooksResults.MORE_EDITIONS_STRING){
-        axsBooksResults.axsJAXObj.clickElem(linksArray[i], evt.shiftKey);
-        return;
+    currentResultNode = axsBooksResults.resultsArray[axsBooksResults.resultsIndex];
+    linksArray = currentResultNode.getElementsByTagName('A');
+    for (i=0, currentLink; currentLink = linksArray[i]; i++){
+      if (currentLink.textContent == axsBooksResults.MORE_EDITIONS_STRING){
+        axsBooksResults.axsJAXObj.clickElem(currentLink, evt.shiftKey);
+        return false;
       }
     }
     axsBooksResults.axsJAXObj.speakText(axsBooksResults.NO_OTHER_EDITIONS_STRING);
   }
-  
-
+  return false;
 };
 
 
