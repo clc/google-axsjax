@@ -60,22 +60,23 @@ AxsJAX.prototype.speakNode = function(targetNode){
   if (!targetNode.id){
     this.assignId(targetNode);
   }
-  var oldRole = targetNode.getAttribute("role");
-  targetNode.setAttribute("role","wairole:row");
+  var oldRole = this.getAttributeOf(targetNode,'role');
+  this.setAttributeOf(targetNode,'role','row');
   var theBody = window.content.document.body;
   theBody.tabIndex = -1;
   theBody.blur();
-  theBody.setAttribute("role","wairole:group");
-  theBody.setAttribute("aria-activedescendant", '');
+  this.setAttributeOf(theBody,'role','group');
+  this.setAttributeOf(theBody,'activedescendant',null);
   theBody.focus();
-  theBody.setAttribute("aria-activedescendant", targetNode.id);
+  this.setAttributeOf(theBody,'activedescendant',targetNode.id);
   //Restore the original role of the targetNode
+  var self = this;
   window.setTimeout(
       function(){
         if (oldRole){
-          targetNode.setAttribute("role",oldRole);
+          self.setAttributeOf(targetNode,'role',oldRole);
         } else {
-        targetNode.removeAttribute("role");
+          self.removeAttributeOf(targetNode,'role');
         }
       },0);
 };
@@ -95,7 +96,7 @@ AxsJAX.prototype.speakText = function(textString){
   var audioNode = document.createElement('span');
   audioNode.id = 'AxsJAX_audioNode';
   audioNode.style.visibility = 'hidden';
-  audioNode.setAttribute('aria-live', 'rude');
+  this.setAttributeOf(audioNode,'live','rude');
   var oldAudioNode = document.getElementById(audioNode.id);
   if (oldAudioNode){
     document.body.removeChild(oldAudioNode);
@@ -264,4 +265,50 @@ AxsJAX.prototype.goTo = function(targetNode){
   targetNode.scrollIntoView(true);
   this.speakNode(targetNode);
   this.markPosition(targetNode);
+};
+
+
+/**
+ * Sets the attribute of the targetNode to the value.
+ * Use this rather than a direct set attribute to abstract away ARIA
+ * naming changes.
+ * @param {Node} targetNode The HTML node to be spoken.
+ */
+AxsJAX.prototype.setAttributeOf = function(targetNode, attribute, value){
+  //Add the aria- to attributes
+  if (attribute.toLowerCase() == 'live'){
+    attribute = 'aria-live';
+  } else if (attribute.toLowerCase() == 'activedescendant'){
+    attribute = 'aria-activedescendant';
+  }
+  //Add the wairole: to values
+  if (value && value.toLowerCase){
+    if (value.toLowerCase() == 'group'){
+      value = 'wairole:group';
+    } else if (value.toLowerCase() == 'row'){
+      value = 'wairole:row';
+    }
+  }
+  targetNode.setAttribute(attribute, value);
+};
+
+
+/**
+ * Gets the attribute of the targetNode.
+ * Use this rather than a direct get attribute to abstract away ARIA
+ * naming changes.
+ * @param {Node} targetNode The HTML node to be spoken.
+ */
+AxsJAX.prototype.getAttributeOf = function(targetNode, attribute){
+  return targetNode.getAttribute(attribute);
+};
+
+/**
+ * Removes the attribute of the targetNode.
+ * Use this rather than a direct remove attribute to abstract away ARIA
+ * naming changes.
+ * @param {Node} targetNode The HTML node to be spoken.
+ */
+AxsJAX.prototype.removeAttributeOf = function(targetNode, attribute){
+  targetNode.removeAttribute(attribute);
 };
