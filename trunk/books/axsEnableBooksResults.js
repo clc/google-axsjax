@@ -34,7 +34,8 @@ axsBooksResults.ABOUT_THIS_BOOK_STRING = 'About this book';
 axsBooksResults.MORE_EDITIONS_STRING = 'More editions';
 
 //These are strings to be spoken to the user
-axsBooksResults.NO_OTHER_EDITIONS_STRING = 'There are no other editions available.';
+axsBooksResults.NO_OTHER_EDITIONS_STRING =
+    'There are no other editions available.';
 
 axsBooksResults.HELP_STRING =
     'The following shortcut keys are available. ' +
@@ -82,7 +83,7 @@ axsBooksResults.init = function(){
   document.addEventListener('blur', axsBooksResults.blurHandler, true);
 
   //Setup the results array
-  axsBooksResults.resultsArray = document.getElementById('results_container').childNodes;
+  axsBooksResults.buildResultsArray();
 
   //Read the first thing on the page.
   //Use a set time out just in case the browser is not entirely ready yet.
@@ -186,12 +187,14 @@ axsBooksResults.extraKeyboardNavHandler = function(evt){
   //Capitals will be checked when it should be possible to open the link in a
   //new window since shift clicking usually opens in a new window.
   if (evt.keyCode == 13){ // Enter
-    var currentResultNode = axsBooksResults.resultsArray[axsBooksResults.resultsIndex];
+    var currentResultNode =
+        axsBooksResults.resultsArray[axsBooksResults.resultsIndex];
     var mainLink = currentResultNode.getElementsByTagName('H2')[0].firstChild;
     axsBooksResults.axsJAXObj.clickElem(mainLink, evt.shiftKey);
   }
   if ((evt.charCode == 97) || (evt.charCode == 65)){ // a
-    currentResultNode = axsBooksResults.resultsArray[axsBooksResults.resultsIndex];
+    currentResultNode =
+        axsBooksResults.resultsArray[axsBooksResults.resultsIndex];
     linksArray = currentResultNode.getElementsByTagName('A');
     for (var i=0, currentLink; currentLink = linksArray[i]; i++){
       if (currentLink.textContent == axsBooksResults.ABOUT_THIS_BOOK_STRING){
@@ -201,7 +204,8 @@ axsBooksResults.extraKeyboardNavHandler = function(evt){
     }
   }
   if ((evt.charCode == 101) || (evt.charCode == 69)){ // e
-    currentResultNode = axsBooksResults.resultsArray[axsBooksResults.resultsIndex];
+    currentResultNode =
+        axsBooksResults.resultsArray[axsBooksResults.resultsIndex];
     linksArray = currentResultNode.getElementsByTagName('A');
     for (i=0, currentLink; currentLink = linksArray[i]; i++){
       if (currentLink.textContent == axsBooksResults.MORE_EDITIONS_STRING){
@@ -218,8 +222,17 @@ axsBooksResults.extraKeyboardNavHandler = function(evt){
 
 
 //************
-//Functions for traversing results
+//Functions for results
 //************
+axsBooksResults.buildResultsArray = function(){
+  var resultsContainer = document.getElementById('results_container');
+  axsBooksResults.resultsArray = new Array();
+  for (var i=0,child; child = resultsContainer.childNodes[i]; i++){
+    //Skip the cover to avoid repeating the title
+    var resultContent = child.firstChild.firstChild.childNodes[1];
+    axsBooksResults.resultsArray.push(resultContent);
+  }
+};
 
 axsBooksResults.goToNextResult = function(cycleBool){
   axsBooksResults.resultsIndex++;
@@ -232,7 +245,8 @@ axsBooksResults.goToNextResult = function(cycleBool){
       axsBooksResults.resultsIndex = 0;
     }
   }
-  var currentResultNode = axsBooksResults.resultsArray[axsBooksResults.resultsIndex];
+  var currentResultNode =
+      axsBooksResults.resultsArray[axsBooksResults.resultsIndex];
   axsBooksResults.axsJAXObj.goTo(currentResultNode);
 };
 
@@ -247,7 +261,8 @@ axsBooksResults.goToPrevResult = function(cycleBool){
       axsBooksResults.resultsIndex = axsBooksResults.resultsArray.length-1;
     }
   }
-  var currentResultNode = axsBooksResults.resultsArray[axsBooksResults.resultsIndex];
+  var currentResultNode =
+      axsBooksResults.resultsArray[axsBooksResults.resultsIndex];
   axsBooksResults.axsJAXObj.goTo(currentResultNode);
 };
 
@@ -273,9 +288,7 @@ axsBooksResults.goToPrevPage = function(){
 };
 
 
-//************
-//Functions for working with results
-//************
+
 
 
 
