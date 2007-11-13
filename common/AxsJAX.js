@@ -287,6 +287,8 @@ AxsJAX.prototype.setAttributeOf = function(targetNode, attribute, value){
       value = 'wairole:group';
     } else if (value.toLowerCase() == 'row'){
       value = 'wairole:row';
+    } else if (value.toLowerCase() == 'button'){
+      value = 'wairole:button';
     }
   }
   targetNode.setAttribute(attribute, value);
