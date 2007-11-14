@@ -132,7 +132,11 @@ AxsJAX.prototype.clickElem = function(targetNode, shiftKey){
   var evt = document.createEvent('MouseEvents');
   evt.initMouseEvent('click',true,true,document.defaultView,
                      1,0,0,0,0,false,false,shiftKey,false,0,null);
-  targetNode.dispatchEvent(evt);
+  //Use a try block here so that if the AJAX fails and it is a link,
+  //it can still fall through and retry by setting the document.location.
+  try{
+    targetNode.dispatchEvent(evt);
+  } catch(e){}
   //Clicking on a link does not cause traversal because of script
   //privilege limitations. The traversal has to be done by setting
   //document.location.

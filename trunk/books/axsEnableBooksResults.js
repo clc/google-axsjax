@@ -227,6 +227,7 @@ axsBooksResults.extraKeyboardNavHandler = function(evt){
 axsBooksResults.buildResultsArray = function(){
   var resultsContainer = document.getElementById('results_container');
   axsBooksResults.resultsArray = new Array();
+  axsBooksResults.resultsIndex = -1;
   for (var i=0,child; child = resultsContainer.childNodes[i]; i++){
     //Skip the cover to avoid repeating the title
     var resultContent = child.firstChild.firstChild.childNodes[1];
