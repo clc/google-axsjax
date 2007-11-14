@@ -505,7 +505,7 @@ axsBooksAbout.actOnCurrentItem = function(shiftKey){
   if (currentItem.tagName == 'A'){
     currentLink = currentItem;
   } else {
-    currentItem.getElementsByTagName('A')[linkIndex];
+    currentLink = currentItem.getElementsByTagName('A')[linkIndex];
   }
   if (currentLink){
     axsBooksAbout.axsJAXObj.clickElem(currentLink,shiftKey);
