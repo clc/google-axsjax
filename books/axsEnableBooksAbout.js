@@ -37,6 +37,7 @@ axsBooksAbout.categoryObj = function(){
 
 //These are strings used to find specific links
 axsBooksAbout.MORE_STRING = 'more';
+axsBooksAbout.PLACES_MENTIONED_STRING = 'Places mentioned in this book';
 
 //These are strings to be spoken to the user
 axsBooksAbout.HELP_STRING =
@@ -178,6 +179,19 @@ axsBooksAbout.extraKeyboardNavHandler = function(evt){
     axsBooksAbout.goToPrevCategory();
     return false;
   }
+  if (evt.charCode == 115){ // s
+    var inputElems =
+        document.getElementById('search_form').getElementsByTagName('INPUT');
+    for (var i=0,input; input = inputElems[i]; i++){
+      if (input.type == 'text'){
+        input.focus();
+        input.select();
+        return false;
+      }
+    }
+    return true;
+  }
+
 
 
   if (evt.charCode == 47){ // / (slash symbol)
@@ -229,8 +243,29 @@ axsBooksAbout.buildCategoriesArray = function(){
   axsBooksAbout.categoriesArray = new Array();
   axsBooksAbout.categoriesIndex = -1;
   var cat = null;
+  var myNode = null;
+
+  //Search - only add this if the user did a search and there are results
+  myNode = document.getElementById('search');
+  if (myNode){
+    cat = new axsBooksAbout.categoryObj();
+    cat.titleNode = myNode.previousSibling;
+    cat.mainContentNode = myNode;
+    cat.itemsArray = new Array();
+    cat.itemsIndex = -1;
+    var divArray = myNode.getElementsByTagName('DIV');
+    for (var i=0,currentDiv; currentDiv = divArray[i]; i++){
+      if (currentDiv.className == 'searchresult'){
+        cat.itemsArray.push(currentDiv);
+      }
+    }
+    if (cat.itemsArray.length > 0){
+      axsBooksAbout.categoriesArray.push(cat);
+    }
+  }
+
   //Summary
-  var myNode = document.getElementById('summary_content');
+  myNode = document.getElementById('summary_content');
   if (myNode){
     cat = new axsBooksAbout.categoryObj();
     cat.titleNode = myNode.previousSibling;
@@ -295,25 +330,27 @@ axsBooksAbout.buildCategoriesArray = function(){
   //Key Terms
   myNode = document.getElementById('keywords');
   if (myNode){
-    axsBooksAbout.categoriesArray.push(axsBooksAbout.buildCategoryFromPanelSingleElemStyle(myNode,'A'));
+    cat = axsBooksAbout.buildCategoryFromPanelSingleElemStyle(myNode,'A');
+    axsBooksAbout.categoriesArray.push(cat);
   }
 
   //Popular Passages
   myNode = document.getElementById('quotes');
   if (myNode){
-    axsBooksAbout.categoriesArray.push(axsBooksAbout.buildCategoryFromPanelSingleElemStyle(myNode,'P'));
+    cat = axsBooksAbout.buildCategoryFromPanelSingleElemStyle(myNode,'P');
+    axsBooksAbout.categoriesArray.push(cat);
   }
 
   //Places Mentioned
   myNode = document.getElementById('gmap');
   if (myNode){
-    var divArray = myNode.getElementsByTagName('DIV');
+    divArray = myNode.getElementsByTagName('DIV');
     cat = new axsBooksAbout.categoryObj();
     cat.titleNode = myNode.previousSibling;
     cat.mainContentNode = myNode;
     cat.itemsArray = new Array();
     cat.itemsIndex = -1;
-    for (var i=0, currentDiv; currentDiv = divArray[i]; i++){
+    for (i=0, currentDiv; currentDiv = divArray[i]; i++){
       if (currentDiv.className == 'result'){
         cat.itemsArray.push(currentDiv.getElementsByTagName('DIV')[0]);
       }
@@ -324,35 +361,61 @@ axsBooksAbout.buildCategoriesArray = function(){
   //References from Books
   myNode = document.getElementById('book_citations');
   if (myNode){
-    axsBooksAbout.categoriesArray.push(axsBooksAbout.buildCategoryFromPanelBookStyle(myNode));
+    cat = axsBooksAbout.buildCategoryFromPanelBookStyle(myNode);
+    axsBooksAbout.categoriesArray.push(cat);
   }
 
   //References from Scholarly Works
   myNode = document.getElementById('scholar_citations');
   if (myNode){
-    axsBooksAbout.categoriesArray.push(axsBooksAbout.buildCategoryFromPanelSingleElemStyle(myNode,'P'));
+    cat = axsBooksAbout.buildCategoryFromPanelSingleElemStyle(myNode,'P');
+    axsBooksAbout.categoriesArray.push(cat);
   }
 
   //References from Web Pages
   myNode = document.getElementById('web_references');
   if (myNode){
-    axsBooksAbout.categoriesArray.push(axsBooksAbout.buildCategoryFromPanelSingleElemStyle(myNode,'P'));
+    cat = axsBooksAbout.buildCategoryFromPanelSingleElemStyle(myNode,'P');
+    axsBooksAbout.categoriesArray.push(cat);
   }
   
   //Other Editions
   myNode = document.getElementById('book_other_versions');
   if (myNode){
-    axsBooksAbout.categoriesArray.push(axsBooksAbout.buildCategoryFromPanelBookStyle(myNode));
+    cat = axsBooksAbout.buildCategoryFromPanelBookStyle(myNode);
+    axsBooksAbout.categoriesArray.push(cat);
   }
   
   //Related Books
   myNode = document.getElementById('similarbooks');
   if (myNode){
-    axsBooksAbout.categoriesArray.push(axsBooksAbout.buildCategoryFromPanelBookStyle(myNode));
+    cat = axsBooksAbout.buildCategoryFromPanelBookStyle(myNode);
+    axsBooksAbout.categoriesArray.push(cat);
   }
 
-
   //Sponsored Links
+  myNode = null;
+  var child = null;
+  for (i=0, child; child = document.body.childNodes[i]; i++){
+    if (child.className && child.className == 'lads'){
+      myNode = child;
+      break;
+    }
+  }
+  if (myNode){
+    tdArray = myNode.getElementsByTagName('TD');
+    cat = new axsBooksAbout.categoryObj();
+    cat.titleNode = tdArray[1];
+    cat.mainContentNode = myNode;
+    cat.itemsArray = new Array();
+    cat.itemsIndex = -1;
+    cat.itemsArray.push(tdArray[0]);
+    var currentTd = null;
+    for (i=2, currentTd; currentTd = tdArray[i]; i++){
+      cat.itemsArray.push(currentTd);
+    }
+    axsBooksAbout.categoriesArray.push(cat);
+  }
 
 };
 
@@ -389,7 +452,8 @@ axsBooksAbout.goToNextCategory = function(){
   if(axsBooksAbout.categoriesIndex >= axsBooksAbout.categoriesArray.length){
     axsBooksAbout.categoriesIndex = 0;
   }
-  var currentCategory = axsBooksAbout.categoriesArray[axsBooksAbout.categoriesIndex];
+  var currentCategory =
+      axsBooksAbout.categoriesArray[axsBooksAbout.categoriesIndex];
   axsBooksAbout.axsJAXObj.goTo(currentCategory.titleNode);
 };
 
@@ -399,13 +463,15 @@ axsBooksAbout.goToPrevCategory = function(){
   if(axsBooksAbout.categoriesIndex < 0){
     axsBooksAbout.categoriesIndex = axsBooksAbout.categoriesArray.length - 1;
   }
-  var currentCategory = axsBooksAbout.categoriesArray[axsBooksAbout.categoriesIndex];
+  var currentCategory =
+      axsBooksAbout.categoriesArray[axsBooksAbout.categoriesIndex];
   axsBooksAbout.axsJAXObj.goTo(currentCategory.titleNode);
 };
 
 
 axsBooksAbout.goToNextItem = function(){
-  var currentCategory = axsBooksAbout.categoriesArray[axsBooksAbout.categoriesIndex];
+  var currentCategory =
+      axsBooksAbout.categoriesArray[axsBooksAbout.categoriesIndex];
   currentCategory.itemsIndex++;
   if(currentCategory.itemsIndex >= currentCategory.itemsArray.length){
     currentCategory.itemsIndex = 0;
@@ -416,7 +482,8 @@ axsBooksAbout.goToNextItem = function(){
 
 
 axsBooksAbout.goToPrevItem = function(){
-  var currentCategory = axsBooksAbout.categoriesArray[axsBooksAbout.categoriesIndex];
+  var currentCategory =
+      axsBooksAbout.categoriesArray[axsBooksAbout.categoriesIndex];
   currentCategory.itemsIndex--;
   if(currentCategory.itemsIndex < 0){
     currentCategory.itemsIndex = currentCategory.itemsArray.length - 1;
@@ -426,9 +493,20 @@ axsBooksAbout.goToPrevItem = function(){
 };
 
 axsBooksAbout.actOnCurrentItem = function(shiftKey){
-  var currentCategory = axsBooksAbout.categoriesArray[axsBooksAbout.categoriesIndex];
+  var linkIndex = 0;
+  var currentCategory =
+      axsBooksAbout.categoriesArray[axsBooksAbout.categoriesIndex];
   var currentItem = currentCategory.itemsArray[currentCategory.itemsIndex];
-  var currentLink = currentItem.getElementsByTagName('A')[0];
+  var titleText = currentCategory.titleNode.textContent;
+  if (titleText == axsBooksAbout.PLACES_MENTIONED_STRING){
+    linkIndex = 1;
+  }
+  var currentLink = null;
+  if (currentItem.tagName == 'A'){
+    currentLink = currentItem;
+  } else {
+    currentItem.getElementsByTagName('A')[linkIndex];
+  }
   if (currentLink){
     axsBooksAbout.axsJAXObj.clickElem(currentLink,shiftKey);
   }
