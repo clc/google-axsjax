@@ -293,14 +293,33 @@ axsBooksAbout.buildCategoriesArray = function(){
   }
 
   //Key Terms
+  myNode = document.getElementById('keywords');
+  if (myNode){
+    axsBooksAbout.categoriesArray.push(axsBooksAbout.buildCategoryFromPanelSingleElemStyle(myNode,'A'));
+  }
 
   //Popular Passages
   myNode = document.getElementById('quotes');
   if (myNode){
-    axsBooksAbout.categoriesArray.push(axsBooksAbout.buildCategoryFromPanelParagraphStyle(myNode));
+    axsBooksAbout.categoriesArray.push(axsBooksAbout.buildCategoryFromPanelSingleElemStyle(myNode,'P'));
   }
 
   //Places Mentioned
+  myNode = document.getElementById('gmap');
+  if (myNode){
+    var divArray = myNode.getElementsByTagName('DIV');
+    cat = new axsBooksAbout.categoryObj();
+    cat.titleNode = myNode.previousSibling;
+    cat.mainContentNode = myNode;
+    cat.itemsArray = new Array();
+    cat.itemsIndex = -1;
+    for (var i=0, currentDiv; currentDiv = divArray[i]; i++){
+      if (currentDiv.className == 'result'){
+        cat.itemsArray.push(currentDiv.getElementsByTagName('DIV')[0]);
+      }
+    }
+    axsBooksAbout.categoriesArray.push(cat);
+  }
 
   //References from Books
   myNode = document.getElementById('book_citations');
@@ -311,13 +330,13 @@ axsBooksAbout.buildCategoriesArray = function(){
   //References from Scholarly Works
   myNode = document.getElementById('scholar_citations');
   if (myNode){
-    axsBooksAbout.categoriesArray.push(axsBooksAbout.buildCategoryFromPanelParagraphStyle(myNode));
+    axsBooksAbout.categoriesArray.push(axsBooksAbout.buildCategoryFromPanelSingleElemStyle(myNode,'P'));
   }
 
   //References from Web Pages
   myNode = document.getElementById('web_references');
   if (myNode){
-    axsBooksAbout.categoriesArray.push(axsBooksAbout.buildCategoryFromPanelParagraphStyle(myNode));
+    axsBooksAbout.categoriesArray.push(axsBooksAbout.buildCategoryFromPanelSingleElemStyle(myNode,'P'));
   }
   
   //Other Editions
@@ -339,12 +358,12 @@ axsBooksAbout.buildCategoriesArray = function(){
 
 
 
-axsBooksAbout.buildCategoryFromPanelParagraphStyle = function(contentNode){
+axsBooksAbout.buildCategoryFromPanelSingleElemStyle = function(contentNode,elemTagName){
     var myNode = contentNode;
     var cat = new axsBooksAbout.categoryObj();
     cat.titleNode = myNode.previousSibling;
     cat.mainContentNode = myNode;
-    cat.itemsArray = myNode.getElementsByTagName('P');
+    cat.itemsArray = myNode.getElementsByTagName(elemTagName);
     cat.itemsIndex = -1;
     return cat;
 };
