@@ -347,7 +347,7 @@ axsBooksAbout.buildCategoryFromPanelParagraphStyle = function(contentNode){
     cat.itemsArray = myNode.getElementsByTagName('P');
     cat.itemsIndex = -1;
     return cat;
-}
+};
 
 axsBooksAbout.buildCategoryFromPanelBookStyle = function(contentNode){
     var myNode = contentNode;
@@ -361,7 +361,7 @@ axsBooksAbout.buildCategoryFromPanelBookStyle = function(contentNode){
       cat.itemsArray.push(currentTr.childNodes[1]);
     }
     return cat;
-}
+};
 
 
 
@@ -372,7 +372,7 @@ axsBooksAbout.goToNextCategory = function(){
   }
   var currentCategory = axsBooksAbout.categoriesArray[axsBooksAbout.categoriesIndex];
   axsBooksAbout.axsJAXObj.goTo(currentCategory.titleNode);
-}
+};
 
 
 axsBooksAbout.goToPrevCategory = function(){
@@ -382,7 +382,7 @@ axsBooksAbout.goToPrevCategory = function(){
   }
   var currentCategory = axsBooksAbout.categoriesArray[axsBooksAbout.categoriesIndex];
   axsBooksAbout.axsJAXObj.goTo(currentCategory.titleNode);
-}
+};
 
 
 axsBooksAbout.goToNextItem = function(){
@@ -393,7 +393,7 @@ axsBooksAbout.goToNextItem = function(){
   }
   var currentItem = currentCategory.itemsArray[currentCategory.itemsIndex];
   axsBooksAbout.axsJAXObj.goTo(currentItem);
-}
+};
 
 
 axsBooksAbout.goToPrevItem = function(){
@@ -404,7 +404,7 @@ axsBooksAbout.goToPrevItem = function(){
   }
   var currentItem = currentCategory.itemsArray[currentCategory.itemsIndex];
   axsBooksAbout.axsJAXObj.goTo(currentItem);
-}
+};
 
 axsBooksAbout.actOnCurrentItem = function(shiftKey){
   var currentCategory = axsBooksAbout.categoriesArray[axsBooksAbout.categoriesIndex];
@@ -413,7 +413,7 @@ axsBooksAbout.actOnCurrentItem = function(shiftKey){
   if (currentLink){
     axsBooksAbout.axsJAXObj.clickElem(currentLink,shiftKey);
   }
-}
+};
 
 
 
