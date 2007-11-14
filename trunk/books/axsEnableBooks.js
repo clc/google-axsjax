@@ -29,7 +29,9 @@ function pickBooksScript(){
   var currentURL = document.baseURI;
 
   //Do URL matching to figure out which subpage of books is being used.
-  if ((currentURL.indexOf('http://books.google.com/books?id=') === 0) && (currentURL.indexOf('&printsec=') == -1)){
+  if ( ((currentURL.indexOf('http://books.google.com/books?id=') === 0) &&
+        (currentURL.indexOf('&printsec=') == -1)) ||
+       (currentURL.indexOf('http://books.google.com/books?as_brr=') === 0) ) {
     theScript.src = baseURL + 'books/axsEnableBooksAbout.js';
     shouldInsertScripts = true;
   } else if ((currentURL.indexOf('http://books.google.com/books?id=') === 0) && (currentURL.indexOf('&printsec=') != -1)){
