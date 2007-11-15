@@ -28,22 +28,18 @@ function pickBooksScript(){
   theScript.type = 'text/javascript';
   var currentURL = document.baseURI;
 
-  //Do URL matching to figure out which subpage of books is being used.
-  if ( ((currentURL.indexOf('http://books.google.com/books?id=') === 0) &&
-        (currentURL.indexOf('&printsec=') == -1)) ||
-       (currentURL.indexOf('http://books.google.com/books?as_brr=') === 0) ) {
-    theScript.src = baseURL + 'books/axsEnableBooksAbout.js';
+  //URL pattern for About summary
+  if (currentURL.indexOf('id=') != -1){
+    if ((currentURL.indexOf('&printsec=') != -1) || (currentURL.indexOf('&pg=') != -1)){
+      theScript.src = baseURL + 'books/axsEnableBooksPreview.js';
+    } else {
+      theScript.src = baseURL + 'books/axsEnableBooksAbout.js';
+    }
     shouldInsertScripts = true;
-  } else if ((currentURL.indexOf('http://books.google.com/books?id=') === 0) && (currentURL.indexOf('&printsec=') != -1)){
-    theScript.src = baseURL + 'books/axsEnableBooksPreview.js';
-    shouldInsertScripts = true;
-  } else if (currentURL.indexOf('http://books.google.com/books?q=') === 0){
+  } else {
     theScript.src = baseURL + 'books/axsEnableBooksResults.js';
-    shouldInsertScripts = true;
   }
-  if (shouldInsertScripts){
-    document.getElementsByTagName('head')[0].appendChild(theScript);
-  }
+  document.getElementsByTagName('head')[0].appendChild(theScript);
 }
 
 pickBooksScript();

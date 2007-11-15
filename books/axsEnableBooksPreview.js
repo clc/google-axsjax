@@ -30,28 +30,16 @@ var axsBooksPreview = {};
 
 //These are strings used to find specific links
 axsBooksPreview.TWO_PAGES_STRING = 'Two pages';
+axsBooksPreview.ABOUT_STRING = 'About this book';
 
 //These are strings to be spoken to the user
 axsBooksPreview.HELP_STRING =
     'The following shortcut keys are available. ' +
-    'Down arrow or N, go to the next result. ' +
-    'Up arrow or P, go to the previous result. ' +
-    'Right arrow or J, cycle to the next result. ' +
-    'Left arrow or K, cycle to the previous result. ' +
-    'Enter, go to the current result. ' +
-    'Slash, jump to search blank. ' +
-    'Escape, leave search blank. ' +
-    'O, hear the available options for the current result. ' +
-    'C, go to works that cite the current result. ' +
-    'V, go to all the versions of the current result. ' +
-    'L, find the current result at a local library. ' +
-    'R, find related works to the current result. ' +
-    'H, go to an H T M L version of the current result. ' +
-    'B, find the current result at B L direct. ' +
-    'W, perform a web search on the current result. ' +
-    'I, import the current result into a citation format. ' +
-    'Page up, go to the previous page. ' +
-    'Page down, go to the next page. ';
+    'Right arrow or J, go to the next page. ' +
+    'Left arrow or K, go to the previous page. ' +
+    'Slash, jump to search for books blank. ' +
+    'Escape, leave search for books blank. ' +
+    'A, go to the about page for this book. ';
 
 
 
@@ -148,11 +136,15 @@ axsBooksPreview.extraKeyboardNavHandler = function(evt){
     return true;
   }
 
-  if (evt.charCode == 106){ // j
+  if (evt.charCode == 97){ // a
+    axsBooksPreview.goToAboutPage();
+    return false;
+  }
+  if ((evt.charCode == 106) || (evt.keyCode == 39)){ // j
     axsBooksPreview.goToNextPage();
     return false;
   }
-  if (evt.charCode == 107){ // k
+  if ((evt.charCode == 107) || (evt.keyCode == 37)){ // k
     axsBooksPreview.goToPrevPage();
     return false;
   }
@@ -170,13 +162,21 @@ axsBooksPreview.extraKeyboardNavHandler = function(evt){
     axsBooksPreview.axsJAXObj.speakText(axsBooksPreview.HELP_STRING);
     return false;
   }
-
-
+  
   return true;
 };
 
 
 
+axsBooksPreview.goToAboutPage = function(){
+  var synopsisDiv =  document.getElementById('synopsis');
+  var linksArray = synopsisDiv.getElementsByTagName('A');
+  for (var i=0, link; link = linksArray[i]; i++){
+    if (link.textContent == axsBooksPreview.ABOUT_STRING){
+      axsBooksPreview.axsJAXObj.clickElem(link,false);
+    }
+  }
+};
 
 
 
@@ -185,15 +185,21 @@ axsBooksPreview.extraKeyboardNavHandler = function(evt){
 //************
 
 axsBooksPreview.speakLeftPage = function(){
-  var viewport = window.content.document.getElementById('viewport');
-  axsBooksPreview.axsJAXObj.speakNode(viewport.getElementsByTagName('P')[0]);
+  var viewport = document.getElementById('viewport');
+  var thePage = viewport.getElementsByTagName('P')[0];
   axsBooksPreview.onLeftPage = true;
+  if (thePage){
+    axsBooksPreview.axsJAXObj.speakNode(thePage);
+  }
 };
 
 axsBooksPreview.speakRightPage = function(){
-  var viewport = window.content.document.getElementById('viewport');
-  axsBooksPreview.axsJAXObj.speakNode(viewport.getElementsByTagName('P')[1]);
+  var viewport = document.getElementById('viewport');
+  var thePage = viewport.getElementsByTagName('P')[1];
   axsBooksPreview.onLeftPage = false;
+  if (thePage){
+    axsBooksPreview.axsJAXObj.speakNode(thePage);
+  }
 };
 
 
@@ -213,6 +219,7 @@ axsBooksPreview.goToPrevPage = function(){
     axsBooksPreview.axsJAXObj.clickElem(document.getElementById('prev_btn'),false);
   }
 };
+
 
 
 
