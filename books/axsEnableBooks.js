@@ -22,7 +22,6 @@
 
 
 function pickBooksScript(){
-  var shouldInsertScripts = false;
   var baseURL = 'http://google-axsjax.googlecode.com/svn/trunk/';
   var theScript = document.createElement('script');
   theScript.type = 'text/javascript';

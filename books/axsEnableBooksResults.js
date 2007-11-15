@@ -44,17 +44,9 @@ axsBooksResults.HELP_STRING =
     'Right arrow or J, cycle to the next result. ' +
     'Left arrow or K, cycle to the previous result. ' +
     'Enter, go to the current result. ' +
-    'Slash, jump to search blank. ' +
-    'Escape, leave search blank. ' +
-    'O, hear the available options for the current result. ' +
-    'C, go to works that cite the current result. ' +
-    'V, go to all the versions of the current result. ' +
-    'L, find the current result at a local library. ' +
-    'R, find related works to the current result. ' +
-    'H, go to an H T M L version of the current result. ' +
-    'B, find the current result at B L direct. ' +
-    'W, perform a web search on the current result. ' +
-    'I, import the current result into a citation format. ' +
+    'Slash, jump to search field. ' +
+    'Escape, leave search field. ' +
+    'A, go to the about page. ' +
     'Page up, go to the previous page. ' +
     'Page down, go to the next page. ';
 
