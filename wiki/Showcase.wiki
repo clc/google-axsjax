@@ -10,13 +10,11 @@ The following is a list of web applications that we have enhanced with AxsJAX.
 
 ==Google Web Search==
   * http://www.google.com 
-  [http://google-axsjax.googlecode.com/svn/trunk/docs/search_userguide.html
-  user Guide]
+  [http://google-axsjax.googlecode.com/svn/trunk/docs/search_userguide.html user Guide]
 
 ==Google Reader==
   * http://reader.google.com
-   [http://google-axsjax.googlecode.com/svn/trunk/docs/reader_userguide.html
-   user Guide]
+   [http://google-axsjax.googlecode.com/svn/trunk/docs/reader_userguide.html user Guide]
 
 
 ==Google Scholar==
