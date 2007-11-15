@@ -42,24 +42,14 @@ axsBooksAbout.PLACES_MENTIONED_STRING = 'Places mentioned in this book';
 //These are strings to be spoken to the user
 axsBooksAbout.HELP_STRING =
     'The following shortcut keys are available. ' +
-    'Down arrow or N, go to the next result. ' +
-    'Up arrow or P, go to the previous result. ' +
-    'Right arrow or J, cycle to the next result. ' +
-    'Left arrow or K, cycle to the previous result. ' +
-    'Enter, go to the current result. ' +
-    'Slash, jump to search blank. ' +
-    'Escape, leave search blank. ' +
-    'O, hear the available options for the current result. ' +
-    'C, go to works that cite the current result. ' +
-    'V, go to all the versions of the current result. ' +
-    'L, find the current result at a local library. ' +
-    'R, find related works to the current result. ' +
-    'H, go to an H T M L version of the current result. ' +
-    'B, find the current result at B L direct. ' +
-    'W, perform a web search on the current result. ' +
-    'I, import the current result into a citation format. ' +
-    'Page up, go to the previous page. ' +
-    'Page down, go to the next page. ';
+    'Down arrow or N, go to the next category. ' +
+    'Up arrow or P, go to the previous category. ' +
+    'Right arrow or J, cycle to the next item in the current category. ' +
+    'Left arrow or K, cycle to the previous item in the current category. ' +
+    'Enter, act on the current item. ' +
+    'Slash, jump to the book search blank. ' +
+    'S, jump to the "Search in this book" blank. ' +
+    'Escape, leave a search blank. ';
 
 
 
