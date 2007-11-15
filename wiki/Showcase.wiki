@@ -1,0 +1,27 @@
+#summary A showcase of web applications that have been AxsJAX enhanced so far
+#labels Featured
+
+= Introduction =
+
+The following is a list web applications that we have enhanced with AxsJAX. 
+
+
+= Details =
+
+==Google Web Search==
+  * http://www.google.com
+  * [http://google-axsjax.googlecode.com/svn/trunk/docs/search_userguide.html Documentation for using AxsJAX-Enhanced Google Web Search]
+
+
+==Google Reader==
+  * http://reader.google.com
+  * [http://google-axsjax.googlecode.com/svn/trunk/docs/reader_userguide.html Documentation for using AxsJAX-Enhanced Google Reader]
+
+
+==Google Scholar==
+  * http://scholar.google.com/
+  * [http://google-axsjax.googlecode.com/svn/trunk/docs/scholar_userguide.html Documentation for using AxsJAX-Enhanced Google Web Search]
+
+
+==Jawbreaker Game==
+  * http://www.minijuegosgratis.com/juegos/jawbreaker/jawbreaker.htm
