@@ -12,10 +12,6 @@ access-enabled using AxsJAX.
 
   * [http://reader.google.com Google Reader] [http://google-axsjax.googlecode.com/svn/trunk/docs/reader_userguide.html user Guide]
 
-  * [http://scholar.google.com Google Scholar] / [http://google-axsjax.googlecode.com/svn/trunk/docs/scholar_userguide.html User Guide]
+  * [http://scholar.google.com Google Scholar]  [http://google-axsjax.googlecode.com/svn/trunk/docs/scholar_userguide.html User Guide]
 
-
-
-  *
-    [http://www.minijuegosgratis.com/juegos/jawbreaker/jawbreaker.htm
-    Jawbreaker Game] 
+  * [http://www.minijuegosgratis.com/juegos/jawbreaker/jawbreaker.htm Jawbreaker Game] 
