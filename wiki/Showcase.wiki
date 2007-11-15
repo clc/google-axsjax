@@ -3,7 +3,7 @@
 
 = Introduction =
 
-The following is a list web applications that we have enhanced with AxsJAX. 
+The following is a list of web applications that we have enhanced with AxsJAX. 
 
 
 = Details =
