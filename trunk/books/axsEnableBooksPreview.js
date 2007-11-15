@@ -37,8 +37,8 @@ axsBooksPreview.HELP_STRING =
     'The following shortcut keys are available. ' +
     'Right arrow or J, go to the next page. ' +
     'Left arrow or K, go to the previous page. ' +
-    'Slash, jump to search for books blank. ' +
-    'Escape, leave search for books blank. ' +
+    'Slash, jump to search for books field. ' +
+    'Escape, leave search field. ' +
     'A, go to the about page for this book. ';
 
 
@@ -67,7 +67,7 @@ axsBooksPreview.init = function(){
   document.addEventListener('blur', axsBooksPreview.blurHandler, true);
 
   var viewport = document.getElementById('viewport');
-  viewport.addEventListener('DOMNodeInserted', axsBooksPreview.domInsertionHandler,
+  viewport.addEventListener('DOMNodeInserted', axsBooksPreview.pageInsertionHandler,
                           true);
 
   //Switch to two page display with plain text
@@ -85,7 +85,7 @@ axsBooksPreview.init = function(){
 
 
 
-axsBooksPreview.domInsertionHandler = function(evt){
+axsBooksPreview.pageInsertionHandler = function(evt){
    if (evt.target.tagName == 'P'){
      if (axsBooksPreview.onLeftPage){
        window.setTimeout(axsBooksPreview.speakRightPage,100);
@@ -140,6 +140,14 @@ axsBooksPreview.extraKeyboardNavHandler = function(evt){
     axsBooksPreview.goToAboutPage();
     return false;
   }
+
+  if (evt.charCode == 103){ // g
+    // Focus on the jump to page blank
+    document.getElementById('jtp').focus();
+    document.getElementById('jtp').select(); //and select all text
+    return false;
+  }
+
   if ((evt.charCode == 106) || (evt.keyCode == 39)){ // j
     axsBooksPreview.goToNextPage();
     return false;
@@ -147,6 +155,17 @@ axsBooksPreview.extraKeyboardNavHandler = function(evt){
   if ((evt.charCode == 107) || (evt.keyCode == 37)){ // k
     axsBooksPreview.goToPrevPage();
     return false;
+  }
+  if (evt.charCode == 115){ // s
+    var inputElems =
+        document.getElementById('search_form').getElementsByTagName('INPUT');
+    for (var i=0,input; input = inputElems[i]; i++){
+      if (input.type == 'text'){
+        input.focus();
+        input.select();
+        return false;
+      }
+    }
   }
 
 
