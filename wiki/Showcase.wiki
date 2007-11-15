@@ -6,9 +6,9 @@
 This is a showcase of Web-2.0 applications that have been
 access-enabled using AxsJAX.
 
-  * [http://www.google.comGoogle Web Search] [http://google-axsjax.googlecode.com/svn/trunk/docs/search_userguide.html User Guide]
+  * [http://www.google.com Google Web Search] [http://google-axsjax.googlecode.com/svn/trunk/docs/search_userguide.html User Guide]
 
-  * [http://reader.google.com Google Reader] [http://google-axsjax.googlecode.com/svn/trunk/docs/reader_userguide.html user Guide]
+  * [http://reader.google.com Google Reader] [http://google-axsjax.googlecode.com/svn/trunk/docs/reader_userguide.html User Guide]
 
   * [http://scholar.google.com Google Scholar]  [http://google-axsjax.googlecode.com/svn/trunk/docs/scholar_userguide.html User Guide]
 
