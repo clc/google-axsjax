@@ -1,14 +1,12 @@
-#summary A showcase of web applications that have been AxsJAX enhanced so far
+#summary A showcase of Web-2.0 that have been access-enabled via AxsJAX
 #labels Featured
 
 = Introduction =
+
 This is a showcase of Web-2.0 applications that have been
 access-enabled using AxsJAX.
 
-
-
-
-  * [http://www.google.comGoogle Web Search]  [http://google-axsjax.googlecode.com/svn/trunk/docs/search_userguide.html User Guide]
+  * [http://www.google.comGoogle Web Search] [http://google-axsjax.googlecode.com/svn/trunk/docs/search_userguide.html User Guide]
 
   * [http://reader.google.com Google Reader] [http://google-axsjax.googlecode.com/svn/trunk/docs/reader_userguide.html user Guide]
 
