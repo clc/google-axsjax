@@ -109,7 +109,7 @@ function axsJb_keyboardHandler(evt){
   }
   if (evt.charCode == 32){ // Space
     axsJb_axsJaxObj.clickElem(axsJb_getCurrentBallImgNode(axsJb_row,axsJb_col));
-    axsJb_getCurrentPosition();
+    axsJb_sayStats();
   }
   if (evt.charCode == 115){ // s
     axsJb_sayStats();
