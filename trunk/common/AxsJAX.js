@@ -105,6 +105,30 @@ AxsJAX.prototype.speakText = function(textString){
   document.body.appendChild(audioNode);
 };
 
+/**
+ * This will insert a transparent pixel to the end of the page, put
+ * the textString as the pixel's alt text, then use speakNode on the pixel.
+ * This is an alternative way of speaking text that does not rely on
+ * ARIA live regions.
+ * The advantage is that it is more compatible as few assistive technologies
+ * currently support live regions.
+ * The disadvantage (besides being a somewhat hacky way of doing things) is
+ * that it may cause problems with things which rely on focus/blur as speakNode
+ * is setting focus on the body.
+ * @param {String} textString The text to be spoken.
+ */
+AxsJAX.prototype.speakThroughPixel = function(textString){
+  var pixelId = 'AxsJAX_pixelAudioNode';
+  var pixelNode = document.getElementById(pixelId);
+  if (!pixelNode){
+    pixelNode = document.createElement('img');
+    pixelNode.src = 'http://google-axsjax.googlecode.com/svn/trunk/common/res/images/blank.gif';
+    document.body.appendChild(pixelNode);
+  }
+  pixelNode.alt = textString;
+  this.speakNode(pixelNode);
+};
+
 
 /**
  * Puts alt='' for all images that are children of the target node that
@@ -128,7 +152,7 @@ AxsJAX.prototype.putNullForNoAltImages = function(targetNode){
  * Dispatches a left click event on the element that is the targetNode.
  * @param {Node} targetNode The target node of this operation.
  */
-AxsJAX.prototype.clickElem = function(targetNode, shiftKey){
+AxsJAX.prototype.clickElem = function(targetNode, shiftKey){   
   var evt = document.createEvent('MouseEvents');
   evt.initMouseEvent('click',true,true,document.defaultView,
                      1,0,0,0,0,false,false,shiftKey,false,0,null);

@@ -369,7 +369,7 @@ axsWebSearch.formatAdAreaSide = function(){
 
 axsWebSearch.cycleThroughAds = function(){
   if (axsWebSearch.adsArray.length < 1){
-    axsWebSearch.axsJAXObj.speakText(axsWebSearch.NO_ADS_STRING);
+    axsWebSearch.axsJAXObj.speakThroughPixel(axsWebSearch.NO_ADS_STRING);
     return;
   }
   axsWebSearch.adsIndex++;
