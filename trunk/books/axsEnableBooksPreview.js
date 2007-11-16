@@ -31,6 +31,7 @@ var axsBooksPreview = {};
 //These are strings used to find specific links
 axsBooksPreview.TWO_PAGES_STRING = 'Two pages';
 axsBooksPreview.ABOUT_STRING = 'About this book';
+axsBooksPreview.MORE_STRING = 'more';
 
 //These are strings to be spoken to the user
 axsBooksPreview.HELP_STRING =
@@ -54,6 +55,10 @@ axsBooksPreview.lastFocusedNode = null;
 
 axsBooksPreview.onLeftPage = false;
 
+axsBooksPreview.resultsArray = null;
+axsBooksPreview.resultsIndex = 0;
+
+
 
 
 
@@ -66,8 +71,14 @@ axsBooksPreview.init = function(){
   document.addEventListener('focus', axsBooksPreview.focusHandler, true);
   document.addEventListener('blur', axsBooksPreview.blurHandler, true);
 
+  //Watch for when pages are changed
   var viewport = document.getElementById('viewport');
   viewport.addEventListener('DOMNodeInserted', axsBooksPreview.pageInsertionHandler,
+                          true);
+  
+  //Watch for when search results show up
+  var searchContent = document.getElementById('search_content');
+  searchContent.addEventListener('DOMNodeInserted', axsBooksPreview.resultInsertionHandler,
                           true);
 
   //Switch to two page display with plain text
@@ -78,8 +89,9 @@ axsBooksPreview.init = function(){
       axsBooksPreview.axsJAXObj.clickElem(toolbarImages[i],false);
     }
   }
-
   axsBooksPreview.axsJAXObj.clickElem(document.getElementById('text_mode_text'),false);
+  axsBooksPreview.expandAllMoreLinks();
+  axsBooksPreview.buildResultsArray();
 
 };
 
@@ -148,14 +160,24 @@ axsBooksPreview.extraKeyboardNavHandler = function(evt){
     return false;
   }
 
-  if ((evt.charCode == 106) || (evt.keyCode == 39)){ // j
+  if ((evt.charCode == 106) || (evt.keyCode == 39)){ // j or right arrow
     axsBooksPreview.goToNextPage();
     return false;
   }
-  if ((evt.charCode == 107) || (evt.keyCode == 37)){ // k
+  if ((evt.charCode == 107) || (evt.keyCode == 37)){ // k or left arrow
     axsBooksPreview.goToPrevPage();
     return false;
   }
+  if (evt.charCode == 110){ // n
+    axsBooksPreview.goToNextResult();
+    return false;
+  }
+  if (evt.charCode == 112){ // p
+    axsBooksPreview.goToPrevResult();
+    return false;
+  }
+
+
   if (evt.charCode == 115){ // s
     var inputElems =
         document.getElementById('search_form').getElementsByTagName('INPUT');
@@ -166,6 +188,10 @@ axsBooksPreview.extraKeyboardNavHandler = function(evt){
         return false;
       }
     }
+  }
+
+  if (evt.keyCode == 13){ // Enter
+    axsBooksPreview.actOnCurrentItem(evt.shiftKey);
   }
 
 
@@ -240,8 +266,75 @@ axsBooksPreview.goToPrevPage = function(){
 };
 
 
+//************
+//Functions for search results
+//************
+axsBooksPreview.resultInsertionHandler = function(){
+  axsBooksPreview.buildResultsArray();
+  axsBooksPreview.goToNextResult();
+};
+
+axsBooksPreview.buildResultsArray = function(){
+  axsBooksPreview.resultsArray = new Array();
+  axsBooksPreview.resultsIndex = -1;
+  var searchContent = document.getElementById('search_content');
+  var divsArray = searchContent.getElementsByTagName('DIV');
+  for (var i=0, currentDiv; currentDiv = divsArray[i]; i++){
+    if (currentDiv.className == 'searchresult'){
+      axsBooksPreview.resultsArray.push(currentDiv);
+    }
+  }
+  if ((axsBooksPreview.resultsArray.length == 0) && (searchContent.firstChild.textContent)){
+    axsBooksPreview.resultsArray.push(searchContent.firstChild);
+  }
+};
+
+
+axsBooksPreview.goToNextResult = function(){
+  axsBooksPreview.resultsIndex++;
+  if(axsBooksPreview.resultsIndex >= axsBooksPreview.resultsArray.length){
+    axsBooksPreview.resultsIndex = 0;
+  }
+  var currentResultNode =
+      axsBooksPreview.resultsArray[axsBooksPreview.resultsIndex];
+  axsBooksPreview.axsJAXObj.goTo(currentResultNode);
+};
+
+axsBooksPreview.goToPrevResult = function(){
+  axsBooksPreview.resultsIndex--;
+  if(axsBooksPreview.resultsIndex < 0){
+    axsBooksPreview.resultsIndex = axsBooksPreview.resultsArray.length - 1;
+  }
+  var currentResultNode =
+      axsBooksPreview.resultsArray[axsBooksPreview.resultsIndex];
+  axsBooksPreview.axsJAXObj.goTo(currentResultNode);
+};
 
 
 
+axsBooksPreview.actOnCurrentItem = function(shiftKey){
+  var linkIndex = 0;
+  var currentItem = axsBooksPreview.resultsArray[axsBooksPreview.resultsIndex]
+  var currentLink = currentItem.getElementsByTagName('A')[linkIndex];
+  if (currentLink){
+    axsBooksPreview.axsJAXObj.clickElem(currentLink,shiftKey);
+  }
+};
+
+/**
+ * Expand everything that can be expanded on the page by clicking on all
+ * the "more >>" links.
+ * Note that only the "more" part is matched - matching for
+ * the " >>" part causes problems.
+ */
+axsBooksPreview.expandAllMoreLinks = function(){
+  var spansArray = document.body.getElementsByTagName('SPAN');
+  for (var i=0,currentLink; currentLink = spansArray[i]; i++){
+    if ( (currentLink.className == 'morelesslink') &&
+         (currentLink.textContent.indexOf(axsBooksPreview.MORE_STRING) === 0) ){
+      axsBooksPreview.axsJAXObj.clickElem(currentLink);
+    }
+  }
+};
 
 axsBooksPreview.init();

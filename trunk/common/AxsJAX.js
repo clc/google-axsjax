@@ -140,7 +140,7 @@ AxsJAX.prototype.clickElem = function(targetNode, shiftKey){
   //Clicking on a link does not cause traversal because of script
   //privilege limitations. The traversal has to be done by setting
   //document.location.
-  if ((targetNode.tagName == 'A') && targetNode.href && (targetNode.href.indexOf('http') === 0)){
+  if (!targetNode.onclick && (targetNode.tagName == 'A') && targetNode.href && (targetNode.href.indexOf('http') === 0)){
     if (shiftKey){
       window.open(targetNode.href);
     } else {
