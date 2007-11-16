@@ -171,6 +171,7 @@ axsWebSearch.extraKeyboardNavHandler = function(evt){
   }
   if (evt.keyCode == 27){ // ESC
     axsWebSearch.lastFocusedNode.blur();
+    return false;
   }                       
 
   if (axsWebSearch.inputFocused){
@@ -178,41 +179,53 @@ axsWebSearch.extraKeyboardNavHandler = function(evt){
   }
   if (evt.charCode == 49){ // 1
     axsWebSearch.readOneBox();
+    return false;
   }
   if (evt.charCode == 97){ // a
     axsWebSearch.cycleThroughAds();
+    return false;
   }
   if (evt.charCode == 65){ // A
     axsWebSearch.switchToAccessibleSearch();
+    return false;
   }
   if (evt.charCode == 99){ // c
     axsWebSearch.cycleThroughAltSearchCat();
+    return false;
   }
   if (evt.charCode == 103){ // g
     axsWebSearch.cycleThroughGuideMode();
+    return false;
   }
   if (evt.charCode == 106){ // j
     axsWebSearch.goToNextResult(true);
+    return false;
   }
   if (evt.charCode == 107){ // k
     axsWebSearch.goToPrevResult(true);
+    return false;
   }
   if (evt.charCode == 110){ // n
     axsWebSearch.goToNextResult(false);
+    return false;
   }
   if (evt.charCode == 112){ // p
     axsWebSearch.goToPrevResult(false);
+    return false;
   }
   if (evt.charCode == 114){ // r
     axsWebSearch.cycleThroughRelatedSearches();
+    return false;
   }
   if (evt.charCode == 87){ // W
     axsWebSearch.switchToWebSearch();
+    return false;
   }
   if (evt.charCode == 47){ // / (slash symbol)
     // Focus on the top search blank
     document.getElementsByName('q')[0].focus();  
     document.getElementsByName('q')[0].select(); //and select all text
+    return false;
   }
   if ((evt.keyCode == 13) && axsWebSearch.currentLink){ // Enter
     if (evt.shiftKey){
@@ -220,29 +233,37 @@ axsWebSearch.extraKeyboardNavHandler = function(evt){
     } else{
       axsWebSearch.goToCurrentLink();
     }
+    return false;
   }
   if (evt.keyCode == 33){ // Page Up
     axsWebSearch.goToPrevPage();
+    return false;
   }
   if (evt.keyCode == 34){ // Page Down
     axsWebSearch.goToNextPage();
+    return false;
   }
   if (evt.keyCode == 38){ // Up arrow
     axsWebSearch.goToPrevResult(false);
+    return false;
   }
   if (evt.keyCode == 37){ // Left arrow
     axsWebSearch.goToPrevResult(true);
+    return false;
   }
   if (evt.keyCode == 40){ // Down arrow
     axsWebSearch.goToNextResult(false);
+    return false;
   }
   if (evt.keyCode == 39){ // Right arrow
     axsWebSearch.goToNextResult(true);
+    return false;
   }
   if (evt.charCode == 63){ // ? (question mark)
     axsWebSearch.axsJAXObj.speakText(axsWebSearch.HELP_STRING);
+    return false;
   }
-  return false;
+  return true;
 };
 
 

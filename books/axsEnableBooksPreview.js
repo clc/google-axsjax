@@ -292,7 +292,7 @@ axsBooksPreview.buildResultsArray = function(){
       axsBooksPreview.resultsArray.push(currentDiv);
     }
   }
-  if ((axsBooksPreview.resultsArray.length == 0) && (searchContent.firstChild.textContent)){
+  if ((axsBooksPreview.resultsArray.length === 0) && (searchContent.firstChild.textContent)){
     axsBooksPreview.resultsArray.push(searchContent.firstChild);
   }
 };
@@ -322,7 +322,7 @@ axsBooksPreview.goToPrevResult = function(){
 
 axsBooksPreview.actOnCurrentItem = function(shiftKey){
   var linkIndex = 0;
-  var currentItem = axsBooksPreview.resultsArray[axsBooksPreview.resultsIndex]
+  var currentItem = axsBooksPreview.resultsArray[axsBooksPreview.resultsIndex];
   var currentLink = currentItem.getElementsByTagName('A')[linkIndex];
   if (currentLink){
     axsBooksPreview.axsJAXObj.clickElem(currentLink,shiftKey);
