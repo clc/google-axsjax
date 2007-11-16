@@ -15,21 +15,26 @@ function axsJb_getCurrentPosition(){
   ballImg.alt = message;
   axsJb_axsJaxObj.speakNode(ballImg);
 }
+/*
+ * Dictionary mapping  image names to color names
+ */
+var AxsJBImg2ColorMap = {
+  's_green.gif' : 'Selected. Green. ',
+  's_blue.gif' : 'Selected. Blue. ',
+  's_purple.gif' : 'Selected. Purple. ',
+  's_red.gif' : 'Selected. Red. ',
+  's_yellow.gif' : 'Selected. Yellow. ',
+  'p_green.gif' : 'Green. ',
+  'p_blue.gif' : 'Blue. ',
+  'p_purple.gif' : 'Purple. ',
+  'p_red.gif' : 'Red. ',
+  'p_yellow.gif' : 'Yellow. ',
+  'p_white.gif' : 'Blank. '
+};
 
 function axsJb_getColorOfBallImg(ballImg){
   var color = '';
-  var ImgSrcString = ballImg.src.toString();
-  if (ImgSrcString.indexOf('s_green.gif') != -1){ color = 'Selected. Green. '; }
-  if (ImgSrcString.indexOf('s_blue.gif') != -1){ color = 'Selected. Blue. '; }
-  if (ImgSrcString.indexOf('s_purple.gif') != -1){ color = 'Selected. Purple. '; }
-  if (ImgSrcString.indexOf('s_red.gif') != -1){ color = 'Selected. Red. '; }
-  if (ImgSrcString.indexOf('s_yellow.gif') != -1){ color = 'Selected. Yellow. '; }
-  if (ImgSrcString.indexOf('p_green.gif') != -1){ color = 'Green. '; }
-  if (ImgSrcString.indexOf('p_blue.gif') != -1){ color = 'Blue. '; }
-  if (ImgSrcString.indexOf('p_purple.gif') != -1){ color = 'Purple. '; }
-  if (ImgSrcString.indexOf('p_red.gif') != -1){ color = 'Red. '; }
-  if (ImgSrcString.indexOf('p_yellow.gif') != -1){ color = 'Yellow. '; }
-  if (ImgSrcString.indexOf('p_white.gif') != -1){ color = 'Blank. '; }
+  color = AxsJBImg2ColorMap[ballImg.src.toString()];
   return color;
 }
 
