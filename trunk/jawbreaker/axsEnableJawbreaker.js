@@ -35,11 +35,8 @@ var AxsJBImg2ColorMap = {
 function axsJb_getColorOfBallImg(ballImg){
   var color = '';
   var url = ballImg.src.toString();
-  var slashPos = url.indexOf('/');
-  while (slashPos != -1){
-    url = url.substring(slashPos+1);
-    slashPos = url.indexOf('/');
-  }
+  var slashPos = url.lastIndexOf('/');
+  url = url.substring(slashPos+1);
   color = AxsJBImg2ColorMap[url];
   return color;
 }
