@@ -34,7 +34,13 @@ var AxsJBImg2ColorMap = {
 
 function axsJb_getColorOfBallImg(ballImg){
   var color = '';
-  color = AxsJBImg2ColorMap[ballImg.src.toString()];
+  var url = ballImg.src.toString();
+  var slashPos = url.indexOf('/');
+  while (slashPos != -1){
+    url = url.substring(slashPos+1);
+    slashPos = url.indexOf('/');
+  }
+  color = AxsJBImg2ColorMap[url];
   return color;
 }
 
