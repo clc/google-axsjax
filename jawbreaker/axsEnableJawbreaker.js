@@ -19,17 +19,17 @@ function axsJb_getCurrentPosition(){
  * Dictionary mapping  image names to color names
  */
 var AxsJBImg2ColorMap = {
-  's_green.gif' : 'Selected. Green. ',
-  's_blue.gif' : 'Selected. Blue. ',
-  's_purple.gif' : 'Selected. Purple. ',
-  's_red.gif' : 'Selected. Red. ',
-  's_yellow.gif' : 'Selected. Yellow. ',
-  'p_green.gif' : 'Green. ',
-  'p_blue.gif' : 'Blue. ',
-  'p_purple.gif' : 'Purple. ',
-  'p_red.gif' : 'Red. ',
-  'p_yellow.gif' : 'Yellow. ',
-  'p_white.gif' : 'Blank. '
+  's_green.gif' : 'Selected Green. ',
+  's_blue.gif' : 'Selected Blue. ',
+  's_purple.gif' : 'Selected Purple. ',
+  's_red.gif' : 'Selected  Red. ',
+  's_yellow.gif' : 'Selected. Yellow ',
+  'p_green.gif' : 'Green ',
+  'p_blue.gif' : 'Blue ',
+  'p_purple.gif' : 'Purple ',
+  'p_red.gif' : 'Red ',
+  'p_yellow.gif' : 'Yellow ',
+  'p_white.gif' : 'Blank '
 };
 
 function axsJb_getColorOfBallImg(ballImg){
@@ -66,7 +66,7 @@ function axsJb_sayStats(){
 function axsJb_speakRow(){
   var speechString = "Row " +  axsJb_row + ": ";
   for (var col = 0; col < axsJb_MAXCOL; col++){
-    speechString = speechString + axsJb_getColorOfBallImg(axsJb_getCurrentBallImgNode(axsJb_row,col)) + ", ";
+    speechString = speechString + axsJb_getColorOfBallImg(axsJb_getCurrentBallImgNode(axsJb_row,col));
   }
   speechString = speechString + axsJb_getColorOfBallImg(axsJb_getCurrentBallImgNode(axsJb_row,axsJb_MAXCOL)) + ". ";
   axsJb_axsJaxObj.speakText(speechString);
@@ -75,7 +75,7 @@ function axsJb_speakRow(){
 function axsJb_speakCol(){
   var speechString = "Col " +  axsJb_col + ": ";
   for (var row = 0; row < axsJb_MAXROW; row++){
-    speechString = speechString + axsJb_getColorOfBallImg(axsJb_getCurrentBallImgNode(row,axsJb_col)) + ", ";
+    speechString = speechString + axsJb_getColorOfBallImg(axsJb_getCurrentBallImgNode(row,axsJb_col));
   }
   speechString = speechString + axsJb_getColorOfBallImg(axsJb_getCurrentBallImgNode(axsJb_MAXROW,axsJb_col)) + ". ";
   axsJb_axsJaxObj.speakText(speechString);
