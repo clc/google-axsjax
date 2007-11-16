@@ -94,7 +94,10 @@ axsBooksPreview.init = function(){
       axsBooksPreview.axsJAXObj.clickElem(toolbarImages[i],false);
     }
   }
-  axsBooksPreview.axsJAXObj.clickElem(document.getElementById('text_mode_text'),false);
+  var textModeLink = document.getElementById('text_mode_text');
+  if (textModeLink){
+    axsBooksPreview.axsJAXObj.clickElem(textModeLink,false);
+  }
   axsBooksPreview.expandAllMoreLinks();
   axsBooksPreview.buildResultsArray();
 

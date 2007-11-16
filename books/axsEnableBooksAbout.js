@@ -227,7 +227,8 @@ axsBooksAbout.extraKeyboardNavHandler = function(evt){
 
 
 //************
-//Functions for results
+//Functions for scraping the About page
+//and breaking it into categories
 //************
 axsBooksAbout.buildCategoriesArray = function(){
   axsBooksAbout.categoriesArray = new Array();
@@ -246,6 +247,7 @@ axsBooksAbout.buildCategoriesArray = function(){
     var divArray = myNode.getElementsByTagName('DIV');
     for (var i=0,currentDiv; currentDiv = divArray[i]; i++){
       if (currentDiv.className == 'searchresult'){
+        axsBooksAbout.fixSearchResult(currentDiv);
         cat.itemsArray.push(currentDiv);
       }
     }
@@ -407,6 +409,21 @@ axsBooksAbout.buildCategoriesArray = function(){
     axsBooksAbout.categoriesArray.push(cat);
   }
 
+};
+
+//Need to perform a fix as there is a problem when the link is used as-is
+//and the resulting preview page switches to a two page, plain text view
+//immediately upon load.
+axsBooksAbout.fixSearchResult = function(resultDiv){
+  var resLink = resultDiv.getElementsByTagName('A')[0];
+  if (!resLink){
+    return;
+  }
+  resLink.onclick = null;
+  var pageNumStart = resLink.href.indexOf('&pg=') + 4;
+  var pageNumEnd = resLink.href.indexOf('&',pageNumStart+1);
+  var pageNum = resLink.href.substring(pageNumStart, pageNumEnd);
+  resLink.href = resLink.href + '#P' + pageNum + ',M2';
 };
 
 
