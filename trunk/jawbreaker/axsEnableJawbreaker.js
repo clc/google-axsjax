@@ -60,7 +60,7 @@ function axsJb_sayStats(){
   var blockCount = document.getElementById('blockcount').textContent;
   var blockScore = document.getElementById('blockscore').textContent;
   var totalScore = document.getElementById('userscore').textContent;
-  axsJb_axsJaxObj.speakText('Block count: ' + blockCount + '. Block score: ' + blockScore + '. Total score: ' + totalScore + '.');
+  axsJb_axsJaxObj.speakThroughPixel('Block count: ' + blockCount + '. Block score: ' + blockScore + '. Total score: ' + totalScore + '.');
 }
 
 function axsJb_speakRow(){
