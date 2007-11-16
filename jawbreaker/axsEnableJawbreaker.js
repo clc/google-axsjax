@@ -83,22 +83,26 @@ function axsJb_speakCol(){
 
 
 function axsJb_keyboardHandler(evt){
-  if (evt.keyCode == 38){ // Up arrow
+  if (evt.keyCode == 38 ||
+      evt.charCode == 107){ // Up arrow or k
     axsJb_row--;
     if (axsJb_row < 0){ axsJb_row = 0; }
     axsJb_getCurrentPosition();
   }
-  if (evt.keyCode == 37){ // Left arrow 
+  if (evt.keyCode == 37 ||
+      evt.charCode == 104){ // Left arrow  or h
     axsJb_col--;
     if (axsJb_col < 0){ axsJb_col = 0; }
     axsJb_getCurrentPosition();
   }
-  if (evt.keyCode == 40){ // Down arrow
+  if (evt.keyCode == 40 ||
+      evt.charCode == 106){ // Down arrow or j 
     axsJb_row++;
     if (axsJb_row > axsJb_MAXROW){  axsJb_row = axsJb_MAXROW; }
     axsJb_getCurrentPosition();
   }
-  if (evt.keyCode == 39){ // Right arrow
+  if (evt.keyCode == 39 ||
+      evt.charCode == 108){ // Right arrow or l
     axsJb_col++;
     if (axsJb_col > axsJb_MAXCOL){ axsJb_col = axsJb_MAXCOL; }
     axsJb_getCurrentPosition();
