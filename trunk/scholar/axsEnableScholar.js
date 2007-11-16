@@ -163,6 +163,7 @@ axsScholar.extraKeyboardNavHandler = function(evt){
   }
   if (evt.keyCode == 27){ // ESC
     axsScholar.lastFocusedNode.blur();
+    return false;
   }
 
   if (axsScholar.inputFocused){
@@ -171,15 +172,19 @@ axsScholar.extraKeyboardNavHandler = function(evt){
 
   if (evt.charCode == 106){ // j
     axsScholar.goToNextResult(true);
+    return false;
   }
   if (evt.charCode == 107){ // k
     axsScholar.goToPrevResult(true);
+    return false;
   }
   if (evt.charCode == 110){ // n
     axsScholar.goToNextResult(false);
+    return false;
   }
   if (evt.charCode == 112){ // p
     axsScholar.goToPrevResult(false);
+    return false;
   }
 
 
@@ -187,29 +192,37 @@ axsScholar.extraKeyboardNavHandler = function(evt){
     // Focus on the top search blank
     document.getElementsByName('q')[0].focus();  
     document.getElementsByName('q')[0].select(); //and select all text
+    return false;
   }
 
 
   if (evt.keyCode == 33){ // Page Up
     axsScholar.goToPrevPage();
+    return false;
   }
   if (evt.keyCode == 34){ // Page Down
     axsScholar.goToNextPage();
+    return false;
   }
   if (evt.keyCode == 38){ // Up arrow
     axsScholar.goToPrevResult(false);
+    return false;
   }
   if (evt.keyCode == 37){ // Left arrow
     axsScholar.goToPrevResult(true);
+    return false;
   }
   if (evt.keyCode == 40){ // Down arrow
     axsScholar.goToNextResult(false);
+    return false;
   }
   if (evt.keyCode == 39){ // Right arrow
     axsScholar.goToNextResult(true);
+    return false;
   }
   if (evt.charCode == 63){ // ? (question mark)
     axsScholar.axsJAXObj.speakText(axsScholar.HELP_STRING);
+    return false;
   }
 
   //Keys for working with the current result.
@@ -217,6 +230,7 @@ axsScholar.extraKeyboardNavHandler = function(evt){
   //new window since shift clicking usually opens in a new window.
   if (evt.charCode == 111){ // o
     axsScholar.announceOptions();
+    return false;
   }
 
   if (evt.keyCode == 13){ // Enter
@@ -225,6 +239,7 @@ axsScholar.extraKeyboardNavHandler = function(evt){
     } else{
       axsScholar.axsJAXObj.speakText(axsScholar.NO_MAIN_LINK_STRING);
     }
+    return false;
   }
 
   if ((evt.charCode == 118) || (evt.charCode == 86)){ // v
@@ -233,6 +248,7 @@ axsScholar.extraKeyboardNavHandler = function(evt){
     } else{
       axsScholar.axsJAXObj.speakText(axsScholar.ONLY_ONE_VERSION_STRING);
     }
+    return false;
   }
 
   if ((evt.charCode == 99) || (evt.charCode == 67)){ // c
@@ -241,6 +257,7 @@ axsScholar.extraKeyboardNavHandler = function(evt){
     } else{
       axsScholar.axsJAXObj.speakText(axsScholar.CITED_BY_STRING + axsScholar.UNAVAILABLE_STRING);
     }
+    return false;
   }
 
   if ((evt.charCode == 114) || (evt.charCode == 82)){ // r
@@ -249,6 +266,7 @@ axsScholar.extraKeyboardNavHandler = function(evt){
     } else{
       axsScholar.axsJAXObj.speakText(axsScholar.RELATED_ARTICLES_STRING + axsScholar.UNAVAILABLE_STRING);
     }
+    return false;
   }
 
   if ((evt.charCode == 119) || (evt.charCode == 87)){ // w
@@ -257,6 +275,7 @@ axsScholar.extraKeyboardNavHandler = function(evt){
     } else{
       axsScholar.axsJAXObj.speakText(axsScholar.WEB_SEARCH_STRING + axsScholar.UNAVAILABLE_STRING);
     }
+    return false;
   }
 
   if ((evt.charCode == 108) || (evt.charCode == 76)){ // l
@@ -265,6 +284,7 @@ axsScholar.extraKeyboardNavHandler = function(evt){
     } else{
       axsScholar.axsJAXObj.speakText(axsScholar.LIBRARY_SEARCH_STRING + axsScholar.UNAVAILABLE_STRING);
     }
+    return false;
   }
 
   if ((evt.charCode == 104) || (evt.charCode == 72)){ // h
@@ -273,6 +293,7 @@ axsScholar.extraKeyboardNavHandler = function(evt){
     } else{
       axsScholar.axsJAXObj.speakText(axsScholar.VIEW_AS_HTML_STRING + axsScholar.UNAVAILABLE_STRING);
     }
+    return false;
   }
 
   if ((evt.charCode == 105) || (evt.charCode == 73)){ // i
@@ -281,6 +302,7 @@ axsScholar.extraKeyboardNavHandler = function(evt){
     } else{
       axsScholar.axsJAXObj.speakText(axsScholar.IMPORT_INTO_STRING + axsScholar.UNAVAILABLE_STRING);
     }
+    return false;
   }
 
   if ((evt.charCode == 98) || (evt.charCode == 66)){ // b
@@ -289,8 +311,9 @@ axsScholar.extraKeyboardNavHandler = function(evt){
     } else{
       axsScholar.axsJAXObj.speakText(axsScholar.BL_DIRECT_STRING + axsScholar.UNAVAILABLE_STRING);
     }
+    return false;
   }
-  return false;
+  return true;
 };
 
 
