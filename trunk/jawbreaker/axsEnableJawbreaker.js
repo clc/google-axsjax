@@ -23,13 +23,13 @@ var AxsJBImg2ColorMap = {
   's_blue.gif' : 'Selected Blue. ',
   's_purple.gif' : 'Selected Purple. ',
   's_red.gif' : 'Selected  Red. ',
-  's_yellow.gif' : 'Selected. Yellow ',
-  'p_green.gif' : 'Green ',
-  'p_blue.gif' : 'Blue ',
-  'p_purple.gif' : 'Purple ',
-  'p_red.gif' : 'Red ',
-  'p_yellow.gif' : 'Yellow ',
-  'p_white.gif' : 'Blank '
+  's_yellow.gif' : 'Selected Yellow. ',
+  'p_green.gif' : 'Green, ',
+  'p_blue.gif' : 'Blue, ',
+  'p_purple.gif' : 'Purple, ',
+  'p_red.gif' : 'Red, ',
+  'p_yellow.gif' : 'Yellow, ',
+  'p_white.gif' : 'Blank, '
 };
 
 function axsJb_getColorOfBallImg(ballImg){
