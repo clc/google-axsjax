@@ -38,6 +38,11 @@ axsBooksPreview.HELP_STRING =
     'The following shortcut keys are available. ' +
     'Right arrow or J, go to the next page. ' +
     'Left arrow or K, go to the previous page. ' +
+    'S, jump to search in this book field. ' +
+    'N, hear the next search result. ' +
+    'P, hear the previous search result. ' +
+    'Enter, go to the search result. ' +
+    'G, jump to the go to a particular page field. ' +
     'Slash, jump to search for books field. ' +
     'Escape, leave search field. ' +
     'A, go to the about page for this book. ';
