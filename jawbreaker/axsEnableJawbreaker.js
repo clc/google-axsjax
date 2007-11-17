@@ -69,7 +69,7 @@ function axsJb_speakRow(){
     speechString = speechString + axsJb_getColorOfBallImg(axsJb_getCurrentBallImgNode(axsJb_row,col));
   }
   speechString = speechString + axsJb_getColorOfBallImg(axsJb_getCurrentBallImgNode(axsJb_row,axsJb_MAXCOL));
-  axsJb_axsJaxObj.speakText(speechString);
+  axsJb_axsJaxObj.speakThroughPixel(speechString);
 }
 
 function axsJb_speakCol(){
@@ -78,11 +78,29 @@ function axsJb_speakCol(){
     speechString = speechString + axsJb_getColorOfBallImg(axsJb_getCurrentBallImgNode(row,axsJb_col));
   }
   speechString = speechString + axsJb_getColorOfBallImg(axsJb_getCurrentBallImgNode(axsJb_MAXROW,axsJb_col));
-  axsJb_axsJaxObj.speakText(speechString);
+  axsJb_axsJaxObj.speakThroughPixel(speechString);
 }
 
 
 function axsJb_keyboardHandler(evt){
+  if (evt.charCode == 97){      //a
+    axsJb_col = 0;
+    axsJb_getCurrentPosition();
+  }
+  if (evt.charCode == 101){       //e
+    axsJb_col = axsJb_MAXCOL;
+    axsJb_getCurrentPosition();
+  }
+  if (evt.charCode == 116){      //t
+    axsJb_row = 0;
+    axsJb_getCurrentPosition();
+  }
+  if (evt.charCode == 98){       //b
+    axsJb_row = axsJb_MAXROW;
+    axsJb_getCurrentPosition();
+  }
+
+
   if (evt.keyCode == 38 ||
       evt.charCode == 107){ // Up arrow or k
     axsJb_row--;
