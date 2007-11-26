@@ -172,7 +172,7 @@ axsBooksResults.extraKeyboardNavHandler = function(evt){
     axsBooksResults.goToNextResult(true);
   }
   if (evt.charCode == 63){ // ? (question mark)
-    axsBooksResults.axsJAXObj.speakText(axsBooksResults.HELP_STRING);
+    axsBooksResults.axsJAXObj.speakThroughPixel(axsBooksResults.HELP_STRING);
   }
 
   //Keys for working with the current result.
@@ -205,7 +205,7 @@ axsBooksResults.extraKeyboardNavHandler = function(evt){
         return false;
       }
     }
-    axsBooksResults.axsJAXObj.speakText(axsBooksResults.NO_OTHER_EDITIONS_STRING);
+    axsBooksResults.axsJAXObj.speakThroughPixel(axsBooksResults.NO_OTHER_EDITIONS_STRING);
   }
   return false;
 };

@@ -210,7 +210,7 @@ axsBooksAbout.extraKeyboardNavHandler = function(evt){
     return false;
   }
   if (evt.charCode == 63){ // ? (question mark)
-    axsBooksAbout.axsJAXObj.speakText(axsBooksAbout.HELP_STRING);
+    axsBooksAbout.axsJAXObj.speakThroughPixel(axsBooksAbout.HELP_STRING);
     return false;
   }
 
@@ -247,7 +247,10 @@ axsBooksAbout.buildCategoriesArray = function(){
     var divArray = myNode.getElementsByTagName('DIV');
     for (var i=0,currentDiv; currentDiv = divArray[i]; i++){
       if (currentDiv.className == 'searchresult'){
-        axsBooksAbout.fixSearchResult(currentDiv);
+        var resLink = currentDiv.getElementsByTagName('A')[0];
+        if (resLink){
+          axsBooksAbout.fixBookPageLink(resLink);
+        }
         cat.itemsArray.push(currentDiv);
       }
     }
@@ -324,11 +327,28 @@ axsBooksAbout.buildCategoriesArray = function(){
   if (myNode){
     cat = axsBooksAbout.buildCategoryFromPanelSingleElemStyle(myNode,'A');
     axsBooksAbout.categoriesArray.push(cat);
+  } else { //Key terms can sometimes be presented inside the summary.
+    myNode = document.getElementById('keywords_v');
+    if (myNode && myNode.childNodes[1]){
+      myNode = myNode.childNodes[1];
+      cat = axsBooksAbout.buildCategoryFromPanelSingleElemStyle(myNode,'A');
+      axsBooksAbout.categoriesArray.push(cat);
+    }
   }
-
+  
   //Popular Passages
   myNode = document.getElementById('quotes');
   if (myNode){
+    var linksArray = myNode.getElementsByTagName('A');
+    var currentLink = null;
+    for (i = 0,currentLink; currentLink = linksArray[i]; i++){
+      //In the Popular Passages section, links with no classname are links to
+      //pages in the book. Links to pages in the book need to be fixed to work
+      //correctly in two page, text-only mode.
+      if (!currentLink.className){
+        axsBooksAbout.fixBookPageLink(currentLink);
+      }
+    }
     cat = axsBooksAbout.buildCategoryFromPanelSingleElemStyle(myNode,'P');
     axsBooksAbout.categoriesArray.push(cat);
   }
@@ -414,16 +434,12 @@ axsBooksAbout.buildCategoriesArray = function(){
 //Need to perform a fix as there is a problem when the link is used as-is
 //and the resulting preview page switches to a two page, plain text view
 //immediately upon load.
-axsBooksAbout.fixSearchResult = function(resultDiv){
-  var resLink = resultDiv.getElementsByTagName('A')[0];
-  if (!resLink){
-    return;
-  }
-  resLink.onclick = null;
-  var pageNumStart = resLink.href.indexOf('&pg=') + 4;
-  var pageNumEnd = resLink.href.indexOf('&',pageNumStart+1);
-  var pageNum = resLink.href.substring(pageNumStart, pageNumEnd);
-  resLink.href = resLink.href + '#P' + pageNum + ',M2';
+axsBooksAbout.fixBookPageLink = function(theLink){
+  theLink.onclick = null;
+  var pageNumStart = theLink.href.indexOf('&pg=') + 4;
+  var pageNumEnd = theLink.href.indexOf('&',pageNumStart+1);
+  var pageNum = theLink.href.substring(pageNumStart, pageNumEnd);
+  theLink.href = theLink.href + '#P' + pageNum + ',M2';
 };
 
 

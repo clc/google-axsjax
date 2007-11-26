@@ -168,11 +168,11 @@ axsBooksPreview.extraKeyboardNavHandler = function(evt){
     return false;
   }
 
-  if ((evt.charCode == 106) || (evt.keyCode == 39)){ // j or right arrow
+  if ((evt.charCode == 106) || (evt.keyCode == 39) || (evt.keyCode == 34)){ // j or right arrow or page down
     axsBooksPreview.goToNextPage();
     return false;
   }
-  if ((evt.charCode == 107) || (evt.keyCode == 37)){ // k or left arrow
+  if ((evt.charCode == 107) || (evt.keyCode == 37) || (evt.keyCode == 33)){ // k or left arrow or page up
     axsBooksPreview.goToPrevPage();
     return false;
   }
@@ -212,7 +212,7 @@ axsBooksPreview.extraKeyboardNavHandler = function(evt){
 
 
   if (evt.charCode == 63){ // ? (question mark)
-    axsBooksPreview.axsJAXObj.speakText(axsBooksPreview.HELP_STRING);
+    axsBooksPreview.axsJAXObj.speakThroughPixel(axsBooksPreview.HELP_STRING);
     return false;
   }
   
