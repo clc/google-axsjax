@@ -101,11 +101,11 @@ full-text is available.
   - s: Puts focus on the search within this book field.
   - g: Puts focus on the blank for going to a particular page.
   - Esc: Takes focus away from the currently focused field.
-  - j or Right Arrow or Page Down: Puts focus on the next page.
-  - k or Left Arrow or page up: Puts focus on the previous page. 
+  - n or Right Arrow or Page Down: Puts focus on the next page.
+  - p or Left Arrow or page up: Puts focus on the previous page. 
   - a: Go to the /about page/ for the current result.
-  - n: Cycles to the next match within this book.
-  - p: Cycles to the previous match within this book.
+  - j: Cycles to the next match within this book.
+  - k: Cycles to the previous match within this book.
   - Enter: Follows the link for the current search result.
 
 
