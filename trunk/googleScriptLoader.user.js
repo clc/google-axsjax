@@ -16,7 +16,7 @@
 // @name          Google Accessibility Enhancements
 // @namespace     http://www.google.com/accessible/
 // @description   Uses WAI-ARIA to enhance accessibility for Google
-// @include       http://www.google.com/*
+// @include       *
 // ==/UserScript==
 
 function loadScript(){
