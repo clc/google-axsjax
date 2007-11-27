@@ -34,13 +34,14 @@ axsBooksPreview.ABOUT_STRING = 'About this book';
 axsBooksPreview.MORE_STRING = 'more';
 
 //These are strings to be spoken to the user
+axsBooksPreview.PAGE_STRING = 'Page ';
 axsBooksPreview.HELP_STRING =
     'The following shortcut keys are available. ' +
-    'Right arrow or J, go to the next page. ' +
-    'Left arrow or K, go to the previous page. ' +
+    'Right arrow or N, go to the next page. ' +
+    'Left arrow or P, go to the previous page. ' +
     'S, jump to search in this book field. ' +
-    'N, hear the next search result. ' +
-    'P, hear the previous search result. ' +
+    'J, hear the next search result. ' +
+    'K, hear the previous search result. ' +
     'Enter, go to the search result. ' +
     'G, jump to the go to a particular page field. ' +
     'Slash, jump to search for books field. ' +
@@ -78,17 +79,20 @@ axsBooksPreview.init = function(){
 
   //Watch for when pages are changed
   var viewport = document.getElementById('viewport');
-  viewport.addEventListener('DOMNodeInserted', axsBooksPreview.pageInsertionHandler,
-                          true);
+  viewport.addEventListener('DOMNodeInserted',
+                            axsBooksPreview.pageInsertionHandler,
+                            true);
   
   //Watch for when search results show up
   var searchContent = document.getElementById('search_content');
-  searchContent.addEventListener('DOMNodeInserted', axsBooksPreview.resultInsertionHandler,
-                          true);
+  searchContent.addEventListener('DOMNodeInserted',
+                                 axsBooksPreview.resultInsertionHandler,
+                                 true);
 
   //Switch to two page display with plain text
   axsBooksPreview.onLeftPage = false;
-  var toolbarImages = document.getElementById('toolbar').getElementsByTagName('IMG');
+  var toolbarImages =
+      document.getElementById('toolbar').getElementsByTagName('IMG');
   for (var i=0; i<toolbarImages.length; i++){
     if (toolbarImages[i].title == axsBooksPreview.TWO_PAGES_STRING){
       axsBooksPreview.axsJAXObj.clickElem(toolbarImages[i],false);
@@ -167,20 +171,21 @@ axsBooksPreview.extraKeyboardNavHandler = function(evt){
     document.getElementById('jtp').select(); //and select all text
     return false;
   }
-
-  if ((evt.charCode == 106) || (evt.keyCode == 39) || (evt.keyCode == 34)){ // j or right arrow or page down
+  // n or right arrow or page down
+  if ((evt.charCode == 110) || (evt.keyCode == 39) || (evt.keyCode == 34)){
     axsBooksPreview.goToNextPage();
     return false;
   }
-  if ((evt.charCode == 107) || (evt.keyCode == 37) || (evt.keyCode == 33)){ // k or left arrow or page up
+  // p or left arrow or page up
+  if ((evt.charCode == 112) || (evt.keyCode == 37) || (evt.keyCode == 33)){
     axsBooksPreview.goToPrevPage();
     return false;
   }
-  if (evt.charCode == 110){ // n
+  if (evt.charCode == 106){ // j
     axsBooksPreview.goToNextResult();
     return false;
   }
-  if (evt.charCode == 112){ // p
+  if (evt.charCode == 107){ // k
     axsBooksPreview.goToPrevResult();
     return false;
   }
@@ -236,25 +241,41 @@ axsBooksPreview.goToAboutPage = function(){
 //************
 //Functions for pages
 //************
+axsBooksPreview.generatePageNumberString = function(){
+  var pageNum = parseInt(document.getElementById('jtp').value,10);
+  if (isNaN(pageNum)){
+    return '';
+  }
+  if (((pageNum%2) == 1) && axsBooksPreview.onLeftPage){
+    pageNum = pageNum - 1;
+  }
+  if (((pageNum%2) === 0) && !axsBooksPreview.onLeftPage){
+    pageNum = pageNum + 1;
+  }
+  return axsBooksPreview.PAGE_STRING + pageNum + '. ';
+};
 
 axsBooksPreview.speakLeftPage = function(){
   var viewport = document.getElementById('viewport');
   var thePage = viewport.getElementsByTagName('P')[0];
   axsBooksPreview.onLeftPage = true;
+  var theMessage = axsBooksPreview.generatePageNumberString();
   if (thePage){
-    axsBooksPreview.axsJAXObj.speakNode(thePage);
+    theMessage = theMessage + thePage.textContent;
   }
+  axsBooksPreview.axsJAXObj.speakThroughPixel(theMessage);
 };
 
 axsBooksPreview.speakRightPage = function(){
   var viewport = document.getElementById('viewport');
   var thePage = viewport.getElementsByTagName('P')[1];
   axsBooksPreview.onLeftPage = false;
+  var theMessage = axsBooksPreview.generatePageNumberString();
   if (thePage){
-    axsBooksPreview.axsJAXObj.speakNode(thePage);
+    theMessage = theMessage + thePage.textContent;
   }
+  axsBooksPreview.axsJAXObj.speakThroughPixel(theMessage);
 };
-
 
 axsBooksPreview.goToNextPage = function(){
   if (axsBooksPreview.onLeftPage){
@@ -292,7 +313,8 @@ axsBooksPreview.buildResultsArray = function(){
       axsBooksPreview.resultsArray.push(currentDiv);
     }
   }
-  if ((axsBooksPreview.resultsArray.length === 0) && (searchContent.firstChild.textContent)){
+  if ( (axsBooksPreview.resultsArray.length === 0) &&
+       (searchContent.firstChild.textContent) ){
     axsBooksPreview.resultsArray.push(searchContent.firstChild);
   }
 };
