@@ -122,6 +122,7 @@ AxsJAX.prototype.speakThroughPixel = function(textString){
   var pixelNode = document.getElementById(pixelId);
   if (!pixelNode){
     pixelNode = document.createElement('img');
+    pixelNode.id = pixelId;
     pixelNode.src = 'http://google-axsjax.googlecode.com/svn/trunk/common/res/images/blank.gif';
     document.body.appendChild(pixelNode);
   }
