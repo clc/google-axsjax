@@ -7,13 +7,13 @@
 AxsJAX-Enhanced Google Books is the same as regular Google
 Books with the following additional features:
 
-  - Quick jump to the search for books box
+  - Quick jump to the /search for books/ box
   - Quick navigation through the search results
   - Automatically go to the next page of results when at the end of the current page
   - Quick navigation to the next/previous search results page
-  - Cycle through the different sections and through the items within each section on the "About this book" page
-  - Quick jump to the "Search within this book" blank 
-  - Keyboard access to going through the book preview/full view one page at a time when a plain text version is available
+  - Cycle through the different items    on the /About this book/ page
+  - Quick jump to the /Search within this book/ field 
+  - Keyboard access for reading books a page at a time where full text is available.
 
 
 ** How Can I Start Using AxsJAX-Enhanced Google Books?
@@ -45,12 +45,24 @@ All of the AxsJAX enhancements are activated through the
 keyboard. If your assistive technology uses modes, e.g., /browse
 mode/ in JFW, please switch to the mode that you use for working
 with forms and web applications so that your keystrokes will be
-sent to the web page itself. Google Books consists of three distinct types of pages: a search results page, an about this book page, and a viewer page for reading a preview or full view of the book. 
+sent to the web page itself. 
 
-When you are on the search results page, the following keys are available:
+
+Note that Google books uses three types of views:
+
+| View           | Purpose                         |
+|----------------+---------------------------------|
+| /Results/      | List of search results          |
+| /About A Book/ | Available metadata about a book |
+| /Full-text/    | Browse and search within a book |
+|----------------+---------------------------------|
+  
+
+***  Results  View
+
   - ? (question mark): Brings up a list of the keyboard commands.
-  - / (slash): Puts focus on the search blank.
-  - Esc: Takes focus away from the search blank.
+  - / (slash): Puts focus on the search field.
+  - Esc: Takes focus away from the search field.
   - Enter: Go to the viewer for the current result.
   - a: Go to the about page for the current result.
   - n or Down Arrow: Puts focus on the next result. If you are on the last result of the page, the next page will be loaded for you automatically.
@@ -60,28 +72,40 @@ When you are on the search results page, the following keys are available:
   - Page up: Goes to the previous page.
   - Page down: Goes to the next page.
 
-When you are on the about page, the following keys are available:
+*** About A Book View
+
+Note that this page groups the available information about a book
+into several /categories/,
+where each category contains one or more items.
+You can cycle through the available categories and browse the
+individual items with single keystrokes as listed below.
+
   - ? (question mark): Brings up a list of the keyboard commands.
-  - / (slash): Puts focus on the search for books blank.
-  - s: Puts focus on the search within this book blank.
-  - Esc: Takes focus away from the currently focused search blank.
+  - / (slash): Puts focus on the /search for books/ field.
+  - s: Puts focus on the search within this book field.
+  - Esc: Takes focus away from the currently focused search field.
   - n or Down Arrow: Cycles to the next category.
   - p or Up Arrow: Cycles to the previous category.
   - j or Right Arrow: Puts focus on the next item in the current category. If you are on the last item of the category, you will be taken back to the first item.
   - k or Left Arrow: Puts focus on the previous item in the current category. If you are on the first item of the category, you will be taken to the last item.
   - Enter: Follows the link for the current item that has focus if there is a link.
 
-When you are on the viewer page, the following keys are available:
+*** Full-text View
+
+
+This view is active  for public-domain books when 
+full-text is available.
+
   - ? (question mark): Brings up a list of the keyboard commands.
-  - / (slash): Puts focus on the search for books blank.
-  - s: Puts focus on the search within this book blank.
+  - / (slash): Puts focus on the /search for books/ field.
+  - s: Puts focus on the search within this book field.
   - g: Puts focus on the blank for going to a particular page.
-  - Esc: Takes focus away from the currently focused blank.
+  - Esc: Takes focus away from the currently focused field.
   - j or Right Arrow or Page Down: Puts focus on the next page.
-  - k or Left Arrow: Puts focus on the previous page. 
-  - a: Go to the about page for the current result.
-  - n: Cycles to the next search result for searching within this book.
-  - p: Cycles to the previous search result for searching within this book.
+  - k or Left Arrow or page up: Puts focus on the previous page. 
+  - a: Go to the /about page/ for the current result.
+  - n: Cycles to the next match within this book.
+  - p: Cycles to the previous match within this book.
   - Enter: Follows the link for the current search result.
 
 
