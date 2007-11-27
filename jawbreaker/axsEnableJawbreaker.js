@@ -5,6 +5,15 @@ var axsJb_row = 0;
 var axsJb_col = 0;
 var axsJb_MAXROW = 11;
 var axsJb_MAXCOL = 10;
+var axsJb_HELP_STRING = 'The following keys are available. ' +
+                        'N, start a new game. ' +
+                        'Arrow keys or H,J,K,L, navigate the board one ball at a time. ' +
+                        'A,E,T,B, jump to the edges of the board. ' +
+                        'R, read the current row. ' +
+                        'C, read the current column. ' +
+                        'S, read the current stats. ' +
+                        'Space, click on the current ball. The first click selects the group and the second click confirms the selection.';
+
 var axsJb_axsJaxObj = new AxsJAX();
 
 
@@ -143,7 +152,12 @@ function axsJb_keyboardHandler(evt){
     axsJb_col = 0;
     axsJb_axsJaxObj.clickElem(document.getElementById('menu-start'));
     axsJb_getCurrentPosition();
-  }  
+  }
+
+  if (evt.charCode == 63){ // ? (question mark)
+    axsJb_axsJaxObj.speakThroughPixel(axsJb_HELP_STRING);
+  }
+
 }
 
 
