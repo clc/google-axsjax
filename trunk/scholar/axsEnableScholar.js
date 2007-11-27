@@ -221,7 +221,7 @@ axsScholar.extraKeyboardNavHandler = function(evt){
     return false;
   }
   if (evt.charCode == 63){ // ? (question mark)
-    axsScholar.axsJAXObj.speakText(axsScholar.HELP_STRING);
+    axsScholar.axsJAXObj.speakThroughPixel(axsScholar.HELP_STRING);
     return false;
   }
 
@@ -237,7 +237,7 @@ axsScholar.extraKeyboardNavHandler = function(evt){
     if (axsScholar.currentResult.mainLink){
       axsScholar.axsJAXObj.clickElem(axsScholar.currentResult.mainLink, evt.shiftKey);
     } else{
-      axsScholar.axsJAXObj.speakText(axsScholar.NO_MAIN_LINK_STRING);
+      axsScholar.axsJAXObj.speakThroughPixel(axsScholar.NO_MAIN_LINK_STRING);
     }
     return false;
   }
@@ -246,7 +246,7 @@ axsScholar.extraKeyboardNavHandler = function(evt){
     if (axsScholar.currentResult.versionsLink){
       axsScholar.axsJAXObj.clickElem(axsScholar.currentResult.versionsLink, evt.shiftKey);
     } else{
-      axsScholar.axsJAXObj.speakText(axsScholar.ONLY_ONE_VERSION_STRING);
+      axsScholar.axsJAXObj.speakThroughPixel(axsScholar.ONLY_ONE_VERSION_STRING);
     }
     return false;
   }
@@ -255,7 +255,7 @@ axsScholar.extraKeyboardNavHandler = function(evt){
     if (axsScholar.currentResult.citationLink){
       axsScholar.axsJAXObj.clickElem(axsScholar.currentResult.citationLink, evt.shiftKey);
     } else{
-      axsScholar.axsJAXObj.speakText(axsScholar.CITED_BY_STRING + axsScholar.UNAVAILABLE_STRING);
+      axsScholar.axsJAXObj.speakThroughPixel(axsScholar.CITED_BY_STRING + axsScholar.UNAVAILABLE_STRING);
     }
     return false;
   }
@@ -264,7 +264,7 @@ axsScholar.extraKeyboardNavHandler = function(evt){
     if (axsScholar.currentResult.relatedArticlesLink){
       axsScholar.axsJAXObj.clickElem(axsScholar.currentResult.relatedArticlesLink, evt.shiftKey);
     } else{
-      axsScholar.axsJAXObj.speakText(axsScholar.RELATED_ARTICLES_STRING + axsScholar.UNAVAILABLE_STRING);
+      axsScholar.axsJAXObj.speakThroughPixel(axsScholar.RELATED_ARTICLES_STRING + axsScholar.UNAVAILABLE_STRING);
     }
     return false;
   }
@@ -273,7 +273,7 @@ axsScholar.extraKeyboardNavHandler = function(evt){
     if (axsScholar.currentResult.webSearchLink){
       axsScholar.axsJAXObj.clickElem(axsScholar.currentResult.webSearchLink, evt.shiftKey);
     } else{
-      axsScholar.axsJAXObj.speakText(axsScholar.WEB_SEARCH_STRING + axsScholar.UNAVAILABLE_STRING);
+      axsScholar.axsJAXObj.speakThroughPixel(axsScholar.WEB_SEARCH_STRING + axsScholar.UNAVAILABLE_STRING);
     }
     return false;
   }
@@ -282,7 +282,7 @@ axsScholar.extraKeyboardNavHandler = function(evt){
     if (axsScholar.currentResult.librarySearchLink){
       axsScholar.axsJAXObj.clickElem(axsScholar.currentResult.librarySearchLink, evt.shiftKey);
     } else{
-      axsScholar.axsJAXObj.speakText(axsScholar.LIBRARY_SEARCH_STRING + axsScholar.UNAVAILABLE_STRING);
+      axsScholar.axsJAXObj.speakThroughPixel(axsScholar.LIBRARY_SEARCH_STRING + axsScholar.UNAVAILABLE_STRING);
     }
     return false;
   }
@@ -291,7 +291,7 @@ axsScholar.extraKeyboardNavHandler = function(evt){
     if (axsScholar.currentResult.HTMLVerLink){
       axsScholar.axsJAXObj.clickElem(axsScholar.currentResult.HTMLVerLink, evt.shiftKey);
     } else{
-      axsScholar.axsJAXObj.speakText(axsScholar.VIEW_AS_HTML_STRING + axsScholar.UNAVAILABLE_STRING);
+      axsScholar.axsJAXObj.speakThroughPixel(axsScholar.VIEW_AS_HTML_STRING + axsScholar.UNAVAILABLE_STRING);
     }
     return false;
   }
@@ -300,7 +300,7 @@ axsScholar.extraKeyboardNavHandler = function(evt){
     if (axsScholar.currentResult.importLink){
       axsScholar.axsJAXObj.clickElem(axsScholar.currentResult.importLink, evt.shiftKey);
     } else{
-      axsScholar.axsJAXObj.speakText(axsScholar.IMPORT_INTO_STRING + axsScholar.UNAVAILABLE_STRING);
+      axsScholar.axsJAXObj.speakThroughPixel(axsScholar.IMPORT_INTO_STRING + axsScholar.UNAVAILABLE_STRING);
     }
     return false;
   }
@@ -309,7 +309,7 @@ axsScholar.extraKeyboardNavHandler = function(evt){
     if (axsScholar.currentResult.BLDirectLink){
       axsScholar.axsJAXObj.clickElem(axsScholar.currentResult.BLDirectLink, evt.shiftKey);
     } else{
-      axsScholar.axsJAXObj.speakText(axsScholar.BL_DIRECT_STRING + axsScholar.UNAVAILABLE_STRING);
+      axsScholar.axsJAXObj.speakThroughPixel(axsScholar.BL_DIRECT_STRING + axsScholar.UNAVAILABLE_STRING);
     }
     return false;
   }
@@ -480,7 +480,7 @@ axsScholar.announceOptions = function(){
   if (axsScholar.currentResult.importLink){
     messageString = messageString + 'I, ' + axsScholar.currentResult.importLink.textContent; + '. ';
   }
-  axsScholar.axsJAXObj.speakText(messageString);
+  axsScholar.axsJAXObj.speakThroughPixel(messageString);
 };
 
 
