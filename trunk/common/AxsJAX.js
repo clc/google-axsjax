@@ -40,8 +40,23 @@ AxsJAX = function(useTabKeyFix){
   if (useTabKeyFix){
     document.addEventListener('keypress', function(event){self.tabKeyHandler(event,self);}, true);
   }
+  this.activeParent = document.body;
 };
 
+
+/**
+ * AxsJAX causes assistive technologies to speak by using the activedescendant
+ * property. Usually, the activedescendant should be set on the document.body
+ * object and this is the default if setActiveParent is never called. However,
+ * if the node to be spoken is inside an iframe, then it can
+ * not be referenced by its ID from the parent document. Thus activedescendant
+ * will not work. The solution is to use setActiveParent to set the active
+ * parent that AxsJAX is using to the child iframe's document.body.
+ * @param {Node} targetNode The HTML node to be used as the active parent
+ */
+AxsJAX.prototype.setActiveParent = function(targetNode){
+  this.activeParent = targetNode;
+}
 
 /**
  * Triggers a DOMNodeInserted event on an HTML element node.
@@ -62,13 +77,11 @@ AxsJAX.prototype.speakNode = function(targetNode){
   }
   var oldRole = this.getAttributeOf(targetNode,'role');
   this.setAttributeOf(targetNode,'role','row');
-  var theBody = window.content.document.body;
-  theBody.tabIndex = -1;
-  theBody.blur();
-  this.setAttributeOf(theBody,'role','group');
-  this.setAttributeOf(theBody,'activedescendant',null);
-  theBody.focus();
-  this.setAttributeOf(theBody,'activedescendant',targetNode.id);
+  this.activeParent.tabIndex = -1;
+  this.activeParent.blur();
+  this.setAttributeOf(this.activeParent,'activedescendant',null);
+  this.activeParent.focus();
+  this.setAttributeOf(this.activeParent,'activedescendant',targetNode.id);
   //Restore the original role of the targetNode
   var self = this;
   window.setTimeout(
