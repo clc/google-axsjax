@@ -35,10 +35,14 @@ AxsJAX = function(useTabKeyFix){
     emptyNode.textContent = ' ';
     return emptyNode;
   };
+  //Activate the tab key fix if needed
   this.tabbingStartPosNode = null;
+  this.tabKeyFixOn = false;
   var self = this;
   if (useTabKeyFix){
+    this.tabKeyFixOn = true;
     document.addEventListener('keypress', function(event){self.tabKeyHandler(event,self);}, true);
+    document.AXSJAX_TABKEYFIX_ADDED = true;
   }
   this.activeParent = document.body;
 };
@@ -56,7 +60,26 @@ AxsJAX = function(useTabKeyFix){
  */
 AxsJAX.prototype.setActiveParent = function(targetNode){
   this.activeParent = targetNode;
+  if (this.tabKeyFixOn && !document.AXSJAX_TABKEYFIX_ADDED){
+    var self = this;
+    this.getActiveDocument().addEventListener('keypress', function(event){self.tabKeyHandler(event,self);}, true);
+    document.AXSJAX_TABKEYFIX_ADDED = true;
+  }
 }
+
+
+/**
+ * Gets the document for the active parent.
+ * @return {Node} The document that is the ancestor for the active parent
+ */
+AxsJAX.prototype.getActiveDocument = function(){
+  var activeDoc = this.activeParent;
+  while (activeDoc.nodeType != 9){
+    activeDoc = activeDoc.parentNode;
+  }
+  return activeDoc;
+}
+
 
 /**
  * Triggers a DOMNodeInserted event on an HTML element node.
@@ -132,12 +155,13 @@ AxsJAX.prototype.speakText = function(textString){
  */
 AxsJAX.prototype.speakThroughPixel = function(textString){
   var pixelId = 'AxsJAX_pixelAudioNode';
-  var pixelNode = document.getElementById(pixelId);
+  var activeDoc = this.getActiveDocument();
+  var pixelNode = activeDoc.getElementById(pixelId);
   if (!pixelNode){
-    pixelNode = document.createElement('img');
+    pixelNode = activeDoc.createElement('img');
     pixelNode.id = pixelId;
     pixelNode.src = 'http://google-axsjax.googlecode.com/svn/trunk/common/res/images/blank.gif';
-    document.body.appendChild(pixelNode);
+    activeDoc.body.appendChild(pixelNode);
   }
   pixelNode.alt = textString;
   this.speakNode(pixelNode);
@@ -166,9 +190,10 @@ AxsJAX.prototype.putNullForNoAltImages = function(targetNode){
  * Dispatches a left click event on the element that is the targetNode.
  * @param {Node} targetNode The target node of this operation.
  */
-AxsJAX.prototype.clickElem = function(targetNode, shiftKey){   
-  var evt = document.createEvent('MouseEvents');
-  evt.initMouseEvent('click',true,true,document.defaultView,
+AxsJAX.prototype.clickElem = function(targetNode, shiftKey){
+  var activeDoc = this.getActiveDocument();
+  var evt = activeDoc.createEvent('MouseEvents');
+  evt.initMouseEvent('click',true,true,activeDoc.defaultView,
                      1,0,0,0,0,false,false,shiftKey,false,0,null);
   //Use a try block here so that if the AJAX fails and it is a link,
   //it can still fall through and retry by setting the document.location.
@@ -210,7 +235,8 @@ AxsJAX.prototype.sendKey = function(targetNode, theKey,
   else if (theKey.length == 1){
     charCode = theKey.charCodeAt(0);
   }
-  var evt = document.createEvent('KeyboardEvent');
+  var activeDoc = this.getActiveDocument();
+  var evt = activeDoc.createEvent('KeyboardEvent');
   evt.initKeyEvent('keypress',true,true,null,holdCtrl,
                    holdAlt,holdShift,false,keyCode,charCode);
   targetNode.dispatchEvent(evt);
@@ -341,7 +367,9 @@ AxsJAX.prototype.setAttributeOf = function(targetNode, attribute, value){
  * Gets the attribute of the targetNode.
  * Use this rather than a direct get attribute to abstract away ARIA
  * naming changes.
- * @param {Node} targetNode The HTML node to be spoken.
+ * @param {Node} targetNode The HTML node to get the attribute of
+ * @param {string} attribute The attribute to get the value of
+ * @return {string} The value of the attribute of the targetNode
  */
 AxsJAX.prototype.getAttributeOf = function(targetNode, attribute){
   return targetNode.getAttribute(attribute);
@@ -351,7 +379,8 @@ AxsJAX.prototype.getAttributeOf = function(targetNode, attribute){
  * Removes the attribute of the targetNode.
  * Use this rather than a direct remove attribute to abstract away ARIA
  * naming changes.
- * @param {Node} targetNode The HTML node to be spoken.
+ * @param {Node} targetNode The HTML node to remove the attribute from
+ * @param {string} attribute The attribute to be removed
  */
 AxsJAX.prototype.removeAttributeOf = function(targetNode, attribute){
   targetNode.removeAttribute(attribute);
