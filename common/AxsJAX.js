@@ -65,7 +65,7 @@ AxsJAX.prototype.setActiveParent = function(targetNode){
     this.getActiveDocument().addEventListener('keypress', function(event){self.tabKeyHandler(event,self);}, true);
     document.AXSJAX_TABKEYFIX_ADDED = true;
   }
-}
+};
 
 
 /**
@@ -78,7 +78,7 @@ AxsJAX.prototype.getActiveDocument = function(){
     activeDoc = activeDoc.parentNode;
   }
   return activeDoc;
-}
+};
 
 
 /**
