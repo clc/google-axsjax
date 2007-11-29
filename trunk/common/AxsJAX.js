@@ -42,7 +42,7 @@ AxsJAX = function(useTabKeyFix){
   if (useTabKeyFix){
     this.tabKeyFixOn = true;
     document.addEventListener('keypress', function(event){self.tabKeyHandler(event,self);}, true);
-    document.AXSJAX_TABKEYFIX_ADDED = true;
+    document.body.AXSJAX_TABKEYFIX_ADDED = true;
   }
   this.activeParent = document.body;
 };
@@ -60,10 +60,11 @@ AxsJAX = function(useTabKeyFix){
  */
 AxsJAX.prototype.setActiveParent = function(targetNode){
   this.activeParent = targetNode;
-  if (this.tabKeyFixOn && !document.AXSJAX_TABKEYFIX_ADDED){
-    var self = this;
-    this.getActiveDocument().addEventListener('keypress', function(event){self.tabKeyHandler(event,self);}, true);
-    document.AXSJAX_TABKEYFIX_ADDED = true;
+  var activeDoc = this.getActiveDocument();
+  if (this.tabKeyFixOn && !activeDoc.body.AXSJAX_TABKEYFIX_ADDED){
+    var self = this;          
+    activeDoc.addEventListener('keypress', function(event){self.tabKeyHandler(event,self);}, true);
+    activeDoc.body.AXSJAX_TABKEYFIX_ADDED = true;
   }
 };
 
@@ -291,7 +292,7 @@ AxsJAX.prototype.markPosition = function(targetNode){
   }
   var allDescendants = targetNode.getElementsByTagName('*');
   for (var i = 0, currentNode; currentNode = allDescendants[i]; i++){
-    if ((currentNode.tagName == 'A') || (currentNode.tagName == 'INPUT')){
+    if ((currentNode.tagName == 'A') || (currentNode.tagName == 'INPUT') || (currentNode.hasAttribute('tabindex') && (currentNode.tabIndex != -1))){
       this.tabbingStartPosNode = currentNode;
       return true;
     }
