@@ -150,23 +150,55 @@ AxsJAX.prototype.speakText = function(textString){
  * The advantage is that it is more compatible as few assistive technologies
  * currently support live regions.
  * The disadvantage (besides being a somewhat hacky way of doing things) is
- * that it may cause problems with things which rely on focus/blur as speakNode
- * is setting focus on the body.
+ * that it may cause problems with things which rely on focus/blur as this
+ * causes focus to be set somewhere on the page.
+ *
+ * If there is an anchorNode specified, this function will place the pixel
+ * before the anchorNode and set focus to the pixel.
+ *
+ * If there is no anchorNode specified, this function will append the pixel
+ * as the last child to the body of the active document and call speakNode on
+ * the pixel.
+ *
  * @param {String} textString The text to be spoken.
+ * @param {Node} anchorNode The node to insert the pixel in front of.
+ *
  */
-AxsJAX.prototype.speakThroughPixel = function(textString){
+AxsJAX.prototype.speakThroughPixel = function(textString, anchorNode){
   var pixelId = 'AxsJAX_pixelAudioNode';
+  var pixelName = 'AxsJAX_pixelAudioNode';
   var activeDoc = this.getActiveDocument();
-  var pixelNode = activeDoc.getElementById(pixelId);
-  if (!pixelNode){
-    pixelNode = activeDoc.createElement('img');
-    pixelNode.id = pixelId;
-    pixelNode.src = 'http://google-axsjax.googlecode.com/svn/trunk/common/res/images/blank.gif';
-    activeDoc.body.appendChild(pixelNode);
+  var pixelNode = null;
+  if (anchorNode)  {
+    if (anchorNode.previousSibling && anchorNode.previousSibling.name == pixelName){
+      pixelNode = anchorNode.previousSibling;
+    } else {
+      pixelNode = activeDoc.createElement('img');
+      pixelNode.name = pixelName;
+      pixelNode.setAttribute('tabindex',0);
+      pixelNode.style.outline = 'none';
+      pixelNode.src = 'http://google-axsjax.googlecode.com/svn/trunk/common/res/images/blank.gif';
+      anchorNode.parentNode.insertBefore(pixelNode, anchorNode);
+    }
+    pixelNode.alt = textString;
+    // Use a setTimeout here as Firefox attribute setting can be quirky
+    // (tabIndex is not always set soon enough).
+    window.setTimeout(function(){pixelNode.focus();},0);
+  } else {
+    pixelNode = activeDoc.getElementById(pixelId);
+    if (!pixelNode){
+      pixelNode = activeDoc.createElement('img');
+      pixelNode.id = pixelId;
+      pixelNode.src = 'http://google-axsjax.googlecode.com/svn/trunk/common/res/images/blank.gif';
+      activeDoc.body.appendChild(pixelNode);
+    }
+    pixelNode.alt = textString;
+    this.speakNode(pixelNode);
   }
-  pixelNode.alt = textString;
-  this.speakNode(pixelNode);
 };
+
+
+
 
 
 /**
