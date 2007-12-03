@@ -183,7 +183,7 @@ AxsJAX.prototype.speakThroughPixel = function(textString, anchorNode){
     pixelNode.alt = textString;
     // Use a setTimeout here as Firefox attribute setting can be quirky
     // (tabIndex is not always set soon enough).
-    window.setTimeout(function(){pixelNode.focus();},0);
+    window.setTimeout(function(){pixelNode.blur();pixelNode.focus();},0);
   } else {
     pixelNode = activeDoc.getElementById(pixelId);
     if (!pixelNode){
