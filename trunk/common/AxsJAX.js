@@ -365,10 +365,11 @@ AxsJAX.prototype.tabKeyHandler = function(evt, selfRef){
  */
 AxsJAX.prototype.goTo = function(targetNode){
   targetNode.scrollIntoView(true);
+  this.speakNode(targetNode);
   this.markPosition(targetNode);
-  this.forceATSync(targetNode);
-  var self = this;
-  window.setTimeout(function(){self.speakNode(targetNode);},0);
+//  this.forceATSync(targetNode);
+//  var self = this;
+//  window.setTimeout(function(){self.speakNode(targetNode);},0);
 };
 
 
