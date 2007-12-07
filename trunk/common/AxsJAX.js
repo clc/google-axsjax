@@ -179,6 +179,7 @@ AxsJAX.prototype.speakThroughPixel = function(textString, anchorNode){
       pixelNode.style.outline = 'none';
       pixelNode.src = 'http://google-axsjax.googlecode.com/svn/trunk/common/res/images/blank.gif';
       anchorNode.parentNode.insertBefore(pixelNode, anchorNode);
+      this.forceATSync(pixelNode);
     }
     pixelNode.alt = textString;
     // Use a setTimeout here as Firefox attribute setting can be quirky
@@ -364,8 +365,10 @@ AxsJAX.prototype.tabKeyHandler = function(evt, selfRef){
  */
 AxsJAX.prototype.goTo = function(targetNode){
   targetNode.scrollIntoView(true);
-  this.speakNode(targetNode);
   this.markPosition(targetNode);
+  this.forceATSync(targetNode);
+  var self = this;
+  window.setTimeout(function(){self.speakNode(targetNode);},0);
 };
 
 
@@ -417,4 +420,22 @@ AxsJAX.prototype.getAttributeOf = function(targetNode, attribute){
  */
 AxsJAX.prototype.removeAttributeOf = function(targetNode, attribute){
   targetNode.removeAttribute(attribute);
+};
+
+
+/**
+ * Sets the location of the active document. This will force
+ * assistive technologies that use a browse vs forms mode system
+ * to be synced to the targetNode.
+ * @param {Node} targetNode The HTML node to force the AT to sync to
+ */
+AxsJAX.prototype.forceATSync = function(targetNode){
+  var id = this.assignId(targetNode);
+  var activeDoc = this.getActiveDocument();
+  var loc = activeDoc.baseURI;
+  var indexOfHash = loc.indexOf('#');
+  if (indexOfHash != -1){
+    loc = loc.substring(0,indexOfHash);
+  }
+  activeDoc.location = loc + '#' + id;
 };
