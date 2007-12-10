@@ -141,6 +141,18 @@ axsXKCD.extraKeyboardNavHandler = function(evt){
     axsXKCD.axsJAXObj.clickElem(axsXKCD.prevComicLink,false);
     return false;
   }
+  if (evt.charCode == 114){ // r
+    axsXKCD.axsJAXObj.clickElem(axsXKCD.randomComicLink,false);
+    return false;
+  }
+  if (evt.charCode == 49){ // 1
+    axsXKCD.axsJAXObj.clickElem(axsXKCD.firstComicLink,false);
+    return false;
+  }
+  if (evt.charCode == 48){ // 0
+    axsXKCD.axsJAXObj.clickElem(axsXKCD.latestComicLink,false);
+    return false;
+  }
 
   if (evt.charCode == 47){ // / (slash symbol)
     // Focus on the top search blank
@@ -178,7 +190,7 @@ axsXKCD.prepImage = function(){
   var mainImage = axsXKCD.getMainImage();
   mainImage.setAttribute('tabindex',0);
   var transcript = "";
-  if (axsXKCD.ts[axsXKCD.getComicNumber()]){
+  if (axsXKCD.ts && axsXKCD.ts[axsXKCD.getComicNumber()]){
     transcript = axsXKCD.TRANSCRIPT_STRING + axsXKCD.ts[axsXKCD.getComicNumber()];
   }  
   mainImage.alt = mainImage.alt + '\n' + mainImage.title + '\n' + transcript;
