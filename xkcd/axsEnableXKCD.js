@@ -23,7 +23,7 @@
 var axsXKCD = {};
 
 
-function axsXKCD.getComicNumber(){
+axsXKCD.getComicNumber = function(){
   var h3Array = document.getElementsByTagName('H3');
   for (var i=0, currentH3; currentH3 = h3Array[i]; i++){
     if (currentH3.innerHTML.indexOf('Permanent link to this comic: http://xkcd.com/') === 0){
@@ -31,9 +31,9 @@ function axsXKCD.getComicNumber(){
       return parseInt(numString);
     }
   }
-}
+};
 
-function axsXKCD.pickXKCDScript(){
+axsXKCD.pickXKCDScript = function(){
   var baseURL = 'http://google-axsjax.googlecode.com/svn/trunk/';
   var theScript = document.createElement('script');
   theScript.type = 'text/javascript';
@@ -56,6 +56,6 @@ function axsXKCD.pickXKCDScript(){
   
   document.getElementsByTagName('head')[0].appendChild(theTranscript);
   document.getElementsByTagName('head')[0].appendChild(theScript);  
-}
+};
 
 axsXKCD.pickXKCDScript();
