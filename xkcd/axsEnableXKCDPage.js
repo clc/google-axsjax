@@ -23,8 +23,7 @@
 
 
 
-// create namespace
-var axsXKCD = {};
+
 
 
 

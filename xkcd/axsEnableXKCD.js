@@ -19,28 +19,29 @@
  * @author clchen@google.com (Charles L. Chen)
  */
 
+// create namespace
+var axsXKCD = {};
 
-var xkcdTranscript = null;
 
+function axsXKCD.getComicNumber(){
+  var h3Array = document.getElementsByTagName('H3');
+  for (var i=0, currentH3; currentH3 = h3Array[i]; i++){
+    if (currentH3.innerHTML.indexOf('Permanent link to this comic: http://xkcd.com/') === 0){
+      var numString = currentH3.innerHTML.substring(46,currentH3.innerHTML.length-1);
+      return parseInt(numString);
+    }
+  }
+}
 
-function pickXKCDScript(){
+function axsXKCD.pickXKCDScript(){
   var baseURL = 'http://google-axsjax.googlecode.com/svn/trunk/';
   var theScript = document.createElement('script');
   theScript.type = 'text/javascript';
   theScript.src = baseURL + 'xkcd/axsEnableXKCDPage.js';
   var theTranscript = document.createElement('script');
   theTranscript.type = 'text/javascript';
-
-  var comicNumber = 0;
-  var h3Array = document.getElementsByTagName('H3');
-  for (var i=0, currentH3; currentH3 = h3Array[i]; i++){
-    if (currentH3.innerHTML.indexOf('Permanent link to this comic: http://xkcd.com/') === 0){
-      var numString = currentH3.innerHTML.substring(46,currentH3.innerHTML.length-1);
-      comicNumber = parseInt(numString);
-      break;
-      }
-  }
-
+  var comicNumber = axsXKCD.getComicNumber();
+  
   if (comicNumber <= 30){
     theTranscript.src = baseURL + 'xkcd/transcripts/xkcd_transcriptions_30.js';
   } else if (comicNumber <= 61){
@@ -54,9 +55,7 @@ function pickXKCDScript(){
   } 
   
   document.getElementsByTagName('head')[0].appendChild(theTranscript);
-  document.getElementsByTagName('head')[0].appendChild(theScript);
-  
-  xkcdTranscript = xkcdTranscriptions[comicNumber];
+  document.getElementsByTagName('head')[0].appendChild(theScript);  
 }
 
-pickXKCDScript();
+axsXKCD.pickXKCDScript();
