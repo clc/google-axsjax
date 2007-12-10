@@ -5,9 +5,9 @@
 var theTable = window.content.document.getElementsByTagName('TABLE')[0];
 var theRows = theTable.getElementsByTagName('TR');
 
-var outputString = "xkcdTranscriptions = new Array(); <br/>";
+var outputString = "axsXKCD.ts = new Array(); <br/>";
 
-var SYNTAX_00_STRING = "xkcdTranscriptions[";
+var SYNTAX_00_STRING = "axsXKCD.ts[";
 var SYNTAX_01_STRING = "] = '";
 var SYNTAX_02_STRING = "'; <br/>";
 
