@@ -20,6 +20,8 @@
  */
 
 
+var xkcdTranscript = null;
+
 
 function pickXKCDScript(){
   var baseURL = 'http://google-axsjax.googlecode.com/svn/trunk/';
@@ -53,6 +55,8 @@ function pickXKCDScript(){
   
   document.getElementsByTagName('head')[0].appendChild(theTranscript);
   document.getElementsByTagName('head')[0].appendChild(theScript);
+  
+  xkcdTranscript = xkcdTranscriptions[comicNumber];
 }
 
 pickXKCDScript();
