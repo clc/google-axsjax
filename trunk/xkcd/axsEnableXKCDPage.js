@@ -40,7 +40,7 @@ axsXKCD.HELP_STRING =
     '1, jump to the first comic. ' +
     '0, jump to the latest comic. ' +
     'R, jump to a random comic. ' +
-    'Enter, repeat the current comic. ' +
+    'Space, repeat the current comic. ' +
     'Slash, jump to the comic search field. ' +
     'Escape, leave the search field. ';
 
@@ -174,7 +174,7 @@ axsXKCD.extraKeyboardNavHandler = function(evt){
     return false;
   }
 
-  if (evt.keyCode == 13){ // Enter
+  if (evt.charCode == 32){ // Enter
     axsXKCD.readComic(evt.shiftKey);
     return false;
   }
