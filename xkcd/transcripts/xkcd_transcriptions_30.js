@@ -1,4 +1,4 @@
-xkcdTranscription = new Array();
+xkcdTranscriptions = new Array();
 xkcdTranscriptions[1] = '[[A boy sits in a barrel which is floating in an ocean.]] / Boy: I wonder where Ill float next? / [[The barrel drifts into the distance. Nothing else can be seen.]] / {{Alt: Dont we all.}}';
 xkcdTranscriptions[-2] = '[untranscribed - please consider transcribing this comic!]';
 xkcdTranscriptions[3] = '[[An island shaped almost like a shellfish wholly covered by a piece of cloth. The island is green. The view puts the horizon at 2/5 the height of the picture, counted from the bottom. The highest point of the island is on the half-half line of the picture.]] / {{alt text: Hello, island.}}';
