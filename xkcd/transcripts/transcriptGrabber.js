@@ -7,8 +7,8 @@ var theRows = theTable.getElementsByTagName('TR');
 
 var outputString = "xkcdTranscription = new Array(); <br/>";
 
-var SYNTAX_00_STRING = "xkcdTranscription['";
-var SYNTAX_01_STRING = "'] = '";
+var SYNTAX_00_STRING = "xkcdTranscriptions[";
+var SYNTAX_01_STRING = "] = '";
 var SYNTAX_02_STRING = "'; <br/>";
 
 
@@ -16,7 +16,7 @@ for (var i=0, currentRow; currentRow = theRows[i]; i++){
   var theCells = currentRow.getElementsByTagName('TD');
   var theMessage = "";
   try{
-    theTranscription = SYNTAX_00_STRING + theCells[0].firstChild.href + SYNTAX_01_STRING;
+    theTranscription = SYNTAX_00_STRING + theCells[0].firstChild.href.substring(16,theCells[0].firstChild.href.length-1) + SYNTAX_01_STRING;
     for (var j=0, currentChar; currentChar = theCells[1].firstChild.textContent[j]; j++){
       if (currentChar != "'"){
         theTranscription = theTranscription + currentChar;
