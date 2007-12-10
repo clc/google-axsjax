@@ -32,6 +32,7 @@
 
 
 //These are strings to be spoken to the user
+axsXKCD.TRANSCRIPT_STRING = 'Transcript. ';
 axsXKCD.HELP_STRING =
     'The following shortcut keys are available. ' +
     'Down arrow or N, go to the next comic. ' +
@@ -176,6 +177,11 @@ axsXKCD.getMainImage = function(){
 axsXKCD.prepImage = function(){
   var mainImage = axsXKCD.getMainImage();
   mainImage.setAttribute('tabindex',0);
+  var transcript = "";
+  if (axsXKCD.ts[axsXKCD.getComicNumber()]){
+    transcript = axsXKCD.TRANSCRIPT_STRING + axsXKCD.ts[axsXKCD.getComicNumber()];
+  }  
+  mainImage.alt = mainImage.alt + '\n' + mainImage.title + '\n' + transcript;
 };
 
 axsXKCD.findLinks = function(){
