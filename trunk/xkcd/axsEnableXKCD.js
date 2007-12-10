@@ -52,6 +52,16 @@ axsXKCD.pickXKCDScript = function(){
     theTranscript.src = baseURL + 'xkcd/transcripts/xkcd_transcriptions_122.js';
   }   else if (comicNumber <= 152){
     theTranscript.src = baseURL + 'xkcd/transcripts/xkcd_transcriptions_152.js';
+  }    else if (comicNumber <= 197){
+    theTranscript.src = baseURL + 'xkcd/transcripts/xkcd_transcriptions_197.js';
+  }    else if (comicNumber <= 242){
+    theTranscript.src = baseURL + 'xkcd/transcripts/xkcd_transcriptions_242.js';
+  }    else if (comicNumber <= 273){
+    theTranscript.src = baseURL + 'xkcd/transcripts/xkcd_transcriptions_273.js';
+  }    else if (comicNumber <= 325){
+    theTranscript.src = baseURL + 'xkcd/transcripts/xkcd_transcriptions_325.js';
+  }    else if (comicNumber <= 354){
+    theTranscript.src = baseURL + 'xkcd/transcripts/xkcd_transcriptions_354.js';
   } 
   
   document.getElementsByTagName('head')[0].appendChild(theTranscript);
