@@ -184,7 +184,7 @@ axsXKCD.extraKeyboardNavHandler = function(evt){
 axsXKCD.getMainImage = function(){
   var contentDiv = document.getElementById('middleContent');
   return contentDiv.getElementsByTagName('IMG')[0];
-}
+};
 
 axsXKCD.prepImage = function(){
   var mainImage = axsXKCD.getMainImage();
