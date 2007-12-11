@@ -28,9 +28,10 @@ axsXKCD.getComicNumber = function(){
   for (var i=0, currentH3; currentH3 = h3Array[i]; i++){
     if (currentH3.innerHTML.indexOf('Permanent link to this comic: http://xkcd.com/') === 0){
       var numString = currentH3.innerHTML.substring(46,currentH3.innerHTML.length-1);
-      return parseInt(numString);
+      return parseInt(numString,10);
     }
   }
+  return 0;
 };
 
 axsXKCD.pickXKCDScript = function(){

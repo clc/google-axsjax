@@ -28,6 +28,10 @@
  * @constructor
  */
 AxsJAX = function(useTabKeyFix){
+  this.htmlNode = null;
+  this.origBody = null;
+  this.drillDownBody = null;
+  this.currentView = 0;
   this.ID_NUM_ = 0;
   //Empty node used for tickling existing nodes into speaking
   this.EMPTY_NODE_ = new function(){
@@ -439,4 +443,68 @@ AxsJAX.prototype.forceATSync = function(targetNode){
     loc = loc.substring(0,indexOfHash);
   }
   activeDoc.location = loc + '#' + id;
+};
+
+
+/**
+ * Removes the actual body of the page from view and replaces it with
+ * a drill down view that only contains the subtree of the targetNode.
+ * @param {Node} targetNode The HTML node to force the AT to sync to
+ */
+AxsJAX.prototype.enterDrillDownView = function(targetNode){
+  if (this.currentView == 1){
+    return;
+  }
+  if (!this.htmlNode){
+    this.origBody = document.body;
+    this.htmlNode = this.origBody.parentNode;
+  }
+  this.drillDownBody = document.createElement('BODY');
+  this.drillDownBody.appendChild(targetNode.cloneNode(true));
+  this.drillDownBody.firstChild.setAttribute('tabindex',0);
+  this.htmlNode.insertBefore(this.drillDownBody, this.origBody);
+  this.origBody.style.display="none";
+  this.currentView = 1;
+  this.drillDownBody.firstChild.focus();
+};
+
+/**
+ * Restores the original body after entering the drill down view.
+ */
+AxsJAX.prototype.restoreOriginalView = function(){
+  if (this.currentView === 0){
+    return;
+  }
+  this.origBody.style.display="";
+  this.htmlNode.removeChild(this.drillDownBody);
+  this.drillDownBody = null;
+  this.currentView = 0;
+};
+
+/**
+ * Given an XPath expression and rootNode, it returns an array of children nodes that match.
+ * The code for this function was taken from Mihai Parparita's GMail Macros Greasemonkey Script.
+ * http://gmail-greasemonkey.googlecode.com/svn/trunk/scripts/gmail-new-macros.user.js
+ */
+AxsJAX.prototype.evalXPath = function(expression, rootNode) {
+  try {
+    var xpathIterator = rootNode.ownerDocument.evaluate(
+      expression,
+      rootNode,
+      null, // no namespace resolver
+      XPathResult.ORDERED_NODE_ITERATOR_TYPE,
+      null); // no existing results
+  } catch (err) {
+    GM_log("Error when evaluating XPath expression '" + expression + "'" +
+           ": " + err);
+    return null;
+  }
+  var results = [];
+  // Convert result to JS array
+  for (var xpathNode = xpathIterator.iterateNext();
+       xpathNode;
+       xpathNode = xpathIterator.iterateNext()) {
+    results.push(xpathNode);
+  }
+  return results;
 };
