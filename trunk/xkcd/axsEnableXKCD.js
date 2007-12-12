@@ -23,6 +23,213 @@
 var axsXKCD = {};
 
 
+
+//These are strings to be spoken to the user
+axsXKCD.TRANSCRIPT_STRING = 'Transcript. ';
+axsXKCD.HELP_STRING =
+    'The following shortcut keys are available. ' +
+    'Down arrow or N, go to the next comic. ' +
+    'Up arrow or P, go to the previous comic. ' +
+    '1, jump to the first comic. ' +
+    '0, jump to the latest comic. ' +
+    'R, jump to a random comic. ' +
+    'Space, repeat the current comic. ' +
+    'Slash, jump to the comic search field. ' +
+    'Escape, leave the search field. ';
+
+
+
+/**
+ * The AxsJAX object that will do the tickling and speaking.
+ * @type AxsJAX
+ */
+axsXKCD.axsJAXObj = null;
+axsXKCD.transcriptFrame = null;
+
+axsXKCD.inputFocused = false;
+axsXKCD.lastFocusedNode = null;
+
+axsXKCD.firstComicLink = null;
+axsXKCD.prevComicLink = null;
+axsXKCD.randomComicLink = null;
+axsXKCD.nextComicLink = null;
+axsXKCD.latestComicLink = null;
+
+axsXKCD.init = function(){
+  axsXKCD.axsJAXObj = new AxsJAX(true);
+
+  //Add event listeners
+  document.addEventListener('keypress', axsXKCD.extraKeyboardNavHandler,
+                             true);
+  document.addEventListener('focus', axsXKCD.focusHandler, true);
+  document.addEventListener('blur', axsXKCD.blurHandler, true);
+
+  //Get the transcript
+  axsXKCD.getTranscript();
+
+
+  axsXKCD.findLinks();
+  //Read the first thing on the page.
+  axsXKCD.prepImageWhenReady();
+};
+
+axsXKCD.prepImageWhenReady = function(){
+  if (!document.location.hash){
+    window.setTimeout(axsXKCD.prepImageWhenReady,100);
+    return;
+  }
+  axsXKCD.transcriptFrame.style.display = 'none'; 
+  axsXKCD.prepImage();
+  window.setTimeout(axsXKCD.readComic,100);
+};
+
+
+
+/**
+ * Reads the comic by setting focus to the image.
+ */
+axsXKCD.readComic = function(){
+  var mainImage = axsXKCD.getMainImage();
+  mainImage.blur();
+  mainImage.focus();
+  mainImage.parentNode.scrollIntoView(true);
+};
+
+
+
+/**
+ * When an input blank has focus, the keystrokes should go into the blank
+ * and should not trigger hot key commands.
+ * @param {event} A Focus event
+ */
+axsXKCD.focusHandler = function(evt){
+  axsXKCD.lastFocusedNode = evt.target;
+  if ((evt.target.tagName == 'INPUT') ||
+      (evt.target.tagName == 'TEXTAREA')){
+    axsXKCD.inputFocused = true;
+  }
+};
+
+/**
+ * When no input blanks have focus, the keystrokes should trigger hot key
+ * commands.
+ * @param {event} A Blur event
+ */
+axsXKCD.blurHandler = function (evt){
+  axsXKCD.lastFocusedNode = null;
+  if ((evt.target.tagName == 'INPUT') ||
+      (evt.target.tagName == 'TEXTAREA')){
+    axsXKCD.inputFocused = false;
+  }
+};
+
+
+axsXKCD.extraKeyboardNavHandler = function(evt){
+  if (evt.ctrlKey){ //None of these commands involve Ctrl.
+                    //If Ctrl is held, it must be for some AT.
+    return true;
+  }
+  if (evt.keyCode == 27){ // ESC
+    axsXKCD.lastFocusedNode.blur();
+    return false;
+  }
+
+  if (axsXKCD.inputFocused){
+    return true;
+  }
+
+  if (evt.charCode == 110){ // n
+    axsXKCD.axsJAXObj.clickElem(axsXKCD.nextComicLink,false);
+    return false;
+  }
+  if (evt.charCode == 112){ // p
+    axsXKCD.axsJAXObj.clickElem(axsXKCD.prevComicLink,false);
+    return false;
+  }
+  if (evt.charCode == 114){ // r
+    axsXKCD.axsJAXObj.clickElem(axsXKCD.randomComicLink,false);
+    return false;
+  }
+  if (evt.charCode == 49){ // 1
+    axsXKCD.axsJAXObj.clickElem(axsXKCD.firstComicLink,false);
+    return false;
+  }
+  if (evt.charCode == 48){ // 0
+    axsXKCD.axsJAXObj.clickElem(axsXKCD.latestComicLink,false);
+    return false;
+  }
+
+  if (evt.charCode == 47){ // / (slash symbol)
+    // Focus on the top search blank
+    document.getElementsByName('s')[0].focus();
+    document.getElementsByName('s')[0].select(); //and select all text
+    return false;
+  }
+
+  if (evt.keyCode == 38){ // Up arrow
+    axsXKCD.axsJAXObj.clickElem(axsXKCD.prevComicLink,false);
+    return false;
+  }
+  if (evt.keyCode == 40){ // Down arrow
+    axsXKCD.axsJAXObj.clickElem(axsXKCD.nextComicLink,false);
+    return false;
+  }
+  if (evt.charCode == 63){ // ? (question mark)
+    axsXKCD.axsJAXObj.speakThroughPixel(axsXKCD.HELP_STRING);
+    return false;
+  }
+
+  if (evt.charCode == 32){ // Enter
+    axsXKCD.readComic(evt.shiftKey);
+    return false;
+  }
+  return true;
+};
+
+axsXKCD.getMainImage = function(){
+  var contentDiv = document.getElementById('middleContent');
+  return contentDiv.getElementsByTagName('IMG')[0];
+};
+
+axsXKCD.prepImage = function(){
+  var mainImage = axsXKCD.getMainImage();
+  mainImage.setAttribute('tabindex',0);
+  var transcript = unescape(document.location.hash);
+  if (transcript == '#NULL'){
+    transcript = '';
+  }else{
+    transcript = transcript.substr(1);
+    transcript = axsXKCD.TRANSCRIPT_STRING + transcript;
+  }  
+  mainImage.alt = mainImage.alt + '\n' + mainImage.title + '\n' + transcript;
+};
+
+axsXKCD.findLinks = function(){
+  var contentDiv = document.getElementById('middleContent');
+  var liArray = contentDiv.getElementsByTagName('LI');
+  for (var i=0, currentLi; currentLi = liArray[i]; i++){
+    if (currentLi.textContent == '|<'){
+      axsXKCD.firstComicLink = currentLi.firstChild;
+    } else if (currentLi.textContent == '< Prev'){
+      axsXKCD.prevComicLink = currentLi.firstChild;
+    }  else if (currentLi.textContent == 'Random'){
+      axsXKCD.randomComicLink = currentLi.firstChild;
+    }  else if (currentLi.textContent == 'Next >'){
+      axsXKCD.nextComicLink = currentLi.firstChild;
+    }  else if (currentLi.textContent == '>|'){
+      axsXKCD.latestComicLink = currentLi.firstChild;
+    }
+  }
+};
+
+
+axsXKCD.getTranscript= function(){
+  var comicNumber = axsXKCD.getComicNumber();
+  axsXKCD.transcriptFrame = document.createElement('iframe');
+  axsXKCD.transcriptFrame.src = 'http://www.ohnorobot.com/transcribe.pl?comicid=apKHvCCc66NMg&url=http:%2F%2Fxkcd.com%2F' + comicNumber + '%2F#AxsJAX_Cmd=' + comicNumber;
+  document.body.appendChild(axsXKCD.transcriptFrame);
+};
+
 axsXKCD.getComicNumber = function(){
   var h3Array = document.getElementsByTagName('H3');
   for (var i=0, currentH3; currentH3 = h3Array[i]; i++){
@@ -34,39 +241,5 @@ axsXKCD.getComicNumber = function(){
   return 0;
 };
 
-axsXKCD.pickXKCDScript = function(){
-  var baseURL = 'http://google-axsjax.googlecode.com/svn/trunk/';
-  var theScript = document.createElement('script');
-  theScript.type = 'text/javascript';
-  theScript.src = baseURL + 'xkcd/axsEnableXKCDPage.js';
-  var theTranscript = document.createElement('script');
-  theTranscript.type = 'text/javascript';
-  var comicNumber = axsXKCD.getComicNumber();
-  
-  if (comicNumber <= 30){
-    theTranscript.src = baseURL + 'xkcd/transcripts/xkcd_transcriptions_30.js';
-  } else if (comicNumber <= 61){
-    theTranscript.src = baseURL + 'xkcd/transcripts/xkcd_transcriptions_61.js';
-  }  else if (comicNumber <= 92){
-    theTranscript.src = baseURL + 'xkcd/transcripts/xkcd_transcriptions_92.js';
-  }  else if (comicNumber <= 122){
-    theTranscript.src = baseURL + 'xkcd/transcripts/xkcd_transcriptions_122.js';
-  }   else if (comicNumber <= 152){
-    theTranscript.src = baseURL + 'xkcd/transcripts/xkcd_transcriptions_152.js';
-  }    else if (comicNumber <= 197){
-    theTranscript.src = baseURL + 'xkcd/transcripts/xkcd_transcriptions_197.js';
-  }    else if (comicNumber <= 242){
-    theTranscript.src = baseURL + 'xkcd/transcripts/xkcd_transcriptions_242.js';
-  }    else if (comicNumber <= 273){
-    theTranscript.src = baseURL + 'xkcd/transcripts/xkcd_transcriptions_273.js';
-  }    else if (comicNumber <= 325){
-    theTranscript.src = baseURL + 'xkcd/transcripts/xkcd_transcriptions_325.js';
-  }    else if (comicNumber <= 354){
-    theTranscript.src = baseURL + 'xkcd/transcripts/xkcd_transcriptions_354.js';
-  } 
-  
-  document.getElementsByTagName('head')[0].appendChild(theTranscript);
-  document.getElementsByTagName('head')[0].appendChild(theScript);  
-};
+axsXKCD.init();
 
-axsXKCD.pickXKCDScript();
