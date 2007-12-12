@@ -55,11 +55,10 @@ function pickScript(){
   }  else if (currentURL === 'http://www.minijuegosgratis.com/juegos/jawbreaker/jawbreaker.htm'){
     theScript.src = baseURL + 'jawbreaker/axsEnableJawbreaker.js';
     shouldInsertScripts = true;
-  else if ((currentURL.indexOf('http://www.xkcd.com') === 0) || (currentURL.indexOf('http://xkcd.com') === 0)){
+  } else if ((currentURL.indexOf('http://www.xkcd.com') === 0) || (currentURL.indexOf('http://xkcd.com') === 0)){
     theScript.src = baseURL + 'xkcd/axsEnableXKCD.js';
     shouldInsertScripts = true;
-  }
-  else if ( (currentURL.indexOf('http://www.ohnorobot.com/transcribe.pl?comicid=apKHvCCc66NMg') === 0) &&
+  } else if ( (currentURL.indexOf('http://www.ohnorobot.com/transcribe.pl?comicid=apKHvCCc66NMg') === 0) &&
             (currentURL.indexOf('#AxsJAX_Cmd') != -1)){
     theScript.src = baseURL + 'xkcd/axsEnableXKCD_TranscriptFetcher.js';
     shouldInsertScripts = true;
