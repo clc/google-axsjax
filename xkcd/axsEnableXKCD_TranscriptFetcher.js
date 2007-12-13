@@ -31,13 +31,13 @@ axsXKCD_TranscriptFetcher.run = function(){
   } else {
     transcript = document.getElementsByTagName('P')[0].textContent;
   }
-  if (transcript == ''){
+  if (transcript === ''){
     transcript = 'NULL';
   }
   var url = document.location.toString();
   var parentNum = url.substr(url.indexOf('#AxsJAX_Cmd=') + 12);
 
   parent.location = 'http://xkcd.com/' + parentNum + '/#' + transcript;
-}
+};
 
 axsXKCD_TranscriptFetcher.run();

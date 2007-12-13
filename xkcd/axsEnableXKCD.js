@@ -26,6 +26,7 @@ var axsXKCD = {};
 
 //These are strings to be spoken to the user
 axsXKCD.TRANSCRIPT_STRING = 'Transcript. ';
+axsXKCD.COMMENT_STRING = 'Comment. ';
 axsXKCD.HELP_STRING =
     'The following shortcut keys are available. ' +
     'Down arrow or N, go to the next comic. ' +
@@ -199,10 +200,32 @@ axsXKCD.prepImage = function(){
     transcript = '';
   }else{
     transcript = transcript.substr(1);
+    transcript = axsXKCD.cleanUpTranscript(transcript);
     transcript = axsXKCD.TRANSCRIPT_STRING + transcript;
   }  
-  mainImage.alt = mainImage.alt + '\n' + mainImage.title + '\n' + transcript;
+  mainImage.alt = mainImage.alt + '\n' + transcript + '\n' + axsXKCD.COMMENT_STRING + mainImage.title;
+  document.location.hash = "#";
 };
+
+
+axsXKCD.cleanUpTranscript = function(origTranscript){
+  var cleanedUpTranscript = "";
+  for (var i=0, currentChar; currentChar = origTranscript[i]; i++){
+    if  ( (currentChar != '[') &&
+          (currentChar != ']') &&
+          (currentChar != '/') &&
+          (currentChar != '<') &&
+          (currentChar != '>') &&
+          (currentChar != '{') &&
+          (currentChar != '}') ){
+      cleanedUpTranscript = cleanedUpTranscript + currentChar;
+    } else {
+      cleanedUpTranscript = cleanedUpTranscript + ' ';
+    }
+  }
+  return cleanedUpTranscript;
+};
+
 
 axsXKCD.findLinks = function(){
   var contentDiv = document.getElementById('middleContent');
