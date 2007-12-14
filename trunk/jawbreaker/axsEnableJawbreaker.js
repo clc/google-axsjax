@@ -73,7 +73,7 @@ function axsJb_sayStats(){
 }
 
 function axsJb_speakRow(){
-  var speechString = "Row " +  axsJb_row + ": ";
+  var speechString = "R " +  axsJb_row + ": ";
   for (var col = 0; col < axsJb_MAXCOL; col++){
     speechString = speechString + axsJb_getColorOfBallImg(axsJb_getCurrentBallImgNode(axsJb_row,col));
   }
@@ -82,7 +82,7 @@ function axsJb_speakRow(){
 }
 
 function axsJb_speakCol(){
-  var speechString = "Col " +  axsJb_col + ": ";
+  var speechString = "C " +  axsJb_col + ": ";
   for (var row = 0; row < axsJb_MAXROW; row++){
     speechString = speechString + axsJb_getColorOfBallImg(axsJb_getCurrentBallImgNode(row,axsJb_col));
   }
