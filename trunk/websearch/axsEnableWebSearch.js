@@ -30,6 +30,8 @@ var axsWebSearch = {};
 axsWebSearch.ACCESSIBLE_SEARCH_URL = 
     'http://www.google.com/cse?cx=000183394137052953072%3Azc1orsc6mbq&q=';
 
+axsWebSearch.WEB_SEARCH_URL = 'http://www.google.com/search?q=';
+
 //These are strings to be spoken to the user
 axsWebSearch.NO_ONE_BOX_STRING = 'There is no one box on this page.';
 axsWebSearch.NO_ADS_STRING = 'There are no advertisements on this page.';
@@ -476,7 +478,10 @@ axsWebSearch.goToCurrentLinkInNewWindow = function(){
 axsWebSearch.buildAltSearchCatArray = function(){
   axsWebSearch.altSearchCatArray = new Array();
   axsWebSearch.altSearchCatIndex = -1;
-  var altSearchCatArea = document.getElementById('sd').nextSibling;
+  var altSearchCatArea = null;
+  if (document.getElementById('sd')){
+    altSearchCatArea = document.getElementById('sd').nextSibling;
+    }
   if (altSearchCatArea){
     for (var child = altSearchCatArea.firstChild; child;
             child = child.nextSibling){
@@ -565,7 +570,8 @@ axsWebSearch.getCurrentURLQueryString = function(){
 
 
 axsWebSearch.switchToAccessibleSearch = function(){
-  if (document.baseURI.indexOf('http://www.google.com/custom') === 0){
+  if ( (document.baseURI.indexOf('http://www.google.com/custom') === 0) ||
+       (document.baseURI.indexOf('http://www.google.com/cse') === 0) ){
     axsWebSearch.axsJAXObj.speakThroughPixel(axsWebSearch.ON_ACCESSIBLE_SEARCH);
     return;
   }
