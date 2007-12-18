@@ -15,3 +15,5 @@ access-enabled using AxsJAX. [http://google-axsjax.googlecode.com/svn/trunk/docs
   * [http://books.google.com Google Books]  [http://google-axsjax.googlecode.com/svn/trunk/docs/books_userguide.html User Guide]
 
   * [http://www.minijuegosgratis.com/juegos/jawbreaker/jawbreaker.htm Jawbreaker Game] [http://google-axsjax.googlecode.com/svn/trunk/docs/jawbreaker_userguide.html User Guide]
+
+  * [http://xkcd.com/ The xkcd Web Comic] [http://google-axsjax.googlecode.com/svn/trunk/docs/xkcd_userguide.html User Guide]
