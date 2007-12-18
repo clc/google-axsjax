@@ -1,0 +1,78 @@
+#    -*- mode: org -*-
+* Introduction To AxsJAX-Enhanced GMail
+
+** What Is AxsJAX-Enhanced GMail?
+
+
+AxsJAX-Enhanced GMail is the same as regular GMail, with all user
+actions producing relevant spoken feedback when used in
+conjunction with adaptive technologies such as screenreaders or
+self-voicing browsers. Note that GMail is a very keyboard
+friendly Web application; common user actions are available from
+the keyboard. Here is a brief description of GMail when using
+AxsJAX; see the final section of this document for configuring
+AxsJAX for your setup if you are a first-time AxsJAX user.
+
+
+** How Do I Use These Features?
+
+All of the AxsJAX enhancements are activated through the
+keyboard. If your assistive technology uses modes, e.g., /browse
+mode/ in JFW, please switch to the mode that you use for working
+with forms and web applications so that your keystrokes will be
+sent to the web page. 
+
+The GMail interface can be broken into three types of views:
+
+  1. Search results --- used to display matching email messages
+     after a search
+  2. Thread list view --- used to display a summary of mail folders
+  3.  Conversation view --- used to display a specific thread of
+     conversation.
+
+
+
+The keyboard commands listed below are available in all of these
+views, and produce the appropriate spoken feedback, e.g., speak
+the current conversation, as one works with GMail.
+
+  1. ? (question mark): Brings up a list of the keyboard commands.
+  2. / (slash): Puts focus on the search field.
+  3. Esc: Takes focus away from the search field.
+  4. l: Go to the Quick Nav select box for jumping to labels.
+  5. j: Go to the next conversation. 
+  6. k: Go to the previous conversation.  
+  7. o: Opens the current conversation.  
+  8. n: Go to the next message in the current conversation. 
+  9. p: Go to the previous message in the current conversation. 
+  10. x: Selects the current conversation.  
+  11. s: Stars a message/conversation. 
+  12. y: Removes the conversation from current view. 
+  13. m: Mutes the conversation.  
+  14. ! (exclamation mark): Report the conversation as spam.  
+  15. # (number sign): Moves the conversation to trash. 
+  16. z: Undoes the last action when possible. 
+  17. c: Compose a new message.  
+  18. r: Reply to the current message. 
+  19. a: Reply all to the current message. 
+  20. f: Forward the current message.  
+
+Note that all of the above commands are available in GMail by
+default. AxsJAX augments these actions with the necessary DOM
+mutations so that adaptive technologies that implement W3C ARIA
+can produce the relevant spoken feedback  in conjunction
+with a conformant browser.
+
+** How Can I Start Using AxsJAX?
+
+If you are a first-time AxsJAX user, see the [[http://google-axsjax.googlecode.com/svn/trunk/docs/faq.html#sec-9][AxsJAX Technical
+ Overview]] for details on configuring AxsJAX. Once configured,
+ this automatically injects accessibility features into Web
+ applications that have been enabled via AxsJAX.
+
+#+TITLE:     AxsJAX-Enhanced GMail User Guide
+#+AUTHOR:    T.V. Raman, Charles L. Chen
+#+EMAIL:     raman@google.com
+#+EMAIL: clchen@google.com
+#+LANGUAGE:  en
+#+OPTIONS:   H:3 num:t toc:t \n:nil @:t ::t |:t ^:t f:t *:t TeX:t LaTeX:nil skip:t p:nil
