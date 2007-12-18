@@ -27,18 +27,12 @@
  *                                tab key.
  * @constructor
  */
-AxsJAX = function(useTabKeyFix){
+var AxsJAX = function(useTabKeyFix){
   this.htmlNode = null;
   this.origBody = null;
   this.drillDownBody = null;
   this.currentView = 0;
   this.ID_NUM_ = 0;
-  //Empty node used for tickling existing nodes into speaking
-  this.EMPTY_NODE_ = new function(){
-    var emptyNode = document.createElement('span');
-    emptyNode.textContent = ' ';
-    return emptyNode;
-  };
   //Activate the tab key fix if needed
   this.tabbingStartPosNode = null;
   this.tabKeyFixOn = false;
@@ -165,24 +159,24 @@ AxsJAX.prototype.speakText = function(textString){
  * the pixel.
  *
  * @param {String} textString The text to be spoken.
- * @param {Node} anchorNode The node to insert the pixel in front of.
+ * @param {Node} opt_anchorNode The node to insert the pixel in front of.
  *
  */
-AxsJAX.prototype.speakThroughPixel = function(textString, anchorNode){
+AxsJAX.prototype.speakThroughPixel = function(textString, opt_anchorNode){
   var pixelId = 'AxsJAX_pixelAudioNode';
   var pixelName = 'AxsJAX_pixelAudioNode';
   var activeDoc = this.getActiveDocument();
   var pixelNode = null;
-  if (anchorNode)  {
-    if (anchorNode.previousSibling && anchorNode.previousSibling.name == pixelName){
-      pixelNode = anchorNode.previousSibling;
+  if (opt_anchorNode)  {
+    if (opt_anchorNode.previousSibling && opt_anchorNode.previousSibling.name == pixelName){
+      pixelNode = opt_anchorNode.previousSibling;
     } else {
       pixelNode = activeDoc.createElement('img');
       pixelNode.name = pixelName;
       pixelNode.setAttribute('tabindex',0);
       pixelNode.style.outline = 'none';
       pixelNode.src = 'http://google-axsjax.googlecode.com/svn/trunk/common/res/images/blank.gif';
-      anchorNode.parentNode.insertBefore(pixelNode, anchorNode);
+      opt_anchorNode.parentNode.insertBefore(pixelNode, opt_anchorNode);
       this.forceATSync(pixelNode);
     }
     pixelNode.alt = textString;
@@ -287,20 +281,20 @@ AxsJAX.prototype.sendKey = function(targetNode, theKey,
  * @param {Node} targetNode The target node of this operation.
  * @param {String} opt_prefixString
  * Prefix to help ensure the uniqueness of the ID.
- *This is optional; if null, it will use "AxsJAX_ID_".
+ * This is optional; if null, it will use "AxsJAX_ID_".
  * @return {String} The ID that the targetNode now has.
  */
-AxsJAX.prototype.assignId = function(targetNode,prefixString){
+AxsJAX.prototype.assignId = function(targetNode,opt_prefixString){
   if (!targetNode){
     return '';
   }
   if (targetNode.id){
     return targetNode.id;
   }
-  if (!prefixString){
-    prefixString = "AxsJAX_ID_";
+  if (!opt_prefixString){
+    opt_prefixString = "AxsJAX_ID_";
   }
-  targetNode.id = prefixString + this.ID_NUM_++;        
+  targetNode.id = opt_prefixString + this.ID_NUM_++;        
   return targetNode.id;
 };
 
@@ -371,9 +365,6 @@ AxsJAX.prototype.goTo = function(targetNode){
   targetNode.scrollIntoView(true);
   this.speakNode(targetNode);
   this.markPosition(targetNode);
-//  this.forceATSync(targetNode);
-//  var self = this;
-//  window.setTimeout(function(){self.speakNode(targetNode);},0);
 };
 
 
@@ -495,8 +486,6 @@ AxsJAX.prototype.evalXPath = function(expression, rootNode) {
       XPathResult.ORDERED_NODE_ITERATOR_TYPE,
       null); // no existing results
   } catch (err) {
-    GM_log("Error when evaluating XPath expression '" + expression + "'" +
-           ": " + err);
     return null;
   }
   var results = [];

@@ -362,7 +362,7 @@ axsBooksPreview.expandAllMoreLinks = function(){
   for (var i=0,currentLink; currentLink = spansArray[i]; i++){
     if ( (currentLink.className == 'morelesslink') &&
          (currentLink.textContent.indexOf(axsBooksPreview.MORE_STRING) === 0) ){
-      axsBooksPreview.axsJAXObj.clickElem(currentLink);
+      axsBooksPreview.axsJAXObj.clickElem(currentLink, false);
     }
   }
 };

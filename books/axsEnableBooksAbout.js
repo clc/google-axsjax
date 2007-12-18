@@ -98,7 +98,7 @@ axsBooksAbout.expandAllMoreLinks = function(){
   for (var i=0,currentLink; currentLink = spansArray[i]; i++){
     if ( (currentLink.className == 'morelesslink') &&
          (currentLink.textContent.indexOf(axsBooksAbout.MORE_STRING) === 0) ){
-      axsBooksAbout.axsJAXObj.clickElem(currentLink);
+      axsBooksAbout.axsJAXObj.clickElem(currentLink,false);
     }
   }
 };

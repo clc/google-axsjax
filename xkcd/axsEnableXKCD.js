@@ -180,8 +180,8 @@ axsXKCD.extraKeyboardNavHandler = function(evt){
     return false;
   }
 
-  if (evt.charCode == 32){ // Enter
-    axsXKCD.readComic(evt.shiftKey);
+  if (evt.charCode == 32){ // Space
+    axsXKCD.readComic();
     return false;
   }
   return true;

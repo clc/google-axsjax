@@ -14,7 +14,7 @@ var axsJb_HELP_STRING = 'The following keys are available. ' +
                         'S, read the current stats. ' +
                         'Space, click on the current ball. The first click selects the group and the second click confirms the selection.';
 
-var axsJb_axsJaxObj = new AxsJAX();
+var axsJb_axsJaxObj = new AxsJAX(false);
 
 
 function axsJb_getCurrentPosition(){
@@ -135,7 +135,7 @@ function axsJb_keyboardHandler(evt){
     axsJb_getCurrentPosition();
   }
   if (evt.charCode == 32){ // Space
-    axsJb_axsJaxObj.clickElem(axsJb_getCurrentBallImgNode(axsJb_row,axsJb_col));
+    axsJb_axsJaxObj.clickElem(axsJb_getCurrentBallImgNode(axsJb_row,axsJb_col), false);
     axsJb_sayStats();
   }
   if (evt.charCode == 115){ // s
@@ -150,7 +150,7 @@ function axsJb_keyboardHandler(evt){
   if (evt.charCode == 110){ // n
     axsJb_row = 0;
     axsJb_col = 0;
-    axsJb_axsJaxObj.clickElem(document.getElementById('menu-start'));
+    axsJb_axsJaxObj.clickElem(document.getElementById('menu-start'), false);
     axsJb_getCurrentPosition();
   }
 
