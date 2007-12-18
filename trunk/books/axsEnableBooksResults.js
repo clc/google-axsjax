@@ -187,7 +187,7 @@ axsBooksResults.extraKeyboardNavHandler = function(evt){
   if ((evt.charCode == 97) || (evt.charCode == 65)){ // a
     currentResultNode =
         axsBooksResults.resultsArray[axsBooksResults.resultsIndex];
-    linksArray = currentResultNode.getElementsByTagName('A');
+    var linksArray = currentResultNode.getElementsByTagName('A');
     for (var i=0, currentLink; currentLink = linksArray[i]; i++){
       if (currentLink.textContent == axsBooksResults.ABOUT_THIS_BOOK_STRING){
         axsBooksResults.axsJAXObj.clickElem(currentLink, evt.shiftKey);
@@ -264,7 +264,7 @@ axsBooksResults.goToNextPage = function(){
   var images = document.getElementsByTagName('IMG');
   for (var i=0; i<images.length; i++){
     if (images[i].src.indexOf('nav_next.gif') != -1){
-      axsBooksResults.axsJAXObj.clickElem(images[i].parentNode);
+      axsBooksResults.axsJAXObj.clickElem(images[i].parentNode, false);
       return;
     }
   }
@@ -274,7 +274,7 @@ axsBooksResults.goToPrevPage = function(){
   var images = document.getElementsByTagName('IMG');
   for (var i=0; i<images.length; i++){
     if (images[i].src.indexOf('nav_previous.gif') != -1){
-      axsBooksResults.axsJAXObj.clickElem(images[i].parentNode);
+      axsBooksResults.axsJAXObj.clickElem(images[i].parentNode, false);
       return;
     }
   }

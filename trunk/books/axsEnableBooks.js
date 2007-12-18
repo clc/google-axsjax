@@ -34,7 +34,6 @@ function pickBooksScript(){
     } else {
       theScript.src = baseURL + 'books/axsEnableBooksAbout.js';
     }
-    shouldInsertScripts = true;
   } else {
     theScript.src = baseURL + 'books/axsEnableBooksResults.js';
   }
