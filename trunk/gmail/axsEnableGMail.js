@@ -537,8 +537,8 @@ axsGMail.jumpToSelectedQuickNavItem = function(){
 
 // Initialize the AxsJAX script using GMail's GMonkey API
 // http://code.google.com/p/gmail-greasemonkey/wiki/GmailGreasemonkey10API
-window.addEventListener('load', axsGMail.loader, true);
-
 axsGMail.loader = function(){
   gmonkey.load('1.0', axsGMail.init);
 };
+
+window.addEventListener('load', axsGMail.loader, true);
