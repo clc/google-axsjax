@@ -8,6 +8,8 @@ access-enabled using AxsJAX. [http://google-axsjax.googlecode.com/svn/trunk/docs
 
   * [http://www.google.com Google Web Search] [http://google-axsjax.googlecode.com/svn/trunk/docs/search_userguide.html User Guide]
 
+  * [http://mail.google.com Google Gmail] [http://google-axsjax.googlecode.com/svn/trunk/docs/gmail_userguide.html User Guide]
+
   * [http://reader.google.com Google Reader] [http://google-axsjax.googlecode.com/svn/trunk/docs/reader_userguide.html User Guide]
 
   * [http://scholar.google.com Google Scholar]  [http://google-axsjax.googlecode.com/svn/trunk/docs/scholar_userguide.html User Guide]
