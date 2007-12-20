@@ -38,10 +38,13 @@ function pickScript(){
   var theScript = document.createElement('script');
   theScript.type = 'text/javascript';
   var currentURL = document.baseURI;
-  if (currentURL.indexOf('http://www.google.com/reader/') === 0){
+  if (currentURL.indexOf('#AxsJAX_Cmd=GetImgText') != -1){
+    theScript.src = baseURL + 'common/axsJAX_ImgTextFetcher.js';
+    shouldInsertScripts = true;
+  } else if (currentURL.indexOf('http://www.google.com/reader/') === 0){
     theScript.src = baseURL + 'reader/axsEnableReader.js';
     shouldInsertScripts = true;
-  }  else if ((currentURL === 'http://www.google.com/')
+  } else if ((currentURL === 'http://www.google.com/')
       || (currentURL.indexOf('http://www.google.com/search') === 0)
       || (currentURL.indexOf('http://www.google.com/custom') === 0)
       || (currentURL.indexOf('http://www.google.com/cse') === 0)){
@@ -50,10 +53,7 @@ function pickScript(){
   }  else if (currentURL.indexOf('http://scholar.google.com/scholar') === 0){
     theScript.src = baseURL + 'scholar/axsEnableScholar.js';
     shouldInsertScripts = true;
-  } else if (currentURL.indexOf('http://mail.google.com/') === 0){
-    theScript.src = baseURL + 'gmail/axsEnableGMail.js';
-    shouldInsertScripts = true;
-  } else if (currentURL.indexOf('http://books.google.com') === 0){
+  }  else if (currentURL.indexOf('http://books.google.com') === 0){
     theScript.src = baseURL + 'books/axsEnableBooks.js';
     shouldInsertScripts = true;
   }  else if (currentURL === 'http://www.minijuegosgratis.com/juegos/jawbreaker/jawbreaker.htm'){
