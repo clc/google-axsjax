@@ -38,10 +38,11 @@ function pickScript(){
   var theScript = document.createElement('script');
   theScript.type = 'text/javascript';
   var currentURL = document.baseURI;
+
   if (currentURL.indexOf('#AxsJAX_Cmd=GetImgText') != -1){
     theScript.src = baseURL + 'common/axsJAX_ImgTextFetcher.js';
     shouldInsertScripts = true;
-  } else if (currentURL.indexOf('http://www.google.com/reader/') === 0){
+  }  else if (currentURL.indexOf('http://www.google.com/reader/') === 0){
     theScript.src = baseURL + 'reader/axsEnableReader.js';
     shouldInsertScripts = true;
   } else if ((currentURL === 'http://www.google.com/')
@@ -49,16 +50,19 @@ function pickScript(){
       || (currentURL.indexOf('http://www.google.com/custom') === 0)
       || (currentURL.indexOf('http://www.google.com/cse') === 0)){
     theScript.src = baseURL + 'websearch/axsEnableWebSearch.js';
+    shouldInsertScripts = true;    
+  } else if ( currentURL.indexOf('http://images.google.com/images') === 0 ){
+    theScript.src = baseURL + 'imagesearch/axsEnableImageSearch.js';
     shouldInsertScripts = true;
-  }  else if (currentURL.indexOf('http://scholar.google.com/scholar') === 0){
+  } else if (currentURL.indexOf('http://scholar.google.com/scholar') === 0){
     theScript.src = baseURL + 'scholar/axsEnableScholar.js';
     shouldInsertScripts = true;
-  }  else if (currentURL.indexOf('http://books.google.com') === 0){
-    theScript.src = baseURL + 'books/axsEnableBooks.js';
+  } else if (currentURL.indexOf('http://mail.google.com/') === 0){
+    theScript.src = baseURL + 'gmail/axsEnableGMail.js';
     shouldInsertScripts = true;
-  }  else if (currentURL === 'http://www.minijuegosgratis.com/juegos/jawbreaker/jawbreaker.htm'){
+  } else if (currentURL === 'http://www.minijuegosgratis.com/juegos/jawbreaker/jawbreaker.htm'){
     theScript.src = baseURL + 'jawbreaker/axsEnableJawbreaker.js';
-    shouldInsertScripts = true;
+    shouldInsertScripts = true;    
   } else if ((currentURL.indexOf('http://www.xkcd.com') === 0) || (currentURL.indexOf('http://xkcd.com') === 0)){
     theScript.src = baseURL + 'xkcd/axsEnableXKCD.js';
     shouldInsertScripts = true;
@@ -67,6 +71,7 @@ function pickScript(){
     theScript.src = baseURL + 'xkcd/axsEnableXKCD_TranscriptFetcher.js';
     shouldInsertScripts = true;
   }
+
   if (shouldInsertScripts){
     document.getElementsByTagName('head')[0].appendChild(theLib);
     document.getElementsByTagName('head')[0].appendChild(theScript);
