@@ -93,27 +93,42 @@ AxsJAX.prototype.getActiveDocument = function(){
  * by speaking its contents as soon as as it becomes the current node.
  * @param {Node} targetNode The HTML node to be spoken.
  */
-AxsJAX.prototype.speakNode = function(targetNode){
+AxsJAX.prototype.speakNode = function(targetNode, opt_noFocusChange){
   if (!targetNode.id){
     this.assignId(targetNode);
   }
-  var oldRole = this.getAttributeOf(targetNode,'role');
-  this.setAttributeOf(targetNode,'role','row');
-  this.activeParent.tabIndex = -1;
-  this.activeParent.blur();
-  this.setAttributeOf(this.activeParent,'activedescendant',null);
-  this.activeParent.focus();
-  this.setAttributeOf(this.activeParent,'activedescendant',targetNode.id);
-  //Restore the original role of the targetNode
-  var self = this;
-  window.setTimeout(
-      function(){
-        if (oldRole){
-          self.setAttributeOf(targetNode,'role',oldRole);
-        } else {
-          self.removeAttributeOf(targetNode,'role');
-        }
-      },0);
+  if (opt_noFocusChange){
+    this.setAttributeOf(targetNode,'live','rude');
+    this.setAttributeOf(targetNode,'atomic','true');
+    var activeDoc = this.getActiveDocument();
+    var dummyNode = activeDoc.createElement('div');
+    dummyNode.textContent = ' ';
+    dummyNode.name = 'AxsJAX_dummyNode';
+    if ( targetNode.lastChild &&
+         targetNode.lastChild.name &&
+         (targetNode.lastChild.name == dummyNode.name) ){
+      targetNode.removeChild(targetNode.lastChild);
+    }
+    targetNode.appendChild(dummyNode);
+  } else {
+    var oldRole = this.getAttributeOf(targetNode,'role');
+    this.setAttributeOf(targetNode,'role','row');
+    this.activeParent.tabIndex = -1;
+    this.activeParent.blur();
+    this.setAttributeOf(this.activeParent,'activedescendant',null);
+    this.activeParent.focus();
+    this.setAttributeOf(this.activeParent,'activedescendant',targetNode.id);
+    //Restore the original role of the targetNode
+    var self = this;
+    window.setTimeout(
+        function(){
+          if (oldRole){
+            self.setAttributeOf(targetNode,'role',oldRole);
+          } else {
+            self.removeAttributeOf(targetNode,'role');
+          }
+        },0);
+  }
 };
 
 
@@ -128,7 +143,8 @@ AxsJAX.prototype.speakNode = function(targetNode){
  * @param {String} textString The text to be spoken.
  */
 AxsJAX.prototype.speakText = function(textString){
-  var audioNode = document.createElement('span');
+  var activeDoc = this.getActiveDocument();
+  var audioNode = activeDoc.createElement('span');
   audioNode.id = 'AxsJAX_audioNode';
   audioNode.style.visibility = 'hidden';
   this.setAttributeOf(audioNode,'live','rude');
@@ -380,6 +396,8 @@ AxsJAX.prototype.setAttributeOf = function(targetNode, attribute, value){
     attribute = 'aria-live';
   } else if (attribute.toLowerCase() == 'activedescendant'){
     attribute = 'aria-activedescendant';
+  } else if (attribute.toLowerCase() == 'atomic'){
+    attribute = 'aria-atomic';
   }
   //Add the wairole: to values
   if (value && value.toLowerCase){

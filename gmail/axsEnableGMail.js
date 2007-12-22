@@ -39,6 +39,9 @@ axsGMail.SELECTED_STRING = 'Selected. ';
 axsGMail.STARRED_STRING = 'Starred. ';
 axsGMail.NOT_STRING = 'Not ';
 axsGMail.UNDO_MSG_STRING = "To undo, press Z.";
+axsGMail.NEW_CHAT_FROM_STRING = 'You have received a new chat message from ';
+axsGMail.NEW_CHAT_ACTIONS_STRING = 'Press escape to ignore the message. Press any other key to open a chat window.';
+
 
 axsGMail.HELP_STRING =
     'The following shortcut keys are available. ' +
@@ -102,6 +105,8 @@ axsGMail.init = function(gmObj){
                              true);
   document.addEventListener('focus', axsGMail.focusHandler, true);
   document.addEventListener('blur', axsGMail.blurHandler, true);
+  document.addEventListener('DOMNodeInserted', axsGMail.mainDoc_domInsertionHandler, true);
+
 
   //AxsJAX the canvas frame
   var canvasDoc = document.getElementById('canvas_frame').contentDocument;
@@ -166,6 +171,32 @@ axsGMail.extraKeyboardNavHandler = function(evt){
 
   return true;
 };
+
+axsGMail.mainDoc_domInsertionHandler = function(evt){
+  var target = evt.target;
+  if ( (target.tagName == 'DIV') &&
+       (target.className == 'XoqCub EGSDee') ){
+    window.setTimeout(function(){axsGMail.chatWindowHandler(target);},0);
+  }
+};
+
+axsGMail.chatWindowHandler = function(chatWindowDiv){
+  var textArea = chatWindowDiv.getElementsByTagName('textarea')[0];
+  textArea.addEventListener('keypress',
+      function(evt){
+        if (evt.keyCode == 27){ // ESC
+          return true;
+        }
+        axsGMail.axsJAXObj.clickElem(chatWindowDiv.getElementsByTagName('img')[0],false);
+        return false;
+      },
+      true);
+  textArea.focus();
+  var userName = chatWindowDiv.getElementsByTagName('td')[1].textContent;
+  var newChatMsg = axsGMail.NEW_CHAT_FROM_STRING + userName + axsGMail.NEW_CHAT_ACTIONS_STRING;
+  axsGMail.axsJAXObj.speakText(newChatMsg);
+};
+
 
 
 axsGMail.canvas_extraKeyboardNavHandler = function(evt){
@@ -303,7 +334,7 @@ axsGMail.TL_domInsertionHandler = function(evt){
       message = message + axsGMail.UNDO_MSG_STRING;
     }
     axsGMail.axsJAXObj.speakThroughPixel(message);
-  }
+  }     
 };
 
 
@@ -340,6 +371,9 @@ axsGMail.TL_getDate = function(tlItem){
 
 
 axsGMail.TL_speakItem = function(tlItem){
+  if(!axsGMail.TL_needToSpeak){
+    return;
+  }
   axsGMail.TL_needToSpeak = false;
   var message = "";
   if (axsGMail.TL_isNew(tlItem)){
@@ -460,6 +494,9 @@ axsGMail.CV_forceExpandAll = function(){
 };
 
 axsGMail.CV_goToItem = function(cvItem){
+  if(!axsGMail.CV_needToSpeak){
+    return;
+  }
   axsGMail.CV_needToSpeak = false;
   var message = "";
   if (axsGMail.CV_isStarred(cvItem)){
