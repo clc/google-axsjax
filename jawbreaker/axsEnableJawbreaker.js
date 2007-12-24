@@ -42,15 +42,15 @@ var AxsJBImg2ColorMap = {
 };
 
 function axsJb_getColorOfBallImg(ballImg){
-  var color = '';
-  var url = ballImg.src.toString();
-  var slashPos = url.lastIndexOf('/');
-  url = url.substring(slashPos+1);
-  color = AxsJBImg2ColorMap[url];
+  var color = AxsJBImg2ColorMap[axsJb_getUrlOfBallImg(ballImg)];
   return color;
 }
 
-
+function axsJb_getUrlOfBallImg(ballImg){
+  var url = ballImg.src.toString();
+  var slashPos = url.lastIndexOf('/');
+  return url.substring(slashPos+1);
+}
 
 function axsJb_getCurrentBallImgNode(row,col){
   var rowString = row.toString();
@@ -69,12 +69,18 @@ function axsJb_sayStats(){
   var blockCount = document.getElementById('blockcount').textContent;
   var blockScore = document.getElementById('blockscore').textContent;
   var totalScore = document.getElementById('userscore').textContent;
-  axsJb_axsJaxObj.speakThroughPixel(blockCount+ 'blocks make '  + blockScore + ' to  Total ' + totalScore );
+  axsJb_axsJaxObj.speakThroughPixel(blockCount + ' blocks add '  + blockScore + ' to total ' + totalScore);
 }
 
 function axsJb_speakRow(){
   var speechString = "R " +  axsJb_row + ": ";
-  for (var col = 0; col < axsJb_MAXCOL; col++){
+  var startPos = axsJb_findFirstBallInRow();
+  if (startPos > 1){
+    speechString = speechString + startPos + ' blanks, ';
+  } else {
+    startPos = 0;
+  }     
+  for (var col = startPos; col < axsJb_MAXCOL; col++){
     speechString = speechString + axsJb_getColorOfBallImg(axsJb_getCurrentBallImgNode(axsJb_row,col));
   }
   speechString = speechString + axsJb_getColorOfBallImg(axsJb_getCurrentBallImgNode(axsJb_row,axsJb_MAXCOL));
@@ -83,17 +89,47 @@ function axsJb_speakRow(){
 
 function axsJb_speakCol(){
   var speechString = "C " +  axsJb_col + ": ";
-  for (var row = 0; row < axsJb_MAXROW; row++){
+  var startPos = axsJb_findFirstBallInCol();
+  if (startPos > 1){
+    speechString = speechString + startPos + ' blanks, ';
+  } else {
+    startPos = 0;
+  }       
+  for (var row = startPos; row < axsJb_MAXROW; row++){
     speechString = speechString + axsJb_getColorOfBallImg(axsJb_getCurrentBallImgNode(row,axsJb_col));
   }
   speechString = speechString + axsJb_getColorOfBallImg(axsJb_getCurrentBallImgNode(axsJb_MAXROW,axsJb_col));
   axsJb_axsJaxObj.speakThroughPixel(speechString);
 }
 
+function axsJb_findFirstBallInCol(){
+  for (var row = 0; row < axsJb_MAXROW; row++){
+    var ballImg = axsJb_getCurrentBallImgNode(row,axsJb_col);
+    if (axsJb_getUrlOfBallImg(ballImg) != 'p_white.gif'){
+      return row;
+    }  
+  }
+  return -1;
+};
+
+function axsJb_findFirstBallInRow(){
+  for (var col = 0; col < axsJb_MAXCOL; col++){
+    var ballImg = axsJb_getCurrentBallImgNode(axsJb_row,col);
+    if (axsJb_getUrlOfBallImg(ballImg) != 'p_white.gif'){
+      return col;
+    }  
+  }
+  return -1;
+};
+
+
 
 function axsJb_keyboardHandler(evt){
   if (evt.charCode == 97){      //a
-    axsJb_col = 0;
+    var targCol = axsJb_findFirstBallInRow();
+    if (targCol != -1){    
+      axsJb_col = targCol;
+    }
     axsJb_getCurrentPosition();
   }
   if (evt.charCode == 101){       //e
@@ -101,7 +137,10 @@ function axsJb_keyboardHandler(evt){
     axsJb_getCurrentPosition();
   }
   if (evt.charCode == 116){      //t
-    axsJb_row = 0;
+    var targRow = axsJb_findFirstBallInCol();
+    if (targRow != -1){    
+      axsJb_row = targRow;
+    }
     axsJb_getCurrentPosition();
   }
   if (evt.charCode == 98){       //b
