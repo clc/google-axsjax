@@ -175,11 +175,11 @@ function axsJb_keyboardHandler(evt){
   }
   if (evt.charCode == 32){ // Space
     axsJb_axsJaxObj.clickElem(axsJb_getBallImgNode(axsJb_row,axsJb_col), false);
-    if (axsJb_getUrlOfBallImg(axsJb_getBallImgNode(axsJb_row,axsJb_col)) == 'p_white.gif'){
+    if (axsJb_getUrlOfBallImg(axsJb_getBallImgNode(axsJb_row,axsJb_col)).indexOf('s_') === 0){
+      axsJb_sayStats();
+    } else {      
       var totalScore = document.getElementById('userscore').textContent;
       axsJb_axsJaxObj.speakThroughPixel('Total ' + totalScore);
-    } else {      
-      axsJb_sayStats();
     }  
   }
   if (evt.charCode == 115){ // s
