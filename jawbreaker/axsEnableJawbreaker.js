@@ -18,7 +18,7 @@ var axsJb_axsJaxObj = new AxsJAX(false);
 
 
 function axsJb_getCurrentPosition(){
-  var ballImg = axsJb_getCurrentBallImgNode(axsJb_row,axsJb_col);
+  var ballImg = axsJb_getBallImgNode(axsJb_row,axsJb_col);
   var color = axsJb_getColorOfBallImg(ballImg);
   var message = color + axsJb_row + ', ' + axsJb_col + '.';
   ballImg.alt = message;
@@ -52,7 +52,7 @@ function axsJb_getUrlOfBallImg(ballImg){
   return url.substring(slashPos+1);
 }
 
-function axsJb_getCurrentBallImgNode(row,col){
+function axsJb_getBallImgNode(row,col){
   var rowString = row.toString();
   var colString = col.toString();
   if (rowString.length < 2){
@@ -81,9 +81,9 @@ function axsJb_speakRow(){
     startPos = 0;
   }     
   for (var col = startPos; col < axsJb_MAXCOL; col++){
-    speechString = speechString + axsJb_getColorOfBallImg(axsJb_getCurrentBallImgNode(axsJb_row,col));
+    speechString = speechString + axsJb_getColorOfBallImg(axsJb_getBallImgNode(axsJb_row,col));
   }
-  speechString = speechString + axsJb_getColorOfBallImg(axsJb_getCurrentBallImgNode(axsJb_row,axsJb_MAXCOL));
+  speechString = speechString + axsJb_getColorOfBallImg(axsJb_getBallImgNode(axsJb_row,axsJb_MAXCOL));
   axsJb_axsJaxObj.speakThroughPixel(speechString);
 }
 
@@ -96,15 +96,15 @@ function axsJb_speakCol(){
     startPos = 0;
   }       
   for (var row = startPos; row < axsJb_MAXROW; row++){
-    speechString = speechString + axsJb_getColorOfBallImg(axsJb_getCurrentBallImgNode(row,axsJb_col));
+    speechString = speechString + axsJb_getColorOfBallImg(axsJb_getBallImgNode(row,axsJb_col));
   }
-  speechString = speechString + axsJb_getColorOfBallImg(axsJb_getCurrentBallImgNode(axsJb_MAXROW,axsJb_col));
+  speechString = speechString + axsJb_getColorOfBallImg(axsJb_getBallImgNode(axsJb_MAXROW,axsJb_col));
   axsJb_axsJaxObj.speakThroughPixel(speechString);
 }
 
 function axsJb_findFirstBallInCol(){
   for (var row = 0; row < axsJb_MAXROW; row++){
-    var ballImg = axsJb_getCurrentBallImgNode(row,axsJb_col);
+    var ballImg = axsJb_getBallImgNode(row,axsJb_col);
     if (axsJb_getUrlOfBallImg(ballImg) != 'p_white.gif'){
       return row;
     }  
@@ -114,7 +114,7 @@ function axsJb_findFirstBallInCol(){
 
 function axsJb_findFirstBallInRow(){
   for (var col = 0; col < axsJb_MAXCOL; col++){
-    var ballImg = axsJb_getCurrentBallImgNode(axsJb_row,col);
+    var ballImg = axsJb_getBallImgNode(axsJb_row,col);
     if (axsJb_getUrlOfBallImg(ballImg) != 'p_white.gif'){
       return col;
     }  
@@ -174,8 +174,13 @@ function axsJb_keyboardHandler(evt){
     axsJb_getCurrentPosition();
   }
   if (evt.charCode == 32){ // Space
-    axsJb_axsJaxObj.clickElem(axsJb_getCurrentBallImgNode(axsJb_row,axsJb_col), false);
-    axsJb_sayStats();
+    if (axsJb_getUrlOfBallImg(axsJb_getBallImgNode(axsJb_row,axsJb_col)) == 'p_white.gif'){
+      var totalScore = document.getElementById('userscore').textContent;
+      axsJb_axsJaxObj.speakThroughPixel('Total ' + totalScore);
+    } else {
+      axsJb_axsJaxObj.clickElem(axsJb_getBallImgNode(axsJb_row,axsJb_col), false);
+      axsJb_sayStats();
+    }  
   }
   if (evt.charCode == 115){ // s
     axsJb_sayStats();
