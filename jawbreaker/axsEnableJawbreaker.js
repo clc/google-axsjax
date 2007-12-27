@@ -210,3 +210,9 @@ function axsJb_keyboardHandler(evt){
 
 
 document.addEventListener('keypress', axsJb_keyboardHandler, true);
+
+//Rewrite the native alert function so that it speaks through AxsJAX and
+//does NOT popup a JavaScript alert window.
+alert = function(textStr){
+  axsJb_axsJaxObj.speakThroughPixel(textStr);
+}
