@@ -1,6 +1,7 @@
 //AxsJAX script for Jawbreaker game at:
 //http://www.minijuegosgratis.com/juegos/jawbreaker/jawbreaker.htm
 
+var axsJb_keyboardLocked = false;
 var axsJb_row = 0;
 var axsJb_col = 0;
 var axsJb_MAXROW = 11;
@@ -129,6 +130,23 @@ function axsJb_findFirstBallInRow(){
 
 
 function axsJb_keyboardHandler(evt){
+  if (evt.charCode == 110){ // n
+    axsJb_row = 0;
+    axsJb_col = 0;
+    axsJb_axsJaxObj.clickElem(document.getElementById('menu-start'), false);
+    axsJb_getCurrentPosition();
+    axsJb_keyboardLocked = false;
+  }
+
+
+  if (evt.charCode == 63){ // ? (question mark)
+    axsJb_axsJaxObj.speakThroughPixel(axsJb_HELP_STRING);
+  }
+
+  if (axsJb_keyboardLocked){
+    return;
+  }
+
   if (evt.charCode == 97){      //a
     var targCol = axsJb_findFirstBallInRow();
     if (targCol != -1){    
@@ -195,16 +213,8 @@ function axsJb_keyboardHandler(evt){
   if (evt.charCode == 114){ // r
     axsJb_speakRow();
   }
-  if (evt.charCode == 110){ // n
-    axsJb_row = 0;
-    axsJb_col = 0;
-    axsJb_axsJaxObj.clickElem(document.getElementById('menu-start'), false);
-    axsJb_getCurrentPosition();
-  }
 
-  if (evt.charCode == 63){ // ? (question mark)
-    axsJb_axsJaxObj.speakThroughPixel(axsJb_HELP_STRING);
-  }
+
 
 }
 
@@ -213,6 +223,9 @@ document.addEventListener('keypress', axsJb_keyboardHandler, true);
 
 //Rewrite the native alert function so that it speaks through AxsJAX and
 //does NOT popup a JavaScript alert window.
+//Lock the keyboard so that the user doesn't accidentally
+//cancel this message out.
 alert = function(textStr){
-  axsJb_axsJaxObj.speakThroughPixel(textStr);
+  axsJb_keyboardLocked = true;
+  window.setTimeout(function(){axsJb_axsJaxObj.speakThroughPixel(textStr);},0);
 }
