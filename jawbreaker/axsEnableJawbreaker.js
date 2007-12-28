@@ -70,7 +70,7 @@ function axsJb_sayStats(){
   var blockCount = document.getElementById('blockcount').textContent;
   var blockScore = document.getElementById('blockscore').textContent;
   var totalScore = document.getElementById('userscore').textContent;
-  if (blockCount == 0 ) {
+  if (blockCount === 0 ) {
       axsJb_axsJaxObj.speakThroughPixel('  Score is   ' + totalScore );
   } else {
       axsJb_axsJaxObj.speakThroughPixel(blockCount+ 'blocks make '  + blockScore + ' to  Total ' + totalScore );
@@ -80,35 +80,39 @@ function axsJb_sayStats(){
 function axsJb_speakRow(){
   var speechString = "R " +  axsJb_row + ": ";
   var startPos = axsJb_findFirstBallInRow();
-  if (startPos > 1){
+  if (startPos == -1){
+    speechString = speechString + 'all blank!';
+    startPos = axsJb_MAXCOL + 1;
+  } else if (startPos > 1){
     speechString = speechString + startPos + ' blanks, ';
   } else {
     startPos = 0;
   }     
-  for (var col = startPos; col < axsJb_MAXCOL; col++){
+  for (var col = startPos; col <= axsJb_MAXCOL; col++){
     speechString = speechString + axsJb_getColorOfBallImg(axsJb_getBallImgNode(axsJb_row,col));
   }
-  speechString = speechString + axsJb_getColorOfBallImg(axsJb_getBallImgNode(axsJb_row,axsJb_MAXCOL));
   axsJb_axsJaxObj.speakThroughPixel(speechString);
 }
 
 function axsJb_speakCol(){
   var speechString = "C " +  axsJb_col + ": ";
   var startPos = axsJb_findFirstBallInCol();
-  if (startPos > 1){
+  if (startPos == -1){
+    speechString = speechString + 'all blank!';
+    startPos = axsJb_MAXROW + 1;
+  } else if (startPos > 1){
     speechString = speechString + startPos + ' blanks, ';
   } else {
     startPos = 0;
   }       
-  for (var row = startPos; row < axsJb_MAXROW; row++){
+  for (var row = startPos; row <= axsJb_MAXROW; row++){
     speechString = speechString + axsJb_getColorOfBallImg(axsJb_getBallImgNode(row,axsJb_col));
   }
-  speechString = speechString + axsJb_getColorOfBallImg(axsJb_getBallImgNode(axsJb_MAXROW,axsJb_col));
   axsJb_axsJaxObj.speakThroughPixel(speechString);
 }
 
 function axsJb_findFirstBallInCol(){
-  for (var row = 0; row < axsJb_MAXROW; row++){
+  for (var row = 0; row <= axsJb_MAXROW; row++){
     var ballImg = axsJb_getBallImgNode(row,axsJb_col);
     if (axsJb_getUrlOfBallImg(ballImg) != 'p_white.gif'){
       return row;
@@ -118,7 +122,7 @@ function axsJb_findFirstBallInCol(){
 }
 
 function axsJb_findFirstBallInRow(){
-  for (var col = 0; col < axsJb_MAXCOL; col++){
+  for (var col = 0; col <= axsJb_MAXCOL; col++){
     var ballImg = axsJb_getBallImgNode(axsJb_row,col);
     if (axsJb_getUrlOfBallImg(ballImg) != 'p_white.gif'){
       return col;
@@ -143,7 +147,7 @@ function axsJb_keyboardHandler(evt){
     axsJb_axsJaxObj.speakThroughPixel(axsJb_HELP_STRING);
   }
 
-  if (axsJb_keyboardLocked){
+  if (axsJb_keyboardLocked === true){
     return;
   }
 
@@ -225,7 +229,8 @@ document.addEventListener('keypress', axsJb_keyboardHandler, true);
 //does NOT popup a JavaScript alert window.
 //Lock the keyboard so that the user doesn't accidentally
 //cancel this message out.
+
 alert = function(textStr){
   axsJb_keyboardLocked = true;
   window.setTimeout(function(){axsJb_axsJaxObj.speakThroughPixel(textStr);},0);
-}
+};
