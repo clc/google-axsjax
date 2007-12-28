@@ -57,6 +57,9 @@ function pickScript(){
   } else if (currentURL.indexOf('http://scholar.google.com/scholar') === 0){
     theScript.src = baseURL + 'scholar/axsEnableScholar.js';
     shouldInsertScripts = true;
+  } else if (currentURL.indexOf('http://books.google.com/') === 0){
+    theScript.src = baseURL + 'books/axsEnableBooks.js';
+    shouldInsertScripts = true;
   } else if (currentURL.indexOf('http://mail.google.com/') === 0){
     if (currentURL.indexOf('&view=cw&fs=1&tf=1&ver=771ghx9vre3pcv3n4rbd22lll#') != -1){
       theScript.src = baseURL + 'gmail/axsEnableTalk.js';
