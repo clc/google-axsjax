@@ -14,7 +14,8 @@ var axsJb_HELP_STRING = 'The following keys are available. ' +
                         'C, read the current column. ' +
                         'S, read the current stats. ' +
                         'Equals, read the current number of balls remaining for each color. ' +
-                        'Space, click on the current ball. The first click selects the group and the second click confirms the selection.';
+                        'Space, click on the current ball. The first click selects the group and the second click confirms the selection.' +
+                        'U, undoes the last confirmed selection.';
 
 var axsJb_axsJaxObj = new AxsJAX(false);
 
@@ -74,7 +75,7 @@ function axsJb_sayStats(){
   if (blockCount === 0 ) {
       axsJb_axsJaxObj.speakThroughPixel('Score is ' + totalScore );
   } else {
-      axsJb_axsJaxObj.speakThroughPixel(blockCount + ' blocks add '  + blockScore + ' to  total ' + totalScore);
+      axsJb_axsJaxObj.speakThroughPixel(blockCount + ' blocks add '  + blockScore + ' to ' + totalScore);
   }
 }
 
@@ -166,6 +167,18 @@ function axsJb_keyboardHandler(evt){
   if (axsJb_keyboardLocked === true){
     return;
   }
+
+
+  if (evt.charCode == 117){ // u
+    var undoButton = document.getElementById('menu-undo');
+    if (undoButton.disabled == true){
+      axsJb_axsJaxObj.speakThroughPixel('Nothing to undo.');
+    } else {
+      axsJb_axsJaxObj.clickElem(undoButton, false);
+      axsJb_axsJaxObj.speakThroughPixel('Last action undone.');
+    }
+  }
+
 
   if (evt.charCode == 97){      //a
     var targCol = axsJb_findFirstBallInRow();
