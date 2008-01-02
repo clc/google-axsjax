@@ -13,6 +13,7 @@ var axsJb_HELP_STRING = 'The following keys are available. ' +
                         'R, read the current row. ' +
                         'C, read the current column. ' +
                         'S, read the current stats. ' +
+                        'Equals, read the current number of balls remaining for each color. ' +
                         'Space, click on the current ball. The first click selects the group and the second click confirms the selection.';
 
 var axsJb_axsJaxObj = new AxsJAX(false);
@@ -71,10 +72,25 @@ function axsJb_sayStats(){
   var blockScore = document.getElementById('blockscore').textContent;
   var totalScore = document.getElementById('userscore').textContent;
   if (blockCount === 0 ) {
-      axsJb_axsJaxObj.speakThroughPixel('  Score is   ' + totalScore );
+      axsJb_axsJaxObj.speakThroughPixel('Score is ' + totalScore );
   } else {
-      axsJb_axsJaxObj.speakThroughPixel(blockCount+ 'blocks make '  + blockScore + ' to  Total ' + totalScore );
+      axsJb_axsJaxObj.speakThroughPixel(blockCount + ' blocks add '  + blockScore + ' to  total ' + totalScore);
   }
+}
+
+
+function axsJb_sayColorCounts(){
+  var redCount = document.getElementById('red').textContent;
+  var yellowCount = document.getElementById('yellow').textContent;
+  var greenCount = document.getElementById('green').textContent;
+  var blueCount = document.getElementById('blue').textContent;
+  var purpleCount = document.getElementById('purple').textContent;
+  axsJb_axsJaxObj.speakThroughPixel( redCount + ' reds, ' +
+                                     yellowCount + ' yellows, ' +
+                                     greenCount + ' greens, ' +
+                                     blueCount + ' blues, ' +
+                                     purpleCount + ' purples.');
+  
 }
 
 function axsJb_speakRow(){
@@ -174,6 +190,9 @@ function axsJb_keyboardHandler(evt){
     axsJb_getCurrentPosition();
   }
 
+  if (evt.charCode == 61){       //= (equals)
+    axsJb_sayColorCounts();
+  }
 
   if (evt.keyCode == 38 ||
       evt.charCode == 107){ // Up arrow or k
