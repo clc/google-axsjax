@@ -158,8 +158,6 @@ function axsJb_keyboardHandler(evt){
     axsJb_getCurrentPosition();
     axsJb_keyboardLocked = false;
   }
-
-
   if (evt.charCode == 63){ // ? (question mark)
     axsJb_axsJaxObj.speakThroughPixel(axsJb_HELP_STRING);
   }
@@ -168,18 +166,15 @@ function axsJb_keyboardHandler(evt){
     return;
   }
 
-
   if (evt.charCode == 117){ // u
     var undoButton = document.getElementById('menu-undo');
-    if (undoButton.disabled == true){
+    if (undoButton.disabled === true){
       axsJb_axsJaxObj.speakThroughPixel('Nothing to undo.');
     } else {
       axsJb_axsJaxObj.clickElem(undoButton, false);
       axsJb_axsJaxObj.speakThroughPixel('Last action undone.');
     }
   }
-
-
   if (evt.charCode == 97){      //a
     var targCol = axsJb_findFirstBallInRow();
     if (targCol != -1){    
