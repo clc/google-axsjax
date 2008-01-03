@@ -217,7 +217,7 @@ axsBooksPreview.extraKeyboardNavHandler = function(evt){
 
 
   if (evt.charCode == 63){ // ? (question mark)
-    axsBooksPreview.axsJAXObj.speakThroughPixel(axsBooksPreview.HELP_STRING);
+    axsBooksPreview.axsJAXObj.speakTextViaNode(axsBooksPreview.HELP_STRING);
     return false;
   }
   
@@ -263,7 +263,7 @@ axsBooksPreview.speakLeftPage = function(){
   if (thePage){
     theMessage = theMessage + thePage.textContent;
   }
-  axsBooksPreview.axsJAXObj.speakThroughPixel(theMessage);
+  axsBooksPreview.axsJAXObj.speakTextViaNode(theMessage);
 };
 
 axsBooksPreview.speakRightPage = function(){
@@ -274,7 +274,7 @@ axsBooksPreview.speakRightPage = function(){
   if (thePage){
     theMessage = theMessage + thePage.textContent;
   }
-  axsBooksPreview.axsJAXObj.speakThroughPixel(theMessage);
+  axsBooksPreview.axsJAXObj.speakTextViaNode(theMessage);
 };
 
 axsBooksPreview.goToNextPage = function(){

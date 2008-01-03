@@ -262,7 +262,7 @@ axsWebSearch.extraKeyboardNavHandler = function(evt){
     return false;
   }
   if (evt.charCode == 63){ // ? (question mark)
-    axsWebSearch.axsJAXObj.speakThroughPixel(axsWebSearch.HELP_STRING);
+    axsWebSearch.axsJAXObj.speakTextViaNode(axsWebSearch.HELP_STRING);
     return false;
   }
   return true;
@@ -289,7 +289,7 @@ axsWebSearch.readOneBox = function(){
   if (oneBox){
     axsWebSearch.axsJAXObj.goTo(oneBox);
   } else{
-    axsWebSearch.axsJAXObj.speakThroughPixel(axsWebSearch.NO_ONE_BOX_STRING);
+    axsWebSearch.axsJAXObj.speakTextViaNode(axsWebSearch.NO_ONE_BOX_STRING);
   }
   axsWebSearch.currentLink = oneBox.getElementsByTagName('a')[0].href;
 };
@@ -371,7 +371,7 @@ axsWebSearch.formatAdAreaSide = function(){
 
 axsWebSearch.cycleThroughAds = function(){
   if (axsWebSearch.adsArray.length < 1){
-    axsWebSearch.axsJAXObj.speakThroughPixel(axsWebSearch.NO_ADS_STRING);
+    axsWebSearch.axsJAXObj.speakTextViaNode(axsWebSearch.NO_ADS_STRING);
     return;
   }
   axsWebSearch.adsIndex++;
@@ -447,7 +447,7 @@ axsWebSearch.goToPrevResult = function(cycleBool){
 axsWebSearch.goToNextPage = function(){
   var nextPageDiv = document.getElementById('nn');
   if (!nextPageDiv){
-    axsWebSearch.axsJAXObj.speakThroughPixel(axsWebSearch.NO_NEXT_PAGE_STRING);
+    axsWebSearch.axsJAXObj.speakTextViaNode(axsWebSearch.NO_NEXT_PAGE_STRING);
     return;
   }
   document.location = nextPageDiv.parentNode.href;
@@ -456,7 +456,7 @@ axsWebSearch.goToNextPage = function(){
 axsWebSearch.goToPrevPage = function(){
   var prevPageDiv = document.getElementById('np');
   if (!prevPageDiv){
-    axsWebSearch.axsJAXObj.speakThroughPixel(axsWebSearch.NO_PREV_PAGE_STRING);
+    axsWebSearch.axsJAXObj.speakTextViaNode(axsWebSearch.NO_PREV_PAGE_STRING);
     return;
   }
   document.location = prevPageDiv.parentNode.href;
@@ -495,7 +495,7 @@ axsWebSearch.buildAltSearchCatArray = function(){
 
 axsWebSearch.cycleThroughAltSearchCat = function(){
   if (axsWebSearch.altSearchCatArray.length < 1){
-    axsWebSearch.axsJAXObj.speakThroughPixel(axsWebSearch.NO_ALT_SEARCH_CAT_STRING);
+    axsWebSearch.axsJAXObj.speakTextViaNode(axsWebSearch.NO_ALT_SEARCH_CAT_STRING);
     return;
   }
   axsWebSearch.altSearchCatIndex++;
@@ -506,7 +506,7 @@ axsWebSearch.cycleThroughAltSearchCat = function(){
       axsWebSearch.altSearchCatArray[axsWebSearch.altSearchCatIndex];
   currentAltSearch.scrollIntoView(true);
   axsWebSearch.currentLink = currentAltSearch.href;
-  axsWebSearch.axsJAXObj.speakThroughPixel(axsWebSearch.SEARCH_WITHIN_STRING +
+  axsWebSearch.axsJAXObj.speakTextViaNode(axsWebSearch.SEARCH_WITHIN_STRING +
                                    currentAltSearch.textContent);
   axsWebSearch.axsJAXObj.markPosition(currentAltSearch);
 };
@@ -538,7 +538,7 @@ axsWebSearch.buildRelatedSearchesArray = function(){
 
 axsWebSearch.cycleThroughRelatedSearches = function(){
   if (axsWebSearch.relatedSearchesArray.length < 1){
-    axsWebSearch.axsJAXObj.speakThroughPixel(axsWebSearch.NO_RELATED_SEARCHES_STRING);
+    axsWebSearch.axsJAXObj.speakTextViaNode(axsWebSearch.NO_RELATED_SEARCHES_STRING);
     return;
   }
   axsWebSearch.relatedSearchesIndex++;
@@ -572,7 +572,7 @@ axsWebSearch.getCurrentURLQueryString = function(){
 axsWebSearch.switchToAccessibleSearch = function(){
   if ( (document.baseURI.indexOf('http://www.google.com/custom') === 0) ||
        (document.baseURI.indexOf('http://www.google.com/cse') === 0) ){
-    axsWebSearch.axsJAXObj.speakThroughPixel(axsWebSearch.ON_ACCESSIBLE_SEARCH);
+    axsWebSearch.axsJAXObj.speakTextViaNode(axsWebSearch.ON_ACCESSIBLE_SEARCH);
     return;
   }
   var searchQuery = axsWebSearch.getCurrentURLQueryString();
@@ -584,7 +584,7 @@ axsWebSearch.switchToAccessibleSearch = function(){
 
 axsWebSearch.switchToWebSearch = function(){
   if (document.baseURI.indexOf('http://www.google.com/search') === 0){
-    axsWebSearch.axsJAXObj.speakThroughPixel(axsWebSearch.ON_WEB_SEARCH);
+    axsWebSearch.axsJAXObj.speakTextViaNode(axsWebSearch.ON_WEB_SEARCH);
     return;
   }
   var searchQuery = axsWebSearch.getCurrentURLQueryString();
@@ -675,7 +675,7 @@ axsWebSearch.cycleThroughGuideMode = function(){
   axsWebSearch.guideModeIndex++;
   if (axsWebSearch.guideModeIndex >= axsWebSearch.guideModeArray.length){
     axsWebSearch.guideModeIndex = -1;
-    axsWebSearch.axsJAXObj.speakThroughPixel(axsWebSearch.GUIDE_MODE_END);
+    axsWebSearch.axsJAXObj.speakTextViaNode(axsWebSearch.GUIDE_MODE_END);
     return;
   }
   var currentGuideObj = axsWebSearch.guideModeArray[
@@ -683,7 +683,7 @@ axsWebSearch.cycleThroughGuideMode = function(){
   var currentItem = currentGuideObj.node;
   currentItem.scrollIntoView(true);
   if (currentGuideObj.isAd){
-    axsWebSearch.axsJAXObj.speakThroughPixel(axsWebSearch.SPONSORED_LINK +
+    axsWebSearch.axsJAXObj.speakTextViaNode(axsWebSearch.SPONSORED_LINK +
                                      currentItem.textContent);
   }
   else {

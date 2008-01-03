@@ -215,7 +215,7 @@ axsGMail.canvas_extraKeyboardNavHandler = function(evt){
   }
 
  if (evt.charCode == 63){ // ? (question mark)
-    axsGMail.axsJAXObj.speakThroughPixel(axsGMail.HELP_STRING);
+    axsGMail.axsJAXObj.speakTextViaNode(axsGMail.HELP_STRING);
     return false;
   }
 
@@ -306,19 +306,19 @@ axsGMail.TL_domAttrModifiedHandler = function(evt){
 
   //Message selected
   if ((attrib == 'class') && (oldVal.indexOf('rfza3e') == -1) && (newVal.indexOf('rfza3e') != -1)){
-    axsGMail.axsJAXObj.speakThroughPixel(axsGMail.SELECTED_STRING);
+    axsGMail.axsJAXObj.speakTextViaNode(axsGMail.SELECTED_STRING);
   }
   //Message deselected
   if ((attrib == 'class') && (oldVal.indexOf('rfza3e') != -1) && (newVal.indexOf('rfza3e') == -1)){
-    axsGMail.axsJAXObj.speakThroughPixel(axsGMail.NOT_STRING + axsGMail.SELECTED_STRING);
+    axsGMail.axsJAXObj.speakTextViaNode(axsGMail.NOT_STRING + axsGMail.SELECTED_STRING);
   }
   //Message starred
   if ((attrib == 'class') && (oldVal.indexOf('n1QcP') == -1) && (newVal.indexOf('n1QcP') != -1)){
-    axsGMail.axsJAXObj.speakThroughPixel(axsGMail.STARRED_STRING);
+    axsGMail.axsJAXObj.speakTextViaNode(axsGMail.STARRED_STRING);
   }
   //Message unstarred
   if ((attrib == 'class') && (oldVal.indexOf('n1QcP') != -1) && (newVal.indexOf('n1QcP') == -1)){
-    axsGMail.axsJAXObj.speakThroughPixel(axsGMail.NOT_STRING + axsGMail.STARRED_STRING);
+    axsGMail.axsJAXObj.speakTextViaNode(axsGMail.NOT_STRING + axsGMail.STARRED_STRING);
   }
 
 };
@@ -333,7 +333,7 @@ axsGMail.TL_domInsertionHandler = function(evt){
       axsGMail.axsJAXObj.markPosition(undoLink);
       message = message + axsGMail.UNDO_MSG_STRING;
     }
-    axsGMail.axsJAXObj.speakThroughPixel(message);
+    axsGMail.axsJAXObj.speakTextViaNode(message);
   }     
 };
 
@@ -391,7 +391,7 @@ axsGMail.TL_speakItem = function(tlItem){
             axsGMail.TL_getSubject(tlItem).textContent + '. ' +
             axsGMail.TL_getSnippet(tlItem).textContent + '. ' +
             axsGMail.TL_getDate(tlItem).textContent + '. ';
-  axsGMail.axsJAXObj.speakThroughPixel(message);
+  axsGMail.axsJAXObj.speakTextViaNode(message);
   axsGMail.TL_currentItem = tlItem;
 };
 
@@ -429,11 +429,11 @@ axsGMail.CV_domAttrModifiedHandler = function(evt){
   
   //Message starred
   if ((attrib == 'class') && (oldVal.indexOf('kJv9nb') == -1) && (newVal.indexOf('kJv9nb') != -1)){
-    axsGMail.axsJAXObj.speakThroughPixel(axsGMail.STARRED_STRING);
+    axsGMail.axsJAXObj.speakTextViaNode(axsGMail.STARRED_STRING);
   }
   //Message unstarred
   if ((attrib == 'class') && (oldVal.indexOf('kJv9nb') != -1) && (newVal.indexOf('kJv9nb') == -1)){
-    axsGMail.axsJAXObj.speakThroughPixel(axsGMail.NOT_STRING + axsGMail.STARRED_STRING);
+    axsGMail.axsJAXObj.speakTextViaNode(axsGMail.NOT_STRING + axsGMail.STARRED_STRING);
   }
 };
 
@@ -518,7 +518,7 @@ axsGMail.CV_goToItem = function(cvItem){
   if (contentNode){
     message = message + contentNode.textContent + '. ';
   }
-  axsGMail.axsJAXObj.speakThroughPixel(message,cvItem);
+  axsGMail.axsJAXObj.speakTextViaNode(message,cvItem);
   axsGMail.CV_currentItem = cvItem;
 };
 

@@ -210,7 +210,7 @@ axsBooksAbout.extraKeyboardNavHandler = function(evt){
     return false;
   }
   if (evt.charCode == 63){ // ? (question mark)
-    axsBooksAbout.axsJAXObj.speakThroughPixel(axsBooksAbout.HELP_STRING);
+    axsBooksAbout.axsJAXObj.speakTextViaNode(axsBooksAbout.HELP_STRING);
     return false;
   }
 
