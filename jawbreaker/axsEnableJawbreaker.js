@@ -76,9 +76,9 @@ axsJb.sayStats = function(){
   var blockScore = document.getElementById('blockscore').textContent;
   var totalScore = document.getElementById('userscore').textContent;
   if (blockCount === 0 ) {
-      axsJb.axsJaxObj.speakThroughPixel('Score is ' + totalScore );
+      axsJb.axsJaxObj.speakTextViaNode('Score is ' + totalScore );
   } else {
-      axsJb.axsJaxObj.speakThroughPixel(blockCount + ' blocks add '  + blockScore + ' to ' + totalScore);
+      axsJb.axsJaxObj.speakTextViaNode(blockCount + ' blocks add '  + blockScore + ' to ' + totalScore);
   }
 };
 
@@ -89,7 +89,7 @@ axsJb.sayColorCounts = function(){
   var greenCount = document.getElementById('green').textContent;
   var blueCount = document.getElementById('blue').textContent;
   var purpleCount = document.getElementById('purple').textContent;
-  axsJb.axsJaxObj.speakThroughPixel( redCount + ' reds, ' +
+  axsJb.axsJaxObj.speakTextViaNode( redCount + ' reds, ' +
                                      yellowCount + ' yellows, ' +
                                      greenCount + ' greens, ' +
                                      blueCount + ' blues, ' +
@@ -111,7 +111,7 @@ axsJb.speakRow = function(){
   for (var col = startPos; col <= axsJb.MAXCOL; col++){
     speechString = speechString + axsJb.getColorOfBallImg(axsJb.getBallImgNode(axsJb.row,col));
   }
-  axsJb.axsJaxObj.speakThroughPixel(speechString);
+  axsJb.axsJaxObj.speakTextViaNode(speechString);
 };
 
 axsJb.speakCol = function(){
@@ -128,7 +128,7 @@ axsJb.speakCol = function(){
   for (var row = startPos; row <= axsJb.MAXROW; row++){
     speechString = speechString + axsJb.getColorOfBallImg(axsJb.getBallImgNode(row,axsJb.col));
   }
-  axsJb.axsJaxObj.speakThroughPixel(speechString);
+  axsJb.axsJaxObj.speakTextViaNode(speechString);
 };
 
 axsJb.findFirstBallInCol = function(){
@@ -162,7 +162,7 @@ axsJb.keyboardHandler = function(evt){
     axsJb.keyboardLocked = false;
   }
   if (evt.charCode == 63){ // ? (question mark)
-    axsJb.axsJaxObj.speakThroughPixel(axsJb.HELP_STRING);
+    axsJb.axsJaxObj.speakTextViaNode(axsJb.HELP_STRING);
   }
 
   if (axsJb.keyboardLocked === true){
@@ -172,10 +172,10 @@ axsJb.keyboardHandler = function(evt){
   if (evt.charCode == 117){ // u
     var undoButton = document.getElementById('menu-undo');
     if (undoButton.disabled === true){
-      axsJb.axsJaxObj.speakThroughPixel('Nothing to undo.');
+      axsJb.axsJaxObj.speakTextViaNode('Nothing to undo.');
     } else {
       axsJb.axsJaxObj.clickElem(undoButton, false);
-      axsJb.axsJaxObj.speakThroughPixel('Last action undone.');
+      axsJb.axsJaxObj.speakTextViaNode('Last action undone.');
     }
   }
   if (evt.charCode == 97){      //a
@@ -235,7 +235,7 @@ axsJb.keyboardHandler = function(evt){
       axsJb.sayStats();
     } else {      
       var totalScore = document.getElementById('userscore').textContent;
-      axsJb.axsJaxObj.speakThroughPixel('Total ' + totalScore);
+      axsJb.axsJaxObj.speakTextViaNode('Total ' + totalScore);
     }  
   }
   if (evt.charCode == 115){ // s
@@ -260,5 +260,5 @@ document.addEventListener('keypress', axsJb.keyboardHandler, true);
 
 alert = function(textStr){
   axsJb.keyboardLocked = true;
-  window.setTimeout(function(){axsJb.axsJaxObj.speakThroughPixel(textStr);},0);
+  window.setTimeout(function(){axsJb.axsJaxObj.speakTextViaNode(textStr);},0);
 };

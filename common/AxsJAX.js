@@ -178,7 +178,7 @@ AxsJAX.prototype.speakText = function(textString){
  * @param {Node} opt_anchorNode The node to insert the pixel in front of.
  *
  */
-AxsJAX.prototype.speakThroughPixel = function(textString, opt_anchorNode){
+AxsJAX.prototype.speakTextViaNode = function(textString, opt_anchorNode){
   var pixelId = 'AxsJAX_pixelAudioNode';
   var pixelName = 'AxsJAX_pixelAudioNode';
   var activeDoc = this.getActiveDocument();

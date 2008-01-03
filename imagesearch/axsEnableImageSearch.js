@@ -193,7 +193,7 @@ axsImageSearch.extraKeyboardNavHandler = function(evt){
     return false;
   }
   if (evt.charCode == 63){ // ? (question mark)
-    axsImageSearch.axsJAXObj.speakThroughPixel(axsImageSearch.HELP_STRING);
+    axsImageSearch.axsJAXObj.speakTextViaNode(axsImageSearch.HELP_STRING);
     return false;
   }
 
@@ -260,7 +260,7 @@ axsImageSearch.goToPrevResult = function(cycleBool){
 axsImageSearch.goToNextPage = function(){
   var nextPageDiv = document.getElementById('nn');
   if (!nextPageDiv){
-    axsImageSearch.axsJAXObj.speakThroughPixel(axsImageSearch.NO_NEXT_PAGE_STRING);
+    axsImageSearch.axsJAXObj.speakTextViaNode(axsImageSearch.NO_NEXT_PAGE_STRING);
     return;
   }
   document.location = nextPageDiv.parentNode.href;
@@ -269,7 +269,7 @@ axsImageSearch.goToNextPage = function(){
 axsImageSearch.goToPrevPage = function(){
   var prevPageDiv = document.getElementById('np');
   if (!prevPageDiv){
-    axsImageSearch.axsJAXObj.speakThroughPixel(axsImageSearch.NO_PREV_PAGE_STRING);
+    axsImageSearch.axsJAXObj.speakTextViaNode(axsImageSearch.NO_PREV_PAGE_STRING);
     return;
   }
   document.location = prevPageDiv.parentNode.href;

@@ -157,7 +157,7 @@ axsTalk.extraKeyboardNavHandler = function(evt){
 
 
   if (evt.charCode == 63){ // ? (question mark)
-    axsTalk.axsJAXObj.speakThroughPixel(axsTalk.HELP_STRING);
+    axsTalk.axsJAXObj.speakTextViaNode(axsTalk.HELP_STRING);
     return false;
   }
 

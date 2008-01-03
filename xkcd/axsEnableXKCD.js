@@ -176,7 +176,7 @@ axsXKCD.extraKeyboardNavHandler = function(evt){
     return false;
   }
   if (evt.charCode == 63){ // ? (question mark)
-    axsXKCD.axsJAXObj.speakThroughPixel(axsXKCD.HELP_STRING);
+    axsXKCD.axsJAXObj.speakTextViaNode(axsXKCD.HELP_STRING);
     return false;
   }
 
