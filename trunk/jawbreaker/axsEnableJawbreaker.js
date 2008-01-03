@@ -1,12 +1,14 @@
 //AxsJAX script for Jawbreaker game at:
 //http://www.minijuegosgratis.com/juegos/jawbreaker/jawbreaker.htm
 
-var axsJb_keyboardLocked = false;
-var axsJb_row = 0;
-var axsJb_col = 0;
-var axsJb_MAXROW = 11;
-var axsJb_MAXCOL = 10;
-var axsJb_HELP_STRING = 'The following keys are available. ' +
+var axsJb = {};
+
+axsJb.keyboardLocked = false;
+axsJb.row = 0;
+axsJb.col = 0;
+axsJb.MAXROW = 11;
+axsJb.MAXCOL = 10;
+axsJb.HELP_STRING = 'The following keys are available. ' +
                         'N, start a new game. ' +
                         'Arrow keys or H,J,K,L, navigate the board one ball at a time. ' +
                         'A,E,T,B, jump to the edges of the board. ' +
@@ -17,20 +19,21 @@ var axsJb_HELP_STRING = 'The following keys are available. ' +
                         'Space, click on the current ball. The first click selects the group and the second click confirms the selection.' +
                         'U, undoes the last confirmed selection.';
 
-var axsJb_axsJaxObj = new AxsJAX(false);
+axsJb.axsJaxObj = new AxsJAX(false);
 
 
-function axsJb_getCurrentPosition(){
-  var ballImg = axsJb_getBallImgNode(axsJb_row,axsJb_col);
-  var color = axsJb_getColorOfBallImg(ballImg);
-  var message = color + axsJb_row + ', ' + axsJb_col + '.';
+axsJb.getCurrentPosition = function(){
+  var ballImg = axsJb.getBallImgNode(axsJb.row,axsJb.col);
+  var color = axsJb.getColorOfBallImg(ballImg);
+  var message = color + axsJb.row + ', ' + axsJb.col + '.';
   ballImg.alt = message;
-  axsJb_axsJaxObj.speakNode(ballImg);
-}
+  axsJb.axsJaxObj.speakNode(ballImg);
+};
+
 /*
  * Dictionary mapping  image names to color names
  */
-var AxsJBImg2ColorMap = {
+axsJb.Img2ColorMap = {
   's_green.gif' : 'Selected Green. ',
   's_blue.gif' : 'Selected Blue. ',
   's_purple.gif' : 'Selected Purple. ',
@@ -44,18 +47,18 @@ var AxsJBImg2ColorMap = {
   'p_white.gif' : 'dot, '
 };
 
-function axsJb_getColorOfBallImg(ballImg){
-  var color = AxsJBImg2ColorMap[axsJb_getUrlOfBallImg(ballImg)];
+axsJb.getColorOfBallImg = function(ballImg){
+  var color = axsJb.Img2ColorMap[axsJb.getUrlOfBallImg(ballImg)];
   return color;
-}
+};
 
-function axsJb_getUrlOfBallImg(ballImg){
+axsJb.getUrlOfBallImg = function(ballImg){
   var url = ballImg.src.toString();
   var slashPos = url.lastIndexOf('/');
   return url.substring(slashPos+1);
-}
+};
 
-function axsJb_getBallImgNode(row,col){
+axsJb.getBallImgNode = function(row,col){
   var rowString = row.toString();
   var colString = col.toString();
   if (rowString.length < 2){
@@ -66,191 +69,189 @@ function axsJb_getBallImgNode(row,col){
   }
   var targetId = 'r'+ rowString + 'c' + colString;
   return document.getElementById(targetId);
-}
+};
 
-function axsJb_sayStats(){
+axsJb.sayStats = function(){
   var blockCount = document.getElementById('blockcount').textContent;
   var blockScore = document.getElementById('blockscore').textContent;
   var totalScore = document.getElementById('userscore').textContent;
   if (blockCount === 0 ) {
-      axsJb_axsJaxObj.speakThroughPixel('Score is ' + totalScore );
+      axsJb.axsJaxObj.speakThroughPixel('Score is ' + totalScore );
   } else {
-      axsJb_axsJaxObj.speakThroughPixel(blockCount + ' blocks add '  + blockScore + ' to ' + totalScore);
+      axsJb.axsJaxObj.speakThroughPixel(blockCount + ' blocks add '  + blockScore + ' to ' + totalScore);
   }
-}
+};
 
 
-function axsJb_sayColorCounts(){
+axsJb.sayColorCounts = function(){
   var redCount = document.getElementById('red').textContent;
   var yellowCount = document.getElementById('yellow').textContent;
   var greenCount = document.getElementById('green').textContent;
   var blueCount = document.getElementById('blue').textContent;
   var purpleCount = document.getElementById('purple').textContent;
-  axsJb_axsJaxObj.speakThroughPixel( redCount + ' reds, ' +
+  axsJb.axsJaxObj.speakThroughPixel( redCount + ' reds, ' +
                                      yellowCount + ' yellows, ' +
                                      greenCount + ' greens, ' +
                                      blueCount + ' blues, ' +
                                      purpleCount + ' purples.');
   
-}
+};
 
-function axsJb_speakRow(){
-  var speechString = "R " +  axsJb_row + ": ";
-  var startPos = axsJb_findFirstBallInRow();
+axsJb.speakRow = function(){
+  var speechString = "R " +  axsJb.row + ": ";
+  var startPos = axsJb.findFirstBallInRow();
   if (startPos == -1){
     speechString = speechString + 'all blank!';
-    startPos = axsJb_MAXCOL + 1;
+    startPos = axsJb.MAXCOL + 1;
   } else if (startPos > 1){
     speechString = speechString + startPos + ' blanks, ';
   } else {
     startPos = 0;
   }     
-  for (var col = startPos; col <= axsJb_MAXCOL; col++){
-    speechString = speechString + axsJb_getColorOfBallImg(axsJb_getBallImgNode(axsJb_row,col));
+  for (var col = startPos; col <= axsJb.MAXCOL; col++){
+    speechString = speechString + axsJb.getColorOfBallImg(axsJb.getBallImgNode(axsJb.row,col));
   }
-  axsJb_axsJaxObj.speakThroughPixel(speechString);
-}
+  axsJb.axsJaxObj.speakThroughPixel(speechString);
+};
 
-function axsJb_speakCol(){
-  var speechString = "C " +  axsJb_col + ": ";
-  var startPos = axsJb_findFirstBallInCol();
+axsJb.speakCol = function(){
+  var speechString = "C " +  axsJb.col + ": ";
+  var startPos = axsJb.findFirstBallInCol();
   if (startPos == -1){
     speechString = speechString + 'all blank!';
-    startPos = axsJb_MAXROW + 1;
+    startPos = axsJb.MAXROW + 1;
   } else if (startPos > 1){
     speechString = speechString + startPos + ' blanks, ';
   } else {
     startPos = 0;
   }       
-  for (var row = startPos; row <= axsJb_MAXROW; row++){
-    speechString = speechString + axsJb_getColorOfBallImg(axsJb_getBallImgNode(row,axsJb_col));
+  for (var row = startPos; row <= axsJb.MAXROW; row++){
+    speechString = speechString + axsJb.getColorOfBallImg(axsJb.getBallImgNode(row,axsJb.col));
   }
-  axsJb_axsJaxObj.speakThroughPixel(speechString);
-}
+  axsJb.axsJaxObj.speakThroughPixel(speechString);
+};
 
-function axsJb_findFirstBallInCol(){
-  for (var row = 0; row <= axsJb_MAXROW; row++){
-    var ballImg = axsJb_getBallImgNode(row,axsJb_col);
-    if (axsJb_getUrlOfBallImg(ballImg) != 'p_white.gif'){
+axsJb.findFirstBallInCol = function(){
+  for (var row = 0; row <= axsJb.MAXROW; row++){
+    var ballImg = axsJb.getBallImgNode(row,axsJb.col);
+    if (axsJb.getUrlOfBallImg(ballImg) != 'p_white.gif'){
       return row;
     }  
   }
   return -1;
-}
+};
 
-function axsJb_findFirstBallInRow(){
-  for (var col = 0; col <= axsJb_MAXCOL; col++){
-    var ballImg = axsJb_getBallImgNode(axsJb_row,col);
-    if (axsJb_getUrlOfBallImg(ballImg) != 'p_white.gif'){
+axsJb.findFirstBallInRow = function(){
+  for (var col = 0; col <= axsJb.MAXCOL; col++){
+    var ballImg = axsJb.getBallImgNode(axsJb.row,col);
+    if (axsJb.getUrlOfBallImg(ballImg) != 'p_white.gif'){
       return col;
     }  
   }
   return -1;
-}
+};
 
 
 
-function axsJb_keyboardHandler(evt){
+axsJb.keyboardHandler = function(evt){
   if (evt.charCode == 110){ // n
-    axsJb_row = 0;
-    axsJb_col = 0;
-    axsJb_axsJaxObj.clickElem(document.getElementById('menu-start'), false);
-    axsJb_getCurrentPosition();
-    axsJb_keyboardLocked = false;
+    axsJb.row = 0;
+    axsJb.col = 0;
+    axsJb.axsJaxObj.clickElem(document.getElementById('menu-start'), false);
+    axsJb.getCurrentPosition();
+    axsJb.keyboardLocked = false;
   }
   if (evt.charCode == 63){ // ? (question mark)
-    axsJb_axsJaxObj.speakThroughPixel(axsJb_HELP_STRING);
+    axsJb.axsJaxObj.speakThroughPixel(axsJb.HELP_STRING);
   }
 
-  if (axsJb_keyboardLocked === true){
+  if (axsJb.keyboardLocked === true){
     return;
   }
 
   if (evt.charCode == 117){ // u
     var undoButton = document.getElementById('menu-undo');
     if (undoButton.disabled === true){
-      axsJb_axsJaxObj.speakThroughPixel('Nothing to undo.');
+      axsJb.axsJaxObj.speakThroughPixel('Nothing to undo.');
     } else {
-      axsJb_axsJaxObj.clickElem(undoButton, false);
-      axsJb_axsJaxObj.speakThroughPixel('Last action undone.');
+      axsJb.axsJaxObj.clickElem(undoButton, false);
+      axsJb.axsJaxObj.speakThroughPixel('Last action undone.');
     }
   }
   if (evt.charCode == 97){      //a
-    var targCol = axsJb_findFirstBallInRow();
+    var targCol = axsJb.findFirstBallInRow();
     if (targCol != -1){    
-      axsJb_col = targCol;
+      axsJb.col = targCol;
     }
-    axsJb_getCurrentPosition();
+    axsJb.getCurrentPosition();
   }
   if (evt.charCode == 101){       //e
-    axsJb_col = axsJb_MAXCOL;
-    axsJb_getCurrentPosition();
+    axsJb.col = axsJb.MAXCOL;
+    axsJb.getCurrentPosition();
   }
   if (evt.charCode == 116){      //t
-    var targRow = axsJb_findFirstBallInCol();
+    var targRow = axsJb.findFirstBallInCol();
     if (targRow != -1){    
-      axsJb_row = targRow;
+      axsJb.row = targRow;
     }
-    axsJb_getCurrentPosition();
+    axsJb.getCurrentPosition();
   }
   if (evt.charCode == 98){       //b
-    axsJb_row = axsJb_MAXROW;
-    axsJb_getCurrentPosition();
+    axsJb.row = axsJb.MAXROW;
+    axsJb.getCurrentPosition();
   }
 
   if (evt.charCode == 61){       //= (equals)
-    axsJb_sayColorCounts();
+    axsJb.sayColorCounts();
   }
 
   if (evt.keyCode == 38 ||
       evt.charCode == 107){ // Up arrow or k
-    axsJb_row--;
-    if (axsJb_row < 0){ axsJb_row = 0; }
-    axsJb_getCurrentPosition();
+    axsJb.row--;
+    if (axsJb.row < 0){ axsJb.row = 0; }
+    axsJb.getCurrentPosition();
   }
   if (evt.keyCode == 37 ||
       evt.charCode == 104){ // Left arrow  or h
-    axsJb_col--;
-    if (axsJb_col < 0){ axsJb_col = 0; }
-    axsJb_getCurrentPosition();
+    axsJb.col--;
+    if (axsJb.col < 0){ axsJb.col = 0; }
+    axsJb.getCurrentPosition();
   }
   if (evt.keyCode == 40 ||
       evt.charCode == 106){ // Down arrow or j 
-    axsJb_row++;
-    if (axsJb_row > axsJb_MAXROW){  axsJb_row = axsJb_MAXROW; }
-    axsJb_getCurrentPosition();
+    axsJb.row++;
+    if (axsJb.row > axsJb.MAXROW){  axsJb.row = axsJb.MAXROW; }
+    axsJb.getCurrentPosition();
   }
   if (evt.keyCode == 39 ||
       evt.charCode == 108){ // Right arrow or l
-    axsJb_col++;
-    if (axsJb_col > axsJb_MAXCOL){ axsJb_col = axsJb_MAXCOL; }
-    axsJb_getCurrentPosition();
+    axsJb.col++;
+    if (axsJb.col > axsJb.MAXCOL){ axsJb.col = axsJb.MAXCOL; }
+    axsJb.getCurrentPosition();
   }
   if (evt.charCode == 32){ // Space
-    axsJb_axsJaxObj.clickElem(axsJb_getBallImgNode(axsJb_row,axsJb_col), false);
-    if (axsJb_getUrlOfBallImg(axsJb_getBallImgNode(axsJb_row,axsJb_col)).indexOf('s_') === 0){
-      axsJb_sayStats();
+    axsJb.axsJaxObj.clickElem(axsJb.getBallImgNode(axsJb.row,axsJb.col), false);
+    if (axsJb.getUrlOfBallImg(axsJb.getBallImgNode(axsJb.row,axsJb.col)).indexOf('s_') === 0){
+      axsJb.sayStats();
     } else {      
       var totalScore = document.getElementById('userscore').textContent;
-      axsJb_axsJaxObj.speakThroughPixel('Total ' + totalScore);
+      axsJb.axsJaxObj.speakThroughPixel('Total ' + totalScore);
     }  
   }
   if (evt.charCode == 115){ // s
-    axsJb_sayStats();
+    axsJb.sayStats();
   }
   if (evt.charCode == 99){ // c
-    axsJb_speakCol();
+    axsJb.speakCol();
   }
   if (evt.charCode == 114){ // r
-    axsJb_speakRow();
+    axsJb.speakRow();
   }
 
+};
 
 
-}
-
-
-document.addEventListener('keypress', axsJb_keyboardHandler, true);
+document.addEventListener('keypress', axsJb.keyboardHandler, true);
 
 //Rewrite the native alert function so that it speaks through AxsJAX and
 //does NOT popup a JavaScript alert window.
@@ -258,6 +259,6 @@ document.addEventListener('keypress', axsJb_keyboardHandler, true);
 //cancel this message out.
 
 alert = function(textStr){
-  axsJb_keyboardLocked = true;
-  window.setTimeout(function(){axsJb_axsJaxObj.speakThroughPixel(textStr);},0);
+  axsJb.keyboardLocked = true;
+  window.setTimeout(function(){axsJb.axsJaxObj.speakThroughPixel(textStr);},0);
 };
