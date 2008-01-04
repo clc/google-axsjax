@@ -39,7 +39,9 @@ var AxsJAX = function(useTabKeyFix){
   var self = this;
   if (useTabKeyFix){
     this.tabKeyFixOn = true;
-    document.addEventListener('keypress', function(event){self.tabKeyHandler(event,self);}, true);
+    document.addEventListener('keypress',
+                              function(event){self.tabKeyHandler(event,self);},
+                              true);
     document.body.AXSJAX_TABKEYFIX_ADDED = true;
   }
   this.activeParent = document.body;
@@ -61,7 +63,9 @@ AxsJAX.prototype.setActiveParent = function(targetNode){
   var activeDoc = this.getActiveDocument();
   if (this.tabKeyFixOn && !activeDoc.body.AXSJAX_TABKEYFIX_ADDED){
     var self = this;          
-    activeDoc.addEventListener('keypress', function(event){self.tabKeyHandler(event,self);}, true);
+    activeDoc.addEventListener('keypress',
+                               function(event){self.tabKeyHandler(event,self);},
+                               true);
     activeDoc.body.AXSJAX_TABKEYFIX_ADDED = true;
   }
 };
@@ -184,7 +188,8 @@ AxsJAX.prototype.speakTextViaNode = function(textString, opt_anchorNode){
   var activeDoc = this.getActiveDocument();
   var pixelNode = null;
   if (opt_anchorNode)  {
-    if (opt_anchorNode.previousSibling && opt_anchorNode.previousSibling.name == pixelName){
+    if ( opt_anchorNode.previousSibling &&
+         opt_anchorNode.previousSibling.name == pixelName ){
       pixelNode = opt_anchorNode.previousSibling;
     } else {
       pixelNode = activeDoc.createElement('img');
@@ -251,7 +256,10 @@ AxsJAX.prototype.clickElem = function(targetNode, shiftKey){
   //Clicking on a link does not cause traversal because of script
   //privilege limitations. The traversal has to be done by setting
   //document.location.
-  if (!targetNode.onclick && (targetNode.tagName == 'A') && targetNode.href && (targetNode.href.indexOf('http') === 0)){
+  if ( !targetNode.onclick &&
+       (targetNode.tagName == 'A') &&
+       targetNode.href &&
+       (targetNode.href.indexOf('http') === 0) ){
     if (shiftKey){
       window.open(targetNode.href);
     } else {
@@ -339,7 +347,10 @@ AxsJAX.prototype.markPosition = function(targetNode){
   }
   var allDescendants = targetNode.getElementsByTagName('*');
   for (var i = 0, currentNode; currentNode = allDescendants[i]; i++){
-    if ((currentNode.tagName == 'A') || (currentNode.tagName == 'INPUT') || (currentNode.hasAttribute('tabindex') && (currentNode.tabIndex != -1))){
+    if ( (currentNode.tagName == 'A') ||
+         (currentNode.tagName == 'INPUT') ||
+         ( currentNode.hasAttribute('tabindex') &&
+           (currentNode.tabIndex != -1) )  ){
       this.tabbingStartPosNode = currentNode;
       return true;
     }
@@ -491,8 +502,9 @@ AxsJAX.prototype.restoreOriginalView = function(){
 };
 
 /**
- * Given an XPath expression and rootNode, it returns an array of children nodes that match.
- * The code for this function was taken from Mihai Parparita's GMail Macros Greasemonkey Script.
+ * Given an XPath expression and rootNode, it returns an array of children nodes
+ * that match. The code for this function was taken from Mihai Parparita's GMail
+ * Macros Greasemonkey Script.
  * http://gmail-greasemonkey.googlecode.com/svn/trunk/scripts/gmail-new-macros.user.js
  */
 AxsJAX.prototype.evalXPath = function(expression, rootNode) {

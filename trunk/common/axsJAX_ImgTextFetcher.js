@@ -29,15 +29,20 @@ var axsJAX_ImgTextFetcher = {};
 
 
 axsJAX_ImgTextFetcher.run = function(){
-  var axsJAXCmd_GetImgTextStr = '#AxsJAX_Cmd=GetImgText(';
-  var axsJAXCmd_ImgStr = 'AxsJAX_Img=';
-  var axsJAXCmd_ParentStr = 'AxsJAX_ParentURL=';
+  var cmd_GetImgText = '#AxsJAX_Cmd=GetImgText(';
+  var cmd_Img = 'AxsJAX_Img=';
+  var cmd_Parent = 'AxsJAX_ParentURL=';
 
-  var axsJAXParams = document.location.toString();
-  axsJAXParams = axsJAXParams.substr(axsJAXParams.indexOf(axsJAXCmd_GetImgTextStr) + axsJAXCmd_GetImgTextStr.length);
+  var params = document.location.toString();
+  var params_start = params.indexOf(cmd_GetImgText) + cmd_GetImgText.length;
+  params = params.substr(params_start);
 
-  var imgUrl = axsJAXParams.substring(axsJAXParams.indexOf(axsJAXCmd_ImgStr)+axsJAXCmd_ImgStr.length,axsJAXParams.indexOf(axsJAXCmd_ParentStr)-1);
-  var parentUrl = axsJAXParams.substring(axsJAXParams.indexOf(axsJAXCmd_ParentStr)+axsJAXCmd_ParentStr.length,axsJAXParams.length-1);
+  var imgUrl_start = params.indexOf(cmd_Img)+cmd_Img.length;
+  var imgURL_end = params.indexOf(cmd_Parent)-1;
+  var imgUrl = params.substring(imgUrl_start,imgURL_end);
+  var parentUrl_start = params.indexOf(cmd_Parent)+cmd_Parent.length;
+  var parentUrl_end = params.length-1;
+  var parentUrl = params.substring(parentUrl_start,parentUrl_end);
 
   var imgText = "";
 
