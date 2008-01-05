@@ -31,7 +31,6 @@ var axsGMail = {};
 //These are strings used to find specific links
 axsGMail.EXPAND_ALL_STRING = "Expand all";
 
-
 //These are strings to be spoken to the user
 axsGMail.UNREAD_STRING = 'Unread. ';
 axsGMail.READ_STRING = 'Red. ';
@@ -40,8 +39,13 @@ axsGMail.STARRED_STRING = 'Starred. ';
 axsGMail.NOT_STRING = 'Not ';
 axsGMail.UNDO_MSG_STRING = "To undo, press Z.";
 axsGMail.NEW_CHAT_FROM_STRING = 'You have received a new chat message from ';
-axsGMail.NEW_CHAT_ACTIONS_STRING = 'Press escape to ignore the message. Press any other key to open a chat window.';
+axsGMail.NEW_CHAT_ACTIONS_STRING = 'Press escape to ignore the message. ' +
+                                   'Press any other key to open a chat window.';
 
+axsGMail.ONLINE_STRING = ', online.';
+axsGMail.OFFLINE_STRING = ', offline.';
+axsGMail.IDLE_STRING = ', idle.';
+axsGMail.CHAT_BUDDIES_STRING = 'Chat buddies';
 
 axsGMail.HELP_STRING =
     'The following shortcut keys are available. ' +
@@ -81,6 +85,7 @@ axsGMail.quickNavNode = null;
 axsGMail.inputFocused = false;
 axsGMail.lastFocusedNode = null;
 
+axsGMail.chatBuddiesInputNode = null;
 
 
 axsGMail.TL_currentItem = null;
@@ -88,6 +93,8 @@ axsGMail.TL_needToSpeak = false;
 
 axsGMail.CV_currentItem = null;
 axsGMail.CV_needToSpeak = false;
+
+axsGMail.chat_needToSpeak = false;
 
 
 
@@ -99,21 +106,28 @@ axsGMail.init = function(gmObj){
   axsGMail.TL_needToSpeak = false;
   axsGMail.CV_currentItem = null;
   axsGMail.CV_needToSpeak = false;
+  axsGMail.chat_needToSpeak = false;
 
   //Add event listeners
   document.addEventListener('keypress', axsGMail.extraKeyboardNavHandler,
                              true);
   document.addEventListener('focus', axsGMail.focusHandler, true);
   document.addEventListener('blur', axsGMail.blurHandler, true);
-  document.addEventListener('DOMNodeInserted', axsGMail.mainDoc_domInsertionHandler, true);
-
+  document.addEventListener('DOMNodeInserted',
+                            axsGMail.mainDoc_domInsertionHandler,
+                            true);
 
   //AxsJAX the canvas frame
   var canvasDoc = document.getElementById('canvas_frame').contentDocument;
   axsGMail.axsJAXObj.setActiveParent(canvasDoc.body);
-  canvasDoc.addEventListener('DOMAttrModified', axsGMail.domAttrModifiedHandler, true);
-  canvasDoc.addEventListener('DOMNodeInserted', axsGMail.domInsertionHandler, true);
-  canvasDoc.addEventListener('keypress', axsGMail.canvas_extraKeyboardNavHandler,
+  canvasDoc.addEventListener('DOMAttrModified',
+                             axsGMail.domAttrModifiedHandler,
+                             true);
+  canvasDoc.addEventListener('DOMNodeInserted',
+                             axsGMail.domInsertionHandler,
+                             true);
+  canvasDoc.addEventListener('keypress',
+                             axsGMail.canvas_extraKeyboardNavHandler,
                              true);
   canvasDoc.addEventListener('focus', axsGMail.focusHandler, true);
   canvasDoc.addEventListener('blur', axsGMail.blurHandler, true);
@@ -122,8 +136,10 @@ axsGMail.init = function(gmObj){
   axsGMail.gMonkeyObj.registerViewChangeCallback(axsGMail.viewChangeHandler);
 
   axsGMail.initQuickNav();
-};
 
+  //Use a setTimeOut since chat area loads later
+  window.setTimeout(function(){axsGMail.chat_prepChatField();},100);
+};
 
 
 
@@ -180,23 +196,6 @@ axsGMail.mainDoc_domInsertionHandler = function(evt){
   }
 };
 
-axsGMail.chatWindowHandler = function(chatWindowDiv){
-  var textArea = chatWindowDiv.getElementsByTagName('textarea')[0];
-  textArea.addEventListener('keypress',
-      function(evt){
-        if (evt.keyCode == 27){ // ESC
-          return true;
-        }
-        axsGMail.axsJAXObj.clickElem(chatWindowDiv.getElementsByTagName('img')[0],false);
-        return false;
-      },
-      true);
-  textArea.focus();
-  var userName = chatWindowDiv.getElementsByTagName('td')[1].textContent;
-  var newChatMsg = axsGMail.NEW_CHAT_FROM_STRING + userName + axsGMail.NEW_CHAT_ACTIONS_STRING;
-  axsGMail.axsJAXObj.speakText(newChatMsg);
-};
-
 
 
 axsGMail.canvas_extraKeyboardNavHandler = function(evt){
@@ -207,6 +206,19 @@ axsGMail.canvas_extraKeyboardNavHandler = function(evt){
   if (evt.keyCode == 27){ // ESC
     axsGMail.lastFocusedNode.blur();
     return false;
+  }
+
+  //Reread the current user name the user is on if the user has reached the top/bottom of the list
+  if ( axsGMail.lastFocusedNode &&
+       (axsGMail.lastFocusedNode == axsGMail.chatBuddiesInputNode) ){
+    if (!axsGMail.chat_needToSpeak){
+      if ( (evt.keyCode == 38) ||
+           (evt.keyCode == 40) ){ // Up arrow
+        axsGMail.chat_needToSpeak = true
+        window.setTimeout(axsGMail.chat_needToSpeakMonitor,10);
+        return true;
+      }
+    }
   }
 
 
@@ -249,7 +261,6 @@ axsGMail.canvas_extraKeyboardNavHandler = function(evt){
 };
 
 
-
 axsGMail.domAttrModifiedHandler = function(evt){
   var attrib = evt.attrName;
   var newVal = evt.newValue;
@@ -260,6 +271,15 @@ axsGMail.domAttrModifiedHandler = function(evt){
        (newVal == 'SenFne P0GJpc') ){
     target.setAttribute('tabindex',0);
     window.setTimeout(new function(){target.focus();},0);
+    return;
+  }
+  if ( (attrib == 'class') &&
+       (oldVal == 'ac-row') &&
+       (newVal == 'ac-row active') ){
+    if (!axsGMail.chatBuddiesInputNode){
+      axsGMail.chat_prepChatField();
+      }
+    axsGMail.chat_speakSelectedAutoComplete(target);
     return;
   }
 
@@ -285,7 +305,8 @@ axsGMail.viewChangeHandler = function(){
   } else if (viewType == 'cv'){
     axsGMail.CV_forceExpandAll();
     //Press n will turn on keyboard shortcuts for the conversation view
-    axsGMail.axsJAXObj.sendKey(axsGMail.gMonkeyObj.getActiveViewElement(),'n',false,false,false);
+    var activeViewElem  = axsGMail.gMonkeyObj.getActiveViewElement();
+    axsGMail.axsJAXObj.sendKey(activeViewElem,'n',false,false,false);
   }
 };
 
@@ -305,19 +326,27 @@ axsGMail.TL_domAttrModifiedHandler = function(evt){
   }
 
   //Message selected
-  if ((attrib == 'class') && (oldVal.indexOf('rfza3e') == -1) && (newVal.indexOf('rfza3e') != -1)){
+  if ( (attrib == 'class') &&
+       (oldVal.indexOf('rfza3e') == -1) &&
+       (newVal.indexOf('rfza3e') != -1) ){
     axsGMail.axsJAXObj.speakTextViaNode(axsGMail.SELECTED_STRING);
   }
   //Message deselected
-  if ((attrib == 'class') && (oldVal.indexOf('rfza3e') != -1) && (newVal.indexOf('rfza3e') == -1)){
+  if ( (attrib == 'class') &&
+       (oldVal.indexOf('rfza3e') != -1) &&
+       (newVal.indexOf('rfza3e') == -1) ){
     axsGMail.axsJAXObj.speakTextViaNode(axsGMail.NOT_STRING + axsGMail.SELECTED_STRING);
   }
   //Message starred
-  if ((attrib == 'class') && (oldVal.indexOf('n1QcP') == -1) && (newVal.indexOf('n1QcP') != -1)){
+  if ( (attrib == 'class') &&
+       (oldVal.indexOf('n1QcP') == -1) &&
+       (newVal.indexOf('n1QcP') != -1) ){
     axsGMail.axsJAXObj.speakTextViaNode(axsGMail.STARRED_STRING);
   }
   //Message unstarred
-  if ((attrib == 'class') && (oldVal.indexOf('n1QcP') != -1) && (newVal.indexOf('n1QcP') == -1)){
+  if ( (attrib == 'class') &&
+       (oldVal.indexOf('n1QcP') != -1) &&
+       (newVal.indexOf('n1QcP') == -1) ){
     axsGMail.axsJAXObj.speakTextViaNode(axsGMail.NOT_STRING + axsGMail.STARRED_STRING);
   }
 
@@ -428,11 +457,15 @@ axsGMail.CV_domAttrModifiedHandler = function(evt){
   }
   
   //Message starred
-  if ((attrib == 'class') && (oldVal.indexOf('kJv9nb') == -1) && (newVal.indexOf('kJv9nb') != -1)){
+  if ( (attrib == 'class') &&
+       (oldVal.indexOf('kJv9nb') == -1) &&
+       (newVal.indexOf('kJv9nb') != -1) ){
     axsGMail.axsJAXObj.speakTextViaNode(axsGMail.STARRED_STRING);
   }
   //Message unstarred
-  if ((attrib == 'class') && (oldVal.indexOf('kJv9nb') != -1) && (newVal.indexOf('kJv9nb') == -1)){
+  if ( (attrib == 'class') &&
+       (oldVal.indexOf('kJv9nb') != -1) &&
+       (newVal.indexOf('kJv9nb') == -1) ){
     axsGMail.axsJAXObj.speakTextViaNode(axsGMail.NOT_STRING + axsGMail.STARRED_STRING);
   }
 };
@@ -458,7 +491,9 @@ axsGMail.CV_getSender = function(cvItem){
 
 axsGMail.CV_getSnippet = function(cvItem){
   var senderNode = axsGMail.CV_getSender(cvItem);
-  if (senderNode && senderNode.nextSibling && (senderNode.nextSibling.className == 'zyVlgb XZlFIc')){
+  if ( senderNode &&
+       senderNode.nextSibling &&
+       (senderNode.nextSibling.className == 'zyVlgb XZlFIc') ){
     return senderNode.nextSibling;
   }
   return null;
@@ -484,7 +519,8 @@ axsGMail.CV_getContent = function(cvItem){
 
 
 axsGMail.CV_forceExpandAll = function(){
-  var uArray = document.getElementById('canvas_frame').contentDocument.getElementsByTagName('U');
+  var canvasFrame = document.getElementById('canvas_frame');
+  var uArray = canvasFrame.contentDocument.getElementsByTagName('U');
   for (var i=0,currentU; currentU = uArray[i]; i++){
     if (currentU.textContent == axsGMail.EXPAND_ALL_STRING){
       axsGMail.axsJAXObj.clickElem(currentU.parentNode,false);
@@ -529,7 +565,8 @@ axsGMail.CV_repeatCurrentItem = function(){
 };
 
 axsGMail.CV_needToSpeakMonitor = function(){
-  if ((axsGMail.gMonkeyObj.getActiveViewType() == 'cv') && axsGMail.CV_needToSpeak){
+  if ( (axsGMail.gMonkeyObj.getActiveViewType() == 'cv') &&
+       axsGMail.CV_needToSpeak ){
     axsGMail.CV_repeatCurrentItem();
   }
 };
@@ -567,9 +604,63 @@ axsGMail.quickNav_keyHandler = function(evt){
 
 axsGMail.jumpToSelectedQuickNavItem = function(){
   var labels = axsGMail.getLabels();
-  var index = axsGMail.quickNavNode.getElementsByTagName('SELECT')[0].selectedIndex;
+  var quickNavSelect = axsGMail.quickNavNode.getElementsByTagName('SELECT')[0];
+  var index = quickNavSelect.selectedIndex;
   axsGMail.axsJAXObj.clickElem(labels[index].firstChild,false);
 };
+
+
+
+//************
+//Functions for working with chat
+//************
+axsGMail.chat_prepChatField = function(){
+  var canvasBody = document.getElementById('canvas_frame').contentDocument.body;
+  axsGMail.chatBuddiesInputNode = axsGMail.axsJAXObj.evalXPath("//input[@label]", canvasBody)[0];
+  axsGMail.chatBuddiesInputNode.title = axsGMail.CHAT_BUDDIES_STRING;
+};
+
+axsGMail.chat_speakSelectedAutoComplete = function(acRowDiv){
+  axsGMail.chat_needToSpeak = false;
+  var statusDiv = axsGMail.axsJAXObj.evalXPath("div/div[1]/div[1]", acRowDiv)[0];
+  var status = "";
+  if (statusDiv.firstChild.className == 'T3MKEc ilX2xb'){
+    status = axsGMail.ONLINE_STRING;
+  } else if (statusDiv.firstChild.className == 'T3MKEc OvtWcf'){
+    status = axsGMail.OFFLINE_STRING;
+  } else {
+    status = axsGMail.IDLE_STRING;
+  }
+  var userDiv = axsGMail.axsJAXObj.evalXPath("div/div[1]/div[2]", acRowDiv)[0];
+  axsGMail.axsJAXObj.speakText(userDiv.textContent + status);
+};
+
+axsGMail.chat_needToSpeakMonitor = function(){
+  if (axsGMail.chat_needToSpeak){
+    var canvasBody = document.getElementById('canvas_frame').contentDocument.body;
+    var acRowDiv = axsGMail.axsJAXObj.evalXPath("//div[@class='ac-row active']", canvasBody)[0];
+    axsGMail.chat_speakSelectedAutoComplete(acRowDiv);
+  }
+};
+
+
+axsGMail.chatWindowHandler = function(chatWindowDiv){
+  var textArea = chatWindowDiv.getElementsByTagName('textarea')[0];
+  textArea.addEventListener('keypress',
+      function(evt){
+        if (evt.keyCode == 27){ // ESC
+          return true;
+        }
+        axsGMail.axsJAXObj.clickElem(chatWindowDiv.getElementsByTagName('img')[0],false);
+        return false;
+      },
+      true);
+  textArea.focus();
+  var userName = chatWindowDiv.getElementsByTagName('td')[1].textContent;
+  var newChatMsg = axsGMail.NEW_CHAT_FROM_STRING + userName + axsGMail.NEW_CHAT_ACTIONS_STRING;
+  axsGMail.axsJAXObj.speakText(newChatMsg);
+};
+
 
 
 // Initialize the AxsJAX script using GMail's GMonkey API
