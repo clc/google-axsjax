@@ -21,7 +21,7 @@
  */
 
 /**
- * Class of scripts for improving accessibility of Google Apps.
+ * Class of scripts for improving accessibility of Web 2.0  Apps.
  * @param {boolean} useTabKeyFix  Whether or not to try syncing to the last
  *                                marked position when the user presses the
  *                                tab key.
@@ -33,15 +33,17 @@ var AxsJAX = function(useTabKeyFix){
   this.drillDownBody = null;
   this.currentView = 0;
   this.ID_NUM_ = 0;
-  //Activate the tab key fix if needed
   this.tabbingStartPosNode = null;
   this.tabKeyFixOn = false;
+  
+  //Activate the tab key fix if needed
   var self = this;
   if (useTabKeyFix){
     this.tabKeyFixOn = true;
     document.addEventListener('keypress',
                               function(event){self.tabKeyHandler(event,self);},
                               true);
+    // Record in a custom DOM property:
     document.body.AXSJAX_TABKEYFIX_ADDED = true;
   }
   this.activeParent = document.body;
@@ -77,7 +79,7 @@ AxsJAX.prototype.setActiveParent = function(targetNode){
  */
 AxsJAX.prototype.getActiveDocument = function(){
   var activeDoc = this.activeParent;
-  while (activeDoc.nodeType != 9){
+  while (activeDoc.nodeType != 9){ // 9 == DOCUMENT_NODE
     activeDoc = activeDoc.parentNode;
   }
   return activeDoc;
@@ -96,6 +98,7 @@ AxsJAX.prototype.getActiveDocument = function(){
  * to mirror the visual indication that a node is the current node
  * by speaking its contents as soon as as it becomes the current node.
  * @param {Node} targetNode The HTML node to be spoken.
+ * @param {boolean}opt_noFocusChange  Specify if focus should move to targetNode
  */
 AxsJAX.prototype.speakNode = function(targetNode, opt_noFocusChange){
   if (!targetNode.id){
@@ -105,6 +108,11 @@ AxsJAX.prototype.speakNode = function(targetNode, opt_noFocusChange){
     this.setAttributeOf(targetNode,'live','rude');
     this.setAttributeOf(targetNode,'atomic','true');
     var activeDoc = this.getActiveDocument();
+
+    // It would be simpler to retain the dummyNode once it has been created
+    // and change its textContent; however that fails to trigger the update
+    // events we need. So we create a new node, taking care to remove any
+    // previously created dummyNode.
     var dummyNode = activeDoc.createElement('div');
     dummyNode.textContent = ' ';
     dummyNode.name = 'AxsJAX_dummyNode';
@@ -140,7 +148,7 @@ AxsJAX.prototype.speakNode = function(targetNode, opt_noFocusChange){
  * Triggers a DOMNodeInserted event by inserting the text to be spoken
  * into a hidden node. AT will respond by reading the content of this new node.
  * This should be used in cases a message needs to be spoken
- * to give an auditory cue to something that is shown visually.
+ * to give an auditory cue for something that is shown visually.
  * A good example would be when content has loaded or is changed from
  * being hidden to being displayed; it is visually obvious, but there may not
  * be any audio cue.
@@ -161,10 +169,10 @@ AxsJAX.prototype.speakText = function(textString){
 };
 
 /**
- * This will insert a transparent pixel to the end of the page, put
+ * This will insert a transparent pixel at the end of the page, put
  * the textString as the pixel's alt text, then use speakNode on the pixel.
- * This is an alternative way of speaking text that does not rely on
- * ARIA live regions.
+ * This is way  of generating spoken feedback   when 
+ * ARIA live region support is unavailable.
  * The advantage is that it is more compatible as few assistive technologies
  * currently support live regions.
  * The disadvantage (besides being a somewhat hacky way of doing things) is
@@ -174,6 +182,7 @@ AxsJAX.prototype.speakText = function(textString){
  * If there is an anchorNode specified, this function will place the pixel
  * before the anchorNode and set focus to the pixel.
  *
+ * This enables AT like screenreaders  resume reading at a given position.
  * If there is no anchorNode specified, this function will append the pixel
  * as the last child to the body of the active document and call speakNode on
  * the pixel.
@@ -185,6 +194,7 @@ AxsJAX.prototype.speakText = function(textString){
 AxsJAX.prototype.speakTextViaNode = function(textString, opt_anchorNode){
   var pixelId = 'AxsJAX_pixelAudioNode';
   var pixelName = 'AxsJAX_pixelAudioNode';
+  var encodedClearPixel = 'data:image/gif;base64,R0lGODlhAQABAIAAANvf7wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==';
   var activeDoc = this.getActiveDocument();
   var pixelNode = null;
   if (opt_anchorNode)  {
@@ -196,7 +206,7 @@ AxsJAX.prototype.speakTextViaNode = function(textString, opt_anchorNode){
       pixelNode.name = pixelName;
       pixelNode.setAttribute('tabindex',0);
       pixelNode.style.outline = 'none';
-      pixelNode.src = 'http://google-axsjax.googlecode.com/svn/trunk/common/res/images/blank.gif';
+      pixelNode.src = encodedClearPixel;
       opt_anchorNode.parentNode.insertBefore(pixelNode, opt_anchorNode);
       this.forceATSync(pixelNode);
     }
@@ -209,17 +219,13 @@ AxsJAX.prototype.speakTextViaNode = function(textString, opt_anchorNode){
     if (!pixelNode){
       pixelNode = activeDoc.createElement('img');
       pixelNode.id = pixelId;
-      pixelNode.src = 'http://google-axsjax.googlecode.com/svn/trunk/common/res/images/blank.gif';
+      pixelNode.src = encodedClearPixel;
       activeDoc.body.appendChild(pixelNode);
     }
     pixelNode.alt = textString;
     this.speakNode(pixelNode);
   }
 };
-
-
-
-
 
 /**
  * Puts alt='' for all images that are children of the target node that
@@ -242,6 +248,7 @@ AxsJAX.prototype.putNullForNoAltImages = function(targetNode){
 /**
  * Dispatches a left click event on the element that is the targetNode.
  * @param {Node} targetNode The target node of this operation.
+ * @param {boolean} shiftKey Specifies if shift is held down.
  */
 AxsJAX.prototype.clickElem = function(targetNode, shiftKey){
   var activeDoc = this.getActiveDocument();
@@ -299,9 +306,10 @@ AxsJAX.prototype.sendKey = function(targetNode, theKey,
 };
 
 /**
- * Assigns an ID to the targetNode and returns the ID that the node has after
- * the operation. If the targetNode already has an ID, that ID will not
- * be changed; the returned ID will be the original ID.
+ * Assigns an ID to the targetNode.
+ * If targetNode already has an ID, this is a no-op.
+ * Always returns the ID of targetNode.
+ * If targetNode is null, we return ''
  * @param {Node} targetNode The target node of this operation.
  * @param {String} opt_prefixString
  * Prefix to help ensure the uniqueness of the ID.
@@ -321,10 +329,6 @@ AxsJAX.prototype.assignId = function(targetNode,opt_prefixString){
   targetNode.id = opt_prefixString + this.ID_NUM_++;        
   return targetNode.id;
 };
-
-
-
-
 
 /**
  * Marks the current position by remembering what the last focusable node was.
@@ -358,7 +362,6 @@ AxsJAX.prototype.markPosition = function(targetNode){
   return false;
 };
 
-
 /**
  * Restores the focus .
  * Usage:
@@ -385,7 +388,7 @@ AxsJAX.prototype.tabKeyHandler = function(evt, selfRef){
 /**
  * Scrolls to the targetNode and speaks it.
  * This will automatically mark the position; this should be used if you are
- * trying to do navigation.
+ * navigating through content.
  * @param {Node} targetNode The HTML node to be spoken.
  */
 AxsJAX.prototype.goTo = function(targetNode){
@@ -423,7 +426,6 @@ AxsJAX.prototype.setAttributeOf = function(targetNode, attribute, value){
   targetNode.setAttribute(attribute, value);
 };
 
-
 /**
  * Gets the attribute of the targetNode.
  * Use this rather than a direct get attribute to abstract away ARIA
@@ -447,7 +449,6 @@ AxsJAX.prototype.removeAttributeOf = function(targetNode, attribute){
   targetNode.removeAttribute(attribute);
 };
 
-
 /**
  * Sets the location of the active document. This will force
  * assistive technologies that use a browse vs forms mode system
@@ -463,42 +464,6 @@ AxsJAX.prototype.forceATSync = function(targetNode){
     loc = loc.substring(0,indexOfHash);
   }
   activeDoc.location = loc + '#' + id;
-};
-
-
-/**
- * Removes the actual body of the page from view and replaces it with
- * a drill down view that only contains the subtree of the targetNode.
- * @param {Node} targetNode The HTML node to force the AT to sync to
- */
-AxsJAX.prototype.enterDrillDownView = function(targetNode){
-  if (this.currentView == 1){
-    return;
-  }
-  if (!this.htmlNode){
-    this.origBody = document.body;
-    this.htmlNode = this.origBody.parentNode;
-  }
-  this.drillDownBody = document.createElement('BODY');
-  this.drillDownBody.appendChild(targetNode.cloneNode(true));
-  this.drillDownBody.firstChild.setAttribute('tabindex',0);
-  this.htmlNode.insertBefore(this.drillDownBody, this.origBody);
-  this.origBody.style.display="none";
-  this.currentView = 1;
-  this.drillDownBody.firstChild.focus();
-};
-
-/**
- * Restores the original body after entering the drill down view.
- */
-AxsJAX.prototype.restoreOriginalView = function(){
-  if (this.currentView === 0){
-    return;
-  }
-  this.origBody.style.display="";
-  this.htmlNode.removeChild(this.drillDownBody);
-  this.drillDownBody = null;
-  this.currentView = 0;
 };
 
 /**
