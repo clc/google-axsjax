@@ -122,7 +122,7 @@ axsBooksPreview.pageInsertionHandler = function(evt){
 /**
  * When an input blank has focus, the keystrokes should go into the blank
  * and should not trigger hot key commands.
- * @param {event} A Focus event
+ * @param evt {event} A Focus event
  */
 axsBooksPreview.focusHandler = function(evt){
   axsBooksPreview.lastFocusedNode = evt.target;
@@ -135,7 +135,7 @@ axsBooksPreview.focusHandler = function(evt){
 /**
  * When no input blanks have focus, the keystrokes should trigger hot key
  * commands.
- * @param {event} A Blur event
+ * @param evt {event} A Blur event
  */
 axsBooksPreview.blurHandler = function (evt){
   axsBooksPreview.lastFocusedNode = null;

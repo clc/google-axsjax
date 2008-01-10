@@ -105,8 +105,9 @@ axsReader.init = function(){
 /**
  * When the feed search results are loaded, this will tell users that they can
  * proceed.
- * @param {event} A DOM Node Insertion event
+ * @param event {event} A DOM Node Insertion event
  */
+
 axsReader.domInsertionHandler = function(event){
   if (event.target.firstChild &&
       event.target.firstChild.id == 'directory-search-results'){
@@ -163,7 +164,7 @@ axsReader.findSelectedTag = function(tagSelectorTopDiv){
 /**
  * When an input blank has focus, the keystrokes should go into the blank
  * and should not trigger hot key commands.
- * @param {event} A Focus event
+ * @param event {event} A Focus event
  */
 axsReader.focusHandler = function(event){
   if ((event.target.tagName == 'INPUT') ||
@@ -176,7 +177,7 @@ axsReader.focusHandler = function(event){
 /**
  * When no input blanks have focus, the keystrokes should trigger hot key
  * commands.
- * @param {event} A Blur event
+ * @param event {event} A Blur event
  */
 axsReader.blurHandler = function (event){
   if ((event.target.tagName == 'INPUT') ||
@@ -191,7 +192,7 @@ axsReader.blurHandler = function (event){
  * is interested in and what is highlighted should be spoken.
  * Reader will unhide the articles viewer-box when the user opens a feed; the
  * user should be informed when this happens.
- * @param {event} A DOM Attribute Modified event
+ * @param evt {event} A DOM Attribute Modified event
  */
 axsReader.domAttrModifiedHandler = function(evt){
   var attrib = evt.attrName;
@@ -248,7 +249,7 @@ axsReader.domAttrModifiedHandler = function(evt){
 /**
  * Reader does not have full keyboard support for all important functions.
  * This key handler extends the support to cover what is missing.
- * @param {event} A Keypress event
+ * @param event {event} A Keypress event
  */
 axsReader.extraKeyboardNavHandler = function(event){
   if (event.ctrlKey){ //None of these commands involve Ctrl.

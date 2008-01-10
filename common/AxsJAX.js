@@ -281,11 +281,11 @@ AxsJAX.prototype.clickElem = function(targetNode, shiftKey){
  * @param {Node} targetNode The target node of this operation.
  * @param {String} theKey The key to use for this operation.
  *                        This can be any single printable character or ENTER.
- * @param {Bool} holdCtrl Whether or not the Ctrl key should be held for
+ * @param {Boolean} holdCtrl Whether or not the Ctrl key should be held for
  *                        this operation.
- * @param {Bool} holdAlt Whether or not the Alt key should be held for
+ * @param {Boolean} holdAlt Whether or not the Alt key should be held for
  *                       this operation.
- * @param {Bool} holdShift Whether or not the Shift key should be held
+ * @param {Boolean} holdShift Whether or not the Shift key should be held
  *                         for this operation.
  */
 AxsJAX.prototype.sendKey = function(targetNode, theKey,
@@ -323,10 +323,8 @@ AxsJAX.prototype.assignId = function(targetNode,opt_prefixString){
   if (targetNode.id){
     return targetNode.id;
   }
-  if (!opt_prefixString){
-    opt_prefixString = "AxsJAX_ID_";
-  }
-  targetNode.id = opt_prefixString + this.ID_NUM_++;        
+  var prefix =  opt_prefixString ||  'AxsJAX_ID_';
+  targetNode.id = prefix + this.ID_NUM_++;        
   return targetNode.id;
 };
 
