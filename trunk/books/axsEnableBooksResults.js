@@ -57,8 +57,8 @@ axsBooksResults.HELP_STRING =
  * @type AxsJAX
  */
 axsBooksResults.axsJAXObj = null;
-
-axsBooksResults.resultsArray = null;
+// tvr: declare as array to help the compiler 
+axsBooksResults.resultsArray = new Array();
 axsBooksResults.resultsIndex = 0;
 
 axsBooksResults.inputFocused = false;
@@ -95,7 +95,7 @@ axsBooksResults.readTheFirstThing = function(evt){
 /**
  * When an input blank has focus, the keystrokes should go into the blank
  * and should not trigger hot key commands.
- * @param {event} A Focus event
+ * @param evt {event} A Focus event
  */
 axsBooksResults.focusHandler = function(evt){
   axsBooksResults.lastFocusedNode = evt.target;
@@ -108,7 +108,7 @@ axsBooksResults.focusHandler = function(evt){
 /**
  * When no input blanks have focus, the keystrokes should trigger hot key
  * commands.
- * @param {event} A Blur event
+ * @param evt {event} A Blur event
  */
 axsBooksResults.blurHandler = function (evt){
   axsBooksResults.lastFocusedNode = null;
@@ -120,24 +120,21 @@ axsBooksResults.blurHandler = function (evt){
 
 
 axsBooksResults.extraKeyboardNavHandler = function(evt){
-  if (evt.ctrlKey){ //None of these commands involve Ctrl.
-                    //If Ctrl is held, it must be for some AT. 
-    return true;
-  }
-  if (evt.keyCode == 27){ // ESC
-    axsBooksResults.lastFocusedNode.blur();
-  }
+  // We pass on the event if we are in an input field
+  if (axsBooksResults.inputFocused) return true;
 
-  if (axsBooksResults.inputFocused){
-    return true;
-  }
+  //If Ctrl is held, it must be for some AT.
+  if (evt.ctrlKey) return true;
 
-  if (evt.charCode == 106){ // j
-    axsBooksResults.goToNextResult(true);
-  }
-  if (evt.charCode == 107){ // k
-    axsBooksResults.goToPrevResult(true);
-  }
+  // ESC
+  if (evt.keyCode == 27) axsBooksResults.lastFocusedNode.blur();
+  // TVR: turn this into a kbd table.
+
+  // j, k
+  if (evt.charCode == 106)axsBooksResults.goToNextResult(true);
+  
+  if (evt.charCode == 107) axsBooksResults.goToPrevResult(true);
+  
   if (evt.charCode == 110){ // n
     axsBooksResults.goToNextResult(false);
   }
@@ -147,15 +144,19 @@ axsBooksResults.extraKeyboardNavHandler = function(evt){
 
 
   if (evt.charCode == 47){ // / (slash symbol)
-    // Focus on the top search blank
-    document.getElementsByName('q')[0].focus();  
-    document.getElementsByName('q')[0].select(); //and select all text
+    // Focus on the top search field
+    var f = document.getElementsByName('q')[0];
+    if (f !== undefined) {
+      f.focus();
+      f.select(); //and select all text
+    }
   }
 
 
   if (evt.keyCode == 33){ // Page Up
     axsBooksResults.goToPrevPage();
   }
+
   if (evt.keyCode == 34){ // Page Down
     axsBooksResults.goToNextPage();
   }
@@ -178,16 +179,16 @@ axsBooksResults.extraKeyboardNavHandler = function(evt){
   //Keys for working with the current result.
   //Capitals will be checked when it should be possible to open the link in a
   //new window since shift clicking usually opens in a new window.
+  
+  // make sure linksArray et al are declared in the right scope.
+  var current = axsBooksResults.resultsArray[axsBooksResults.resultsIndex];
   if (evt.keyCode == 13){ // Enter
-    var currentResultNode =
-        axsBooksResults.resultsArray[axsBooksResults.resultsIndex];
-    var mainLink = currentResultNode.getElementsByTagName('H2')[0].firstChild;
+    var mainLink = current.getElementsByTagName('H2')[0].firstChild;
     axsBooksResults.axsJAXObj.clickElem(mainLink, evt.shiftKey);
   }
+  
   if ((evt.charCode == 97) || (evt.charCode == 65)){ // a
-    currentResultNode =
-        axsBooksResults.resultsArray[axsBooksResults.resultsIndex];
-    var linksArray = currentResultNode.getElementsByTagName('A');
+    var linksArray = current.getElementsByTagName('A');
     for (var i=0, currentLink; currentLink = linksArray[i]; i++){
       if (currentLink.textContent == axsBooksResults.ABOUT_THIS_BOOK_STRING){
         axsBooksResults.axsJAXObj.clickElem(currentLink, evt.shiftKey);
@@ -195,10 +196,8 @@ axsBooksResults.extraKeyboardNavHandler = function(evt){
       }
     }
   }
-  if ((evt.charCode == 101) || (evt.charCode == 69)){ // e
-    currentResultNode =
-        axsBooksResults.resultsArray[axsBooksResults.resultsIndex];
-    linksArray = currentResultNode.getElementsByTagName('A');
+  if ((evt.charCode == 101) || (evt.charCode == 69)) { // e
+    linksArray = current.getElementsByTagName('A');
     for (i=0, currentLink; currentLink = linksArray[i]; i++){
       if (currentLink.textContent == axsBooksResults.MORE_EDITIONS_STRING){
         axsBooksResults.axsJAXObj.clickElem(currentLink, evt.shiftKey);
@@ -207,6 +206,7 @@ axsBooksResults.extraKeyboardNavHandler = function(evt){
     }
     axsBooksResults.axsJAXObj.speakTextViaNode(axsBooksResults.NO_OTHER_EDITIONS_STRING);
   }
+  
   return false;
 };
 

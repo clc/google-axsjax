@@ -115,7 +115,7 @@ axsBooksAbout.readTitleBar = function(){
 /**
  * When an input blank has focus, the keystrokes should go into the blank
  * and should not trigger hot key commands.
- * @param {event} A Focus event
+ * @param evt {event} A Focus event
  */
 axsBooksAbout.focusHandler = function(evt){
   axsBooksAbout.lastFocusedNode = evt.target;
@@ -128,7 +128,7 @@ axsBooksAbout.focusHandler = function(evt){
 /**
  * When no input blanks have focus, the keystrokes should trigger hot key
  * commands.
- * @param {event} A Blur event
+ * @param evt {event} A Blur event
  */
 axsBooksAbout.blurHandler = function (evt){
   axsBooksAbout.lastFocusedNode = null;
