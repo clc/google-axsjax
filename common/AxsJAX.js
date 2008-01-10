@@ -404,21 +404,32 @@ AxsJAX.prototype.goTo = function(targetNode){
  */
 AxsJAX.prototype.setAttributeOf = function(targetNode, attribute, value){
   //Add the aria- to attributes
-  if (attribute.toLowerCase() == 'live'){
-    attribute = 'aria-live';
-  } else if (attribute.toLowerCase() == 'activedescendant'){
-    attribute = 'aria-activedescendant';
-  } else if (attribute.toLowerCase() == 'atomic'){
-    attribute = 'aria-atomic';
+  attribute = attribute.toLowerCase();
+  switch (attribute){
+    case 'live': 
+      attribute = 'aria-live';
+      break;
+    case 'activedescendant':
+      attribute = 'aria-activedescendant';
+      break;
+    case 'atomic':
+      attribute = 'aria-atomic';
+      break;
   }
+
   //Add the wairole: to values
   if (value && value.toLowerCase){
-    if (value.toLowerCase() == 'group'){
-      value = 'wairole:group';
-    } else if (value.toLowerCase() == 'row'){
-      value = 'wairole:row';
-    } else if (value.toLowerCase() == 'button'){
-      value = 'wairole:button';
+    value = value.toLowerCase();
+    switch (value){
+      case 'group':
+        value = 'wairole:group';
+        break;
+      case 'row':
+        value = 'wairole:row';
+        break;
+      case 'button':
+        value = 'wairole:button';
+        break;
     }
   }
   targetNode.setAttribute(attribute, value);
