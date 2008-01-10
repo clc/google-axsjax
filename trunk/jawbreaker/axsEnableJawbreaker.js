@@ -19,14 +19,19 @@ axsJb.HELP_STRING = 'The following keys are available. ' +
                         'Space, click on the current ball. The first click selects the group and the second click confirms the selection.' +
                         'U, undoes the last confirmed selection.';
 
+axsJb.prevBallImg = null;
+
 axsJb.axsJaxObj = new AxsJAX(false);
 
 
 axsJb.getCurrentPosition = function(){
+  axsJb.prevBallImg.style.outline = 'none';
   var ballImg = axsJb.getBallImgNode(axsJb.row,axsJb.col);
   var color = axsJb.getColorOfBallImg(ballImg);
   var message = color + axsJb.row + ', ' + axsJb.col + '.';
   ballImg.alt = message;
+  ballImg.style.outline = 'black solid thin';
+  axsJb.prevBallImg = ballImg;
   axsJb.axsJaxObj.speakNode(ballImg);
 };
 
@@ -250,15 +255,19 @@ axsJb.keyboardHandler = function(evt){
 
 };
 
+axsJb.init = function(){
+  axsJb.prevBallImg = axsJb.getBallImgNode(axsJb.row,axsJb.col);
+  axsJb.prevBallImg.style.outline = 'black solid thin';
+  document.addEventListener('keypress', axsJb.keyboardHandler, true);
 
-document.addEventListener('keypress', axsJb.keyboardHandler, true);
-
-//Rewrite the native alert function so that it speaks through AxsJAX and
-//does NOT popup a JavaScript alert window.
-//Lock the keyboard so that the user doesn't accidentally
-//cancel this message out.
-
-alert = function(textStr){
-  axsJb.keyboardLocked = true;
-  window.setTimeout(function(){axsJb.axsJaxObj.speakTextViaNode(textStr);},0);
+  //Rewrite the native alert function so that it speaks through AxsJAX and
+  //does NOT popup a JavaScript alert window.
+  //Lock the keyboard so that the user doesn't accidentally
+  //cancel this message out.
+  alert = function(textStr){
+    axsJb.keyboardLocked = true;
+    window.setTimeout(function(){axsJb.axsJaxObj.speakTextViaNode(textStr);},0);
+  };
 };
+
+axsJb.init();
