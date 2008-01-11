@@ -324,7 +324,7 @@ AxsJAX.prototype.assignId = function(targetNode,opt_prefixString){
     return targetNode.id;
   }
   var prefix =  opt_prefixString ||  'AxsJAX_ID_';
-  targetNode.id = prefix + this.ID_NUM_++;        
+  targetNode.id = prefix + this.ID_NUM_++;
   return targetNode.id;
 };
 
@@ -406,7 +406,7 @@ AxsJAX.prototype.setAttributeOf = function(targetNode, attribute, value){
   //Add the aria- to attributes
   attribute = attribute.toLowerCase();
   switch (attribute){
-    case 'live': 
+    case 'live':
       attribute = 'aria-live';
       break;
     case 'activedescendant':
@@ -415,12 +415,13 @@ AxsJAX.prototype.setAttributeOf = function(targetNode, attribute, value){
     case 'atomic':
       attribute = 'aria-atomic';
       break;
+    default:
+      break;
   }
-
   //Add the wairole: to values
   if (value && value.toLowerCase){
-    value = value.toLowerCase();
-    switch (value){
+    var lcValue = value.toLowerCase(); //Do not directly assign lowercased value to value as it may not be valid
+    switch (lcValue){
       case 'group':
         value = 'wairole:group';
         break;
@@ -429,6 +430,8 @@ AxsJAX.prototype.setAttributeOf = function(targetNode, attribute, value){
         break;
       case 'button':
         value = 'wairole:button';
+        break;
+      default:
         break;
     }
   }
