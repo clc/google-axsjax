@@ -40,7 +40,7 @@ function pickScript(){
   var currentURL = document.baseURI;
 
   if (currentURL.indexOf('#AxsJAX_Cmd=GetImgText') != -1){
-    theScript.src = baseURL + 'common/axsJAX_ImgTextFetcher.js';
+    theScript.src = baseURL + 'common/cmd/imgText-exp.js';
     shouldInsertScripts = true;
   }  else if (currentURL.indexOf('http://www.google.com/reader/') === 0){
     theScript.src = baseURL + 'reader/axsEnableReader.js';

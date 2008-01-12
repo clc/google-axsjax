@@ -14,14 +14,12 @@
 
 
 /**
- * @fileoverview Greasemonkey JavaScript to enhance accessibility
+ * @fileoverview AxsJAX to enhance accessibility
  * of Google Books.
- * Note that these are Greasemonkey scripts for Firefox and are not intended
+ * Note that these  scripts for Firefox and are not intended
  * to work for other browsers.
  * @author clchen@google.com (Charles L. Chen)
  */
-
-
 
 // create namespace
 var axsBooksAbout = {};
@@ -33,14 +31,12 @@ axsBooksAbout.categoryObj = function(){
   this.itemsIndex = null;
 };
 
-
-
 //These are strings used to find specific links
 axsBooksAbout.MORE_STRING = 'more';
 axsBooksAbout.PLACES_MENTIONED_STRING = 'Places mentioned in this book';
 
 //These are strings to be spoken to the user
-axsBooksAbout.HELP_STRING =
+axsBooksAbout.HELP =
     'The following shortcut keys are available. ' +
     'Down arrow or N, go to the next category. ' +
     'Up arrow or P, go to the previous category. ' +
@@ -50,7 +46,6 @@ axsBooksAbout.HELP_STRING =
     'Slash, jump to the book search blank. ' +
     'S, jump to the "Search in this book" blank. ' +
     'Escape, leave a search blank. ';
-
 
 
 /**
@@ -71,20 +66,18 @@ axsBooksAbout.init = function(){
   axsBooksAbout.axsJAXObj = new AxsJAX(true);
 
   //Add event listeners
-  document.addEventListener('keypress', axsBooksAbout.extraKeyboardNavHandler,
-                             true);
+  document.addEventListener('keypress', axsBooksAbout.keyHandler, true);
   document.addEventListener('focus', axsBooksAbout.focusHandler, true);
   document.addEventListener('blur', axsBooksAbout.blurHandler, true);
-
-  //Setup the results array
+  // Expand all navigation sections:
+  
   axsBooksAbout.expandAllMoreLinks();
   axsBooksAbout.buildCategoriesArray();
 
-  //Read the first thing on the page.
+  // Speak the page title
   //Use a set time out just in case the browser is not entirely ready yet.
   window.setTimeout(axsBooksAbout.readTitleBar,100);
 };
-
 
 
 /**
@@ -94,8 +87,8 @@ axsBooksAbout.init = function(){
  * the " >>" part causes problems.
  */
 axsBooksAbout.expandAllMoreLinks = function(){
-  var spansArray = document.body.getElementsByTagName('SPAN');
-  for (var i=0,currentLink; currentLink = spansArray[i]; i++){
+  var spans = document.body.getElementsByTagName('SPAN');
+  for (var i=0,currentLink; currentLink = spans[i]; i++){
     if ( (currentLink.className == 'morelesslink') &&
          (currentLink.textContent.indexOf(axsBooksAbout.MORE_STRING) === 0) ){
       axsBooksAbout.axsJAXObj.clickElem(currentLink,false);
@@ -104,7 +97,7 @@ axsBooksAbout.expandAllMoreLinks = function(){
 };
 
 /**
- * Reads the first thing on the page.
+ * Reads the titlebar
  */
 axsBooksAbout.readTitleBar = function(){
   var titleBarNode = document.getElementById('titlebar');
@@ -113,7 +106,9 @@ axsBooksAbout.readTitleBar = function(){
 
 
 /**
- * When an input blank has focus, the keystrokes should go into the blank
+ * Record where the focus is.
+ * Record if current focus is an input area.
+ * When an input field has focus, the keystrokes should go into the blank
  * and should not trigger hot key commands.
  * @param evt {event} A Focus event
  */
@@ -126,7 +121,8 @@ axsBooksAbout.focusHandler = function(evt){
 };
 
 /**
- * When no input blanks have focus, the keystrokes should trigger hot key
+ * Update flag that records if input area is focused.
+ * When no input fields have focus, the keystrokes should trigger hot key
  * commands.
  * @param evt {event} A Blur event
  */
@@ -139,40 +135,13 @@ axsBooksAbout.blurHandler = function (evt){
 };
 
 
-axsBooksAbout.extraKeyboardNavHandler = function(evt){
-  if (evt.ctrlKey){ //None of these commands involve Ctrl.
-                    //If Ctrl is held, it must be for some AT. 
-    return true;
-  }
-  if (evt.keyCode == 27){ // ESC
-    axsBooksAbout.lastFocusedNode.blur();
-    return false;
-  }
+/*
+ * Move to the search in book field
+ */
 
-  if (axsBooksAbout.inputFocused){
-    return true;
-  }
-
-  if (evt.charCode == 106){ // j
-    axsBooksAbout.goToNextItem();
-    return false;
-  }
-  if (evt.charCode == 107){ // k
-    axsBooksAbout.goToPrevItem();
-    return false;
-  }
-  if (evt.charCode == 110){ // n
-    axsBooksAbout.goToNextCategory();
-    return false;
-  }
-  if (evt.charCode == 112){ // p
-    axsBooksAbout.goToPrevCategory();
-    return false;
-  }
-  if (evt.charCode == 115){ // s
-    var inputElems =
-        document.getElementById('search_form').getElementsByTagName('INPUT');
-    for (var i=0,input; input = inputElems[i]; i++){
+axsBooksAbout.goFindInBook = function () { // s
+    var inputs = document.getElementById('search_form').getElementsByTagName('INPUT');
+    for (var i=0,input; input = inputs[i]; i++){
       if (input.type == 'text'){
         input.focus();
         input.select();
@@ -180,54 +149,46 @@ axsBooksAbout.extraKeyboardNavHandler = function(evt){
       }
     }
     return true;
-  }
-
-
-
-  if (evt.charCode == 47){ // / (slash symbol)
-    // Focus on the top search blank
-    document.getElementsByName('q')[0].focus();  
-    document.getElementsByName('q')[0].select(); //and select all text
-    return false;
-  }
-
-
-
-  if (evt.keyCode == 38){ // Up arrow
-    axsBooksAbout.goToPrevCategory();
-    return false;
-  }
-  if (evt.keyCode == 37){ // Left arrow
-    axsBooksAbout.goToPrevItem();
-    return false;
-  }
-  if (evt.keyCode == 40){ // Down arrow
-    axsBooksAbout.goToNextCategory();
-    return false;
-  }
-  if (evt.keyCode == 39){ // Right arrow
-    axsBooksAbout.goToNextItem();
-    return false;
-  }
-  if (evt.charCode == 63){ // ? (question mark)
-    axsBooksAbout.axsJAXObj.speakTextViaNode(axsBooksAbout.HELP_STRING);
-    return false;
-  }
-
-  if (evt.keyCode == 13){ // Enter
-    axsBooksAbout.actOnCurrentItem(evt.shiftKey);
-  }
-
-
-
-  return true;
 };
 
 
+/*
+ * Move to the search field
+ */
 
+axsBooksAbout.goSearch = function () {
+  // Focus on the top search field
+  var f = document.getElementsByName('q')[0];
+  f.focus();
+  f.select(); //and select all text
+  return false;
+};
+  
+
+/*
+ * Keyboard handler for About A Book page
+ */
+axsBooksAbout.keyHandler = function(evt){
+  //If Ctrl is held, it must be for some AT. 
+  if (evt.ctrlKey) return true;
+  
+  if (evt.keyCode == 27){ // ESC
+    axsBooksAbout.lastFocusedNode.blur();
+    return false;
+  }
+
+  if (axsBooksAbout.inputFocused) return true;
+  
+  var command =  axsBooksAbout.keyCodeMap[evt.keyCode] ||
+  axsBooksAbout.charCodeMap[evt.charCode];
+
+  if (command)  return  command();
+  return true;
+  
+};
 
 //************
-//Functions for scraping the About page
+//Functions for content extraction
 //and breaking it into categories
 //************
 axsBooksAbout.buildCategoriesArray = function(){
@@ -263,7 +224,9 @@ axsBooksAbout.buildCategoriesArray = function(){
   myNode = document.getElementById('summary_content');
   if (myNode){
     cat = new axsBooksAbout.categoryObj();
-    cat.titleNode = myNode.previousSibling;
+    var titleTable = document.getElementById('volumebartable');
+    var titleCell =  axsBooksAbout.axsJAXObj.evalXPath('tbody/tr/td[*][@class="volumetitle"]',titleTable)[0];
+    cat.titleNode = titleCell;
     cat.mainContentNode = myNode;
     cat.itemsArray = new Array();
     cat.itemsIndex = -1;
@@ -535,6 +498,24 @@ axsBooksAbout.actOnCurrentItem = function(shiftKey){
   }
 };
 
+axsBooksAbout.keyCodeMap = {
+13 : function () {axsBooksAbout.actOnCurrentItem(false);}, // enter (tvr: lost shift)
+38 : function () {axsBooksAbout.goToPrevCategory();}, //up arrow
+37 : function () {axsBooksAbout.goToPrevItem();}, // left arrow
+40 : function () {axsBooksAbout.goToNextCategory();}, // down arrow
+39 : function () {axsBooksAbout.goToNextItem();} // down arrow
+};
+
+axsBooksAbout.charCodeMap = {
+63 : function () {
+    axsBooksAbout.axsJAXObj.speakTextViaNode(axsBooksAbout.HELP);}, // ?
+106 : function () {axsBooksAbout.goToNextItem();}, // j
+107 : function () {axsBooksAbout.goToPrevItem();}, // k
+110: function () {axsBooksAbout.goToNextCategory();}, // n
+112 : function () {axsBooksAbout.goToPrevCategory();}, //p
+115 : function () {axsBooksAbout.goFindInBook();}, //s 
+47 : axsBooksAbout.goSearch
+};
 
 
 
