@@ -29,7 +29,8 @@ function pickBooksScript(){
 
   //URL pattern for About summary
   if (currentURL.indexOf('id=') != -1){
-    if ((currentURL.indexOf('&printsec=') != -1) || (currentURL.indexOf('&pg=') != -1)){
+    if ( (currentURL.indexOf('&printsec=') != -1) ||
+         (currentURL.indexOf('&pg=') != -1) ){
       theScript.src = baseURL + 'books/axsEnableBooksPreview.js';
     } else {
       theScript.src = baseURL + 'books/axsEnableBooksAbout.js';
