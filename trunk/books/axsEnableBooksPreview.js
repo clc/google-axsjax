@@ -14,14 +14,12 @@
 
 
 /**
- * @fileoverview Greasemonkey JavaScript to enhance accessibility
+ * @fileoverview AxsJAX JavaScript to enhance accessibility
  * of Google Books.
- * Note that these are Greasemonkey scripts for Firefox and are not intended
+ * Note that these  scripts are for Firefox and are not intended
  * to work for other browsers.
  * @author clchen@google.com (Charles L. Chen)
  */
-
-
 
 // create namespace
 var axsBooksPreview = {};
@@ -35,7 +33,7 @@ axsBooksPreview.MORE_STRING = 'more';
 
 //These are strings to be spoken to the user
 axsBooksPreview.PAGE_STRING = 'Page ';
-axsBooksPreview.HELP_STRING =
+axsBooksPreview.HELP =
     'The following shortcut keys are available. ' +
     'Right arrow or N, go to the next page. ' +
     'Left arrow or P, go to the previous page. ' +
@@ -65,15 +63,15 @@ axsBooksPreview.resultsArray = null;
 axsBooksPreview.resultsIndex = 0;
 
 
-
-
-
+/*
+ * init: Set up Books Preview page
+ * to use two-page view  with full text.
+ */
 axsBooksPreview.init = function(){
   axsBooksPreview.axsJAXObj = new AxsJAX(true);
 
   //Add event listeners
-  document.addEventListener('keypress', axsBooksPreview.extraKeyboardNavHandler,
-                             true);
+  document.addEventListener('keypress', axsBooksPreview.keyHandler, true);
   document.addEventListener('focus', axsBooksPreview.focusHandler, true);
   document.addEventListener('blur', axsBooksPreview.blurHandler, true);
 
@@ -108,6 +106,9 @@ axsBooksPreview.init = function(){
 };
 
 
+/*
+ * Speak newly opened page.
+ */
 
 axsBooksPreview.pageInsertionHandler = function(evt){
    if (evt.target.tagName == 'P'){
@@ -120,10 +121,12 @@ axsBooksPreview.pageInsertionHandler = function(evt){
 };
 
 /**
- * When an input blank has focus, the keystrokes should go into the blank
+ * Record focus changes and remember when input areas get focus.
+ * When an input field has focus, the keystrokes should go into the blank
  * and should not trigger hot key commands.
  * @param evt {event} A Focus event
  */
+
 axsBooksPreview.focusHandler = function(evt){
   axsBooksPreview.lastFocusedNode = evt.target;
   if ((evt.target.tagName == 'INPUT') ||
@@ -146,85 +149,75 @@ axsBooksPreview.blurHandler = function (evt){
 };
 
 
-axsBooksPreview.extraKeyboardNavHandler = function(evt){
-  if (evt.ctrlKey){ //None of these commands involve Ctrl.
-                    //If Ctrl is held, it must be for some AT. 
-    return true;
-  }
-  if (evt.keyCode == 27){ // ESC
-    axsBooksPreview.lastFocusedNode.blur();
-    return false;
-  }
 
-  if (axsBooksPreview.inputFocused){
-    return true;
-  }
+/*
+ * go to search field
+ */
 
-  if (evt.charCode == 97){ // a
-    axsBooksPreview.goToAboutPage();
-    return false;
-  }
-
-  if (evt.charCode == 103){ // g
-    // Focus on the jump to page blank
-    document.getElementById('jtp').focus();
-    document.getElementById('jtp').select(); //and select all text
-    return false;
-  }
-  // n or right arrow or page down
-  if ((evt.charCode == 110) || (evt.keyCode == 39) || (evt.keyCode == 34)){
-    axsBooksPreview.goToNextPage();
-    return false;
-  }
-  // p or left arrow or page up
-  if ((evt.charCode == 112) || (evt.keyCode == 37) || (evt.keyCode == 33)){
-    axsBooksPreview.goToPrevPage();
-    return false;
-  }
-  if (evt.charCode == 106){ // j
-    axsBooksPreview.goToNextResult();
-    return false;
-  }
-  if (evt.charCode == 107){ // k
-    axsBooksPreview.goToPrevResult();
-    return false;
-  }
-
-
-  if (evt.charCode == 115){ // s
-    var inputElems =
-        document.getElementById('search_form').getElementsByTagName('INPUT');
-    for (var i=0,input; input = inputElems[i]; i++){
+axsBooksPreview.goFindInBook = function () { // s
+  var inputs = document.getElementById('search_form').getElementsByTagName('INPUT');
+  for (var i=0,input; input = inputs[i]; i++){
       if (input.type == 'text'){
         input.focus();
         input.select();
         return false;
       }
     }
-  }
+  return true; //event not handled
+};
 
-  if (evt.keyCode == 13){ // Enter
-    axsBooksPreview.actOnCurrentItem(evt.shiftKey);
-  }
+/*
+ * Move to jump-to-page field
+ */
 
-
-  if (evt.charCode == 47){ // / (slash symbol)
-    // Focus on the top search blank
-    document.getElementsByName('q')[0].focus();  
-    document.getElementsByName('q')[0].select(); //and select all text
+axsBooksPreview.jumpToPage = function () { // g
+  var jtp = document.getElementById('jtp');
+  if (jtp) {
+    jtp.focus();
+    jtp.select(); //and select all text
     return false;
+  } else {
+    // event not handled
+    return true;
   }
-
-
-  if (evt.charCode == 63){ // ? (question mark)
-    axsBooksPreview.axsJAXObj.speakTextViaNode(axsBooksPreview.HELP_STRING);
-    return false;
-  }
-  
-  return true;
 };
 
 
+
+/*
+ * Go to search field
+ */
+
+axsBooksPreview.goSearch = function () { // / (slash symbol)
+  var q = document.getElementsByName('q')[0];
+  if (q) {
+    q.focus();  
+    q.select(); //and select all text
+    return false;
+  } else {
+    // event not handled
+    return true;
+  }
+};
+
+axsBooksPreview.keyHandler = function(evt){
+  //If Ctrl is held, it must be for some AT. 
+  if (evt.ctrlKey)
+    return true;
+  
+  if (evt.keyCode == 27) { // escape
+    axsBooksPreview.lastFocusedNode.blur();
+    return false;
+  }
+
+  if (axsBooksPreview.inputFocused) return true;
+  
+  var command =  axsBooksPreview.keyCodeMap[evt.keyCode] ||
+  axsBooksPreview.charCodeMap[evt.charCode];
+
+  if (command)  return  command();
+  return true;
+};
 
 axsBooksPreview.goToAboutPage = function(){
   var synopsisDiv =  document.getElementById('synopsis');
@@ -340,8 +333,6 @@ axsBooksPreview.goToPrevResult = function(){
   axsBooksPreview.axsJAXObj.goTo(currentResultNode);
 };
 
-
-
 axsBooksPreview.actOnCurrentItem = function(shiftKey){
   var linkIndex = 0;
   var currentItem = axsBooksPreview.resultsArray[axsBooksPreview.resultsIndex];
@@ -366,5 +357,27 @@ axsBooksPreview.expandAllMoreLinks = function(){
     }
   }
 };
+
+axsBooksPreview.keyCodeMap = {
+13 : function() {axsBooksPreview.actOnCurrentItem(false);}, // enter (tvr: lost shift)
+37 : axsBooksPreview.goToPrevPage, // left arrow
+33 : axsBooksPreview.goToPrevPage, // Page up
+39 : axsBooksPreview.goToNextPage, // down arrow
+34 : axsBooksPreview.goToNextPage // Page Down
+};
+
+axsBooksPreview.charCodeMap = {
+63 : function () {
+    axsBooksPreview.axsJAXObj.speakTextViaNode(axsBooksPreview.HELP);}, // ?
+97 : axsBooksPreview.goToAboutPage, // A
+103 : axsBooksPreview.jumpToPage,  //g
+106 : axsBooksPreview.goToNextResult, // j
+107 : axsBooksPreview.goToPrevResult, // k
+110: axsBooksPreview.goToNextPage, // n
+112 : axsBooksPreview.goToPrevPage, //p
+115 : axsBooksPreview.goFindInBook, //s 
+47 : axsBooksPreview.goSearch
+};
+
 
 axsBooksPreview.init();

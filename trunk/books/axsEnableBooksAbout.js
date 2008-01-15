@@ -499,24 +499,22 @@ axsBooksAbout.actOnCurrentItem = function(shiftKey){
 };
 
 axsBooksAbout.keyCodeMap = {
-13 : function () {axsBooksAbout.actOnCurrentItem(false);}, // enter (tvr: lost shift)
-38 : function () {axsBooksAbout.goToPrevCategory();}, //up arrow
-37 : function () {axsBooksAbout.goToPrevItem();}, // left arrow
-40 : function () {axsBooksAbout.goToNextCategory();}, // down arrow
-39 : function () {axsBooksAbout.goToNextItem();} // down arrow
+13 : function() {axsBooksAbout.actOnCurrentItem(false);}, // enter (tvr: lost shift)
+38 : axsBooksAbout.goToPrevCategory, //up arrow
+37 : axsBooksAbout.goToPrevItem, // left arrow
+40 : axsBooksAbout.goToNextCategory, // down arrow
+39 : axsBooksAbout.goToNextItem // down arrow
 };
 
 axsBooksAbout.charCodeMap = {
 63 : function () {
     axsBooksAbout.axsJAXObj.speakTextViaNode(axsBooksAbout.HELP);}, // ?
-106 : function () {axsBooksAbout.goToNextItem();}, // j
-107 : function () {axsBooksAbout.goToPrevItem();}, // k
-110: function () {axsBooksAbout.goToNextCategory();}, // n
-112 : function () {axsBooksAbout.goToPrevCategory();}, //p
-115 : function () {axsBooksAbout.goFindInBook();}, //s 
+106 : axsBooksAbout.goToNextItem, // j
+107 : axsBooksAbout.goToPrevItem, // k
+110: axsBooksAbout.goToNextCategory, // n
+112 : axsBooksAbout.goToPrevCategory, //p
+115 : axsBooksAbout.goFindInBook, //s 
 47 : axsBooksAbout.goSearch
 };
-
-
 
 axsBooksAbout.init();
