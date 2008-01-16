@@ -38,7 +38,7 @@ axsGMail.SELECTED_STRING = 'Selected. ';
 axsGMail.STARRED_STRING = 'Starred. ';
 axsGMail.NOT_STRING = 'Not ';
 axsGMail.UNDO_MSG_STRING = "To undo, press Z.";
-axsGMail.NEW_CHAT_FROM_STRING = 'You have received a new chat message from ';
+axsGMail.NEW_CHAT_FROM_STRING = 'New chat message from ';
 axsGMail.NEW_CHAT_ACTIONS_STRING = 'Press escape to ignore the message. ' +
                                    'Press any other key to open a chat window.';
 
@@ -448,7 +448,7 @@ axsGMail.CV_domAttrModifiedHandler = function(evt){
   var target = evt.target;
 
   //Going to a new message causes an arrow to become visible to the left of the message
-  if ((attrib == 'class') && (newVal.indexOf('NGQVAc') != -1)){
+  if ( (attrib == 'class') && (newVal == 'AG5mQe NGQVAc') ){
     var cvItem = target.nextSibling;
     if (cvItem.tagName == 'IMG'){
       cvItem = cvItem.nextSibling;
@@ -533,7 +533,11 @@ axsGMail.CV_goToItem = function(cvItem){
   if(!axsGMail.CV_needToSpeak){
     return;
   }
-  axsGMail.CV_needToSpeak = false;
+  if (cvItem.parentNode.className == 'HprMsc'){
+    axsGMail.CV_needToSpeak = false;
+  } else {
+    axsGMail.CV_forceExpandAll();
+  }
   var message = "";
   if (axsGMail.CV_isStarred(cvItem)){
     message = message + axsGMail.STARRED_STRING;
