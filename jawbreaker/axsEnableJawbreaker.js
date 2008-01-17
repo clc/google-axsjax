@@ -17,6 +17,7 @@ axsJb.HELP_STRING = 'The following keys are available. ' +
                         'S, read the current stats. ' +
                         'Equals, read the current number of balls remaining for each color. ' +
                         'Space, click on the current ball. The first click selects the group and the second click confirms the selection.' +
+                        'D, deselect the unconfirmed selection.' +
                         'U, undoes the last confirmed selection.';
 
 axsJb.prevBallImg = null;
@@ -251,6 +252,10 @@ axsJb.keyboardHandler = function(evt){
   }
   if (evt.charCode == 114){ // r
     axsJb.speakRow();
+  }
+  if (evt.charCode == 100){ //d
+    jb.deselectBlocks();
+    axsJb.axsJaxObj.speakTextViaNode('Deselected. ');
   }
 
 };
