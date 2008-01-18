@@ -61,7 +61,7 @@ function pickScript(){
     theScript.src = baseURL + 'books/axsEnableBooks.js';
     shouldInsertScripts = true;
   } else if (currentURL.indexOf('http://mail.google.com/') === 0){
-    if (currentURL.indexOf('&view=cw&fs=1&tf=1&ver=4z1ea2of9ihcy9k8lkip018ww#') != -1){
+    if (currentURL.indexOf('&view=cw&fs=1&tf=1') != -1){
       theScript.src = baseURL + 'gmail/axsEnableTalk.js';
     } else {
       theScript.src = baseURL + 'gmail/axsEnableGMail.js';
