@@ -65,7 +65,31 @@ axsTalk.translatorsTable  = {
   'ko2en' : 'en',
   'nl2en' : 'en',
   'ru2en' : 'en',
-  'zh2en' : 'en'
+  'zh2en' : 'en',
+  'ar2en@bot.talk.google.com' : 'en',
+  'de2en@bot.talk.google.com' : 'en',
+  'de2fr@bot.talk.google.com' : 'fr',
+  'el2en@bot.talk.google.com' : 'en',
+  'en2ar@bot.talk.google.com' : 'ar',
+  'en2de@bot.talk.google.com' : 'de',
+  'en2el@bot.talk.google.com' : 'el',
+  'en2es@bot.talk.google.com' : 'es',
+  'en2fr@bot.talk.google.com' : 'fr',
+  'en2it@bot.talk.google.com' : 'it',
+  'en2ja@bot.talk.google.com' : 'ja',
+  'en2ko@bot.talk.google.com' : 'ko',
+  'en2nl@bot.talk.google.com' : 'nl',
+  'en2ru@bot.talk.google.com' : 'ru',
+  'en2zh@bot.talk.google.com' : 'zh',
+  'es2en@bot.talk.google.com' : 'en',
+  'fr2de@bot.talk.google.com' : 'de',
+  'fr2en@bot.talk.google.com' : 'en',
+  'it2en@bot.talk.google.com' : 'en',
+  'ja2en@bot.talk.google.com' : 'en',
+  'ko2en@bot.talk.google.com' : 'en',
+  'nl2en@bot.talk.google.com' : 'en',
+  'ru2en@bot.talk.google.com' : 'en',
+  'zh2en@bot.talk.google.com' : 'en'
 };
 
 axsTalk.itemsArray = null;
