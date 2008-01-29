@@ -99,6 +99,7 @@ axsGMail.chat_needToSpeak = false;
 
 
 axsGMail.init = function(gmObj){
+  
   axsGMail.axsJAXObj = new AxsJAX(true);
   axsGMail.gMonkeyObj = gmObj;
 
@@ -108,17 +109,20 @@ axsGMail.init = function(gmObj){
   axsGMail.CV_needToSpeak = false;
   axsGMail.chat_needToSpeak = false;
 
+
+
   //Add event listeners
-  document.addEventListener('keypress', axsGMail.extraKeyboardNavHandler,
+  var mainDoc = window.content.document;
+  mainDoc.addEventListener('keypress', axsGMail.extraKeyboardNavHandler,
                              true);
-  document.addEventListener('focus', axsGMail.focusHandler, true);
-  document.addEventListener('blur', axsGMail.blurHandler, true);
-  document.addEventListener('DOMNodeInserted',
+  mainDoc.addEventListener('focus', axsGMail.focusHandler, true);
+  mainDoc.addEventListener('blur', axsGMail.blurHandler, true);
+  mainDoc.addEventListener('DOMNodeInserted',
                             axsGMail.mainDoc_domInsertionHandler,
                             true);
 
   //AxsJAX the canvas frame
-  var canvasDoc = document.getElementById('canvas_frame').contentDocument;
+  var canvasDoc = mainDoc.getElementById('canvas_frame').contentDocument;
   axsGMail.axsJAXObj.setActiveParent(canvasDoc.body);
   canvasDoc.addEventListener('DOMAttrModified',
                              axsGMail.domAttrModifiedHandler,
@@ -139,6 +143,7 @@ axsGMail.init = function(gmObj){
 
   //Use a setTimeOut since chat area loads later
   window.setTimeout(function(){axsGMail.chat_prepChatField();},100);
+
 };
 
 
@@ -519,7 +524,7 @@ axsGMail.CV_getContent = function(cvItem){
 
 
 axsGMail.CV_forceExpandAll = function(){
-  var canvasFrame = document.getElementById('canvas_frame');
+  var canvasFrame = window.content.document.getElementById('canvas_frame');
   var uArray = canvasFrame.contentDocument.getElementsByTagName('U');
   for (var i=0,currentU; currentU = uArray[i]; i++){
     if (currentU.textContent == axsGMail.EXPAND_ALL_STRING){
@@ -580,9 +585,9 @@ axsGMail.CV_needToSpeakMonitor = function(){
 axsGMail.initQuickNav = function(){
   var quickNav = axsGMail.gMonkeyObj.addNavModule('Quick Nav');
   var labels = axsGMail.getLabels();
-  var selectNode = document.createElement('select');
+  var selectNode = window.content.document.createElement('select');
   for (var i=0, currentLabel; currentLabel = labels[i]; i++){
-    var optionNode = document.createElement('option');
+    var optionNode = window.content.document.createElement('option');
     optionNode.textContent = currentLabel.textContent;
     selectNode.appendChild(optionNode);
   }
@@ -614,12 +619,11 @@ axsGMail.jumpToSelectedQuickNavItem = function(){
 };
 
 
-
 //************
 //Functions for working with chat
 //************
 axsGMail.chat_prepChatField = function(){
-  var canvasBody = document.getElementById('canvas_frame').contentDocument.body;
+  var canvasBody = window.content.document.getElementById('canvas_frame').contentDocument.body;
   axsGMail.chatBuddiesInputNode = axsGMail.axsJAXObj.evalXPath("//input[@label]", canvasBody)[0];
   axsGMail.chatBuddiesInputNode.title = axsGMail.CHAT_BUDDIES_STRING;
 };
@@ -641,7 +645,7 @@ axsGMail.chat_speakSelectedAutoComplete = function(acRowDiv){
 
 axsGMail.chat_needToSpeakMonitor = function(){
   if (axsGMail.chat_needToSpeak){
-    var canvasBody = document.getElementById('canvas_frame').contentDocument.body;
+    var canvasBody = window.content.document.getElementById('canvas_frame').contentDocument.body;
     var acRowDiv = axsGMail.axsJAXObj.evalXPath("//div[@class='ac-row active']", canvasBody)[0];
     axsGMail.chat_speakSelectedAutoComplete(acRowDiv);
   }
@@ -670,7 +674,10 @@ axsGMail.chatWindowHandler = function(chatWindowDiv){
 // Initialize the AxsJAX script using GMail's GMonkey API
 // http://code.google.com/p/gmail-greasemonkey/wiki/GmailGreasemonkey10API
 axsGMail.loader = function(){
-  gmonkey.load('1.0', axsGMail.init);
+  //Don't attempt loading on frames that do not contain the gmonkey object.
+  if (typeof(gmonkey) == 'object'){
+    gmonkey.load('1.0', axsGMail.init);
+  }  
 };
 
 window.addEventListener('load', axsGMail.loader, true);

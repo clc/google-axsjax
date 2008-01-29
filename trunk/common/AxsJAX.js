@@ -155,17 +155,21 @@ AxsJAX.prototype.speakNode = function(targetNode, opt_noFocusChange){
  * @param {String} textString The text to be spoken.
  */
 AxsJAX.prototype.speakText = function(textString){
-  var activeDoc = this.getActiveDocument();
-  var audioNode = activeDoc.createElement('span');
+  //Use the main window's document directly here to ensure the AT
+  //receives and processes the live region event correctly.
+  //Since this is only a string, it is safe to do this without considering
+  //the active document of the AxsJAX object.
+  var doc =  window.content.document;
+  var audioNode = doc.createElement('span');
   audioNode.id = 'AxsJAX_audioNode';
   audioNode.style.visibility = 'hidden';
   this.setAttributeOf(audioNode,'live','rude');
-  var oldAudioNode = document.getElementById(audioNode.id);
+  var oldAudioNode = doc.getElementById(audioNode.id);
   if (oldAudioNode){
-    document.body.removeChild(oldAudioNode);
+    doc.body.removeChild(oldAudioNode);
   }
   audioNode.textContent = textString;
-  document.body.appendChild(audioNode);
+  doc.body.appendChild(audioNode);
 };
 
 /**
