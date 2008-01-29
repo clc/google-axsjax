@@ -219,7 +219,7 @@ axsGMail.canvas_extraKeyboardNavHandler = function(evt){
     if (!axsGMail.chat_needToSpeak){
       if ( (evt.keyCode == 38) ||
            (evt.keyCode == 40) ){ // Up arrow
-        axsGMail.chat_needToSpeak = true
+        axsGMail.chat_needToSpeak = true;
         window.setTimeout(axsGMail.chat_needToSpeakMonitor,10);
         return true;
       }
