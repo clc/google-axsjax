@@ -35,9 +35,34 @@ var AxsJAX = function(useTabKeyFix){
   this.ID_NUM_ = 0;
   this.tabbingStartPosNode = null;
   this.tabKeyFixOn = false;
+  this.navArray = null;
+  this.lastFocusedNode = null;
+  this.inputFocused = false;
+
+  var self = this;
+  //Monitor focus and blur
+  //These return "true" so that any page actions based on
+  //focus and blur will still occur.
+  document.addEventListener('focus', 
+                            function(evt){
+                              self.lastFocusedNode = evt.target;
+                              if ((evt.target.tagName == 'INPUT') ||
+                                  (evt.target.tagName == 'TEXTAREA')){
+                                self.inputFocused = true;
+                              }                              
+                              return true; 
+                            }, true);
+  document.addEventListener('blur', 
+                            function(evt){
+                              self.lastFocusedNode = null;
+                              if ((evt.target.tagName == 'INPUT') ||
+                                  (evt.target.tagName == 'TEXTAREA')){
+                                self.inputFocused = false;
+                              }
+                              return true;
+                            }, true);
   
   //Activate the tab key fix if needed
-  var self = this;
   if (useTabKeyFix){
     this.tabKeyFixOn = true;
     document.addEventListener('keypress',
@@ -507,4 +532,62 @@ AxsJAX.prototype.evalXPath = function(expression, rootNode) {
     results.push(xpathNode);
   }
   return results;
+};
+
+
+
+AxsJAX.prototype.makeItemsArray = function(listNode){
+  var itemsArray = new Array();
+  var cnlItems = listNode.getElementsByTagName('item');
+  for (var i=0,entry; entry = cnlItems[i]; i++){
+    //Do this in a try-catch block since there are multiple
+    //sets of cnlItems and even if one set does not exist as expected,
+    //the other sets should still be available.
+    try{
+      if (entry.getElementsByTagName('endNode')[0].textContent == ''){
+        var xpath = entry.getElementsByTagName('startNode')[0].textContent;
+        var htmlElem = this.getActiveDocument().getElementsByTagName('html')[0];
+        var elems = this.evalXPath(xpath, htmlElem);
+        var idx = parseInt(entry.getElementsByTagName('startIndex')[0].textContent);
+        var count = elems.length - idx;
+        if (entry.getElementsByTagName('itemCount')[0].textContent != '*'){
+          count = parseInt(entry.getElementsByTagName('itemCount')[0].textContent);
+        }
+        var end = count + idx;
+        var action = entry.getElementsByTagName('action')[0].textContent;
+        var ancestorCount = parseInt(entry.getElementsByTagName('ancestor')[0].textContent);
+        while (idx < end){
+          var item = new Object();
+          item.action = action;
+          item.elem = elems[idx];
+          for (var j=0; j<ancestorCount; j++){
+            item.elem = item.elem.parentNode;
+          }
+          itemsArray.push(item);
+          idx++;
+        }        
+      } 
+    } catch(err){}    
+  }
+  return itemsArray;
+};
+
+AxsJAX.prototype.setUpNavKeys = function(cnlDOM){
+  return "";
+};
+
+
+
+AxsJAX.prototype.navInit = function(cnlString){
+  var parser = new DOMParser();
+  var cnlDOM = parser.parseFromString(cnlString, 'text/xml');
+  var lists = cnlDOM.getElementsByTagName('list');
+  this.navArray = new Array();
+  for (var i=0, currentList; currentList = lists[i]; i++){
+    var navList = new Object();
+    navList.title = currentList.getAttribute('title');
+    navList.items = this.makeItemsArray(currentList);    
+    this.navArray.push(navList);    
+  }
+  this.setUpNavKeys(cnlDOM); 
 };
