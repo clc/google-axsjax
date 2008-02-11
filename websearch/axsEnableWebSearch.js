@@ -33,37 +33,25 @@ axsWebSearch.ACCESSIBLE_SEARCH_URL =
 axsWebSearch.WEB_SEARCH_URL = 'http://www.google.com/search?q=';
 
 //These are strings to be spoken to the user
-axsWebSearch.NO_ONE_BOX_STRING = 'There is no one box on this page.';
-axsWebSearch.NO_ADS_STRING = 'There are no advertisements on this page.';
-axsWebSearch.NO_NEXT_PAGE_STRING = 'There is no next page.';
-axsWebSearch.NO_PREV_PAGE_STRING = 'There is no previous page.';
-axsWebSearch.SEARCH_WITHIN_STRING = 'Search within ';
-axsWebSearch.NO_ALT_SEARCH_CAT_STRING = 'There are no other categories to ' +
-                                        'search within.';
-axsWebSearch.NO_RELATED_SEARCHES_STRING = 'There are no related searches.';
 axsWebSearch.HELP_STRING =
     'The following shortcut keys are available. ' +
-    'G, use guided mode. ' +   
-    'Down arrow or N, go to the next result. ' +
-    'Up arrow or P, go to the previous result. ' +
-    'Right arrow or J, cycle to the next result. ' +
-    'Left arrow or K, cycle to the previous result. ' +
+    'Down arrow or N, go to the next category. ' +
+    'Up arrow or P, go to the previous category. ' +
+    'Right arrow or J, go to the next item. ' +
+    'Left arrow or K, go to the previous item. ' +
     'Enter, open the current item. ' +
     'Shift and Enter, open the current item ' +
     'in a new window. ' +
     'Slash, jump to search blank. ' +
     'Escape, leave search blank. ' +
     '1, read the one box. ' +
+    'R, go through the results. ' +
     'A, cycle through advertisements. ' +
     'C, cycle through alternate categories to search in. ' +
-    'R, cycle through related searches. ' +
+    'S, cycle through related searches. ' +
     'Page up, go to the previous page. ' +
     'Page down, go to the next page. ';
-axsWebSearch.GUIDE_MODE_END =
-    'You have reached the end of this page. ' +
-    'Press  page down  to go to the next page. ' +
-    'Or press G again' +
-    'to return to the start of this page.';
+
 axsWebSearch.PAGECONTENT_RELATED_SEARCH_STRING = 'Searches related to:';
 
 axsWebSearch.ON_ACCESSIBLE_SEARCH =
@@ -79,92 +67,37 @@ axsWebSearch.SPONSORED_LINK = 'Sponsored link. ';
  */
 axsWebSearch.axsJAXObj = null;
 
-axsWebSearch.resultsArray = null;
-axsWebSearch.resultsIndex = 0;
-
-axsWebSearch.adAreaSideId = null;
-axsWebSearch.adsArray = null;
-axsWebSearch.adsIndex = 0;
-
-axsWebSearch.inputFocused = false;
-axsWebSearch.lastFocusedNode = null;
-
-axsWebSearch.currentLink = null;
-
-axsWebSearch.altSearchCatArray = null;
-axsWebSearch.altSearchCatIndex = 0;
-
-
-axsWebSearch.relatedSearchesArray = null;
-axsWebSearch.relatedSearchesIndex = 0;
-
-axsWebSearch.guideModeArray = null;
-axsWebSearch.guideModeIndex = 0;
-
-
 axsWebSearch.init = function(){
   axsWebSearch.axsJAXObj = new AxsJAX(true);
 
   //Add event listeners
   document.addEventListener('keypress', axsWebSearch.extraKeyboardNavHandler,
                              true);
-  document.addEventListener('focus', axsWebSearch.focusHandler, true);
-  document.addEventListener('blur', axsWebSearch.blurHandler, true);
 
   //Do any necessary preparations for browsing here
-  axsWebSearch.buildResultsArray();
-  axsWebSearch.buildAdsArray();
-  axsWebSearch.buildAltSearchCatArray();
-  axsWebSearch.buildRelatedSearchesArray();
-  axsWebSearch.buildGuideModeArray();
+  axsWebSearch.formatAdAreaSide();
+
+  var cnlString = "<cnl next='DOWN|n' prev='UP|p' emptyMsg=''>" +
+                  "<list title='One Box' next='RIGHT|j|*1' prev='LEFT|k' emptyMsg='There is no one box on this page.'><item><ancestor>0</ancestor><startNode>//div[@id='res']/p[*]</startNode><endNode></endNode><startIndex>0</startIndex><itemCount>1</itemCount><action>goto</action></item><item><ancestor>0</ancestor><startNode>//div[@id='res']/div[@class='e']</startNode><endNode></endNode><startIndex>0</startIndex><itemCount>1</itemCount><action>goto</action></item></list>" +
+                  "<list title='Results' next='RIGHT|j|*r' prev='LEFT|k' emptyMsg=''><item><ancestor>2</ancestor><startNode>//div[@id='res']//td[@class='j']/ul/li[text()='Make sure all words are spelled correctly.']</startNode><endNode></endNode><startIndex>0</startIndex><itemCount>1</itemCount><action>goto</action></item><item><ancestor>0</ancestor><startNode>//div[@id='res']/div[*]/div[@class='g']</startNode><endNode></endNode><startIndex>0</startIndex><itemCount>*</itemCount><action>goto</action></item><item><ancestor>1</ancestor><startNode>//div[@id='nn']</startNode><endNode></endNode><startIndex>0</startIndex><itemCount>1</itemCount><action>click</action></item><item><ancestor>1</ancestor><startNode>//div[@id='np']</startNode><endNode></endNode><startIndex>0</startIndex><itemCount>1</itemCount><action>click</action></item></list>" +
+                  "<list title='Sponsored Links' next='RIGHT|j|*a' prev='LEFT|k' emptyMsg='There are no sponsored links on this page.'><item><ancestor>0</ancestor><startNode>//div[@id='tads']/div[*]</startNode><endNode></endNode><startIndex>0</startIndex><itemCount>*</itemCount><action>goto</action></item><item><ancestor>0</ancestor><startNode>//table[@id='mbEnd']/tbody/tr[*]/td/font/span[*]</startNode><endNode></endNode><startIndex>0</startIndex><itemCount>1</itemCount><action>goto</action></item></list>" +
+                  "<list title='Related Searches' next='RIGHT|j|*s' prev='LEFT|k' emptyMsg='There are no related searches.'><item><ancestor>0</ancestor><startNode>//div[@id='res']/table[*]/tbody/tr[*]/td[*]/a</startNode><endNode></endNode><startIndex>0</startIndex><itemCount>*</itemCount><action>goto</action></item></list>" +
+                  "<list title='Alternate Search Categories' next='RIGHT|j|*c' prev='LEFT|k' emptyMsg='There are no other categories to search within.'><item><ancestor>0</ancestor><startNode>body/table[*]/tbody/tr/td[*]/font/a[@class='q']</startNode><endNode></endNode><startIndex>0</startIndex><itemCount>*</itemCount><action>goto</action></item></list>" +
+                  "</cnl>";
+  axsWebSearch.axsJAXObj.navInit(cnlString,null);
 
   //Read the first thing on the page.
   //Use a set time out just in case the browser is not entirely ready yet.
   window.setTimeout(axsWebSearch.readTheFirstThing,100);
-
 };
-
-
 
 /**
  * Reads the first thing on the page.
  */
 axsWebSearch.readTheFirstThing = function(evt){
-  //Read the one box or the first result
-  if (axsWebSearch.getOneBoxNode()){
-    axsWebSearch.readOneBox();
-  } else {
-    axsWebSearch.goToNextResult(true);
-  }
+  var firstElem = axsWebSearch.axsJAXObj.nextItem().elem;
+  axsWebSearch.axsJAXObj.goTo(firstElem);
 };
-
-
-/**
- * When an input blank has focus, the keystrokes should go into the blank
- * and should not trigger hot key commands.
- * @param {event} A Focus event
- */
-axsWebSearch.focusHandler = function(evt){
-  axsWebSearch.lastFocusedNode = evt.target;
-  if ((evt.target.tagName == 'INPUT') ||
-      (evt.target.tagName == 'TEXTAREA')){
-    axsWebSearch.inputFocused = true;
-  }
-};
-
-/**
- * When no input blanks have focus, the keystrokes should trigger hot key
- * commands.
- * @param {event} A Blur event
- */
-axsWebSearch.blurHandler = function (evt){
-  axsWebSearch.lastFocusedNode = null;
-  if ((evt.target.tagName == 'INPUT') ||
-      (evt.target.tagName == 'TEXTAREA')){
-    axsWebSearch.inputFocused = false;
-  }
-};
-
 
 axsWebSearch.extraKeyboardNavHandler = function(evt){
   if (evt.ctrlKey){ //None of these commands involve Ctrl.
@@ -172,51 +105,15 @@ axsWebSearch.extraKeyboardNavHandler = function(evt){
     return true;
   }
   if (evt.keyCode == 27){ // ESC
-    axsWebSearch.lastFocusedNode.blur();
+    axsWebSearch.axsJAXObj.lastFocusedNode.blur();
     return false;
-  }                       
-
-  if (axsWebSearch.inputFocused){
+  }
+  if (axsWebSearch.axsJAXObj.inputFocused){
     return true;
   }
-  if (evt.charCode == 49){ // 1
-    axsWebSearch.readOneBox();
-    return false;
-  }
-  if (evt.charCode == 97){ // a
-    axsWebSearch.cycleThroughAds();
-    return false;
-  }
+
   if (evt.charCode == 65){ // A
     axsWebSearch.switchToAccessibleSearch();
-    return false;
-  }
-  if (evt.charCode == 99){ // c
-    axsWebSearch.cycleThroughAltSearchCat();
-    return false;
-  }
-  if (evt.charCode == 103){ // g
-    axsWebSearch.cycleThroughGuideMode();
-    return false;
-  }
-  if (evt.charCode == 106){ // j
-    axsWebSearch.goToNextResult(true);
-    return false;
-  }
-  if (evt.charCode == 107){ // k
-    axsWebSearch.goToPrevResult(true);
-    return false;
-  }
-  if (evt.charCode == 110){ // n
-    axsWebSearch.goToNextResult(false);
-    return false;
-  }
-  if (evt.charCode == 112){ // p
-    axsWebSearch.goToPrevResult(false);
-    return false;
-  }
-  if (evt.charCode == 114){ // r
-    axsWebSearch.cycleThroughRelatedSearches();
     return false;
   }
   if (evt.charCode == 87){ // W
@@ -229,7 +126,7 @@ axsWebSearch.extraKeyboardNavHandler = function(evt){
     document.getElementsByName('q')[0].select(); //and select all text
     return false;
   }
-  if ((evt.keyCode == 13) && axsWebSearch.currentLink){ // Enter
+  if (evt.keyCode == 13){ // Enter
     if (evt.shiftKey){
       axsWebSearch.goToCurrentLinkInNewWindow();
     } else{
@@ -245,22 +142,7 @@ axsWebSearch.extraKeyboardNavHandler = function(evt){
     axsWebSearch.goToNextPage();
     return false;
   }
-  if (evt.keyCode == 38){ // Up arrow
-    axsWebSearch.goToPrevResult(false);
-    return false;
-  }
-  if (evt.keyCode == 37){ // Left arrow
-    axsWebSearch.goToPrevResult(true);
-    return false;
-  }
-  if (evt.keyCode == 40){ // Down arrow
-    axsWebSearch.goToNextResult(false);
-    return false;
-  }
-  if (evt.keyCode == 39){ // Right arrow
-    axsWebSearch.goToNextResult(true);
-    return false;
-  }
+
   if (evt.charCode == 63){ // ? (question mark)
     axsWebSearch.axsJAXObj.speakTextViaNode(axsWebSearch.HELP_STRING);
     return false;
@@ -268,59 +150,43 @@ axsWebSearch.extraKeyboardNavHandler = function(evt){
   return true;
 };
 
-
-
 //************
-//Functions for OneBox
+//Functions for handling links
 //************
 
-axsWebSearch.getOneBoxNode = function(){
-  var resDiv = document.getElementById('res');
-  for (var child = resDiv.firstChild; child; child = child.nextSibling){
-    if ((child.tagName == 'P') && child.textContent){
-      return child;
-    }
+axsWebSearch.goToCurrentLink = function(){
+  var linkUrl = axsWebSearch.getCurrentLink();
+  if (linkUrl === ''){
+    return;
   }
-  return null;
+  document.location = linkUrl;
 };
 
-axsWebSearch.readOneBox = function(){
-  var oneBox = axsWebSearch.getOneBoxNode();
-  if (oneBox){
-    axsWebSearch.axsJAXObj.goTo(oneBox);
-  } else{
-    axsWebSearch.axsJAXObj.speakTextViaNode(axsWebSearch.NO_ONE_BOX_STRING);
+axsWebSearch.goToCurrentLinkInNewWindow = function(){
+  var linkUrl = axsWebSearch.getCurrentLink();
+  if (linkUrl === ''){
+    return;
   }
-  axsWebSearch.currentLink = oneBox.getElementsByTagName('a')[0].href;
+  window.open(linkUrl);
 };
 
+axsWebSearch.getCurrentLink = function(){
+  var currentItem = axsWebSearch.axsJAXObj.currentItem();
+  if (typeof(currentItem) == 'undefined'){
+    return '';
+  }
+  var currentElem = currentItem.elem;
+  if (currentElem.tagName == 'A'){
+    return currentElem.href;
+  } else {
+    return currentElem.getElementsByTagName('a')[0].href;
+  }
+};
 
 
 //************
 //Functions for Ads
 //************
-
-
-
-axsWebSearch.buildAdsArray = function(){
-  axsWebSearch.formatAdAreaSide();
-  axsWebSearch.adsArray = new Array();
-  var adAreaTop = document.getElementById('tads');
-  if (adAreaTop){
-    for (var child = adAreaTop.firstChild; child; child = child.nextSibling){
-      if(child.tagName == 'DIV'){
-        axsWebSearch.adsArray.push(child);
-      }
-    }
-  }
-  var adAreaSide = document.getElementById(axsWebSearch.adAreaSideId);
-  if(adAreaSide){
-     for (child = adAreaSide.firstChild; child; child = child.nextSibling){
-       axsWebSearch.adsArray.push(child);
-     }
-  }
-  axsWebSearch.adsIndex = -1;
-};
 
 //The Ads area on the right side is inside one big FONT tag.
 //There is no structure that groups the individual ads.
@@ -369,79 +235,6 @@ axsWebSearch.formatAdAreaSide = function(){
 };
 
 
-axsWebSearch.cycleThroughAds = function(){
-  if (axsWebSearch.adsArray.length < 1){
-    axsWebSearch.axsJAXObj.speakTextViaNode(axsWebSearch.NO_ADS_STRING);
-    return;
-  }
-  axsWebSearch.adsIndex++;
-  if (axsWebSearch.adsIndex >= axsWebSearch.adsArray.length){
-    axsWebSearch.adsIndex = 0;
-  }  
-  var currentAd = axsWebSearch.adsArray[axsWebSearch.adsIndex];
-  axsWebSearch.currentLink = currentAd.getElementsByTagName('a')[0].href;
-  axsWebSearch.axsJAXObj.goTo(currentAd);
-};
-
-
-
-//************
-//Functions for results
-//************
-
-axsWebSearch.buildResultsArray = function(){
-  axsWebSearch.resultsArray = new Array();
-  axsWebSearch.resultsIndex = -1;
-  var resDiv = document.getElementById('res');
-  var divsArray = resDiv.getElementsByTagName('DIV');
-  for (var i=0, currentDiv; currentDiv = divsArray[i]; i++){
-    if (currentDiv.className == 'g'){
-      axsWebSearch.resultsArray.push(currentDiv);
-    }
-  }
-  //There were no results
-  if (axsWebSearch.resultsArray.length === 0){
-    var noResultsTD = resDiv.getElementsByTagName('TD')[0];
-    if (noResultsTD && (noResultsTD.className == 'j')){
-      axsWebSearch.resultsArray.push(noResultsTD);
-      noResultsTD.tabIndex = -1;
-      noResultsTD.focus();
-    }
-  }
-
-};
-
-axsWebSearch.goToNextResult = function(cycleBool){
-  axsWebSearch.resultsIndex++;
-  if(axsWebSearch.resultsIndex >= axsWebSearch.resultsArray.length){
-    if (!cycleBool){
-      axsWebSearch.resultsIndex = -1;
-      axsWebSearch.goToNextPage();
-      return;
-    } else{
-      axsWebSearch.resultsIndex = 0;
-    }
-  }
-  var currentResult = axsWebSearch.resultsArray[axsWebSearch.resultsIndex];
-  axsWebSearch.currentLink = currentResult.getElementsByTagName('a')[0].href;
-  axsWebSearch.axsJAXObj.goTo(currentResult);
-};
-
-axsWebSearch.goToPrevResult = function(cycleBool){
-  axsWebSearch.resultsIndex--;
-  if(axsWebSearch.resultsIndex < 0){
-    if (!cycleBool){
-      axsWebSearch.resultsIndex = -1;
-      axsWebSearch.goToPrevPage();
-      return;
-    } else{
-      axsWebSearch.resultsIndex = axsWebSearch.resultsArray.length-1;
-    }
-  }
-  var currentResult = axsWebSearch.resultsArray[axsWebSearch.resultsIndex];
-  axsWebSearch.axsJAXObj.goTo(currentResult);
-  axsWebSearch.currentLink = currentResult.getElementsByTagName('a')[0].href;
-};
 
 
 axsWebSearch.goToNextPage = function(){
@@ -462,95 +255,6 @@ axsWebSearch.goToPrevPage = function(){
   document.location = prevPageDiv.parentNode.href;
 };
 
-axsWebSearch.goToCurrentLink = function(){
-  document.location = axsWebSearch.currentLink;
-};
-
-axsWebSearch.goToCurrentLinkInNewWindow = function(){
-  window.open(axsWebSearch.currentLink);
-};
-
-
-//************
-//Functions for alternative search categories
-//************
-
-axsWebSearch.buildAltSearchCatArray = function(){
-  axsWebSearch.altSearchCatArray = new Array();
-  axsWebSearch.altSearchCatIndex = -1;
-  var altSearchCatArea = null;
-  if (document.getElementById('sd')){
-    altSearchCatArea = document.getElementById('sd').nextSibling;
-    }
-  if (altSearchCatArea){
-    for (var child = altSearchCatArea.firstChild; child;
-            child = child.nextSibling){
-      if (child.tagName=='A'){
-        axsWebSearch.altSearchCatArray.push(child);
-      }
-    }
-  }
-};
-
-
-axsWebSearch.cycleThroughAltSearchCat = function(){
-  if (axsWebSearch.altSearchCatArray.length < 1){
-    axsWebSearch.axsJAXObj.speakTextViaNode(axsWebSearch.NO_ALT_SEARCH_CAT_STRING);
-    return;
-  }
-  axsWebSearch.altSearchCatIndex++;
-  if (axsWebSearch.altSearchCatIndex >= axsWebSearch.altSearchCatArray.length){
-    axsWebSearch.altSearchCatIndex = 0;
-  }
-  var currentAltSearch =
-      axsWebSearch.altSearchCatArray[axsWebSearch.altSearchCatIndex];
-  currentAltSearch.scrollIntoView(true);
-  axsWebSearch.currentLink = currentAltSearch.href;
-  axsWebSearch.axsJAXObj.speakTextViaNode(axsWebSearch.SEARCH_WITHIN_STRING +
-                                   currentAltSearch.textContent);
-  axsWebSearch.axsJAXObj.markPosition(currentAltSearch);
-};
-
-
-//************
-//Functions for related searches
-//************
-
-axsWebSearch.buildRelatedSearchesArray = function(){
-  axsWebSearch.relatedSearchesArray = new Array();
-  axsWebSearch.relatedSearchesIndex = -1;
-  var relatedSearchesH2 = null;
-  var resDiv = document.getElementById('res');
-  for (var child = resDiv.firstChild; child; child = child.nextSibling){
-    if ( (child.tagName =='H2') &&
-         (child.className =='r') &&
-         (child.firstChild.textContent ==
-             axsWebSearch.PAGECONTENT_RELATED_SEARCH_STRING)){
-      relatedSearchesH2 = child;
-    }
-  }
-  if (relatedSearchesH2){
-    axsWebSearch.relatedSearchesArray =
-        relatedSearchesH2.nextSibling.getElementsByTagName('A');
-  }
-};
-
-
-axsWebSearch.cycleThroughRelatedSearches = function(){
-  if (axsWebSearch.relatedSearchesArray.length < 1){
-    axsWebSearch.axsJAXObj.speakTextViaNode(axsWebSearch.NO_RELATED_SEARCHES_STRING);
-    return;
-  }
-  axsWebSearch.relatedSearchesIndex++;
-  if (axsWebSearch.relatedSearchesIndex >=
-          axsWebSearch.relatedSearchesArray.length){
-    axsWebSearch.relatedSearchesIndex = 0;
-  }
-  var currentRelSearch =
-      axsWebSearch.relatedSearchesArray[axsWebSearch.relatedSearchesIndex];
-  axsWebSearch.currentLink = currentRelSearch.href;
-  axsWebSearch.axsJAXObj.goTo(currentRelSearch);
-};
 
 
 //************
@@ -579,9 +283,6 @@ axsWebSearch.switchToAccessibleSearch = function(){
   document.location = axsWebSearch.ACCESSIBLE_SEARCH_URL + searchQuery;
 };
 
-
-
-
 axsWebSearch.switchToWebSearch = function(){
   if (document.baseURI.indexOf('http://www.google.com/search') === 0){
     axsWebSearch.axsJAXObj.speakTextViaNode(axsWebSearch.ON_WEB_SEARCH);
@@ -590,113 +291,5 @@ axsWebSearch.switchToWebSearch = function(){
   var searchQuery = axsWebSearch.getCurrentURLQueryString();
   document.location = axsWebSearch.WEB_SEARCH_URL + searchQuery;
 };
-
-
-
-//************
-//Functions for guided mode experiment
-//************
-
-axsWebSearch.buildGuideModeArray = function(){
-  axsWebSearch.guideModeArray = new Array();
-  var oneBox = axsWebSearch.getOneBoxNode();
-  if (oneBox){
-    axsWebSearch.guideModeArray.push(oneBox);
-  }
-  var rInd = 1;
-  var aInd = 0;
-  var resultsAdded = 0;
-
-  //Add search results interspersed with ads
-  var result = new Object();
-  result.node = axsWebSearch.resultsArray[rInd];
-  result.isAd = false;
-  while (result.node){
-    axsWebSearch.guideModeArray.push(result);
-    if ((resultsAdded >= 3) &&
-        (axsWebSearch.adsArray[aInd])){
-      resultsAdded = 0;
-      result = new Object();
-      result.node = axsWebSearch.adsArray[aInd];
-      aInd++;
-      result.isAd = true;
-    } else {
-      resultsAdded++;
-      result = new Object();
-      result.node = axsWebSearch.resultsArray[rInd++];
-      result.isAd = false;
-    }
-  }
-
-  //Add an ad here if there are still ads not added
-  result = new Object();
-  result.node = axsWebSearch.adsArray[aInd++];
-  result.isAd = true;
-  if (result.node){
-    axsWebSearch.guideModeArray.push(result);
-  }
-
-  //Add related searches interspersed with ads
-  rInd = 0;
-  resultsAdded = 0;
-  result = new Object();
-  result.node = axsWebSearch.relatedSearchesArray[rInd++];
-  result.isAd = false;
-  while (result.node){
-    axsWebSearch.guideModeArray.push(result);
-    if ((resultsAdded >= 3) && (axsWebSearch.adsArray[aInd])){
-      resultsAdded = 0;
-      result = new Object();
-      result.node = axsWebSearch.adsArray[aInd++];
-      result.isAd = true;
-    } else {
-      resultsAdded++;
-      result = new Object();
-      result.node = axsWebSearch.relatedSearchesArray[rInd++];
-      result.isAd = false;
-    }
-  }
-
-  //Add any remaining ads
-  result = new Object();
-  result.node = axsWebSearch.adsArray[aInd++];
-  result.isAd = true;
-  while (result.node){
-    axsWebSearch.guideModeArray.push(result);
-    result = new Object();
-    result.node = axsWebSearch.adsArray[aInd++];
-    result.isAd = true;
-  }
-  axsWebSearch.guideModeIndex = -1;
-};
-
-
-axsWebSearch.cycleThroughGuideMode = function(){
-  axsWebSearch.guideModeIndex++;
-  if (axsWebSearch.guideModeIndex >= axsWebSearch.guideModeArray.length){
-    axsWebSearch.guideModeIndex = -1;
-    axsWebSearch.axsJAXObj.speakTextViaNode(axsWebSearch.GUIDE_MODE_END);
-    return;
-  }
-  var currentGuideObj = axsWebSearch.guideModeArray[
-      axsWebSearch.guideModeIndex];
-  var currentItem = currentGuideObj.node;
-  currentItem.scrollIntoView(true);
-  if (currentGuideObj.isAd){
-    axsWebSearch.axsJAXObj.speakTextViaNode(axsWebSearch.SPONSORED_LINK +
-                                     currentItem.textContent);
-  }
-  else {
-    axsWebSearch.axsJAXObj.speakNode(currentItem);
-  }
-  if (currentItem.tagName == 'A'){
-    axsWebSearch.currentLink = currentItem.href;
-  } else {
-    axsWebSearch.currentLink = currentItem.getElementsByTagName('a')[0].href;
-  }
-  axsWebSearch.axsJAXObj.markPosition(currentItem);
-};
-
-
 
 axsWebSearch.init();
