@@ -37,14 +37,14 @@ var AxsJAX = function(useTabKeyFix){
   this.tabKeyFixOn = false;
   this.lastFocusedNode = null;
   this.inputFocused = false;
-  this.navArray = null;
+  this.navArray = new Array();
   this.navListIdx = 0;
-  this.navItemIdxs = null;
+  this.navItemIdxs = new Array();
   this.lastItem = null;
-  this.topCharCodeMap = null;
-  this.topKeyCodeMap = null;
-  this.charCodeMaps = null;
-  this.keyCodeMaps = null;
+  this.topCharCodeMap = new Object();
+  this.topKeyCodeMap = new Object();
+  this.charCodeMaps = new Array();
+  this.keyCodeMaps = new Array();
 
   var self = this;
   //Monitor focus and blur
@@ -456,7 +456,8 @@ AxsJAX.prototype.setAttributeOf = function(targetNode, attribute, value){
   }
   //Add the wairole: to values
   if (value && value.toLowerCase){
-    var lcValue = value.toLowerCase(); //Do not directly assign lowercased value to value as it may not be valid
+    //Do not directly assign lowercased value to value as it may not be valid
+    var lcValue = value.toLowerCase();
     switch (lcValue){
       case 'group':
         value = 'wairole:group';
@@ -543,6 +544,14 @@ AxsJAX.prototype.evalXPath = function(expression, rootNode) {
 
 
 
+
+/**
+ * Makes an array of items given a navigation list node and its index.
+ * Elements associated with a list will be marked as such.
+ * @param {Node} listNode The navigation list node
+ * @param {number} listIdx The index of the navigation list node 
+ * @return {Array} The array of items.
+ */
 AxsJAX.prototype.makeItemsArray = function(listNode, listIdx){
   var itemsArray = new Array();
   var cnlItems = listNode.getElementsByTagName('item');
@@ -593,6 +602,10 @@ AxsJAX.prototype.makeItemsArray = function(listNode, listIdx){
 };
 
 
+/**
+ * Goes to the next navigation list and returns it
+ * @return {Object?} The next navigation list.
+ */
 AxsJAX.prototype.nextList = function(){
   if (this.navArray.length < 1){
     return null;
@@ -604,6 +617,10 @@ AxsJAX.prototype.nextList = function(){
   return this.navArray[this.navListIdx];
 };
 
+/**
+ * Goes to the previous navigation list and returns it
+ * @return {Object?} The previous navigation list.
+ */
 AxsJAX.prototype.prevList = function(){
   if (this.navArray.length < 1){
     return null;
@@ -615,14 +632,25 @@ AxsJAX.prototype.prevList = function(){
   return this.navArray[this.navListIdx];
 };
 
+/**
+ * Returns the current navigation list.
+ * @return {Object} The current navigation list.
+ */
 AxsJAX.prototype.currentList = function(){
   return this.navArray[this.navListIdx];
 };
 
+/**
+ * Speaks the title of the current list
+ */
 AxsJAX.prototype.announceCurrentList = function(){
   this.speakTextViaNode(this.currentList().title);
 };
 
+/**
+ * Goes to the next item and returns it
+ * @return {Object?} The next item. Use item.elem to get at the DOM node.
+ */
 AxsJAX.prototype.nextItem = function(){
   if (this.navArray.length < 1){
     return null;
@@ -647,6 +675,10 @@ AxsJAX.prototype.nextItem = function(){
   return this.lastItem;
 };
 
+/**
+ * Goes to the previous item and returns it
+ * @return {Object?} The previous item. Use item.elem to get at the DOM node.
+ */
 AxsJAX.prototype.prevItem = function(){
   if (this.navArray.length < 1){
     return null;
@@ -671,6 +703,10 @@ AxsJAX.prototype.prevItem = function(){
   return this.lastItem;
 };
 
+/**
+ * Returns the current item.
+ * @return {Object?} The current item. Use item.elem to get at the DOM node.
+ */
 AxsJAX.prototype.currentItem = function(){
   if (this.navArray.length < 1){
     return null;
@@ -688,6 +724,10 @@ AxsJAX.prototype.currentItem = function(){
   return this.lastItem;
 };
 
+/**
+ * This function will act on the current item based on what action was specified
+ * in the Content Navigation Listing.
+ */
 AxsJAX.prototype.actOnCurrentItem = function(){
   var currentItem = this.currentItem();
   if (currentItem !== null){
@@ -699,7 +739,19 @@ AxsJAX.prototype.actOnCurrentItem = function(){
   }
 };
 
+/**
+ * This function creates the maps keypresses to a method on a given
+   char and key map.
 
+ * @param {Array} keyArray  Array of keys that will be associated with the
+                            method
+
+ * @param {Object} charMap  Dictionary that maps character codes to methods
+
+ * @param {Object} keyMap  Dictionary that maps key codes to methods
+
+ * @param {Function} method  Method to be be associated with the array of keys
+ */
 AxsJAX.prototype.assignKeysToMethod = function(keyArray, charMap, keyMap, method){
   for (var i=0; i<keyArray.length; i++){
     var key = keyArray[i];
@@ -717,6 +769,23 @@ AxsJAX.prototype.assignKeysToMethod = function(keyArray, charMap, keyMap, method
   }
 };
 
+/**
+ * This function creates the mapping between keypresses and navigation behavior.
+
+ * @param {string} keyStr  String that indicates the keys to be used. Keys are
+                           separated by the | symbol and any key with * in front
+                           is a key that will cause the user to swap to the list
+                           that the key is associated with and read the
+                           next/prev item there. Otherwise, the keypress will
+                           only be active is the user's current list is the
+                           list indicated by navListIdx.
+
+ * @param {number} navListIdx  Index of the list that these keypresses are
+                                associated with.                                     
+
+ * @param {number} direction  Negative indicates moving backwards,
+                              zero or positive indicates moving forward.
+ */
 AxsJAX.prototype.assignItemKeys = function(keyStr, navListIdx, direction){
   var keys = new Array();
   if (keyStr !== ''){
@@ -768,6 +837,16 @@ AxsJAX.prototype.assignItemKeys = function(keyStr, navListIdx, direction){
   }
 };
 
+/**
+ * For all keys that map to lists with no items, those keys should
+ * speak some message to let the user know that the function was called
+ * but was unsuccessful because there is no content.
+ * @param {string} keyStr  String that indicates the keys to be used.
+
+ * @param {string} emptyMsg  The message that should be spoken when the user
+                             presses the key(s) to let them know that there
+                             is no content.
+ */
 AxsJAX.prototype.assignEmptyMsgKeys = function(keyStr, emptyMsg){
   var keys = new Array();
   if (keyStr !== ''){
@@ -792,7 +871,12 @@ AxsJAX.prototype.assignEmptyMsgKeys = function(keyStr, emptyMsg){
 
 
 
+/**
+ * This function attaches the default AxsJAX key handler for navigation.
+ * @param {Node} cnlDOM  DOM of the Content Navigation Listing.
 
+ * @param {Array} emptyLists  An array of lists which have zero items.
+ */
 
 AxsJAX.prototype.setUpNavKeys = function(cnlDOM, emptyLists){
   var self = this;
@@ -851,20 +935,34 @@ AxsJAX.prototype.setUpNavKeys = function(cnlDOM, emptyLists){
                      //If Ctrl is held, it must be for some AT.
                      if (evt.ctrlKey) return true;
                      if (self.inputFocused) return true;
-                     var command =  self.topKeyCodeMap[evt.keyCode] || self.topCharCodeMap[evt.charCode];
+                     var command =  self.topKeyCodeMap[evt.keyCode] ||
+                                    self.topCharCodeMap[evt.charCode];
                      if (command) return command();
                      var idx = self.navListIdx;
-                     command =  self.keyCodeMaps[idx][evt.keyCode] || self.charCodeMaps[idx][evt.charCode];
+                     command =  self.keyCodeMaps[idx][evt.keyCode] ||
+                                self.charCodeMaps[idx][evt.charCode];
                      if (command) return command();
                    };
 
-
   document.addEventListener('keypress', keyHandler, true);
-
 };
 
+/**
+ * Builds up the navigation system of lists of items.
+ * This system uses the idea of multiple cursors and the visitor pattern.
+ * @param {string} cnlString  An XML string that contains the information needed
+                              to build up the content navigation listings.
 
-AxsJAX.prototype.navInit = function(cnlString, customNavMethod){
+ * @param {Function?} opt_customNavMethod  A custom navigation method provided
+                                  by the caller. This navigation method will be
+                                  given the DOM created from the cnlString, the
+                                  navigation array of lists of items,
+                                  and an array of all the lists which had
+                                  zero items. This parameter is optional; if
+                                  it is null, the default AxsJAX nav handler
+                                  will be used.
+ */
+AxsJAX.prototype.navInit = function(cnlString, opt_customNavMethod){
   var parser = new DOMParser();
   var cnlDOM = parser.parseFromString(cnlString, 'text/xml');
   var lists = cnlDOM.getElementsByTagName('list');
@@ -886,15 +984,16 @@ AxsJAX.prototype.navInit = function(cnlString, customNavMethod){
       //Only add nav lists that have content to the array
       this.navArray.push(navList);
       this.navItemIdxs.push(-1);
-    } else if ((navList.nextKeys.indexOf('*') != -1) || (navList.prevKeys.indexOf('*') != -1)){
+    } else if ( (navList.nextKeys.indexOf('*') != -1) ||
+                (navList.prevKeys.indexOf('*') != -1) ){
       //Record empty nav lists if the user can jump to them directly
       emptyLists.push(navList);
     }
   }
 
-  if (customNavMethod === null){
+  if (opt_customNavMethod === null){
     this.setUpNavKeys(cnlDOM,emptyLists);
   } else {
-    customNavMethod(cnlDOM,this.navArray,emptyLists);
+    opt_customNavMethod(cnlDOM,this.navArray,emptyLists);
   }
 };
