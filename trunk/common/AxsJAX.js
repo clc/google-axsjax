@@ -35,9 +35,16 @@ var AxsJAX = function(useTabKeyFix){
   this.ID_NUM_ = 0;
   this.tabbingStartPosNode = null;
   this.tabKeyFixOn = false;
-  this.navArray = null;
   this.lastFocusedNode = null;
   this.inputFocused = false;
+  this.navArray = null;
+  this.navListIdx = 0;
+  this.navItemIdxs = null;
+  this.lastItem = null;
+  this.topCharCodeMap = null;
+  this.topKeyCodeMap = null;
+  this.charCodeMaps = null;
+  this.keyCodeMaps = null;
 
   var self = this;
   //Monitor focus and blur
@@ -536,58 +543,358 @@ AxsJAX.prototype.evalXPath = function(expression, rootNode) {
 
 
 
-AxsJAX.prototype.makeItemsArray = function(listNode){
+AxsJAX.prototype.makeItemsArray = function(listNode, listIdx){
   var itemsArray = new Array();
   var cnlItems = listNode.getElementsByTagName('item');
+  var debug;
   for (var i=0,entry; entry = cnlItems[i]; i++){
     //Do this in a try-catch block since there are multiple
     //sets of cnlItems and even if one set does not exist as expected,
     //the other sets should still be available.
     try{
-      if (entry.getElementsByTagName('endNode')[0].textContent == ''){
+      if (entry.getElementsByTagName('endNode')[0].textContent === ''){
         var xpath = entry.getElementsByTagName('startNode')[0].textContent;
         var htmlElem = this.getActiveDocument().getElementsByTagName('html')[0];
         var elems = this.evalXPath(xpath, htmlElem);
-        var idx = parseInt(entry.getElementsByTagName('startIndex')[0].textContent);
+
+        var idxStr = entry.getElementsByTagName('startIndex')[0].textContent;
+        var idx = parseInt(idxStr,10);
         var count = elems.length - idx;
         if (entry.getElementsByTagName('itemCount')[0].textContent != '*'){
-          count = parseInt(entry.getElementsByTagName('itemCount')[0].textContent);
+          var countStr = entry.getElementsByTagName('itemCount')[0].textContent;
+          count = parseInt(countStr,10);
         }
         var end = count + idx;
         var action = entry.getElementsByTagName('action')[0].textContent;
-        var ancestorCount = parseInt(entry.getElementsByTagName('ancestor')[0].textContent);
+        var ancestorCountStr = entry.getElementsByTagName('ancestor')[0].textContent;
+        var ancestorCount = parseInt(ancestorCountStr,10);
+
         while (idx < end){
           var item = new Object();
           item.action = action;
           item.elem = elems[idx];
-          for (var j=0; j<ancestorCount; j++){
-            item.elem = item.elem.parentNode;
+          if (typeof(item.elem) != 'undefined'){
+            for (var j=0; j<ancestorCount; j++){
+              item.elem = item.elem.parentNode;
+            }
+            if (typeof(item.elem.AxsJAXNavInfo) == 'undefined'){
+              item.elem.AxsJAXNavInfo = new Object();
+            }
+            item.elem.AxsJAXNavInfo[listIdx] = idx;
+            itemsArray.push(item);
           }
-          itemsArray.push(item);
           idx++;
-        }        
-      } 
-    } catch(err){}    
+        }
+      }
+    }
+    catch(err){ }
   }
   return itemsArray;
 };
 
-AxsJAX.prototype.setUpNavKeys = function(cnlDOM){
-  return "";
+
+AxsJAX.prototype.nextList = function(){
+  if (this.navArray.length < 1){
+    return null;
+  }
+  this.navListIdx++;
+  if (this.navListIdx >= this.navArray.length){
+    this.navListIdx = 0;
+  }
+  return this.navArray[this.navListIdx];
+};
+
+AxsJAX.prototype.prevList = function(){
+  if (this.navArray.length < 1){
+    return null;
+  }
+  this.navListIdx--;
+  if (this.navListIdx < 0){
+    this.navListIdx = this.navArray.length - 1;
+  }
+  return this.navArray[this.navListIdx];
+};
+
+AxsJAX.prototype.currentList = function(){
+  return this.navArray[this.navListIdx];
+};
+
+AxsJAX.prototype.announceCurrentList = function(){
+  this.speakTextViaNode(this.currentList().title);
+};
+
+AxsJAX.prototype.nextItem = function(){
+  if (this.navArray.length < 1){
+    return null;
+  }
+  var currentList = this.navArray[this.navListIdx];
+  var items = currentList.items;
+  if (items.length < 1){
+    return null;
+  }
+  if (this.lastItem){
+    var syncedIndex = this.lastItem.elem.AxsJAXNavInfo[this.navListIdx];
+    if (typeof(syncedIndex) != 'undefined'){
+      this.navItemIdxs[this.navListIdx] = syncedIndex;
+    }
+  }
+  this.navItemIdxs[this.navListIdx]++;
+  if (this.navItemIdxs[this.navListIdx] >= items.length){
+    this.navItemIdxs[this.navListIdx] = 0;
+  }
+  var itemIndex = this.navItemIdxs[this.navListIdx];
+  this.lastItem = items[itemIndex];
+  return this.lastItem;
+};
+
+AxsJAX.prototype.prevItem = function(){
+  if (this.navArray.length < 1){
+    return null;
+  }
+  var currentList = this.navArray[this.navListIdx];
+  var items = currentList.items;
+  if (items.length < 1){
+    return null;
+  }
+  if (this.lastItem){
+    var syncedIndex = this.lastItem.elem.AxsJAXNavInfo[this.navListIdx];
+    if (typeof(syncedIndex) != 'undefined'){
+      this.navItemIdxs[this.navListIdx] = syncedIndex;
+    }
+  }
+  this.navItemIdxs[this.navListIdx]--;
+  if (this.navItemIdxs[this.navListIdx] < 0){
+    this.navItemIdxs[this.navListIdx] = items.length - 1;
+  }
+  var itemIndex = this.navItemIdxs[this.navListIdx];
+  this.lastItem = items[itemIndex];
+  return this.lastItem;
+};
+
+AxsJAX.prototype.currentItem = function(){
+  if (this.navArray.length < 1){
+    return null;
+  }
+  if (this.lastItem){
+    var syncedIndex = this.lastItem.elem.AxsJAXNavInfo[this.navListIdx];
+    if (typeof(syncedIndex) != 'undefined'){
+      this.navItemIdxs[this.navListIdx] = syncedIndex;
+    }
+  }
+  var currentList = this.navArray[this.navListIdx];
+  var items = currentList.items;
+  var itemIndex = this.navItemIdxs[this.navListIdx];
+  this.lastItem = items[itemIndex];
+  return this.lastItem;
+};
+
+AxsJAX.prototype.actOnCurrentItem = function(){
+  var currentItem = this.currentItem();
+  if (currentItem !== null){
+    if (currentItem.action == 'click'){
+      this.clickElem(currentItem.elem, false);
+    } else {
+      this.goTo(currentItem.elem);
+    }
+  }
+};
+
+
+AxsJAX.prototype.assignKeysToMethod = function(keyArray, charMap, keyMap, method){
+  for (var i=0; i<keyArray.length; i++){
+    var key = keyArray[i];
+    if (key == 'LEFT'){
+      keyMap[37] = method;
+    } else if (key == 'UP'){
+      keyMap[38] = method;
+    } else if (key == 'RIGHT'){
+      keyMap[39] = method;
+    } else if (key == 'DOWN'){
+      keyMap[40] = method;
+    } else {
+      charMap[key.charCodeAt(0)] = method;
+    }
+  }
+};
+
+AxsJAX.prototype.assignItemKeys = function(keyStr, navListIdx, direction){
+  var keys = new Array();
+  if (keyStr !== ''){
+    keys = keyStr.split('|');
+  }
+  var superKeys = new Array();
+  var regularKeys = new Array();
+  for (var i=0, key; key = keys[i]; i++){
+    if (key.charAt(0) == '*'){
+      key = key.substring(1);
+      superKeys.push(key);
+    } else {
+      regularKeys.push(key);
+    }
+  }
+  var self = this;
+  if (direction < 0){
+    this.assignKeysToMethod( superKeys,
+                             this.topCharCodeMap,
+                             this.topKeyCodeMap,
+                             function(){
+                               self.navListIdx = navListIdx;
+                               self.prevItem();
+                               self.actOnCurrentItem();
+                             } );
+    this.assignKeysToMethod( regularKeys,
+                             this.charCodeMaps[navListIdx],
+                             this.keyCodeMaps[navListIdx],
+                             function(){
+                               self.prevItem();
+                               self.actOnCurrentItem();
+                             } );
+  } else {
+    this.assignKeysToMethod( superKeys,
+                             this.topCharCodeMap,
+                             this.topKeyCodeMap,
+                             function(){
+                               self.navListIdx = navListIdx;
+                               self.nextItem();
+                               self.actOnCurrentItem();
+                             } );
+    this.assignKeysToMethod( regularKeys,
+                             this.charCodeMaps[navListIdx],
+                             this.keyCodeMaps[navListIdx],
+                             function(){
+                               self.nextItem();
+                               self.actOnCurrentItem();
+                             } );
+  }
+};
+
+AxsJAX.prototype.assignEmptyMsgKeys = function(keyStr, emptyMsg){
+  var keys = new Array();
+  if (keyStr !== ''){
+    keys = keyStr.split('|');
+  }
+  var superKeys = new Array();
+  for (var i=0, key; key = keys[i]; i++){
+    if (key.charAt(0) == '*'){
+      key = key.substring(1);
+      superKeys.push(key);
+    }
+  }
+  var self = this;
+  this.assignKeysToMethod( superKeys,
+                           this.topCharCodeMap,
+                           this.topKeyCodeMap,
+                           function(){
+                             self.speakTextViaNode(emptyMsg);
+                           } );
+
 };
 
 
 
-AxsJAX.prototype.navInit = function(cnlString){
+
+
+AxsJAX.prototype.setUpNavKeys = function(cnlDOM, emptyLists){
+  var self = this;
+  var cnlNode = cnlDOM.firstChild;
+
+  this.topCharCodeMap = new Object();
+  this.topKeyCodeMap = new Object();
+  this.charCodeMaps = new Array();
+  this.keyCodeMaps = new Array();
+
+  var nextListKeys = new Array();
+  var nextListStr = cnlNode.getAttribute('next');
+  if (nextListStr !== ''){
+    nextListKeys = nextListStr.split('|');
+  }
+  this.assignKeysToMethod( nextListKeys,
+                           this.topCharCodeMap,
+                           this.topKeyCodeMap,
+                           function(){
+                             self.nextList();
+                             self.announceCurrentList();
+                           } );
+
+  var prevListKeys = new Array();
+  var prevListStr = cnlNode.getAttribute('prev');
+  if (prevListStr !== ''){
+    prevListKeys = prevListStr.split('|');
+  }
+  this.assignKeysToMethod( prevListKeys,
+                           this.topCharCodeMap,
+                           this.topKeyCodeMap,
+                           function(){
+                             self.prevList();
+                             self.announceCurrentList();
+                           } );
+
+  var i;
+  var list;
+  for (i=0, list; list = this.navArray[i]; i++){
+    var charMap = new Object();
+    var keyMap = new Object();
+    this.charCodeMaps.push(charMap);
+    this.keyCodeMaps.push(keyMap);
+    this.assignItemKeys(list.nextKeys, i, 1);
+    this.assignItemKeys(list.prevKeys, i, -1);
+  }
+
+  var emptyList;
+  for (i=0, emptyList; emptyList = emptyLists[i]; i++){
+    this.assignEmptyMsgKeys(emptyList.nextKeys, emptyList.emptyMsg);
+    this.assignEmptyMsgKeys(emptyList.prevKeys, emptyList.emptyMsg);
+  }  
+
+  var keyHandler = function(evt){
+                     //None of these commands involve Ctrl.
+                     //If Ctrl is held, it must be for some AT.
+                     if (evt.ctrlKey) return true;
+                     if (self.inputFocused) return true;
+                     var command =  self.topKeyCodeMap[evt.keyCode] || self.topCharCodeMap[evt.charCode];
+                     if (command) return command();
+                     var idx = self.navListIdx;
+                     command =  self.keyCodeMaps[idx][evt.keyCode] || self.charCodeMaps[idx][evt.charCode];
+                     if (command) return command();
+                   };
+
+
+  document.addEventListener('keypress', keyHandler, true);
+
+};
+
+
+AxsJAX.prototype.navInit = function(cnlString, customNavMethod){
   var parser = new DOMParser();
   var cnlDOM = parser.parseFromString(cnlString, 'text/xml');
   var lists = cnlDOM.getElementsByTagName('list');
   this.navArray = new Array();
+  this.navListIdx = 0;
+  this.navItemIdxs = new Array();
+
+  var emptyLists = new Array();
+
   for (var i=0, currentList; currentList = lists[i]; i++){
     var navList = new Object();
     navList.title = currentList.getAttribute('title');
-    navList.items = this.makeItemsArray(currentList);    
-    this.navArray.push(navList);    
+    navList.nextKeys = currentList.getAttribute('next');
+    navList.prevKeys = currentList.getAttribute('prev');
+    navList.emptyMsg = currentList.getAttribute('emptyMsg');
+    navList.items = this.makeItemsArray(currentList,i);
+
+    if (navList.items.length > 0){
+      //Only add nav lists that have content to the array
+      this.navArray.push(navList);
+      this.navItemIdxs.push(-1);
+    } else if ((navList.nextKeys.indexOf('*') != -1) || (navList.prevKeys.indexOf('*') != -1)){
+      //Record empty nav lists if the user can jump to them directly
+      emptyLists.push(navList);
+    }
   }
-  this.setUpNavKeys(cnlDOM); 
+
+  if (customNavMethod === null){
+    this.setUpNavKeys(cnlDOM,emptyLists);
+  } else {
+    customNavMethod(cnlDOM,this.navArray,emptyLists);
+  }
 };
