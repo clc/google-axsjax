@@ -1,46 +1,46 @@
 <cnl next='DOWN|n' prev='UP|p' emptyMsg=''>
         <list title='One Box' next='RIGHT|j|*1' prev='LEFT|k' emptyMsg='There is no one box on this page.'>
 		<item action='goto'>
-		    <startNode ancestor='0' index='0' count='1'>//div[@id='res']/p[*]</startNode>
+		    <startNode index='0' count='1'>//div[@id='res']/p[*]</startNode>
 		</item>
 		<item action='goto'>
-		    <startNode ancestor='0' index='0' count='1'>//div[@id='res']/div[@class='e']</startNode>
+		    <startNode index='0' count='1'>//div[@id='res']/div[@class='e']</startNode>
 		</item>          
         </list>
 
         <list title='Results' next='RIGHT|j|*r' prev='LEFT|k' emptyMsg=''>
 		<item action='goto'>
-		    <startNode ancestor='2' index='0' count='1'>//div[@id='res']//td[@class='j']/ul/li[text()='Make sure all words are spelled correctly.']</startNode>
+		    <startNode index='0' count='1'>//div[@id='res']//td[@class='j']/ul/li[text()='Make sure all words are spelled correctly.']/parent::*/parent::*</startNode>
 		</item>
 		<item action='goto'>
-		    <startNode ancestor='0' index='0' count='*'>//div[@id='res']/div[*]/div[@class='g']</startNode>
+		    <startNode index='0' count='*'>//div[@id='res']/div[*]/div[@class='g']</startNode>
 		</item>
 		<item action='click'>
-		    <startNode ancestor='1' index='0' count='1'>//div[@id='nn']</startNode>
+		    <startNode index='0' count='1'>//div[@id='nn']/parent::*</startNode>
 		</item>
 		<item action='click'>
-		    <startNode ancestor='1' index='0' count='1'>//div[@id='np']</startNode>
+		    <startNode index='0' count='1'>//div[@id='np']/parent::*</startNode>
 		</item>
         </list>
 
         <list title='Sponsored Links' next='RIGHT|j|*a' prev='LEFT|k' emptyMsg='There are no sponsored links on this page.'>
 		<item action='goto'>
-		    <startNode ancestor='0' index='0' count='*'>//div[@id='tads']/div[*]</startNode>
+		    <startNode index='0' count='*'>//div[@id='tads']/div[*]</startNode>
 		</item>
 		<item action='goto'>
-		    <startNode ancestor='0' index='0' count='*'>//table[@id='mbEnd']/tbody/tr[*]/td/font/span[*]</startNode>
+		    <startNode index='0' count='*'>//table[@id='mbEnd']/tbody/tr[*]/td/font/span[*]</startNode>
 		</item>
 	</list>
 
         <list title='Related Searches' next='RIGHT|j|*s' prev='LEFT|k' emptyMsg='There are no related searches.'>
 		<item action='goto'>
-		    <startNode ancestor='0' index='0' count='*'>//div[@id='res']/table[*]/tbody/tr[*]/td[*]/a</startNode>
+		    <startNode index='0' count='*'>//div[@id='res']/table[*]/tbody/tr[*]/td[*]/a</startNode>
 		</item>
 	</list>
 
         <list title='Alternate Search Categories' next='RIGHT|j|*c' prev='LEFT|k' emptyMsg='There are no other categories to search within.'>
 		<item action='goto'>
-		    <startNode ancestor='0' index='0' count='*'>body/table[*]/tbody/tr/td[*]/font/a[@class='q']</startNode>
+		    <startNode index='0' count='*'>body/table[*]/tbody/tr/td[*]/font/a[@class='q']</startNode>
 		</item>
 	</list>
 </cnl>

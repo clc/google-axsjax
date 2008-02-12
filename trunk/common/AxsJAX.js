@@ -575,17 +575,13 @@ AxsJAX.prototype.makeItemsArray = function(listNode, listIdx){
       }
       var end = count + idx;
       var action = entry.getAttribute('action');
-      var ancestorCountStr = startNode.getAttribute('ancestor');
-      var ancestorCount = parseInt(ancestorCountStr,10);
+
 
       while (idx < end){
         var item = new Object();
         item.action = action;
         item.elem = elems[idx];
         if (typeof(item.elem) != 'undefined'){
-          for (var j=0; j<ancestorCount; j++){
-            item.elem = item.elem.parentNode;
-          }
           if (typeof(item.elem.AxsJAXNavInfo) == 'undefined'){
             item.elem.AxsJAXNavInfo = new Object();
           }
