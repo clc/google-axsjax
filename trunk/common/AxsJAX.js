@@ -561,43 +561,43 @@ AxsJAX.prototype.makeItemsArray = function(listNode, listIdx){
     //sets of cnlItems and even if one set does not exist as expected,
     //the other sets should still be available.
     try{
-      if (entry.getElementsByTagName('endNode')[0].textContent === ''){
-        var xpath = entry.getElementsByTagName('startNode')[0].textContent;
-        var htmlElem = this.getActiveDocument().getElementsByTagName('html')[0];
-        var elems = this.evalXPath(xpath, htmlElem);
+      var startNode = entry.getElementsByTagName('startNode')[0];
+      var xpath = startNode.textContent;
+      var htmlElem = this.getActiveDocument().getElementsByTagName('html')[0];
+      var elems = this.evalXPath(xpath, htmlElem);
 
-        var idxStr = entry.getElementsByTagName('startIndex')[0].textContent;
-        var idx = parseInt(idxStr,10);
-        var count = elems.length - idx;
-        if (entry.getElementsByTagName('itemCount')[0].textContent != '*'){
-          var countStr = entry.getElementsByTagName('itemCount')[0].textContent;
-          count = parseInt(countStr,10);
-        }
-        var end = count + idx;
-        var action = entry.getElementsByTagName('action')[0].textContent;
-        var ancestorCountStr = entry.getElementsByTagName('ancestor')[0].textContent;
-        var ancestorCount = parseInt(ancestorCountStr,10);
+      var idxStr = startNode.getAttribute('index');
+      var idx = parseInt(idxStr,10);
+      var count = elems.length - idx;
+      var countStr = startNode.getAttribute('count');
+      if (countStr != '*'){
+        count = parseInt(countStr,10);
+      }
+      var end = count + idx;
+      var action = entry.getAttribute('action');
+      var ancestorCountStr = startNode.getAttribute('ancestor');
+      var ancestorCount = parseInt(ancestorCountStr,10);
 
-        while (idx < end){
-          var item = new Object();
-          item.action = action;
-          item.elem = elems[idx];
-          if (typeof(item.elem) != 'undefined'){
-            for (var j=0; j<ancestorCount; j++){
-              item.elem = item.elem.parentNode;
-            }
-            if (typeof(item.elem.AxsJAXNavInfo) == 'undefined'){
-              item.elem.AxsJAXNavInfo = new Object();
-            }
-            item.elem.AxsJAXNavInfo[listIdx] = idx;
-            itemsArray.push(item);
+      while (idx < end){
+        var item = new Object();
+        item.action = action;
+        item.elem = elems[idx];
+        if (typeof(item.elem) != 'undefined'){
+          for (var j=0; j<ancestorCount; j++){
+            item.elem = item.elem.parentNode;
           }
-          idx++;
+          if (typeof(item.elem.AxsJAXNavInfo) == 'undefined'){
+            item.elem.AxsJAXNavInfo = new Object();
+          }
+          item.elem.AxsJAXNavInfo[listIdx] = idx;
+          itemsArray.push(item);
         }
+        idx++;
       }
     }
     catch(err){ }
   }
+
   return itemsArray;
 };
 
@@ -741,15 +741,15 @@ AxsJAX.prototype.actOnCurrentItem = function(){
 
 /**
  * This function creates the maps keypresses to a method on a given
-   char and key map.
-
+ * char and key map.
+ *
  * @param {Array} keyArray  Array of keys that will be associated with the
-                            method
-
+ *                          method
+ *
  * @param {Object} charMap  Dictionary that maps character codes to methods
-
+ *
  * @param {Object} keyMap  Dictionary that maps key codes to methods
-
+ *
  * @param {Function} method  Method to be be associated with the array of keys
  */
 AxsJAX.prototype.assignKeysToMethod = function(keyArray, charMap, keyMap, method){
@@ -771,20 +771,20 @@ AxsJAX.prototype.assignKeysToMethod = function(keyArray, charMap, keyMap, method
 
 /**
  * This function creates the mapping between keypresses and navigation behavior.
-
+ *
  * @param {string} keyStr  String that indicates the keys to be used. Keys are
-                           separated by the | symbol and any key with * in front
-                           is a key that will cause the user to swap to the list
-                           that the key is associated with and read the
-                           next/prev item there. Otherwise, the keypress will
-                           only be active is the user's current list is the
-                           list indicated by navListIdx.
-
+ *                         separated by the | symbol and any key with * in front
+ *                         is a key that will cause the user to swap to the list
+ *                         that the key is associated with and read the
+ *                         next/prev item there. Otherwise, the keypress will
+ *                         only be active is the user's current list is the
+ *                         list indicated by navListIdx.
+ *
  * @param {number} navListIdx  Index of the list that these keypresses are
-                                associated with.                                     
-
+ *                             associated with.
+ *
  * @param {number} direction  Negative indicates moving backwards,
-                              zero or positive indicates moving forward.
+ *                            zero or positive indicates moving forward.
  */
 AxsJAX.prototype.assignItemKeys = function(keyStr, navListIdx, direction){
   var keys = new Array();
@@ -842,10 +842,10 @@ AxsJAX.prototype.assignItemKeys = function(keyStr, navListIdx, direction){
  * speak some message to let the user know that the function was called
  * but was unsuccessful because there is no content.
  * @param {string} keyStr  String that indicates the keys to be used.
-
+ *
  * @param {string} emptyMsg  The message that should be spoken when the user
-                             presses the key(s) to let them know that there
-                             is no content.
+ *                           presses the key(s) to let them know that there
+ *                           is no content.
  */
 AxsJAX.prototype.assignEmptyMsgKeys = function(keyStr, emptyMsg){
   var keys = new Array();
@@ -874,7 +874,6 @@ AxsJAX.prototype.assignEmptyMsgKeys = function(keyStr, emptyMsg){
 /**
  * This function attaches the default AxsJAX key handler for navigation.
  * @param {Node} cnlDOM  DOM of the Content Navigation Listing.
-
  * @param {Array} emptyLists  An array of lists which have zero items.
  */
 
@@ -951,16 +950,15 @@ AxsJAX.prototype.setUpNavKeys = function(cnlDOM, emptyLists){
  * Builds up the navigation system of lists of items.
  * This system uses the idea of multiple cursors and the visitor pattern.
  * @param {string} cnlString  An XML string that contains the information needed
-                              to build up the content navigation listings.
-
- * @param {Function?} opt_customNavMethod  A custom navigation method provided
-                                  by the caller. This navigation method will be
-                                  given the DOM created from the cnlString, the
-                                  navigation array of lists of items,
-                                  and an array of all the lists which had
-                                  zero items. This parameter is optional; if
-                                  it is null, the default AxsJAX nav handler
-                                  will be used.
+ *                            to build up the content navigation listings.
+ *
+ * @notypecheck {Function?} opt_customNavMethod  A custom navigation method provided
+ *                                by the caller. This navigation method will be
+ *                                given the DOM created from the cnlString, the
+ *                                navigation array of lists of items,
+ *                                and an array of all the lists which had
+ *                                zero items. If this is null, the default
+ *                                AxsJAX nav handler will be used.
  */
 AxsJAX.prototype.navInit = function(cnlString, opt_customNavMethod){
   var parser = new DOMParser();
@@ -990,8 +988,8 @@ AxsJAX.prototype.navInit = function(cnlString, opt_customNavMethod){
       emptyLists.push(navList);
     }
   }
-
-  if (opt_customNavMethod === null){
+  if ( (opt_customNavMethod === null) ||
+       (typeof(opt_customNavMethod) == 'undefined') ){
     this.setUpNavKeys(cnlDOM,emptyLists);
   } else {
     opt_customNavMethod(cnlDOM,this.navArray,emptyLists);
