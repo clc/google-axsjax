@@ -160,8 +160,13 @@ AxsJAX.prototype.speakNode = function(targetNode, opt_noFocusChange){
     this.activeParent.tabIndex = -1;
     this.activeParent.blur();
     this.setAttributeOf(this.activeParent,'activedescendant',null);
+
+
+
     this.activeParent.focus();
     this.setAttributeOf(this.activeParent,'activedescendant',targetNode.id);
+
+
     //Restore the original role of the targetNode
     var self = this;
     window.setTimeout(
@@ -246,7 +251,8 @@ AxsJAX.prototype.speakTextViaNode = function(textString, opt_anchorNode){
       opt_anchorNode.parentNode.insertBefore(pixelNode, opt_anchorNode);
       this.forceATSync(pixelNode);
     }
-    pixelNode.alt = textString;
+    pixelNode.setAttribute('alt',textString);
+    pixelNode.setAttribute('title',textString);
     // Use a setTimeout here as Firefox attribute setting can be quirky
     // (tabIndex is not always set soon enough).
     window.setTimeout(function(){pixelNode.blur();pixelNode.focus();},0);
@@ -258,7 +264,9 @@ AxsJAX.prototype.speakTextViaNode = function(textString, opt_anchorNode){
       pixelNode.src = encodedClearPixel;
       activeDoc.body.appendChild(pixelNode);
     }
-    pixelNode.alt = textString;
+    pixelNode.setAttribute('alt',textString);
+    pixelNode.setAttribute('title',textString);
+
     this.speakNode(pixelNode);
   }
 };
@@ -453,24 +461,6 @@ AxsJAX.prototype.setAttributeOf = function(targetNode, attribute, value){
       break;
     default:
       break;
-  }
-  //Add the wairole: to values
-  if (value && value.toLowerCase){
-    //Do not directly assign lowercased value to value as it may not be valid
-    var lcValue = value.toLowerCase();
-    switch (lcValue){
-      case 'group':
-        value = 'wairole:group';
-        break;
-      case 'row':
-        value = 'wairole:row';
-        break;
-      case 'button':
-        value = 'wairole:button';
-        break;
-      default:
-        break;
-    }
   }
   targetNode.setAttribute(attribute, value);
 };
