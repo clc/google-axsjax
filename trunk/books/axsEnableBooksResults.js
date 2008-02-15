@@ -75,7 +75,7 @@ axsBooksResults.init = function(){
       "<list title='Results' next='*DOWN|*n' prev='*UP|*p' emptyMsg=''>" +
       "<item action='goto'>" +
       "<startNode index='0' count='*'>" +
-      "//div[@id='results_container']/table[*]/tbody/tr/td[2]" +
+      "id('results_container')/table[*]/tbody/tr/td[2]" +
       "</startNode>" + 
       "</item>" +
       "<item action='click'>" +
@@ -92,7 +92,7 @@ axsBooksResults.init = function(){
       "<list title='Cycle Results' next='*RIGHT|*j' prev='*LEFT|*k' emptyMsg=''>" +
       "<item action='goto'>" +
       "<startNode index='0' count='*'>" +
-      "//div[@id='results_container']/table[*]/tbody/tr/td[2]" +
+      "id('results_container')/table[*]/tbody/tr/td[2]" +
       "</startNode>" +
       "</item>" +
       "</list>" +

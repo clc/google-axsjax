@@ -66,44 +66,43 @@ axsBooksAbout.init = function(){
     "<list title='Search results' next='RIGHT|j' prev='LEFT|k' emptyMsg=''>" +
     "<item action='goto'>" +
     "<startNode index='0' count='*'>" +
-    "//div[@id='search']//div[@class='searchresult']" +
+    "id('search')//div[@class='searchresult']" +
     "</startNode>" +
     "</item>" +
     "</list>" +
     "<list title='Summary' next='RIGHT|j' prev='LEFT|k' emptyMsg=''>" +
     "<item action='goto'>" +
-    "<startNode index='0' count='1'>//div[@id='coverandmetadata']</startNode>" +
+    "<startNode index='0' count='1'>id('coverandmetadata')</startNode>" +
     "</item>" +
     "<item action='goto'>" +
-    "<startNode index='0' count='1'>//div[@id='synopsistext']</startNode>" +
+    "<startNode index='0' count='1'>id('synopsistext')</startNode>" +
     "</item>" +
     "</list>" +
     "<list title='Buy or borrow this book' next='RIGHT|j' " +
     "prev='LEFT|k' emptyMsg=''>" +
     "<item action='goto'>" +
     "<startNode index='0' count='*'>" +
-    "//div[@id='summary_content']/div[*]/table/" +
-    "tbody/tr[*]/td[@class='btblinks']" +
+    "id('summary_content')/div[*]/table/tbody/tr[*]/td[@class='btblinks']" +
     "</startNode>" +
     "</item>" +
     "</list>" +
     "<list title='Reviews' next='RIGHT|j' prev='LEFT|k' emptyMsg=''>" +
     "<item action='goto'>" +
-    "<startNode index='0' count='*'>//div[@id='reviews']//td</startNode>" +
+    "<startNode index='0' count='*'>id('reviews')//td</startNode>" +
     "</item>" +
     "</list>" +
     "<list title='Keywords' next='RIGHT|j' prev='LEFT|k' emptyMsg=''>" +
     "<item action='goto'>" +
-    "<startNode index='0' count='*'>//div[@id='keywords']//a</startNode>" +
+    "<startNode index='0' count='*'>id('keywords')//a</startNode>" +
     "</item>" +
     "<item action='goto'>" +
-    "<startNode index='0' count='*'>//div[@id='keywords_v']//a</startNode>" +
+    "<startNode index='0' count='*'>id('keywords_v')//a</startNode>" +
     "</item>" +
     "</list>" +
     "<list title='Popular passages' next='RIGHT|j' prev='LEFT|k' emptyMsg=''>" +
     "<item action='goto'>" +
     "<startNode index='0' count='*'>" +
-    "//div[@id='quotes']//p[@class='quot']" +
+    "id('quotes')//p[@class='quot']" +
     "</startNode>" +
     "</item>" +
     "</list>" +
@@ -111,7 +110,7 @@ axsBooksAbout.init = function(){
     "prev='LEFT|k' emptyMsg=''>" +
     "<item action='goto'>" +
     "<startNode index='0' count='*'>" +
-    "//div[@id='gmap']/div/div//div[contains(@id,'geo_')]" +
+    "id('gmap')/div/div//div[contains(@id,'geo_')]" +
     "</startNode>" +
     "</item>" +
     "</list>" +
@@ -119,7 +118,7 @@ axsBooksAbout.init = function(){
     "prev='LEFT|k' emptyMsg=''>" +
     "<item action='goto'>" +
     "<startNode index='0' count='*'>" +
-    "//div[@id='book_citations']//div[@class='resbdy']" +
+    "id('book_citations')//div[@class='resbdy']" +
     "</startNode>" +
     "</item>" +
     "</list>" +
@@ -127,7 +126,7 @@ axsBooksAbout.init = function(){
     "prev='LEFT|k' emptyMsg=''>" +
     "<item action='goto'>" +
     "<startNode index='0' count='*'>" +
-    "//div[@id='scholar_citations']//p[@class='resbdy']" +
+    "id('scholar_citations')//p[@class='resbdy']" +
     "</startNode>" +
     "</item>" +
     "</list>" +
@@ -135,21 +134,21 @@ axsBooksAbout.init = function(){
     "prev='LEFT|k' emptyMsg=''>" +
     "<item action='goto'>" +
     "<startNode index='0' count='*'>" +
-    "//div[@id='web_references']//p[@class='resbdy']" +
+    "id('web_references')//p[@class='resbdy']" +
     "</startNode>" +
     "</item>" +
     "</list>" +
     "<list title='Other editions' next='RIGHT|j' prev='LEFT|k' emptyMsg=''>" +
     "<item action='goto'>" +
     "<startNode index='0' count='*'>" +
-    "//div[@id='book_other_versions']//div[@class='resbdy']" +
+    "id('book_other_versions')//div[@class='resbdy']" +
     "</startNode>" +
     "</item>" +
     "</list>" +
     "<list title='Related books' next='RIGHT|j' prev='LEFT|k' emptyMsg=''>" +
     "<item action='goto'>" +
     "<startNode index='0' count='*'>" +
-    "//div[@id='similarbooks']//div[@class='resbdy']" +
+    "id('similarbooks')//div[@class='resbdy']" +
     "</startNode>" +
     "</item>" +
     "</list>" +
@@ -168,6 +167,9 @@ axsBooksAbout.init = function(){
   // Speak the page title
   //Use a set time out just in case the browser is not entirely ready yet.
   window.setTimeout(axsBooksAbout.readTitleBar,100);
+
+  axsBooksAbout.testFunc0();
+  axsBooksAbout.testFunc1();
 };
 
 
