@@ -27,6 +27,10 @@ function pickScript(){
   var theLib = document.createElement('script');
   theLib.type = 'text/javascript';
   theLib.src = baseURL + 'common/AxsJAX.js';
+  var navLib = document.createElement('script');
+  navLib.type = 'text/javascript';
+  navLib.src = baseURL + 'common/AxsNav.js';
+
   //Do not insert anything if the scripts are already inserted.
   var scriptArray = document.getElementsByTagName('script');
   for (var i=0; i<scriptArray.length; i++){
@@ -81,6 +85,7 @@ function pickScript(){
 
   if (shouldInsertScripts){
     document.getElementsByTagName('head')[0].appendChild(theLib);
+    document.getElementsByTagName('head')[0].appendChild(navLib);
     document.getElementsByTagName('head')[0].appendChild(theScript);
   }
 }
