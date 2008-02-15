@@ -24,16 +24,8 @@
 // create namespace
 var axsBooksAbout = {};
 
-axsBooksAbout.categoryObj = function(){
-  this.titleNode = null;
-  this.mainContentNode = null;
-  this.itemsArray = null;
-  this.itemsIndex = null;
-};
-
 //These are strings used to find specific links
 axsBooksAbout.MORE_STRING = 'more';
-axsBooksAbout.PLACES_MENTIONED_STRING = 'Places mentioned in this book';
 
 //These are strings to be spoken to the user
 axsBooksAbout.HELP =
@@ -50,29 +42,128 @@ axsBooksAbout.HELP =
 
 /**
  * The AxsJAX object that will do the tickling and speaking.
- * @type AxsJAX
+ * @type AxsJAX?
  */
 axsBooksAbout.axsJAXObj = null;
-
-axsBooksAbout.categoriesArray = null;
-axsBooksAbout.categoriesIndex = 0;
-
-
-axsBooksAbout.inputFocused = false;
-axsBooksAbout.lastFocusedNode = null;
-
+/**
+ * The AxsNav object that will handle navigation.
+ * @type AxsNav?
+ */
+axsBooksAbout.axsNavObj = null;
 
 axsBooksAbout.init = function(){
   axsBooksAbout.axsJAXObj = new AxsJAX(true);
+  axsBooksAbout.axsNavObj = new AxsNav(axsBooksAbout.axsJAXObj);
 
   //Add event listeners
   document.addEventListener('keypress', axsBooksAbout.keyHandler, true);
-  document.addEventListener('focus', axsBooksAbout.focusHandler, true);
-  document.addEventListener('blur', axsBooksAbout.blurHandler, true);
   // Expand all navigation sections:
   
   axsBooksAbout.expandAllMoreLinks();
-  axsBooksAbout.buildCategoriesArray();
+
+
+  var cnlString = "<cnl next='DOWN|n' prev='UP|p' emptyMsg=''>" +
+    "<list title='Search results' next='RIGHT|j' prev='LEFT|k' emptyMsg=''>" +
+    "<item action='goto'>" +
+    "<startNode index='0' count='*'>" +
+    "//div[@id='search']//div[@class='searchresult']" +
+    "</startNode>" +
+    "</item>" +
+    "</list>" +
+    "<list title='Summary' next='RIGHT|j' prev='LEFT|k' emptyMsg=''>" +
+    "<item action='goto'>" +
+    "<startNode index='0' count='1'>//div[@id='coverandmetadata']</startNode>" +
+    "</item>" +
+    "<item action='goto'>" +
+    "<startNode index='0' count='1'>//div[@id='synopsistext']</startNode>" +
+    "</item>" +
+    "</list>" +
+    "<list title='Buy or borrow this book' next='RIGHT|j' " +
+    "prev='LEFT|k' emptyMsg=''>" +
+    "<item action='goto'>" +
+    "<startNode index='0' count='*'>" +
+    "//div[@id='summary_content']/div[*]/table/" +
+    "tbody/tr[*]/td[@class='btblinks']" +
+    "</startNode>" +
+    "</item>" +
+    "</list>" +
+    "<list title='Reviews' next='RIGHT|j' prev='LEFT|k' emptyMsg=''>" +
+    "<item action='goto'>" +
+    "<startNode index='0' count='*'>//div[@id='reviews']//td</startNode>" +
+    "</item>" +
+    "</list>" +
+    "<list title='Keywords' next='RIGHT|j' prev='LEFT|k' emptyMsg=''>" +
+    "<item action='goto'>" +
+    "<startNode index='0' count='*'>//div[@id='keywords']//a</startNode>" +
+    "</item>" +
+    "<item action='goto'>" +
+    "<startNode index='0' count='*'>//div[@id='keywords_v']//a</startNode>" +
+    "</item>" +
+    "</list>" +
+    "<list title='Popular passages' next='RIGHT|j' prev='LEFT|k' emptyMsg=''>" +
+    "<item action='goto'>" +
+    "<startNode index='0' count='*'>" +
+    "//div[@id='quotes']//p[@class='quot']" +
+    "</startNode>" +
+    "</item>" +
+    "</list>" +
+    "<list title='Places mentioned in this book' next='RIGHT|j' " +
+    "prev='LEFT|k' emptyMsg=''>" +
+    "<item action='goto'>" +
+    "<startNode index='0' count='*'>" +
+    "//div[@id='gmap']/div/div//div[contains(@id,'geo_')]" +
+    "</startNode>" +
+    "</item>" +
+    "</list>" +
+    "<list title='References from books' next='RIGHT|j' " +
+    "prev='LEFT|k' emptyMsg=''>" +
+    "<item action='goto'>" +
+    "<startNode index='0' count='*'>" +
+    "//div[@id='book_citations']//div[@class='resbdy']" +
+    "</startNode>" +
+    "</item>" +
+    "</list>" +
+    "<list title='References from scholarly works' next='RIGHT|j' " +
+    "prev='LEFT|k' emptyMsg=''>" +
+    "<item action='goto'>" +
+    "<startNode index='0' count='*'>" +
+    "//div[@id='scholar_citations']//p[@class='resbdy']" +
+    "</startNode>" +
+    "</item>" +
+    "</list>" +
+    "<list title='References from web pages' next='RIGHT|j' " +
+    "prev='LEFT|k' emptyMsg=''>" +
+    "<item action='goto'>" +
+    "<startNode index='0' count='*'>" +
+    "//div[@id='web_references']//p[@class='resbdy']" +
+    "</startNode>" +
+    "</item>" +
+    "</list>" +
+    "<list title='Other editions' next='RIGHT|j' prev='LEFT|k' emptyMsg=''>" +
+    "<item action='goto'>" +
+    "<startNode index='0' count='*'>" +
+    "//div[@id='book_other_versions']//div[@class='resbdy']" +
+    "</startNode>" +
+    "</item>" +
+    "</list>" +
+    "<list title='Related books' next='RIGHT|j' prev='LEFT|k' emptyMsg=''>" +
+    "<item action='goto'>" +
+    "<startNode index='0' count='*'>" +
+    "//div[@id='similarbooks']//div[@class='resbdy']" +
+    "</startNode>" +
+    "</item>" +
+    "</list>" +
+    "<list title='Sponsored links' next='RIGHT|j' prev='LEFT|k' emptyMsg=''>" +
+    "<item action='goto'>" +
+    "<startNode index='0' count='*'>" +
+    "/html/body/table[@class='lads']/tbody/tr[*]/td[1]" +
+    "</startNode>" +
+    "</item>" +
+    "</list>" +
+    "</cnl>";
+
+  axsBooksAbout.axsNavObj.navInit(cnlString, null);
+  axsBooksAbout.fixAllPageLinks();
 
   // Speak the page title
   //Use a set time out just in case the browser is not entirely ready yet.
@@ -105,50 +196,21 @@ axsBooksAbout.readTitleBar = function(){
 };
 
 
-/**
- * Record where the focus is.
- * Record if current focus is an input area.
- * When an input field has focus, the keystrokes should go into the blank
- * and should not trigger hot key commands.
- * @param evt {event} A Focus event
- */
-axsBooksAbout.focusHandler = function(evt){
-  axsBooksAbout.lastFocusedNode = evt.target;
-  if ((evt.target.tagName == 'INPUT') ||
-      (evt.target.tagName == 'TEXTAREA')){
-    axsBooksAbout.inputFocused = true;
-  }
-};
-
-/**
- * Update flag that records if input area is focused.
- * When no input fields have focus, the keystrokes should trigger hot key
- * commands.
- * @param evt {event} A Blur event
- */
-axsBooksAbout.blurHandler = function (evt){
-  axsBooksAbout.lastFocusedNode = null;
-  if ((evt.target.tagName == 'INPUT') ||
-      (evt.target.tagName == 'TEXTAREA')){
-    axsBooksAbout.inputFocused = false;
-  }
-};
-
-
 /*
  * Move to the search in book field
  */
 
-axsBooksAbout.goFindInBook = function () { // s
-    var inputs = document.getElementById('search_form').getElementsByTagName('INPUT');
-    for (var i=0,input; input = inputs[i]; i++){
-      if (input.type == 'text'){
-        input.focus();
-        input.select();
-        return false;
-      }
+axsBooksAbout.goFindInBook = function () {
+  var searchForm = document.getElementById('search_form');
+  var inputs = searchForm.getElementsByTagName('INPUT');
+  for (var i=0,input; input = inputs[i]; i++){
+    if (input.type == 'text'){
+      input.focus();
+      input.select();
+      return false;
     }
-    return true;
+  }
+  return true;
 };
 
 
@@ -173,11 +235,11 @@ axsBooksAbout.keyHandler = function(evt){
   if (evt.ctrlKey) return true;
   
   if (evt.keyCode == 27){ // ESC
-    axsBooksAbout.lastFocusedNode.blur();
+    axsBooksAbout.axsJAXObj.lastFocusedNode.blur();
     return false;
   }
 
-  if (axsBooksAbout.inputFocused) return true;
+  if (axsBooksAbout.axsJAXObj.inputFocused) return true;
   
   var command =  axsBooksAbout.keyCodeMap[evt.keyCode] ||
   axsBooksAbout.charCodeMap[evt.charCode];
@@ -185,213 +247,6 @@ axsBooksAbout.keyHandler = function(evt){
   if (command)  return  command();
   return true;
   
-};
-
-//************
-//Functions for content extraction
-//and breaking it into categories
-//************
-axsBooksAbout.buildCategoriesArray = function(){
-  axsBooksAbout.categoriesArray = new Array();
-  axsBooksAbout.categoriesIndex = -1;
-  var cat = null;
-  var myNode = null;
-
-  //Search - only add this if the user did a search and there are results
-  myNode = document.getElementById('search');
-  if (myNode){
-    cat = new axsBooksAbout.categoryObj();
-    cat.titleNode = myNode.previousSibling;
-    cat.mainContentNode = myNode;
-    cat.itemsArray = new Array();
-    cat.itemsIndex = -1;
-    var divArray = myNode.getElementsByTagName('DIV');
-    for (var i=0,currentDiv; currentDiv = divArray[i]; i++){
-      if (currentDiv.className == 'searchresult'){
-        var resLink = currentDiv.getElementsByTagName('A')[0];
-        if (resLink){
-          axsBooksAbout.fixBookPageLink(resLink);
-        }
-        cat.itemsArray.push(currentDiv);
-      }
-    }
-    if (cat.itemsArray.length > 0){
-      axsBooksAbout.categoriesArray.push(cat);
-    }
-  }
-
-  //Summary
-  myNode = document.getElementById('summary_content');
-  if (myNode){
-    cat = new axsBooksAbout.categoryObj();
-    var titleTable = document.getElementById('volumebartable');
-    var titleCell =  axsBooksAbout.axsJAXObj.evalXPath('tbody/tr/td[*][@class="volumetitle"]',titleTable)[0];
-    cat.titleNode = titleCell;
-    cat.mainContentNode = myNode;
-    cat.itemsArray = new Array();
-    cat.itemsIndex = -1;
-    myNode = document.getElementById('coverandmetadata');
-    if (myNode){
-      cat.itemsArray.push(myNode);
-    }
-    myNode = document.getElementById('synopsistext');
-    if (myNode){
-      cat.itemsArray.push(myNode);
-    }
-    axsBooksAbout.categoriesArray.push(cat);
-  }
-
-  //Buy and Borrow Book
-  myNode = document.getElementById('summary_content');
-  myNode = myNode.childNodes[1];
-  if (myNode){
-    var tdArray = myNode.getElementsByTagName('TD');
-    var cellIndex = 0;
-    //Build the Buy category
-    cat = new axsBooksAbout.categoryObj();
-    cat.titleNode = tdArray[cellIndex];
-    cat.mainContentNode = myNode;
-    cat.itemsArray = new Array();
-    cat.itemsIndex = -1;
-    cellIndex++;
-    while(tdArray[cellIndex] && (tdArray[cellIndex].className == 'btblinks')){
-      cat.itemsArray.push(tdArray[cellIndex]);
-      cellIndex++;
-    }
-    axsBooksAbout.categoriesArray.push(cat);
-    //Build the Borrow Category
-    cellIndex++;
-    cat = new axsBooksAbout.categoryObj();
-    cat.titleNode = tdArray[cellIndex];
-    cat.mainContentNode = myNode;
-    cat.itemsArray = new Array();
-    cat.itemsIndex = -1;
-    cellIndex++;
-    while(tdArray[cellIndex] && (tdArray[cellIndex].className == 'btblinks')){
-      cat.itemsArray.push(tdArray[cellIndex]);
-      cellIndex++;
-    }
-    axsBooksAbout.categoriesArray.push(cat);
-  }
-
-  //Reviews
-  myNode = document.getElementById('reviews');
-  if (myNode){
-    cat = new axsBooksAbout.categoryObj();
-    cat.titleNode = myNode.previousSibling;
-    cat.mainContentNode = myNode;
-    cat.itemsArray = myNode.getElementsByTagName('TR');
-    cat.itemsIndex = -1;
-    axsBooksAbout.categoriesArray.push(cat);
-  }
-
-  //Key Terms
-  myNode = document.getElementById('keywords');
-  if (myNode){
-    cat = axsBooksAbout.buildCategoryFromPanelSingleElemStyle(myNode,'A');
-    axsBooksAbout.categoriesArray.push(cat);
-  } else { //Key terms can sometimes be presented inside the summary.
-    myNode = document.getElementById('keywords_v');
-    if (myNode && myNode.childNodes[1]){
-      myNode = myNode.childNodes[1];
-      cat = axsBooksAbout.buildCategoryFromPanelSingleElemStyle(myNode,'A');
-      axsBooksAbout.categoriesArray.push(cat);
-    }
-  }
-  
-  //Popular Passages
-  myNode = document.getElementById('quotes');
-  if (myNode){
-    var linksArray = myNode.getElementsByTagName('A');
-    var currentLink = null;
-    for (i = 0,currentLink; currentLink = linksArray[i]; i++){
-      //In the Popular Passages section, links with no classname are links to
-      //pages in the book. Links to pages in the book need to be fixed to work
-      //correctly in two page, text-only mode.
-      if (!currentLink.className){
-        axsBooksAbout.fixBookPageLink(currentLink);
-      }
-    }
-    cat = axsBooksAbout.buildCategoryFromPanelSingleElemStyle(myNode,'P');
-    axsBooksAbout.categoriesArray.push(cat);
-  }
-
-  //Places Mentioned
-  myNode = document.getElementById('gmap');
-  if (myNode){
-    divArray = myNode.getElementsByTagName('DIV');
-    cat = new axsBooksAbout.categoryObj();
-    cat.titleNode = myNode.previousSibling;
-    cat.mainContentNode = myNode;
-    cat.itemsArray = new Array();
-    cat.itemsIndex = -1;
-    for (i=0, currentDiv; currentDiv = divArray[i]; i++){
-      if (currentDiv.className == 'result'){
-        cat.itemsArray.push(currentDiv.getElementsByTagName('DIV')[0]);
-      }
-    }
-    axsBooksAbout.categoriesArray.push(cat);
-  }
-
-  //References from Books
-  myNode = document.getElementById('book_citations');
-  if (myNode){
-    cat = axsBooksAbout.buildCategoryFromPanelBookStyle(myNode);
-    axsBooksAbout.categoriesArray.push(cat);
-  }
-
-  //References from Scholarly Works
-  myNode = document.getElementById('scholar_citations');
-  if (myNode){
-    cat = axsBooksAbout.buildCategoryFromPanelSingleElemStyle(myNode,'P');
-    axsBooksAbout.categoriesArray.push(cat);
-  }
-
-  //References from Web Pages
-  myNode = document.getElementById('web_references');
-  if (myNode){
-    cat = axsBooksAbout.buildCategoryFromPanelSingleElemStyle(myNode,'P');
-    axsBooksAbout.categoriesArray.push(cat);
-  }
-  
-  //Other Editions
-  myNode = document.getElementById('book_other_versions');
-  if (myNode){
-    cat = axsBooksAbout.buildCategoryFromPanelBookStyle(myNode);
-    axsBooksAbout.categoriesArray.push(cat);
-  }
-  
-  //Related Books
-  myNode = document.getElementById('similarbooks');
-  if (myNode){
-    cat = axsBooksAbout.buildCategoryFromPanelBookStyle(myNode);
-    axsBooksAbout.categoriesArray.push(cat);
-  }
-
-  //Sponsored Links
-  myNode = null;
-  var child = null;
-  for (i=0, child; child = document.body.childNodes[i]; i++){
-    if (child.className && child.className == 'lads'){
-      myNode = child;
-      break;
-    }
-  }
-  if (myNode){
-    tdArray = myNode.getElementsByTagName('TD');
-    cat = new axsBooksAbout.categoryObj();
-    cat.titleNode = tdArray[1];
-    cat.mainContentNode = myNode;
-    cat.itemsArray = new Array();
-    cat.itemsIndex = -1;
-    cat.itemsArray.push(tdArray[0]);
-    var currentTd = null;
-    for (i=2, currentTd; currentTd = tdArray[i]; i++){
-      cat.itemsArray.push(currentTd);
-    }
-    axsBooksAbout.categoriesArray.push(cat);
-  }
-
 };
 
 //Need to perform a fix as there is a problem when the link is used as-is
@@ -402,89 +257,28 @@ axsBooksAbout.fixBookPageLink = function(theLink){
   var pageNumStart = theLink.href.indexOf('&pg=') + 4;
   var pageNumEnd = theLink.href.indexOf('&',pageNumStart+1);
   var pageNum = theLink.href.substring(pageNumStart, pageNumEnd);
-  theLink.href = theLink.href + '#P' + pageNum + ',M2';
+  theLink.href = theLink.href + '&output=text#P' + pageNum + ',M2';
 };
 
-
-
-axsBooksAbout.buildCategoryFromPanelSingleElemStyle = function(contentNode,elemTagName){
-    var myNode = contentNode;
-    var cat = new axsBooksAbout.categoryObj();
-    cat.titleNode = myNode.previousSibling;
-    cat.mainContentNode = myNode;
-    cat.itemsArray = myNode.getElementsByTagName(elemTagName);
-    cat.itemsIndex = -1;
-    return cat;
-};
-
-axsBooksAbout.buildCategoryFromPanelBookStyle = function(contentNode){
-    var myNode = contentNode;
-    var trArray = myNode.getElementsByTagName('TR');
-    var cat = new axsBooksAbout.categoryObj();
-    cat.titleNode = myNode.previousSibling;
-    cat.mainContentNode = myNode;
-    cat.itemsArray = new Array();
-    cat.itemsIndex = -1;
-    for (var i=0, currentTr; currentTr = trArray[i]; i++){
-      cat.itemsArray.push(currentTr.childNodes[1]);
+axsBooksAbout.fixAllPageLinks = function(){
+  var navArray = axsBooksAbout.axsNavObj.navArray;
+  for (var i=0, list; list = navArray[i]; i++){
+    if ( (list.title == 'Search results') ||
+         (list.title == 'Popular passages') ){
+      for (var j=0,item; item=list.items[j]; j++){
+        var link = item.elem.getElementsByTagName('a')[0];
+        if (link) axsBooksAbout.fixBookPageLink(link);
+      }
     }
-    return cat;
-};
-
-
-
-axsBooksAbout.goToNextCategory = function(){
-  axsBooksAbout.categoriesIndex++;
-  if(axsBooksAbout.categoriesIndex >= axsBooksAbout.categoriesArray.length){
-    axsBooksAbout.categoriesIndex = 0;
   }
-  var currentCategory =
-      axsBooksAbout.categoriesArray[axsBooksAbout.categoriesIndex];
-  axsBooksAbout.axsJAXObj.goTo(currentCategory.titleNode);
-};
-
-
-axsBooksAbout.goToPrevCategory = function(){
-  axsBooksAbout.categoriesIndex--;
-  if(axsBooksAbout.categoriesIndex < 0){
-    axsBooksAbout.categoriesIndex = axsBooksAbout.categoriesArray.length - 1;
-  }
-  var currentCategory =
-      axsBooksAbout.categoriesArray[axsBooksAbout.categoriesIndex];
-  axsBooksAbout.axsJAXObj.goTo(currentCategory.titleNode);
-};
-
-
-axsBooksAbout.goToNextItem = function(){
-  var currentCategory =
-      axsBooksAbout.categoriesArray[axsBooksAbout.categoriesIndex];
-  currentCategory.itemsIndex++;
-  if(currentCategory.itemsIndex >= currentCategory.itemsArray.length){
-    currentCategory.itemsIndex = 0;
-  }
-  var currentItem = currentCategory.itemsArray[currentCategory.itemsIndex];
-  axsBooksAbout.axsJAXObj.goTo(currentItem);
-};
-
-
-axsBooksAbout.goToPrevItem = function(){
-  var currentCategory =
-      axsBooksAbout.categoriesArray[axsBooksAbout.categoriesIndex];
-  currentCategory.itemsIndex--;
-  if(currentCategory.itemsIndex < 0){
-    currentCategory.itemsIndex = currentCategory.itemsArray.length - 1;
-  }
-  var currentItem = currentCategory.itemsArray[currentCategory.itemsIndex];
-  axsBooksAbout.axsJAXObj.goTo(currentItem);
 };
 
 axsBooksAbout.actOnCurrentItem = function(shiftKey){
   var linkIndex = 0;
-  var currentCategory =
-      axsBooksAbout.categoriesArray[axsBooksAbout.categoriesIndex];
-  var currentItem = currentCategory.itemsArray[currentCategory.itemsIndex];
-  var titleText = currentCategory.titleNode.textContent;
-  if (titleText == axsBooksAbout.PLACES_MENTIONED_STRING){
+  var currentItem = axsBooksAbout.axsNavObj.currentItem().elem;
+
+  var titleText = axsBooksAbout.axsNavObj.currentList().title;
+  if (titleText == 'Places mentioned in this book'){
     linkIndex = 1;
   }
   var currentLink = null;
@@ -499,22 +293,15 @@ axsBooksAbout.actOnCurrentItem = function(shiftKey){
 };
 
 axsBooksAbout.keyCodeMap = {
-13 : function() {axsBooksAbout.actOnCurrentItem(false);}, // enter (tvr: lost shift)
-38 : axsBooksAbout.goToPrevCategory, //up arrow
-37 : axsBooksAbout.goToPrevItem, // left arrow
-40 : axsBooksAbout.goToNextCategory, // down arrow
-39 : axsBooksAbout.goToNextItem // down arrow
+  // enter (tvr: lost shift)
+  13 : function() {axsBooksAbout.actOnCurrentItem(false);}
 };
 
 axsBooksAbout.charCodeMap = {
-63 : function () {
-    axsBooksAbout.axsJAXObj.speakTextViaNode(axsBooksAbout.HELP);}, // ?
-106 : axsBooksAbout.goToNextItem, // j
-107 : axsBooksAbout.goToPrevItem, // k
-110: axsBooksAbout.goToNextCategory, // n
-112 : axsBooksAbout.goToPrevCategory, //p
-115 : axsBooksAbout.goFindInBook, //s 
-47 : axsBooksAbout.goSearch
+  63 : function () {
+         axsBooksAbout.axsJAXObj.speakTextViaNode(axsBooksAbout.HELP);}, // ?
+ 115 : axsBooksAbout.goFindInBook, //s
+  47 : axsBooksAbout.goSearch
 };
 
 axsBooksAbout.init();

@@ -48,7 +48,7 @@ axsBooksResults.HELP =
 
 /**
  * The AxsJAX object that will do the tickling and speaking.
- * @type AxsJAX
+ * @type AxsJAX?
  */
 axsBooksResults.axsJAXObj = null;
 /**
@@ -108,7 +108,8 @@ axsBooksResults.init = function(){
  * Reads the first thing on the page.
  */
 axsBooksResults.readFirst = function(evt){
-  axsBooksResults.goToNextResult(true);
+  var firstElem = axsBooksResults.axsNavObj.nextItem().elem;
+  axsBooksResults.axsJAXObj.goTo(firstElem);
 };
 
 
