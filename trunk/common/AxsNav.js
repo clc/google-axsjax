@@ -45,7 +45,6 @@ var AxsNav = function(axsJAXObj){
 AxsNav.prototype.makeItemsArray = function(listNode, listIdx){
   var itemsArray = new Array();
   var cnlItems = listNode.getElementsByTagName('item');
-  var debug;
   for (var i=0,entry; entry = cnlItems[i]; i++){
     //Do this in a try-catch block since there are multiple
     //sets of cnlItems and even if one set does not exist as expected,
@@ -53,7 +52,8 @@ AxsNav.prototype.makeItemsArray = function(listNode, listIdx){
     try{
       var startNode = entry.getElementsByTagName('startNode')[0];
       var xpath = startNode.textContent;
-      var htmlElem = this.axsJAXObj.getActiveDocument().getElementsByTagName('html')[0];
+      var htmlElem =
+          this.axsJAXObj.getActiveDocument().getElementsByTagName('html')[0];
       var elems = this.axsJAXObj.evalXPath(xpath, htmlElem);
 
       var idxStr = startNode.getAttribute('index');
@@ -75,7 +75,7 @@ AxsNav.prototype.makeItemsArray = function(listNode, listIdx){
           if (typeof(item.elem.AxsNavInfo) == 'undefined'){
             item.elem.AxsNavInfo = new Object();
           }
-          item.elem.AxsNavInfo[listIdx] = idx;
+          item.elem.AxsNavInfo[listIdx] = itemsArray.length;
           itemsArray.push(item);
         }
         idx++;
@@ -216,6 +216,7 @@ AxsNav.prototype.currentItem = function(){
  */
 AxsNav.prototype.actOnCurrentItem = function(){
   var currentItem = this.currentItem();
+
   if (currentItem !== null){
     if (currentItem.action == 'click'){
       this.axsJAXObj.clickElem(currentItem.elem, false);
@@ -438,8 +439,9 @@ AxsNav.prototype.setUpNavKeys = function(cnlDOM, emptyLists){
  * @param {string} cnlString  An XML string that contains the information needed
  *                            to build up the content navigation listings.
  *
- * @notypecheck {Function?} opt_customNavMethod  A custom navigation method provided
- *                                by the caller. This navigation method will be
+ * @notypecheck {Function?} opt_customNavMethod
+ *                                A custom navigation method provided by
+ *                                the caller. This navigation method will be
  *                                given the DOM created from the cnlString, the
  *                                navigation array of lists of items,
  *                                and an array of all the lists which had
