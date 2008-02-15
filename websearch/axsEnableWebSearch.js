@@ -69,6 +69,7 @@ axsWebSearch.axsJAXObj = null;
 
 axsWebSearch.init = function(){
   axsWebSearch.axsJAXObj = new AxsJAX(true);
+  axsWebSearch.axsNavObj = new AxsNav(axsWebSearch.axsJAXObj);
 
   //Add event listeners
   document.addEventListener('keypress', axsWebSearch.extraKeyboardNavHandler,
@@ -85,7 +86,7 @@ axsWebSearch.init = function(){
                   "<list title='Alternate Search Categories' next='RIGHT|j|*c' prev='LEFT|k' emptyMsg='There are no other categories to search within.'><item action='goto'><startNode index='0' count='*'>body/table[*]/tbody/tr/td[*]/font/a[@class='q']</startNode></item></list>" +
                   "</cnl>";
 
-  axsWebSearch.axsJAXObj.navInit(cnlString, null);
+  axsWebSearch.axsNavObj.navInit(cnlString, null);
 
 
 
@@ -98,7 +99,7 @@ axsWebSearch.init = function(){
  * Reads the first thing on the page.
  */
 axsWebSearch.readTheFirstThing = function(evt){
-  var firstElem = axsWebSearch.axsJAXObj.nextItem().elem;
+  var firstElem = axsWebSearch.axsNavObj.nextItem().elem;
   axsWebSearch.axsJAXObj.goTo(firstElem);
 };
 
