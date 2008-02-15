@@ -51,11 +51,11 @@ axsBooksResults.HELP =
  * @type AxsJAX
  */
 axsBooksResults.axsJAXObj = null;
-axsBooksResults.resultsArray = new Array();
-axsBooksResults.resultsIndex = 0;
-
-axsBooksResults.inputFocused = false;
-axsBooksResults.lastFocusedNode = null;
+/**
+ * The AxsNav object that will handle navigation.
+ * @type AxsNav?
+ */
+axsBooksResults.axsNavObj = null;
 
 /*
  * Initialize
@@ -63,14 +63,41 @@ axsBooksResults.lastFocusedNode = null;
 
 axsBooksResults.init = function(){
   axsBooksResults.axsJAXObj = new AxsJAX(true);
+  axsBooksResults.axsNavObj = new AxsNav(axsBooksResults.axsJAXObj);
 
   //Add event listeners
   document.addEventListener('keypress', axsBooksResults.keyHandler, true);
-  document.addEventListener('focus', axsBooksResults.focusHandler, true);
-  document.addEventListener('blur', axsBooksResults.blurHandler, true);
 
   //Setup the results array
-  axsBooksResults.buildResultsArray();
+//  axsBooksResults.buildResultsArray();
+
+  var cnlString = "<cnl next='' prev='' emptyMsg=''>" +
+      "<list title='Results' next='*DOWN|*n' prev='*UP|*p' emptyMsg=''>" +
+      "<item action='goto'>" +
+      "<startNode index='0' count='*'>" +
+      "//div[@id='results_container']/table[*]/tbody/tr/td[2]" +
+      "</startNode>" + 
+      "</item>" +
+      "<item action='click'>" +
+      "<startNode index='0' count='1'>" +
+      "//img[contains(@src,'nav_next.gif')]/parent::*" +
+      "</startNode>" +
+      "</item>" +
+      "<item action='click'>" +
+      "<startNode index='0' count='1'>" +
+      "//img[contains(@src,'nav_previous.gif')]/parent::*" +
+      "</startNode>" +
+      "</item>" +
+      "</list>" +
+      "<list title='Cycle Results' next='*RIGHT|*j' prev='*LEFT|*k' emptyMsg=''>" +
+      "<item action='goto'>" +
+      "<startNode index='0' count='*'>" +
+      "//div[@id='results_container']/table[*]/tbody/tr/td[2]" +
+      "</startNode>" +
+      "</item>" +
+      "</list>" +
+      "</cnl>";
+  axsBooksResults.axsNavObj.navInit(cnlString, null);
 
   //Read the first thing on the page.
   //Use a set time out just in case the browser is not entirely ready yet.
@@ -85,58 +112,26 @@ axsBooksResults.readFirst = function(evt){
 };
 
 
-/**
- * Record focus in axsBooksResults.lastFocusedNode.
- * Records if axsBooksResults.lastFocusedNode is an input field.
- * This flag is used in our keyHandler.
- * When an input field has focus,  keystrokes should go to the field
- * and should not trigger hot key commands.
- * @param evt {event} A Focus event
- */
-
-axsBooksResults.focusHandler = function(evt){
-  axsBooksResults.lastFocusedNode = evt.target;
-  if ((evt.target.tagName == 'INPUT') ||
-      (evt.target.tagName == 'TEXTAREA')){
-    axsBooksResults.inputFocused = true;
-  }
-};
-
-/**
- *Update axsBooksResults.lastFocusedNode.
- * When no input fields have focus, the keystrokes should trigger hot key
- * commands.
- * @param evt {event} A Blur event
- */
-axsBooksResults.blurHandler = function (evt){
-  axsBooksResults.lastFocusedNode = null;
-  if ((evt.target.tagName == 'INPUT') ||
-      (evt.target.tagName == 'TEXTAREA')){
-    axsBooksResults.inputFocused = false;
-  }
-};
-
-
 axsBooksResults.openResult  = function () {
-  var current = axsBooksResults.resultsArray[axsBooksResults.resultsIndex];
+  var current = axsBooksResults.axsNavObj.currentItem().elem;
   var mainLink = current.getElementsByTagName('H2')[0].firstChild;
   axsBooksResults.axsJAXObj.clickElem(mainLink, false);
 };
 
 
 axsBooksResults.aboutPage = function (shift) {
-  var current = axsBooksResults.resultsArray[axsBooksResults.resultsIndex];
-    var linksArray = current.getElementsByTagName('A');
-    for (var i=0, currentLink; currentLink = linksArray[i]; i++){
-      if (currentLink.textContent == axsBooksResults.ABOUT_THIS_BOOK_STRING){
-        axsBooksResults.axsJAXObj.clickElem(currentLink, shift);
-        return;
-      }
+  var current = axsBooksResults.axsNavObj.currentItem().elem;
+  var linksArray = current.getElementsByTagName('A');
+  for (var i=0, currentLink; currentLink = linksArray[i]; i++){
+    if (currentLink.textContent == axsBooksResults.ABOUT_THIS_BOOK_STRING){
+      axsBooksResults.axsJAXObj.clickElem(currentLink, shift);
+      return;
     }
+  }
 };
 
 axsBooksResults.editions = function (shift)  {
-  var current = axsBooksResults.resultsArray[axsBooksResults.resultsIndex];
+  var current = axsBooksResults.axsNavObj.currentItem().elem;
   var linksArray = current.getElementsByTagName('A');
   var currentLink;
   for (var i=0; currentLink = linksArray[i]; i++){
@@ -167,12 +162,12 @@ axsBooksResults.goSearch =  function () { // slash key
 
 axsBooksResults.keyHandler = function(evt){
   if (evt.keyCode == 27) {
-    axsBooksResults.lastFocusedNode.blur();
+    axsBooksResults.axsJAXObj.lastFocusedNode.blur();
     return false;
   }
 
   // We pass on the event if we are in an input field
-  if (axsBooksResults.inputFocused) return true;
+  if (axsBooksResults.axsJAXObj.inputFocused) return true;
 
   //If Ctrl is held, it must be for some AT.
   if (evt.ctrlKey) return true;
@@ -186,59 +181,6 @@ axsBooksResults.keyHandler = function(evt){
   return true;
 };
 
-
-/*
- * Fill up axsBooksResults.resultsArray
- */
-
-axsBooksResults.buildResultsArray = function(){
-  var results = document.getElementById('results_container');
-  axsBooksResults.resultsArray = new Array();
-  axsBooksResults.resultsIndex = -1;
-  for (var i=0,child; child = results.childNodes[i]; i++){
-    //Skip the cover to avoid repeating the title
-    var resultContent = child.firstChild.firstChild.childNodes[1];
-    axsBooksResults.resultsArray.push(resultContent);
-  }
-};
-/*
- * Navigate to next result
- * @param cycle {boolean} Flag that indicates if we cycle through results
- */
-
-axsBooksResults.goToNextResult = function(cycle){
-  axsBooksResults.resultsIndex++;
-  if(axsBooksResults.resultsIndex >= axsBooksResults.resultsArray.length){
-    if (!cycle){
-      axsBooksResults.resultsIndex = -1;
-      axsBooksResults.goToNextPage();
-      return;
-    } else{
-      axsBooksResults.resultsIndex = 0;
-    }
-  }
-  var current = axsBooksResults.resultsArray[axsBooksResults.resultsIndex];
-  axsBooksResults.axsJAXObj.goTo(current);
-};
-/*
- * Navigate to the previous result.
- * @param cycle {boolean} indicates if we cycle through the results.
- */
-
-axsBooksResults.goToPrevResult = function(cycle){
-  axsBooksResults.resultsIndex--;
-  if(axsBooksResults.resultsIndex < 0){
-    if (!cycle){
-      axsBooksResults.resultsIndex = -1;
-      axsBooksResults.goToPrevPage();
-      return;
-    } else{
-      axsBooksResults.resultsIndex = axsBooksResults.resultsArray.length-1;
-    }
-  }
-  var current = axsBooksResults.resultsArray[axsBooksResults.resultsIndex];
-  axsBooksResults.axsJAXObj.goTo(current);
-};
 
 /*
  * Navigate to the next page of results
@@ -271,11 +213,7 @@ axsBooksResults.goToPrevPage = function(){
 axsBooksResults.keyCodeMap = {
 13 : axsBooksResults.openResult, // enter
 33 : axsBooksResults.goToPrevPage, // page up
-34 : axsBooksResults.goToNextPage, // page-down
-38 : function () {axsBooksResults.goToPrevResult(false);}, //up arrow
-37 : function () {axsBooksResults.goToPrevResult(true);}, // left arrow
-40 : function () {axsBooksResults.goToNextResult(false);}, // down arrow
-39 : function () {axsBooksResults.goToNextResult(true);} // down arrow
+34 : axsBooksResults.goToNextPage // page-down
 };
 
 
@@ -286,10 +224,6 @@ axsBooksResults.charCodeMap = {
 97 : function () {axsBooksResults.aboutPage(false);}, //  a
 69 : function () {axsBooksResults.editions(true);}, // cap E
 101 : function () {axsBooksResults.editions(false);}, // e
-106 : function () {axsBooksResults.goToNextResult(true);  }, // j
-107 : function () {axsBooksResults.goToPrevResult(true);}, // k
-110: function () {axsBooksResults.goToNextResult(false);}, // n
-112 : function () {axsBooksResults.goToPrevResult(false);}, //p
 47 : axsBooksResults.goSearch
 };
 

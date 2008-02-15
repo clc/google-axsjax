@@ -63,9 +63,14 @@ axsWebSearch.SPONSORED_LINK = 'Sponsored link. ';
 
 /**
  * The AxsJAX object that will do the tickling and speaking.
- * @type AxsJAX
+ * @type AxsJAX?
  */
 axsWebSearch.axsJAXObj = null;
+/**
+ * The AxsNav object that will handle navigation.
+ * @type AxsNav?
+ */
+axsWebSearch.axsNavObj = null;
 
 axsWebSearch.init = function(){
   axsWebSearch.axsJAXObj = new AxsJAX(true);
@@ -79,7 +84,7 @@ axsWebSearch.init = function(){
   axsWebSearch.formatAdAreaSide();
 
   var cnlString = "<cnl next='DOWN|n' prev='UP|p' emptyMsg=''>" +
-                  "<list title='One Box' next='RIGHT|j|*1' prev='LEFT|k' emptyMsg='There is no one box on this page.'><item action='goto'><startNode index='0' count='1'>//div[@id='res']/p[*]</startNode></item><item action='goto'><startNode index='0' count='1'>//div[@id='res']/div[@class='e']</startNode></item></list>" +
+                //  "<list title='One Box' next='RIGHT|j|*1' prev='LEFT|k' emptyMsg='There is no one box on this page.'><item action='goto'><startNode index='0' count='1'>//div[@id='res']/p[*]</startNode></item><item action='goto'><startNode index='0' count='1'>//div[@id='res']/div[@class='e']</startNode></item></list>" +
                   "<list title='Results' next='RIGHT|j|*r' prev='LEFT|k' emptyMsg=''><item action='goto'><startNode index='0' count='1'>//div[@id='res']//td[@class='j']/ul/li[text()='Make sure all words are spelled correctly.']/parent::*/parent::*</startNode></item><item action='goto'><startNode index='0' count='*'>//div[@id='res']/div[*]/div[@class='g']</startNode></item><item action='click'><startNode index='0' count='1'>//div[@id='nn']/parent::*</startNode></item><item action='click'><startNode index='0' count='1'>//div[@id='np']/parent::*</startNode></item></list>" +
                   "<list title='Sponsored Links' next='RIGHT|j|*a' prev='LEFT|k' emptyMsg='There are no sponsored links on this page.'><item action='goto'><startNode index='0' count='*'>//div[@id='tads']/div[*]</startNode></item><item action='goto'><startNode index='0' count='*'>//table[@id='mbEnd']/tbody/tr[*]/td/font/span[*]</startNode></item></list>" +
                   "<list title='Related Searches' next='RIGHT|j|*s' prev='LEFT|k' emptyMsg='There are no related searches.'><item action='goto'><startNode index='0' count='*'>//div[@id='res']/table[*]/tbody/tr[*]/td[*]/a</startNode></item></list>" +
