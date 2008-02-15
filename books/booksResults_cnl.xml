@@ -1,0 +1,18 @@
+<cnl next='' prev='' emptyMsg=''>
+        <list title='Results' next='*DOWN|*n' prev='*UP|*p' emptyMsg=''>
+		<item action='goto'>
+		    <startNode index='0' count='*'>//div[@id='results_container']/table[*]/tbody/tr/td[2]</startNode>
+		</item>
+		<item action='click'>
+		    <startNode index='0' count='1'>//img[contains(@src,'nav_next.gif')]/parent::*</startNode>
+		</item>
+		<item action='click'>
+		    <startNode index='0' count='1'>//img[contains(@src,'nav_previous.gif')]/parent::*</startNode>
+		</item>
+        </list>
+        <list title='Cycle Results' next='*RIGHT|*j' prev='*LEFT|*k' emptyMsg=''>
+		<item action='goto'>
+		    <startNode index='0' count='*'>//div[@id='results_container']/table[*]/tbody/tr/td[2]</startNode>
+		</item>
+        </list>
+</cnl>
