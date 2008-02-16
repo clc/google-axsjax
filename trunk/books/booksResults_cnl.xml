@@ -1,18 +1,18 @@
-<cnl next='' prev='' emptyMsg=''>
-        <list title='Results' next='*DOWN|*n' prev='*UP|*p' emptyMsg=''>
+<cnl>
+        <list title='Results' next='*DOWN|*n' prev='*UP|*p'>
 		<item action='goto'>
-		    <startNode index='0' count='*'>id('results_container')/table[*]/tbody/tr/td[2]</startNode>
+		    <locator index='0' count='*'>id('results_container')/table[*]/tbody/tr/td[2]</locator>
 		</item>
 		<item action='click'>
-		    <startNode index='0' count='1'>//img[contains(@src,'nav_next.gif')]/parent::*</startNode>
+		    <locator index='0' count='1'>//img[contains(@src,'nav_next.gif')]/parent::*</locator>
 		</item>
 		<item action='click'>
-		    <startNode index='0' count='1'>//img[contains(@src,'nav_previous.gif')]/parent::*</startNode>
+		    <locator index='0' count='1'>//img[contains(@src,'nav_previous.gif')]/parent::*</locator>
 		</item>
         </list>
-        <list title='Cycle Results' next='*RIGHT|*j' prev='*LEFT|*k' emptyMsg=''>
+        <list title='Cycle Results' next='*RIGHT|*j' prev='*LEFT|*k'>
 		<item action='goto'>
-		    <startNode index='0' count='*'>id('results_container')/table[*]/tbody/tr/td[2]</startNode>
+		    <locator index='0' count='*'>id('results_container')/table[*]/tbody/tr/td[2]</locator>
 		</item>
         </list>
 </cnl>
