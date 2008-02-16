@@ -62,104 +62,89 @@ axsBooksAbout.init = function(){
   axsBooksAbout.expandAllMoreLinks();
 
 
-  var cnlString = "<cnl next='DOWN|n' prev='UP|p' emptyMsg=''>" +
-    "<list title='Search results' next='RIGHT|j' prev='LEFT|k' emptyMsg=''>" +
-    "<item action='goto'>" +
-    "<startNode index='0' count='*'>" +
-    "id('search')//div[@class='searchresult']" +
-    "</startNode>" +
-    "</item>" +
-    "</list>" +
-    "<list title='Summary' next='RIGHT|j' prev='LEFT|k' emptyMsg=''>" +
-    "<item action='goto'>" +
-    "<startNode index='0' count='1'>id('coverandmetadata')</startNode>" +
-    "</item>" +
-    "<item action='goto'>" +
-    "<startNode index='0' count='1'>id('synopsistext')</startNode>" +
-    "</item>" +
-    "</list>" +
-    "<list title='Buy or borrow this book' next='RIGHT|j' " +
-    "prev='LEFT|k' emptyMsg=''>" +
-    "<item action='goto'>" +
-    "<startNode index='0' count='*'>" +
-    "id('summary_content')/div[*]/table/tbody/tr[*]/td[@class='btblinks']" +
-    "</startNode>" +
-    "</item>" +
-    "</list>" +
-    "<list title='Reviews' next='RIGHT|j' prev='LEFT|k' emptyMsg=''>" +
-    "<item action='goto'>" +
-    "<startNode index='0' count='*'>id('reviews')//td</startNode>" +
-    "</item>" +
-    "</list>" +
-    "<list title='Keywords' next='RIGHT|j' prev='LEFT|k' emptyMsg=''>" +
-    "<item action='goto'>" +
-    "<startNode index='0' count='*'>id('keywords')//a</startNode>" +
-    "</item>" +
-    "<item action='goto'>" +
-    "<startNode index='0' count='*'>id('keywords_v')//a</startNode>" +
-    "</item>" +
-    "</list>" +
-    "<list title='Popular passages' next='RIGHT|j' prev='LEFT|k' emptyMsg=''>" +
-    "<item action='goto'>" +
-    "<startNode index='0' count='*'>" +
-    "id('quotes')//p[@class='quot']" +
-    "</startNode>" +
-    "</item>" +
-    "</list>" +
-    "<list title='Places mentioned in this book' next='RIGHT|j' " +
-    "prev='LEFT|k' emptyMsg=''>" +
-    "<item action='goto'>" +
-    "<startNode index='0' count='*'>" +
-    "id('gmap')/div/div//div[contains(@id,'geo_')]" +
-    "</startNode>" +
-    "</item>" +
-    "</list>" +
-    "<list title='References from books' next='RIGHT|j' " +
-    "prev='LEFT|k' emptyMsg=''>" +
-    "<item action='goto'>" +
-    "<startNode index='0' count='*'>" +
-    "id('book_citations')//div[@class='resbdy']" +
-    "</startNode>" +
-    "</item>" +
-    "</list>" +
-    "<list title='References from scholarly works' next='RIGHT|j' " +
-    "prev='LEFT|k' emptyMsg=''>" +
-    "<item action='goto'>" +
-    "<startNode index='0' count='*'>" +
-    "id('scholar_citations')//p[@class='resbdy']" +
-    "</startNode>" +
-    "</item>" +
-    "</list>" +
-    "<list title='References from web pages' next='RIGHT|j' " +
-    "prev='LEFT|k' emptyMsg=''>" +
-    "<item action='goto'>" +
-    "<startNode index='0' count='*'>" +
-    "id('web_references')//p[@class='resbdy']" +
-    "</startNode>" +
-    "</item>" +
-    "</list>" +
-    "<list title='Other editions' next='RIGHT|j' prev='LEFT|k' emptyMsg=''>" +
-    "<item action='goto'>" +
-    "<startNode index='0' count='*'>" +
-    "id('book_other_versions')//div[@class='resbdy']" +
-    "</startNode>" +
-    "</item>" +
-    "</list>" +
-    "<list title='Related books' next='RIGHT|j' prev='LEFT|k' emptyMsg=''>" +
-    "<item action='goto'>" +
-    "<startNode index='0' count='*'>" +
-    "id('similarbooks')//div[@class='resbdy']" +
-    "</startNode>" +
-    "</item>" +
-    "</list>" +
-    "<list title='Sponsored links' next='RIGHT|j' prev='LEFT|k' emptyMsg=''>" +
-    "<item action='goto'>" +
-    "<startNode index='0' count='*'>" +
-    "/html/body/table[@class='lads']/tbody/tr[*]/td[1]" +
-    "</startNode>" +
-    "</item>" +
-    "</list>" +
-    "</cnl>";
+  var cnlString = "<cnl next='DOWN|n' prev='UP|p'>" +
+      "<list title='Search results' next='RIGHT|j' prev='LEFT|k'>" +
+      "<item action='goto'>" +
+      "<locator index='0' count='*'>" +
+      "id('search')//div[@class='searchresult']</locator>" +
+      "</item>" +
+      "</list>" +
+      "<list title='Summary' next='RIGHT|j' prev='LEFT|k'>" +
+      "<item action='goto'>" +
+      "<locator index='0' count='1'>id('coverandmetadata')</locator>" +
+      "</item>" +
+      "<item action='goto'>" +
+      "<locator index='0' count='1'>id('synopsistext')</locator>" +
+      "</item>" +
+      "</list>" +
+      "<list title='Buy or borrow this book' next='RIGHT|j' prev='LEFT|k'>" +
+      "<item action='goto'>" +
+      "<locator index='0' count='*'>" +
+      "id('summary_content')/div[*]/table/tbody/tr[*]/td[@class='btblinks']" +
+      "</locator>" +
+      "</item>" +
+      "</list>" +
+      "<list title='Reviews' next='RIGHT|j' prev='LEFT|k'>" +
+      "<item action='goto'>" +
+      "<locator index='0' count='*'>id('reviews')//td</locator>" +
+      "</item>" +
+      "</list>" +
+      "<list title='Keywords' next='RIGHT|j' prev='LEFT|k'>" +
+      "<item action='goto'>" +
+      "<locator index='0' count='*'>id('keywords')//a</locator>" +
+      "</item>" +
+      "<item action='goto'>" +
+      "<locator index='0' count='*'>id('keywords_v')//a</locator>" +
+      "</item>" +
+      "</list>" +
+      "<list title='Popular passages' next='RIGHT|j' prev='LEFT|k'>" +
+      "<item action='goto'>" +
+      "<locator index='0' count='*'>id('quotes')//p[@class='quot']</locator>" +
+      "</item>" +
+      "</list>" +
+      "<list title='Places mentioned in this book' next='RIGHT|j' prev='LEFT|k'>" +
+      "<item action='goto'>" +
+      "<locator index='0' count='*'>" +
+      "id('gmap')/div/div//div[contains(@id,'geo_')]</locator>" +
+      "</item>" +
+      "</list>" +
+      "<list title='References from books' next='RIGHT|j' prev='LEFT|k'>" +
+      "<item action='goto'>" +
+      "<locator index='0' count='*'>" +
+      "id('book_citations')//div[@class='resbdy']</locator>" +
+      "</item>" +
+      "</list>" +
+      "<list title='References from scholarly works' next='RIGHT|j' prev='LEFT|k'>" +
+      "<item action='goto'>" +
+      "<locator index='0' count='*'>" +
+      "id('scholar_citations')//p[@class='resbdy']</locator>" +
+      "</item>" +
+      "</list>" +
+      "<list title='References from web pages' next='RIGHT|j' prev='LEFT|k'>" +
+      "<item action='goto'>" +
+      "<locator index='0' count='*'>" +
+      "id('web_references')//p[@class='resbdy']</locator>" +
+      "</item>" +
+      "</list>" +
+      "<list title='Other editions' next='RIGHT|j' prev='LEFT|k'>" +
+      "<item action='goto'>" +
+      "<locator index='0' count='*'>" +
+      "id('book_other_versions')//div[@class='resbdy']</locator>" +
+      "</item>" +
+      "</list>" +
+      "<list title='Related books' next='RIGHT|j' prev='LEFT|k'>" +
+      "<item action='goto'>" +
+      "<locator index='0' count='*'>" +
+      "id('similarbooks')//div[@class='resbdy']</locator>" +
+      "</item>" +
+      "</list>" +
+      "<list title='Sponsored links' next='RIGHT|j' prev='LEFT|k'>" +
+      "<item action='goto'>" +
+      "<locator index='0' count='*'>" +
+      "/html/body/table[@class='lads']/tbody/tr[*]/td[1]</locator>" +
+      "</item>" +
+      "</list>" +
+      "</cnl>";
 
   axsBooksAbout.axsNavObj.navInit(cnlString, null);
   axsBooksAbout.fixAllPageLinks();
@@ -167,9 +152,6 @@ axsBooksAbout.init = function(){
   // Speak the page title
   //Use a set time out just in case the browser is not entirely ready yet.
   window.setTimeout(axsBooksAbout.readTitleBar,100);
-
-  axsBooksAbout.testFunc0();
-  axsBooksAbout.testFunc1();
 };
 
 

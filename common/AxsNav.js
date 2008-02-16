@@ -19,7 +19,7 @@
  */
 
 /**
- * Class of scripts for improving navigation of website content
+ * Class for managing navigation of website content
  * @param {Object} axsJAXObj  An instance of an AxsJAX object.
  * @constructor
  */
@@ -32,7 +32,7 @@ var AxsNav = function(axsJAXObj){
   this.topKeyCodeMap = new Object();
   this.charCodeMaps = new Array();
   this.keyCodeMaps = new Array();
-  this.axsJAXObj = axsJAXObj;
+  this.axs_ = axsJAXObj;
 };
 
 /**
@@ -50,23 +50,19 @@ AxsNav.prototype.makeItemsArray = function(listNode, listIdx){
     //sets of cnlItems and even if one set does not exist as expected,
     //the other sets should still be available.
     try{
-      var startNode = entry.getElementsByTagName('startNode')[0];
-      var xpath = startNode.textContent;
-      var htmlElem =
-          this.axsJAXObj.getActiveDocument().getElementsByTagName('html')[0];
-      var elems = this.axsJAXObj.evalXPath(xpath, htmlElem);
-
-      var idxStr = startNode.getAttribute('index');
-      var idx = parseInt(idxStr,10);
+      var locator = entry.getElementsByTagName('locator')[0];
+      var xpath = locator.textContent;
+      var htmlElem = this.axs_.getActiveDocument().documentElement;
+      var elems = this.axs_.evalXPath(xpath, htmlElem);
+      var idxStr = locator.getAttribute('index');
+      var idx = parseInt(idxStr,10);      ;
       var count = elems.length - idx;
-      var countStr = startNode.getAttribute('count');
+      var countStr = locator.getAttribute('count');
       if (countStr != '*'){
         count = parseInt(countStr,10);
       }
       var end = count + idx;
       var action = entry.getAttribute('action');
-
-
       while (idx < end){
         var item = new Object();
         item.action = action;
@@ -78,12 +74,11 @@ AxsNav.prototype.makeItemsArray = function(listNode, listIdx){
           item.elem.AxsNavInfo[listIdx] = itemsArray.length;
           itemsArray.push(item);
         }
-        idx++;
+        idx++;  
       }
     }
     catch(err){ }
   }
-
   return itemsArray;
 };
 
@@ -130,7 +125,7 @@ AxsNav.prototype.currentList = function(){
  * Speaks the title of the current list
  */
 AxsNav.prototype.announceCurrentList = function(){
-  this.axsJAXObj.speakTextViaNode(this.currentList().title);
+  this.axs_.speakTextViaNode(this.currentList().title);
 };
 
 /**
@@ -219,9 +214,9 @@ AxsNav.prototype.actOnCurrentItem = function(){
 
   if (currentItem !== null){
     if (currentItem.action == 'click'){
-      this.axsJAXObj.clickElem(currentItem.elem, false);
+      this.axs_.clickElem(currentItem.elem, false);
     } else {
-      this.axsJAXObj.goTo(currentItem.elem);
+      this.axs_.goTo(currentItem.elem);
     }
   }
 };
@@ -351,7 +346,7 @@ AxsNav.prototype.assignEmptyMsgKeys = function(keyStr, emptyMsg){
                            this.topCharCodeMap,
                            this.topKeyCodeMap,
                            function(){
-                             self.axsJAXObj.speakTextViaNode(emptyMsg);
+                             self.axs_.speakTextViaNode(emptyMsg);
                            } );
 
 };
@@ -374,7 +369,7 @@ AxsNav.prototype.setUpNavKeys = function(cnlDOM, emptyLists){
   this.keyCodeMaps = new Array();
 
   var nextListKeys = new Array();
-  var nextListStr = cnlNode.getAttribute('next');
+  var nextListStr = cnlNode.getAttribute('next') || '';
   if (nextListStr !== ''){
     nextListKeys = nextListStr.split('|');
   }
@@ -387,7 +382,7 @@ AxsNav.prototype.setUpNavKeys = function(cnlDOM, emptyLists){
                            } );
 
   var prevListKeys = new Array();
-  var prevListStr = cnlNode.getAttribute('prev');
+  var prevListStr = cnlNode.getAttribute('prev') || '';
   if (prevListStr !== ''){
     prevListKeys = prevListStr.split('|');
   }
@@ -420,7 +415,7 @@ AxsNav.prototype.setUpNavKeys = function(cnlDOM, emptyLists){
                      //None of these commands involve Ctrl.
                      //If Ctrl is held, it must be for some AT.
                      if (evt.ctrlKey) return true;
-                     if (self.axsJAXObj.inputFocused) return true;
+                     if (self.axs_.inputFocused) return true;
                      var command =  self.topKeyCodeMap[evt.keyCode] ||
                                     self.topCharCodeMap[evt.charCode];
                      if (command) return command();
@@ -460,10 +455,10 @@ AxsNav.prototype.navInit = function(cnlString, opt_customNavMethod){
 
   for (var i=0, currentList; currentList = lists[i]; i++){
     var navList = new Object();
-    navList.title = currentList.getAttribute('title');
-    navList.nextKeys = currentList.getAttribute('next');
-    navList.prevKeys = currentList.getAttribute('prev');
-    navList.emptyMsg = currentList.getAttribute('emptyMsg');
+    navList.title = currentList.getAttribute('title') || '';
+    navList.nextKeys = currentList.getAttribute('next') || '';
+    navList.prevKeys = currentList.getAttribute('prev') || '';
+    navList.emptyMsg = currentList.getAttribute('onEmpty') || '';
     navList.items = this.makeItemsArray(currentList,i);
 
     if (navList.items.length > 0){

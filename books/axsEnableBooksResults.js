@@ -71,29 +71,29 @@ axsBooksResults.init = function(){
   //Setup the results array
 //  axsBooksResults.buildResultsArray();
 
-  var cnlString = "<cnl next='' prev='' emptyMsg=''>" +
-      "<list title='Results' next='*DOWN|*n' prev='*UP|*p' emptyMsg=''>" +
+  var cnlString = "<cnl>" +
+      "<list title='Results' next='*DOWN|*n' prev='*UP|*p'>" +
       "<item action='goto'>" +
-      "<startNode index='0' count='*'>" +
+      "<locator index='0' count='*'>" +
       "id('results_container')/table[*]/tbody/tr/td[2]" +
-      "</startNode>" + 
+      "</locator>" +
       "</item>" +
       "<item action='click'>" +
-      "<startNode index='0' count='1'>" +
+      "<locator index='0' count='1'>" +
       "//img[contains(@src,'nav_next.gif')]/parent::*" +
-      "</startNode>" +
+      "</locator>" +
       "</item>" +
       "<item action='click'>" +
-      "<startNode index='0' count='1'>" +
+      "<locator index='0' count='1'>" +
       "//img[contains(@src,'nav_previous.gif')]/parent::*" +
-      "</startNode>" +
+      "</locator>" +
       "</item>" +
       "</list>" +
-      "<list title='Cycle Results' next='*RIGHT|*j' prev='*LEFT|*k' emptyMsg=''>" +
+      "<list title='Cycle Results' next='*RIGHT|*j' prev='*LEFT|*k'>" +
       "<item action='goto'>" +
-      "<startNode index='0' count='*'>" +
+      "<locator index='0' count='*'>" +
       "id('results_container')/table[*]/tbody/tr/td[2]" +
-      "</startNode>" +
+      "</locator>" +
       "</item>" +
       "</list>" +
       "</cnl>";
