@@ -83,12 +83,12 @@ axsWebSearch.init = function(){
   //Do any necessary preparations for browsing here
   axsWebSearch.formatAdAreaSide();
 
-  var cnlString = "<cnl next='DOWN|n' prev='UP|p' emptyMsg=''>" +
-                  "<list title='One Box' next='RIGHT|j|*1' prev='LEFT|k' emptyMsg='There is no one box on this page.'><item action='goto'><locator index='0' count='1'>//div[@id='res']/p[*]</locator></item><item action='goto'><locator index='0' count='1'>//div[@id='res']/div[@class='e']</locator></item></list>" +
-                  "<list title='Results' next='RIGHT|j|*r' prev='LEFT|k' emptyMsg=''><item action='goto'><locator index='0' count='1'>//div[@id='res']//td[@class='j']/ul/li[text()='Make sure all words are spelled correctly.']/parent::*/parent::*</locator></item><item action='goto'><locator index='0' count='*'>//div[@id='res']/div[*]/div[@class='g']</locator></item><item action='click'><locator index='0' count='1'>//div[@id='nn']/parent::*</locator></item><item action='click'><locator index='0' count='1'>//div[@id='np']/parent::*</locator></item></list>" +
-                  "<list title='Sponsored Links' next='RIGHT|j|*a' prev='LEFT|k' emptyMsg='There are no sponsored links on this page.'><item action='goto'><locator index='0' count='*'>//div[@id='tads']/div[*]</locator></item><item action='goto'><locator index='0' count='*'>//table[@id='mbEnd']/tbody/tr[*]/td/font/span[*]</locator></item></list>" +
-                  "<list title='Related Searches' next='RIGHT|j|*s' prev='LEFT|k' emptyMsg='There are no related searches.'><item action='goto'><locator index='0' count='*'>//div[@id='res']/table[*]/tbody/tr[*]/td[*]/a</locator></item></list>" +
-                  "<list title='Alternate Search Categories' next='RIGHT|j|*c' prev='LEFT|k' emptyMsg='There are no other categories to search within.'><item action='goto'><locator index='0' count='*'>body/table[*]/tbody/tr/td[*]/font/a[@class='q']</locator></item></list>" +
+  var cnlString = "<cnl next='DOWN|n' prev='UP|p'>" +
+                  "<list title='One Box' next='RIGHT|j|*1' prev='LEFT|k' onEmpty='There is no one box on this page.'><item action='goto'><locator index='0' count='1'>id('res')/p[*]</locator></item><item action='goto'><locator index='0' count='1'>id('res')/div[@class='e']</locator></item></list>" +
+                  "<list title='Results' next='RIGHT|j|*r' prev='LEFT|k'><item action='goto'><locator index='0' count='1'>id('res')//td[@class='j']/ul/li[text()='Make sure all words are spelled correctly.']/parent::*/parent::*</locator></item><item action='goto'><locator index='0' count='*'>id('res')/div[*]/div[@class='g']</locator></item><item action='click'><locator index='0' count='1'>id('nn')/parent::*</locator></item><item action='click'><locator index='0' count='1'>id('np')/parent::*</locator></item></list>" +
+                  "<list title='Sponsored Links' next='RIGHT|j|*a' prev='LEFT|k' onEmpty='There are no sponsored links on this page.'><item action='goto'><locator index='0' count='*'>id('tads')/div[*]</locator></item><item action='goto'><locator index='0' count='*'>id('mbEnd')/tbody/tr[*]/td/font/span[*]</locator></item></list>" +
+                  "<list title='Related Searches' next='RIGHT|j|*s' prev='LEFT|k' onEmpty='There are no related searches.'><item action='goto'><locator index='0' count='*'>id('res')/table[*]/tbody/tr[*]/td[*]/a</locator></item></list>" +
+                  "<list title='Alternate Search Categories' next='RIGHT|j|*c' prev='LEFT|k' onEmpty='There are no other categories to search within.'><item action='goto'><locator index='0' count='*'>body/table[*]/tbody/tr/td[*]/font/a[@class='q']</locator></item></list>" +
                   "</cnl>";
 
   axsWebSearch.axsNavObj.navInit(cnlString, null);
