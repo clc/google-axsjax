@@ -1,73 +1,73 @@
-<cnl next='DOWN|n' prev='UP|p'>
-        <list title='Search results' next='RIGHT|j' prev='LEFT|k'>
-		<item action='goto'>
-		    <locator index='0' count='*'>id('search')//div[@class='searchresult']</locator>
+<cnl next='DOWN n' prev='UP p'>
+        <list title='Search results' next='RIGHT j' prev='LEFT k'>
+		<item>
+                  id('search')//div[@class='searchresult']
 		</item>
         </list>
-        <list title='Summary' next='RIGHT|j' prev='LEFT|k'>
-		<item action='goto'>
-		    <locator index='0' count='1'>id('coverandmetadata')</locator>
+        <list title='Summary' next='RIGHT j' prev='LEFT k'>
+		<item count='1'>
+                  id('coverandmetadata')
 		</item>
-		<item action='goto'>
-		    <locator index='0' count='1'>id('synopsistext')</locator>
-		</item>
-        </list>
-        <list title='Buy or borrow this book' next='RIGHT|j' prev='LEFT|k'>
-		<item action='goto'>
-		    <locator index='0' count='*'>id('summary_content')/div[*]/table/tbody/tr[*]/td[@class='btblinks']</locator>
+		<item count='1'>
+                  id('synopsistext')
 		</item>
         </list>
-        <list title='Reviews' next='RIGHT|j' prev='LEFT|k'>
-		<item action='goto'>
-		    <locator index='0' count='*'>id('reviews')//td</locator>
+        <list title='Buy or borrow this book' next='RIGHT j' prev='LEFT k'>
+		<item>
+                  id('summary_content')/div[*]/table/tbody/tr[*]/td[@class='btblinks']
 		</item>
         </list>
-        <list title='Keywords' next='RIGHT|j' prev='LEFT|k'>
-		<item action='goto'>
-		    <locator index='0' count='*'>id('keywords')//a</locator>
-		</item>
-		<item action='goto'>
-		    <locator index='0' count='*'>id('keywords_v')//a</locator>
+        <list title='Reviews' next='RIGHT j' prev='LEFT k'>
+		<item>
+                  id('reviews')//td
 		</item>
         </list>
-        <list title='Popular passages' next='RIGHT|j' prev='LEFT|k'>
-		<item action='goto'>
-		    <locator index='0' count='*'>id('quotes')//p[@class='quot']</locator>
+        <list title='Keywords' next='RIGHT j' prev='LEFT k'>
+		<item>
+                  id('keywords')//a
+		</item>
+		<item>
+                  id('keywords_v')//a
 		</item>
         </list>
-        <list title='Places mentioned in this book' next='RIGHT|j' prev='LEFT|k'>
-		<item action='goto'>
-		    <locator index='0' count='*'>id('gmap')/div/div//div[contains(@id,'geo_')]</locator>
+        <list title='Popular passages' next='RIGHT j' prev='LEFT k'>
+		<item>
+                  id('quotes')//p[@class='quot']
 		</item>
         </list>
-        <list title='References from books' next='RIGHT|j' prev='LEFT|k'>
-		<item action='goto'>
-		    <locator index='0' count='*'>id('book_citations')//div[@class='resbdy']</locator>
+        <list title='Places mentioned in this book' next='RIGHT j' prev='LEFT k'>
+		<item>
+                  id('gmap')/div/div//div[contains(@id,'geo_')]
 		</item>
         </list>
-        <list title='References from scholarly works' next='RIGHT|j' prev='LEFT|k'>
-		<item action='goto'>
-		    <locator index='0' count='*'>id('scholar_citations')//p[@class='resbdy']</locator>
+        <list title='References from books' next='RIGHT j' prev='LEFT k'>
+		<item>
+                  id('book_citations')//div[@class='resbdy']
 		</item>
         </list>
-        <list title='References from web pages' next='RIGHT|j' prev='LEFT|k'>
-		<item action='goto'>
-		    <locator index='0' count='*'>id('web_references')//p[@class='resbdy']</locator>
+        <list title='References from scholarly works' next='RIGHT j' prev='LEFT k'>
+		<item>
+                  id('scholar_citations')//p[@class='resbdy']
 		</item>
         </list>
-        <list title='Other editions' next='RIGHT|j' prev='LEFT|k'>
-		<item action='goto'>
-		    <locator index='0' count='*'>id('book_other_versions')//div[@class='resbdy']</locator>
+        <list title='References from web pages' next='RIGHT j' prev='LEFT k'>
+		<item>
+                  id('web_references')//p[@class='resbdy']
 		</item>
         </list>
-        <list title='Related books' next='RIGHT|j' prev='LEFT|k'>
-		<item action='goto'>
-		    <locator index='0' count='*'>id('similarbooks')//div[@class='resbdy']</locator>
+        <list title='Other editions' next='RIGHT j' prev='LEFT k'>
+		<item>
+                  id('book_other_versions')//div[@class='resbdy']
 		</item>
         </list>
-        <list title='Sponsored links' next='RIGHT|j' prev='LEFT|k'>
-		<item action='goto'>
-		    <locator index='0' count='*'>/html/body/table[@class='lads']/tbody/tr[*]/td[1]</locator>
+        <list title='Related books' next='RIGHT j' prev='LEFT k'>
+		<item>
+                  id('similarbooks')//div[@class='resbdy']
+		</item>
+        </list>
+        <list title='Sponsored links' next='RIGHT j' prev='LEFT k'>
+		<item>
+                  /html/body/table[@class='lads']/tbody/tr[*]/td[1]
 		</item>
         </list>
 </cnl>

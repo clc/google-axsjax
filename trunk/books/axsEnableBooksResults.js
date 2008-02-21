@@ -72,31 +72,24 @@ axsBooksResults.init = function(){
 //  axsBooksResults.buildResultsArray();
 
   var cnlString = "<cnl>" +
-      "<list title='Results' next='*DOWN|*n' prev='*UP|*p'>" +
-      "<item action='goto'>" +
-      "<locator index='0' count='*'>" +
+      "<list title='Results' next='*DOWN *n' prev='*UP *p'>" +
+      "<item>" +
       "id('results_container')/table[*]/tbody/tr/td[2]" +
-      "</locator>" +
       "</item>" +
-      "<item action='click'>" +
-      "<locator index='0' count='1'>" +
+      "<item action='click' count='1'>" +
       "//img[contains(@src,'nav_next.gif')]/parent::*" +
-      "</locator>" +
       "</item>" +
-      "<item action='click'>" +
-      "<locator index='0' count='1'>" +
+      "<item action='click' count='1'>" +
       "//img[contains(@src,'nav_previous.gif')]/parent::*" +
-      "</locator>" +
       "</item>" +
       "</list>" +
-      "<list title='Cycle Results' next='*RIGHT|*j' prev='*LEFT|*k'>" +
-      "<item action='goto'>" +
-      "<locator index='0' count='*'>" +
+      "<list title='Cycle Results' next='*RIGHT *j' prev='*LEFT *k'>" +
+      "<item>" +
       "id('results_container')/table[*]/tbody/tr/td[2]" +
-      "</locator>" +
       "</item>" +
       "</list>" +
       "</cnl>";
+
   axsBooksResults.axsNavObj.navInit(cnlString, null);
 
   //Read the first thing on the page.
