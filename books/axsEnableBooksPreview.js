@@ -50,7 +50,7 @@ axsBooksPreview.HELP =
 
 /**
  * The AxsJAX object that will do the tickling and speaking.
- * @type AxsJAX
+ * @type AxsJAX?
  */
 axsBooksPreview.axsJAXObj = null;
 

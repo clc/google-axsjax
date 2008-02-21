@@ -50,19 +50,18 @@ AxsNav.prototype.makeItemsArray = function(listNode, listIdx){
     //sets of cnlItems and even if one set does not exist as expected,
     //the other sets should still be available.
     try{
-      var locator = entry.getElementsByTagName('locator')[0];
-      var xpath = locator.textContent;
+      var xpath = entry.textContent;
       var htmlElem = this.axs_.getActiveDocument().documentElement;
       var elems = this.axs_.evalXPath(xpath, htmlElem);
-      var idxStr = locator.getAttribute('index');
+      var idxStr = entry.getAttribute('index') || '0';
       var idx = parseInt(idxStr,10);      
       var count = elems.length - idx;
-      var countStr = locator.getAttribute('count');
+      var countStr = entry.getAttribute('count') || '*';
       if (countStr != '*'){
         count = parseInt(countStr,10);
       }
       var end = count + idx;
-      var action = entry.getAttribute('action');
+      var action = entry.getAttribute('action') || 'goto';
       while (idx < end){
         var item = new Object();
         item.action = action;
@@ -271,7 +270,7 @@ AxsNav.prototype.assignKeysToMethod = function(keyArray, charMap, keyMap, method
 AxsNav.prototype.assignItemKeys = function(keyStr, navListIdx, direction){
   var keys = new Array();
   if (keyStr !== ''){
-    keys = keyStr.split('|');
+    keys = keyStr.split(' ');
   }
   var superKeys = new Array();
   var regularKeys = new Array();
@@ -332,7 +331,7 @@ AxsNav.prototype.assignItemKeys = function(keyStr, navListIdx, direction){
 AxsNav.prototype.assignEmptyMsgKeys = function(keyStr, emptyMsg){
   var keys = new Array();
   if (keyStr !== ''){
-    keys = keyStr.split('|');
+    keys = keyStr.split(' ');
   }
   var superKeys = new Array();
   for (var i=0, key; key = keys[i]; i++){
@@ -371,7 +370,7 @@ AxsNav.prototype.setUpNavKeys = function(cnlDOM, emptyLists){
   var nextListKeys = new Array();
   var nextListStr = cnlNode.getAttribute('next') || '';
   if (nextListStr !== ''){
-    nextListKeys = nextListStr.split('|');
+    nextListKeys = nextListStr.split(' ');
   }
   this.assignKeysToMethod( nextListKeys,
                            this.topCharCodeMap,
@@ -384,7 +383,7 @@ AxsNav.prototype.setUpNavKeys = function(cnlDOM, emptyLists){
   var prevListKeys = new Array();
   var prevListStr = cnlNode.getAttribute('prev') || '';
   if (prevListStr !== ''){
-    prevListKeys = prevListStr.split('|');
+    prevListKeys = prevListStr.split(' ');
   }
   this.assignKeysToMethod( prevListKeys,
                            this.topCharCodeMap,
