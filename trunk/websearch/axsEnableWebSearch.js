@@ -220,7 +220,7 @@ axsWebSearch.goToCurrentLinkInNewWindow = function(){
 };
 
 axsWebSearch.getCurrentLink = function(){
-  var currentItem = axsWebSearch.axsJAXObj.currentItem();
+  var currentItem = axsWebSearch.axsNavObj.currentItem();
   if (typeof(currentItem) == 'undefined'){
     return '';
   }
