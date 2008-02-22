@@ -72,7 +72,7 @@ axsBooksResults.init = function(){
 //  axsBooksResults.buildResultsArray();
 
   var cnlString = "<cnl>" +
-      "<list title='Cycle Results' hotkey='RIGHT j' " +
+      "<list title='Cycle Results' " +
       "next='RIGHT j' prev='LEFT k'>" +
       "<item>" +
       "id('results_container')/table[*]/tbody/tr/td[2]" +
@@ -174,11 +174,9 @@ axsBooksResults.keyHandler = function(evt){
 
 axsBooksResults.goToNextResult = function(){
   var nav = axsBooksResults.axsNavObj;
-  var currentList = nav.navArray[nav.navListIdx];
-  var items = currentList.items;
   var currentIndex = nav.navItemIdxs[nav.navListIdx];
 
-  var nextElem = axsBooksResults.axsNavObj.nextItem().elem;
+  var nextElem = nav.nextItem().elem;
   var nextIndex = nav.navItemIdxs[nav.navListIdx];
 
   if (nextIndex < currentIndex){
@@ -194,11 +192,9 @@ axsBooksResults.goToNextResult = function(){
 
 axsBooksResults.goToPrevResult = function(){
   var nav = axsBooksResults.axsNavObj;
-  var currentList = nav.navArray[nav.navListIdx];
-  var items = currentList.items;
   var currentIndex = nav.navItemIdxs[nav.navListIdx];
 
-  var prevElem = axsBooksResults.axsNavObj.prevItem().elem;
+  var prevElem = nav.prevItem().elem;
   var prevIndex = nav.navItemIdxs[nav.navListIdx];
 
   if (prevIndex > currentIndex){
