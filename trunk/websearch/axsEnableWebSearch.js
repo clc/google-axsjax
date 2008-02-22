@@ -84,51 +84,58 @@ axsWebSearch.init = function(){
   axsWebSearch.formatAdAreaSide();
 
   var cnlString = "<cnl next='DOWN n' prev='UP p'>" +
-    "<list title='One Box' next='RIGHT j *1' prev='LEFT k' " +
-    "onEmpty='There is no one box on this page.'>" +
-    "<item count='1'>" +
-    "id('res')/p[*]" +
-    "</item>" +
-    "<item count='1'>" +
-    "id('res')/div[@class='e']" +
-    "</item>" +
-    "</list>" +
-    "<list title='Results' next='RIGHT j *r' prev='LEFT k'>" +
-    "<item count='1'>" +
-    "id('res')//td[@class='j']/ul/li[text()='Make sure all words are spelled correctly.']/parent::*/parent::*" +
-    "</item>" +
-    "<item>" +
-    "id('res')/div[*]/div[@class='g']" +
-    "</item>" +
-    "<item action='click' count='1'>" +
-    "id('nn')/parent::*" +
-    "</item>" +
-    "<item action='click' count='1'>" +
-    "id('np')/parent::*" +
-    "</item>" +
-    "</list>" +
-    "<list title='Sponsored Links' next='RIGHT j *a' prev='LEFT k' " +
-    "onEmpty='There are no sponsored links on this page.'>" +
-    "<item>" +
-    "id('tads')/div[*]" +
-    "</item>" +
-    "<item>" +
-    "id('mbEnd')/tbody/tr[*]/td/font/span[*]" +
-    "</item>" +
-    "</list>" +
-    "<list title='Related Searches' next='RIGHT j *s' prev='LEFT k' " +
-    "onEmpty='There are no related searches.'>" +
-    "<item>" +
-    "id('res')/table[*]/tbody/tr[*]/td[*]/a" +
-    "</item>" +
-    "</list>" +
-    "<list title='Alternate Search Categories' next='RIGHT j *c' prev='LEFT k' " +
-    "onEmpty='There are no other categories to search within.'>" +
-    "<item>" +
-    "body/table[*]/tbody/tr/td[*]/font/a[@class='q']" +
-    "</item>" +
-    "</list>" +
-    "</cnl>";
+      "<list title='One Box' hotkey='1' next='RIGHT j' prev='LEFT k' " +
+      "onEmpty='There is no one box on this page.'>" +
+      "<item count='1'>" +
+      "id('res')/p[*]" +
+      "</item>" +
+      "<item count='1'>" +
+      "id('res')/div[@class='e']" +
+      "</item> " +
+      "</list>" +
+      "<list title='Results' hotkey='r' next='RIGHT j' prev='LEFT k'>" +
+      "<item count='1'>" +
+      "id('res')//td[@class='j']/ul/li[text()='Make sure all words are spelled correctly.']/parent::*/parent::*" +
+      "</item>" +
+      "<item>" +
+      "id('res')/div[*]/div[@class='g']" +
+      "</item>" +
+      "<item action='click' count='1'>" +
+      "id('nn')/parent::*" +
+      "</item>" +
+      "<item action='click' count='1'>" +
+      "id('np')/parent::*" +
+      "</item>" +
+      "</list>" +
+      "<list title='Sponsored Links' hotkey='a' next='RIGHT j' prev='LEFT k' " +
+      "onEmpty='There are no sponsored links on this page.'>" +
+      "<item>" +
+      "id('tads')/div[*]" +
+      "</item>" +
+      "<item>" +
+      "id('mbEnd')/tbody/tr[*]/td/font/span[*]" +
+      "</item>" +
+      "</list>" +
+      "<list title='Related Searches' hotkey='s' next='RIGHT j' " +
+      "prev='LEFT k' onEmpty='There are no related searches.'>" +
+      "<item>" +
+      "id('res')/table[*]/tbody/tr[*]/td[*]/a" +
+      "</item>" +
+      "</list>" +
+      "<list title='Alternate Search Categories' hotkey='c' next='RIGHT j' " +
+      "prev='LEFT k' onEmpty='There are no other categories to search within.'>" +
+      "<item>" +
+      "body/table[*]/tbody/tr/td[*]/font/a[@class='q']" +
+      "</item>" +
+      "</list>" +
+      "<target title='Next page' hotkey='PGDOWN'>" +
+      "id('nn')/parent::*" +
+      "</target>" +
+      "<target title='Previous page' hotkey='PGUP'>" +
+      "id('np')/parent::*" +
+      "</target>" +
+      "</cnl>";
+
 
 
   axsWebSearch.axsNavObj.navInit(cnlString, null);
@@ -181,14 +188,6 @@ axsWebSearch.extraKeyboardNavHandler = function(evt){
     } else{
       axsWebSearch.goToCurrentLink();
     }
-    return false;
-  }
-  if (evt.keyCode == 33){ // Page Up
-    axsWebSearch.goToPrevPage();
-    return false;
-  }
-  if (evt.keyCode == 34){ // Page Down
-    axsWebSearch.goToNextPage();
     return false;
   }
 
@@ -282,28 +281,6 @@ axsWebSearch.formatAdAreaSide = function(){
   adArea.removeChild(adArea.firstChild);
   axsWebSearch.adAreaSideId = axsWebSearch.axsJAXObj.assignId(adArea);
 };
-
-
-
-
-axsWebSearch.goToNextPage = function(){
-  var nextPageDiv = document.getElementById('nn');
-  if (!nextPageDiv){
-    axsWebSearch.axsJAXObj.speakTextViaNode(axsWebSearch.NO_NEXT_PAGE_STRING);
-    return;
-  }
-  document.location = nextPageDiv.parentNode.href;
-};
-
-axsWebSearch.goToPrevPage = function(){
-  var prevPageDiv = document.getElementById('np');
-  if (!prevPageDiv){
-    axsWebSearch.axsJAXObj.speakTextViaNode(axsWebSearch.NO_PREV_PAGE_STRING);
-    return;
-  }
-  document.location = prevPageDiv.parentNode.href;
-};
-
 
 
 //************
