@@ -101,7 +101,7 @@ axsBooksAbout.init = function(){
     "</list>" +
     "<list title='Places mentioned in this book' next='RIGHT j' prev='LEFT k'>" +
     "<item>" +
-    "id('gmap')/div/div//div[contains(@id,'geo_')]" +
+    "id('gmap')/div/div[@class='result']" +
     "</item>" +
     "</list>" +
     "<list title='References from books' next='RIGHT j' prev='LEFT k'>" +
