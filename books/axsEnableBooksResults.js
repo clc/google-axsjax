@@ -72,22 +72,18 @@ axsBooksResults.init = function(){
 //  axsBooksResults.buildResultsArray();
 
   var cnlString = "<cnl>" +
-      "<list title='Results' next='*DOWN *n' prev='*UP *p'>" +
+      "<list title='Cycle Results' hotkey='RIGHT j' " +
+      "next='RIGHT j' prev='LEFT k'>" +
       "<item>" +
       "id('results_container')/table[*]/tbody/tr/td[2]" +
       "</item>" +
-      "<item action='click' count='1'>" +
+      "</list>" +
+      "<target title='Next page' hotkey='PGDOWN'>" +
       "//img[contains(@src,'nav_next.gif')]/parent::*" +
-      "</item>" +
-      "<item action='click' count='1'>" +
+      "</target>" +
+      "<target title='Previous page' hotkey='PGUP'>" +
       "//img[contains(@src,'nav_previous.gif')]/parent::*" +
-      "</item>" +
-      "</list>" +
-      "<list title='Cycle Results' next='*RIGHT *j' prev='*LEFT *k'>" +
-      "<item>" +
-      "id('results_container')/table[*]/tbody/tr/td[2]" +
-      "</item>" +
-      "</list>" +
+      "</target>" +
       "</cnl>";
 
   axsBooksResults.axsNavObj.navInit(cnlString, null);
@@ -176,33 +172,45 @@ axsBooksResults.keyHandler = function(evt){
 };
 
 
-/*
- * Navigate to the next page of results
- */
+axsBooksResults.goToNextResult = function(){
+  var nav = axsBooksResults.axsNavObj;
+  var currentList = nav.navArray[nav.navListIdx];
+  var items = currentList.items;
+  var currentIndex = nav.navItemIdxs[nav.navListIdx];
 
-axsBooksResults.goToNextPage = function(){
-  var images = document.getElementsByTagName('IMG');
-  for (var i=0; i<images.length; i++){
-    if (images[i].src.indexOf('nav_next.gif') != -1){
-      axsBooksResults.axsJAXObj.clickElem(images[i].parentNode, false);
-      return;
-    }
+  var nextElem = axsBooksResults.axsNavObj.nextItem().elem;
+  var nextIndex = nav.navItemIdxs[nav.navListIdx];
+
+  if (nextIndex < currentIndex){
+    var xpath = "//img[contains(@src,'nav_next.gif')]/parent::*";
+    var axs = axsBooksResults.axsJAXObj;
+    nextElem = axs.evalXPath(xpath, document.documentElement)[0];
+    axs.clickElem(nextElem,false);
+  } else {
+    axsBooksResults.axsJAXObj.goTo(nextElem);
   }
 };
 
-/*
- * Navigate to the previous page of results.
- */
 
-axsBooksResults.goToPrevPage = function(){
-  var images = document.getElementsByTagName('IMG');
-  for (var i=0; i<images.length; i++){
-    if (images[i].src.indexOf('nav_previous.gif') != -1){
-      axsBooksResults.axsJAXObj.clickElem(images[i].parentNode, false);
-      return;
-    }
+axsBooksResults.goToPrevResult = function(){
+  var nav = axsBooksResults.axsNavObj;
+  var currentList = nav.navArray[nav.navListIdx];
+  var items = currentList.items;
+  var currentIndex = nav.navItemIdxs[nav.navListIdx];
+
+  var prevElem = axsBooksResults.axsNavObj.prevItem().elem;
+  var prevIndex = nav.navItemIdxs[nav.navListIdx];
+
+  if (prevIndex > currentIndex){
+    var xpath = "//img[contains(@src,'nav_previous.gif')]/parent::*";
+    var axs = axsBooksResults.axsJAXObj;
+    prevElem = axs.evalXPath(xpath, document.documentElement)[0];
+    axs.clickElem(prevElem,false);
+  } else {
+    axsBooksResults.axsJAXObj.goTo(prevElem);
   }
 };
+
 
 axsBooksResults.keyCodeMap = {
 13 : axsBooksResults.openResult, // enter
@@ -218,6 +226,8 @@ axsBooksResults.charCodeMap = {
 97 : function () {axsBooksResults.aboutPage(false);}, //  a
 69 : function () {axsBooksResults.editions(true);}, // cap E
 101 : function () {axsBooksResults.editions(false);}, // e
+110 : function () {axsBooksResults.goToNextResult();}, // n
+112 : function () {axsBooksResults.goToPrevResult();}, // p
 47 : axsBooksResults.goSearch
 };
 

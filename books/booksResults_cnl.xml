@@ -1,17 +1,13 @@
 <cnl>
-        <list title='Results' next='*DOWN *n' prev='*UP *p'>
-		<item>id('results_container')/table[*]/tbody/tr/td[2]
-		</item>
-		<item action='click' count='1'>
-                  //img[contains(@src,'nav_next.gif')]/parent::*
-		</item>
-		<item action='click' count='1'>
-                  //img[contains(@src,'nav_previous.gif')]/parent::*
-		</item>
-        </list>
-        <list title='Cycle Results' next='*RIGHT *j' prev='*LEFT *k'>
-		<item>
-                  id('results_container')/table[*]/tbody/tr/td[2]
-		</item>
-        </list>
+  <list title='Cycle Results' hotkey='RIGHT j' next='RIGHT j' prev='LEFT k'>
+    <item>
+      id('results_container')/table[*]/tbody/tr/td[2]
+    </item>
+  </list>
+  <target title='Next page' hotkey='PGDOWN'>
+    //img[contains(@src,'nav_next.gif')]/parent::*
+  </target>
+  <target title='Previous page' hotkey='PGUP'>
+    //img[contains(@src,'nav_previous.gif')]/parent::*
+  </target>
 </cnl>

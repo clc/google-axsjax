@@ -28,6 +28,7 @@ var AxsNav = function(axsJAXObj){
   this.navListIdx = 0;
   this.navItemIdxs = new Array();
   this.lastItem = null;
+  this.targetsArray = new Array();
   this.topCharCodeMap = new Object();
   this.topKeyCodeMap = new Object();
   this.charCodeMaps = new Array();
@@ -244,6 +245,10 @@ AxsNav.prototype.assignKeysToMethod = function(keyArray, charMap, keyMap, method
       keyMap[39] = method;
     } else if (key == 'DOWN'){
       keyMap[40] = method;
+    } else if (key == 'PGUP'){
+      keyMap[33] = method;
+    } else if (key == 'PGDOWN'){
+      keyMap[34] = method;
     } else {
       charMap[key.charCodeAt(0)] = method;
     }
@@ -251,15 +256,11 @@ AxsNav.prototype.assignKeysToMethod = function(keyArray, charMap, keyMap, method
 };
 
 /**
- * This function creates the mapping between keypresses and navigation behavior.
+ * This function creates the mapping between keypresses and navigation behavior
+ * for item keys. This mapping is only active when the user is in the
+ * corresponding navList.
  *
- * @param {string} keyStr  String that indicates the keys to be used. Keys are
- *                         separated by the | symbol and any key with * in front
- *                         is a key that will cause the user to swap to the list
- *                         that the key is associated with and read the
- *                         next/prev item there. Otherwise, the keypress will
- *                         only be active is the user's current list is the
- *                         list indicated by navListIdx.
+ * @param {string} keyStr  String that indicates the keys to be used.
  *
  * @param {number} navListIdx  Index of the list that these keypresses are
  *                             associated with.
@@ -269,30 +270,13 @@ AxsNav.prototype.assignKeysToMethod = function(keyArray, charMap, keyMap, method
  */
 AxsNav.prototype.assignItemKeys = function(keyStr, navListIdx, direction){
   var keys = new Array();
-  if (keyStr !== ''){
-    keys = keyStr.split(' ');
+  if (keyStr === ''){
+    return;
   }
-  var superKeys = new Array();
-  var regularKeys = new Array();
-  for (var i=0, key; key = keys[i]; i++){
-    if (key.charAt(0) == '*'){
-      key = key.substring(1);
-      superKeys.push(key);
-    } else {
-      regularKeys.push(key);
-    }
-  }
+  keys = keyStr.split(' ');
   var self = this;
   if (direction < 0){
-    this.assignKeysToMethod( superKeys,
-                             this.topCharCodeMap,
-                             this.topKeyCodeMap,
-                             function(){
-                               self.navListIdx = navListIdx;
-                               self.prevItem();
-                               self.actOnCurrentItem();
-                             } );
-    this.assignKeysToMethod( regularKeys,
+    this.assignKeysToMethod( keys,
                              this.charCodeMaps[navListIdx],
                              this.keyCodeMaps[navListIdx],
                              function(){
@@ -300,15 +284,7 @@ AxsNav.prototype.assignItemKeys = function(keyStr, navListIdx, direction){
                                self.actOnCurrentItem();
                              } );
   } else {
-    this.assignKeysToMethod( superKeys,
-                             this.topCharCodeMap,
-                             this.topKeyCodeMap,
-                             function(){
-                               self.navListIdx = navListIdx;
-                               self.nextItem();
-                               self.actOnCurrentItem();
-                             } );
-    this.assignKeysToMethod( regularKeys,
+    this.assignKeysToMethod( keys,
                              this.charCodeMaps[navListIdx],
                              this.keyCodeMaps[navListIdx],
                              function(){
@@ -319,9 +295,40 @@ AxsNav.prototype.assignItemKeys = function(keyStr, navListIdx, direction){
 };
 
 /**
+ * This function creates the mapping between keypresses and navigation behavior
+ * for hotkeys. This mapping is active all the time, regardless of which navList
+ * the user is in.
+ *
+ * @param {string} keyStr  String that indicates the keys to be used.
+ *                         Pressing these keys will cause the user to jump to
+ *                         the list that the key is associated with and read the
+ *                         next item there.
+ *
+ * @param {number} navListIdx  Index of the list that these keypresses are
+ *                             associated with.
+ */
+AxsNav.prototype.assignHotKeys = function(keyStr, navListIdx){
+  var keys = new Array();
+  if (keyStr === ''){
+    return;
+  }
+  keys = keyStr.split(' ');
+  var self = this;
+  this.assignKeysToMethod( keys,
+                           this.topCharCodeMap,
+                           this.topKeyCodeMap,
+                           function(){
+                             self.navListIdx = navListIdx;
+                             self.nextItem();
+                             self.actOnCurrentItem();
+                           } );
+};
+
+/**
  * For all keys that map to lists with no items, those keys should
  * speak some message to let the user know that the function was called
  * but was unsuccessful because there is no content.
+ *
  * @param {string} keyStr  String that indicates the keys to be used.
  *
  * @param {string} emptyMsg  The message that should be spoken when the user
@@ -330,26 +337,45 @@ AxsNav.prototype.assignItemKeys = function(keyStr, navListIdx, direction){
  */
 AxsNav.prototype.assignEmptyMsgKeys = function(keyStr, emptyMsg){
   var keys = new Array();
-  if (keyStr !== ''){
-    keys = keyStr.split(' ');
+  if (keyStr === ''){
+    return;
   }
-  var superKeys = new Array();
-  for (var i=0, key; key = keys[i]; i++){
-    if (key.charAt(0) == '*'){
-      key = key.substring(1);
-      superKeys.push(key);
-    }
-  }
+  keys = keyStr.split(' ');
   var self = this;
-  this.assignKeysToMethod( superKeys,
-                           this.topCharCodeMap,
-                           this.topKeyCodeMap,
-                           function(){
-                             self.axs_.speakTextViaNode(emptyMsg);
-                           } );
+  this.assignKeysToMethod( keys,
+                      this.topCharCodeMap,
+                      this.topKeyCodeMap,
+                      function(){
+                        self.axs_.speakTextViaNode(emptyMsg);
+                      } );
 
 };
 
+
+/**
+ * This function creates the mapping between keypresses and target nodes.
+ * This mapping is active all the time, regardless of which navList
+ * the user is in.
+ *
+ * @param {string} keyStr  String that indicates the keys to be used.
+ * @param {Node} targetNode  The target
+ * @param {string} actionStr  The action to be performed. Currently only 'click'
+ *                            is valid.
+ */
+AxsNav.prototype.assignTargetKeys = function(keyStr, targetNode, actionStr){
+  var keys = new Array();
+  if (keyStr === ''){
+    return;
+  }
+  keys = keyStr.split(' ');
+  var self = this;
+  this.assignKeysToMethod( keys,
+                           this.topCharCodeMap,
+                           this.topKeyCodeMap,
+                           function(){
+                             self.axs_.clickElem(targetNode, false);
+                           } );
+};
 
 
 /**
@@ -367,6 +393,7 @@ AxsNav.prototype.setUpNavKeys = function(cnlDOM, emptyLists){
   this.charCodeMaps = new Array();
   this.keyCodeMaps = new Array();
 
+  //Moving through lists
   var nextListKeys = new Array();
   var nextListStr = cnlNode.getAttribute('next') || '';
   if (nextListStr !== ''){
@@ -393,6 +420,7 @@ AxsNav.prototype.setUpNavKeys = function(cnlDOM, emptyLists){
                              self.announceCurrentList();
                            } );
 
+  //Moving through items
   var i;
   var list;
   for (i=0, list; list = this.navArray[i]; i++){
@@ -402,12 +430,19 @@ AxsNav.prototype.setUpNavKeys = function(cnlDOM, emptyLists){
     this.keyCodeMaps.push(keyMap);
     this.assignItemKeys(list.nextKeys, i, 1);
     this.assignItemKeys(list.prevKeys, i, -1);
+    this.assignHotKeys(list.hotKeys, i);
   }
 
+  //Dealing with empty lists with hotkeys
   var emptyList;
   for (i=0, emptyList; emptyList = emptyLists[i]; i++){
-    this.assignEmptyMsgKeys(emptyList.nextKeys, emptyList.emptyMsg);
-    this.assignEmptyMsgKeys(emptyList.prevKeys, emptyList.emptyMsg);
+    this.assignEmptyMsgKeys(emptyList.hotKeys, emptyList.emptyMsg);
+  }
+
+  //Acting on targets
+  var target;
+  for (i=0, target; target = this.targetsArray[i]; i++){
+    this.assignTargetKeys(target.hotKeys, target.elem, target.action);
   }
 
   var keyHandler = function(evt){
@@ -430,6 +465,7 @@ AxsNav.prototype.setUpNavKeys = function(cnlDOM, emptyLists){
 /**
  * Builds up the navigation system of lists of items.
  * This system uses the idea of multiple cursors and the visitor pattern.
+ *
  * @param {string} cnlString  An XML string that contains the information needed
  *                            to build up the content navigation listings.
  *
@@ -445,6 +481,8 @@ AxsNav.prototype.setUpNavKeys = function(cnlDOM, emptyLists){
 AxsNav.prototype.navInit = function(cnlString, opt_customNavMethod){
   var parser = new DOMParser();
   var cnlDOM = parser.parseFromString(cnlString, 'text/xml');
+
+  //Build up the navigation lists
   var lists = cnlDOM.getElementsByTagName('list');
   this.navArray = new Array();
   this.navListIdx = 0;
@@ -452,9 +490,12 @@ AxsNav.prototype.navInit = function(cnlString, opt_customNavMethod){
 
   var emptyLists = new Array();
 
-  for (var i=0, currentList; currentList = lists[i]; i++){
+  var i;
+  var currentList;
+  for (i=0, currentList; currentList = lists[i]; i++){
     var navList = new Object();
     navList.title = currentList.getAttribute('title') || '';
+    navList.hotKeys = currentList.getAttribute('hotkey') || '';
     navList.nextKeys = currentList.getAttribute('next') || '';
     navList.prevKeys = currentList.getAttribute('prev') || '';
     navList.emptyMsg = currentList.getAttribute('onEmpty') || '';
@@ -464,16 +505,39 @@ AxsNav.prototype.navInit = function(cnlString, opt_customNavMethod){
       //Only add nav lists that have content to the array
       this.navArray.push(navList);
       this.navItemIdxs.push(-1);
-    } else if ( (navList.nextKeys.indexOf('*') != -1) ||
-                (navList.prevKeys.indexOf('*') != -1) ){
+    } else if ( navList.hotKeys !== ''){
       //Record empty nav lists if the user can jump to them directly
       emptyLists.push(navList);
     }
   }
+
+  //Build up the targets
+  var targets = cnlDOM.getElementsByTagName('target');
+  this.targetsArray = new Array();
+  this.targetsIdx = 0;
+
+  var currentTarget;
+  for (i=0, currentTarget; currentTarget = targets[i]; i++){
+    var target = new Object();
+    target.title = currentTarget.getAttribute('title') || '';
+    target.hotKeys = currentTarget.getAttribute('hotkey') || '';
+    target.action = currentTarget.getAttribute('action') || 'click';
+
+    var xpath = currentTarget.textContent;
+    var htmlElem = this.axs_.getActiveDocument().documentElement;
+    target.elem = this.axs_.evalXPath(xpath, htmlElem)[0];
+
+    if ( (typeof(target.elem) != 'undefined') &&
+         (target.elem !== null) ){
+      this.targetsArray.push(target);
+    }
+  }
+
+  //Bind lists and targets to keys if there is no custom handler specified
   if ( (opt_customNavMethod === null) ||
        (typeof(opt_customNavMethod) == 'undefined') ){
     this.setUpNavKeys(cnlDOM,emptyLists);
   } else {
-    opt_customNavMethod(cnlDOM,this.navArray,emptyLists);
+    opt_customNavMethod(cnlDOM,this.navArray,emptyLists,this.targetsArray);
   }
 };
