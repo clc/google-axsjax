@@ -357,24 +357,37 @@ AxsNav.prototype.assignEmptyMsgKeys = function(keyStr, emptyMsg){
  * This mapping is active all the time, regardless of which navList
  * the user is in.
  *
- * @param {string} keyStr  String that indicates the keys to be used.
- * @param {Node} targetNode  The target
- * @param {string} actionStr  The action to be performed. Currently only 'click'
- *                            is valid.
+ * @param {Object} target  Target object created from the <target> element
+ * @param {Object} charMap  Dictionary that maps character codes to methods
+ * @param {Object} keyMap  Dictionary that maps key codes to methods
  */
-AxsNav.prototype.assignTargetKeys = function(keyStr, targetNode, actionStr){
+AxsNav.prototype.assignTargetKeys = function(target, charMap, keyMap){
   var keys = new Array();
-  if (keyStr === ''){
+  if (target.hotkeyStr === ''){
     return;
   }
-  keys = keyStr.split(' ');
+  keys = target.hotkeyStr.split(' ');
   var self = this;
   this.assignKeysToMethod( keys,
-                           this.topCharCodeMap,
-                           this.topKeyCodeMap,
+                           charMap,
+                           keyMap,
                            function(){
-                             self.axs_.clickElem(targetNode, false);
-                           } );
+                             self.actOnTarget(target);
+                            } );
+};
+
+AxsNav.prototype.actOnTarget = function(target){
+  var xpath = target.xpath;
+  var rootNode = this.axs_.getActiveDocument().documentElement;
+  if ( (xpath.indexOf('/') !== 0) && (xpath.indexOf('id(') !== 0) ){
+    rootNode = this.currentItem();
+  }
+  var elems = this.axs_.evalXPath(xpath,rootNode);
+  if ( (elems === null) || (typeof(elems) == 'undefined') ){
+    this.axs_.speakTextViaNode(target.emptyMsg);
+  } else {
+    this.axs_.clickElem(elems[0], false);
+  }
 };
 
 
@@ -387,11 +400,18 @@ AxsNav.prototype.assignTargetKeys = function(keyStr, targetNode, actionStr){
 AxsNav.prototype.setUpNavKeys = function(cnlDOM, emptyLists){
   var self = this;
   var cnlNode = cnlDOM.firstChild;
+  var i;
 
   this.topCharCodeMap = new Object();
   this.topKeyCodeMap = new Object();
   this.charCodeMaps = new Array();
   this.keyCodeMaps = new Array();
+
+  //Acting on global targets
+  var target;
+  for (i=0, target; target = this.targetsArray[i]; i++){
+    this.assignTargetKeys(target, this.topCharCodeMap, this.topKeyCodeMap);
+  }
 
   //Moving through lists
   var nextListKeys = new Array();
@@ -420,8 +440,8 @@ AxsNav.prototype.setUpNavKeys = function(cnlDOM, emptyLists){
                              self.announceCurrentList();
                            } );
 
-  //Moving through items
-  var i;
+
+  //Moving through items and handling per-list targets
   var list;
   for (i=0, list; list = this.navArray[i]; i++){
     var charMap = new Object();
@@ -431,6 +451,10 @@ AxsNav.prototype.setUpNavKeys = function(cnlDOM, emptyLists){
     this.assignItemKeys(list.nextKeys, i, 1);
     this.assignItemKeys(list.prevKeys, i, -1);
     this.assignHotKeys(list.hotKeys, i);
+    var j;
+    for (j=0, target; target = list.targets[j]; j++){
+      this.assignTargetKeys(target, charMap, keyMap);
+    }
   }
 
   //Dealing with empty lists with hotkeys
@@ -439,11 +463,7 @@ AxsNav.prototype.setUpNavKeys = function(cnlDOM, emptyLists){
     this.assignEmptyMsgKeys(emptyList.hotKeys, emptyList.emptyMsg);
   }
 
-  //Acting on targets
-  var target;
-  for (i=0, target; target = this.targetsArray[i]; i++){
-    this.assignTargetKeys(target.hotKeys, target.elem, target.action);
-  }
+
 
   var keyHandler = function(evt){
                      //None of these commands involve Ctrl.
@@ -460,6 +480,23 @@ AxsNav.prototype.setUpNavKeys = function(cnlDOM, emptyLists){
                    };
 
   document.addEventListener('keypress', keyHandler, true);
+};
+
+
+AxsNav.prototype.makeTargetsArray = function(listNode){
+  var targetsArray = new Array();
+  var cnlTargets = listNode.getElementsByTagName('target');
+  for (var i=0,entry; entry = cnlTargets[i]; i++){
+    var target = new Object();
+    target.xpath = entry.textContent;
+    target.title = entry.getAttribute('title') || '';
+    target.trigger = entry.getAttribute('trigger') || 'key';
+    target.hotkeyStr = entry.getAttribute('hotkey') || '';
+    target.action = entry.getAttribute('action') || 'click';
+    target.emptyMsg = entry.getAttribute('onEmpty') || '';
+    targetsArray.push(target);
+  }
+  return targetsArray;
 };
 
 /**
@@ -499,7 +536,17 @@ AxsNav.prototype.navInit = function(cnlString, opt_customNavMethod){
     navList.nextKeys = currentList.getAttribute('next') || '';
     navList.prevKeys = currentList.getAttribute('prev') || '';
     navList.emptyMsg = currentList.getAttribute('onEmpty') || '';
+    navList.tailTarget = null;
+    navList.headTarget = null;
     navList.items = this.makeItemsArray(currentList,i);
+    navList.targets = this.makeTargetsArray(currentList);
+    for (var j=0, target; target = navList.targets[j]; j++){
+      if (target.trigger == 'listTail'){
+        navList.tailTarget = target;
+      } else if (target.trigger == 'listHead'){
+        navList.headTarget = target;
+      }
+    }
 
     if (navList.items.length > 0){
       //Only add nav lists that have content to the array
@@ -512,23 +559,20 @@ AxsNav.prototype.navInit = function(cnlString, opt_customNavMethod){
   }
 
   //Build up the targets
-  var targets = cnlDOM.getElementsByTagName('target');
+  var targets = new Array();
   this.targetsArray = new Array();
   this.targetsIdx = 0;
-
-  var currentTarget;
-  for (i=0, currentTarget; currentTarget = targets[i]; i++){
-    var target = new Object();
-    target.title = currentTarget.getAttribute('title') || '';
-    target.hotKeys = currentTarget.getAttribute('hotkey') || '';
-    target.action = currentTarget.getAttribute('action') || 'click';
-
-    var xpath = currentTarget.textContent;
-    var htmlElem = this.axs_.getActiveDocument().documentElement;
-    target.elem = this.axs_.evalXPath(xpath, htmlElem)[0];
-
-    if ( (typeof(target.elem) != 'undefined') &&
-         (target.elem !== null) ){
+  var currentNode;
+  var cnlNode = cnlDOM.firstChild;
+  for (i=0, currentNode; currentNode = cnlNode.childNodes[i]; i++){
+    if (currentNode.tagName == 'target'){
+      var target = new Object();
+      target.xpath = currentNode.textContent;
+      target.title = currentNode.getAttribute('title') || '';
+      target.trigger = currentNode.getAttribute('trigger') || 'key';
+      target.hotkeyStr = currentNode.getAttribute('hotkey') || '';
+      target.action = currentNode.getAttribute('action') || 'click';
+      target.emptyMsg = currentNode.getAttribute('onEmpty') || '';
       this.targetsArray.push(target);
     }
   }

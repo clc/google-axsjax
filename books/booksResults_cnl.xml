@@ -1,8 +1,14 @@
 <cnl>
-  <list title='Cycle Results' hotkey='RIGHT j' next='RIGHT j' prev='LEFT k'>
+  <list title='Cycle Results' next='RIGHT j' prev='LEFT k' fwd='f' back='b'>
     <item>
       id('results_container')/table[*]/tbody/tr/td[2]
     </item>
+    <target title='Next page' trigger='listTail'>
+      //img[contains(@src,'nav_next.gif')]/parent::*
+    </target>
+    <target title='Prev page' trigger='listHead'>
+      //img[contains(@src,'nav_previous.gif')]/parent::*
+    </target>
   </list>
   <target title='Next page' hotkey='PGDOWN'>
     //img[contains(@src,'nav_next.gif')]/parent::*
