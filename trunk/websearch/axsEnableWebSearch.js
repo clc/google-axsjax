@@ -45,7 +45,7 @@ axsWebSearch.HELP_STRING =
     'Slash, jump to search blank. ' +
     'Escape, leave search blank. ' +
     '1, read the one box. ' +
-    'R, go through the results. ' +
+    'F, go forward through the results. ' +
     'A, cycle through advertisements. ' +
     'C, cycle through alternate categories to search in. ' +
     'S, cycle through related searches. ' +
@@ -93,19 +93,19 @@ axsWebSearch.init = function(){
       "id('res')/div[@class='e']" +
       "</item> " +
       "</list>" +
-      "<list title='Results' hotkey='r' next='RIGHT j' prev='LEFT k'>" +
+      "<list title='Results' hotkey='f' next='RIGHT j' prev='LEFT k' fwd='f' back='b'>" +
       "<item count='1'>" +
       "id('res')//td[@class='j']/ul/li[text()='Make sure all words are spelled correctly.']/parent::*/parent::*" +
       "</item>" +
       "<item>" +
       "id('res')/div[*]/div[@class='g']" +
       "</item>" +
-      "<item action='click' count='1'>" +
+      "<target title='Next page' trigger='listTail'>" +
       "id('nn')/parent::*" +
-      "</item>" +
-      "<item action='click' count='1'>" +
+      "</target>" +
+      "<target title='Prev page' trigger='listHead'>" +
       "id('np')/parent::*" +
-      "</item>" +
+      "</target>" +
       "</list>" +
       "<list title='Sponsored Links' hotkey='a' next='RIGHT j' prev='LEFT k' " +
       "onEmpty='There are no sponsored links on this page.'>" +

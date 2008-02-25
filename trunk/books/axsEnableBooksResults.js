@@ -24,14 +24,6 @@
 // create namespace
 var axsBooksResults = {};
 
-//These are strings used to find specific links
-axsBooksResults.ABOUT_THIS_BOOK_STRING = 'About this book';
-axsBooksResults.MORE_EDITIONS_STRING = 'More editions';
-
-//These are strings to be spoken to the user
-axsBooksResults.NO_OTHER_EDITIONS_STRING =
-    'There are no other editions available.';
-
 axsBooksResults.HELP =
     'The following shortcut keys are available. ' +
     'Down arrow or N, go to the next result. ' +
@@ -67,9 +59,6 @@ axsBooksResults.init = function(){
 
   //Add event listeners
   document.addEventListener('keypress', axsBooksResults.keyHandler, true);
-
-  //Setup the results array
-//  axsBooksResults.buildResultsArray();
 
   var cnlString = "<cnl>" +
       "<list title='Cycle Results' next='RIGHT j' prev='LEFT k' fwd='f' back='b'>" +
@@ -124,7 +113,6 @@ axsBooksResults.goSearch =  function () { // slash key
     f.select(); //and select all text
   }
 };
-
 
 /*
  * Handle key events on Books Results page.
