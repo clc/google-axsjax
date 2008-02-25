@@ -246,7 +246,8 @@ AxsNav.prototype.currentItem = function(){
 /**
  * This function will act on the item based on what action was specified
  * in the Content Navigation Listing.
- * @param {Object?} The item to act on. Use item.elem to get at the DOM node.
+ *
+ * @param {Object?} item The item to act on. Use item.elem to get at the DOM node.
  */
 AxsNav.prototype.actOnItem = function(item){
   if (item !== null){
@@ -425,6 +426,11 @@ AxsNav.prototype.assignTargetKeys = function(target, charMap, keyMap){
                             } );
 };
 
+/**
+ * This function will act on the target specified.
+ *
+ * @param {Object?} target The target to act on.
+ */
 AxsNav.prototype.actOnTarget = function(target){
   var xpath = target.xpath;
   var rootNode = this.axs_.getActiveDocument().documentElement;
@@ -521,12 +527,12 @@ AxsNav.prototype.setUpNavKeys = function(cnlDOM, emptyLists){
                      //If Ctrl is held, it must be for some AT.
                      if (evt.ctrlKey) return true;
                      if (self.axs_.inputFocused) return true;
-                     var command =  self.topKeyCodeMap[evt.keyCode] ||
-                                    self.topCharCodeMap[evt.charCode];
-                     if (command) return command();
                      var idx = self.navListIdx;
-                     command =  self.keyCodeMaps[idx][evt.keyCode] ||
-                                self.charCodeMaps[idx][evt.charCode];
+                     var command =  self.keyCodeMaps[idx][evt.keyCode] ||
+                                    self.charCodeMaps[idx][evt.charCode];
+                     if (command) return command();
+                     command =  self.topKeyCodeMap[evt.keyCode] ||
+                                self.topCharCodeMap[evt.charCode];
                      if (command) return command();
                    };
 
