@@ -76,6 +76,15 @@ axsBooksResults.init = function(){
       "<item>" +
       "id('results_container')/table[*]/tbody/tr/td[2]" +
       "</item>" +
+      "<target title='Open result' hotkey='ENTER'>" +
+      ".//h2/a" +
+      "</target>" +
+      "<target title='About this book' hotkey='a'>" +
+      ".//a[contains(text(),'About')]" +
+      "</target>" +
+      "<target title='More editions' hotkey='e' onEmpty='There are no other editions available.'>" +
+      ".//a[contains(text(),'editions')]" +
+      "</target>" +
       "<target title='Next page' trigger='listTail'>" +
       "//img[contains(@src,'nav_next.gif')]/parent::*" +
       "</target>" +
@@ -107,38 +116,6 @@ axsBooksResults.readFirst = function(evt){
 };
 
 
-axsBooksResults.openResult  = function () {
-  var current = axsBooksResults.axsNavObj.currentItem().elem;
-  var mainLink = current.getElementsByTagName('H2')[0].firstChild;
-  axsBooksResults.axsJAXObj.clickElem(mainLink, false);
-};
-
-
-axsBooksResults.aboutPage = function (shift) {
-  var current = axsBooksResults.axsNavObj.currentItem().elem;
-  var linksArray = current.getElementsByTagName('A');
-  for (var i=0, currentLink; currentLink = linksArray[i]; i++){
-    if (currentLink.textContent == axsBooksResults.ABOUT_THIS_BOOK_STRING){
-      axsBooksResults.axsJAXObj.clickElem(currentLink, shift);
-      return;
-    }
-  }
-};
-
-axsBooksResults.editions = function (shift)  {
-  var current = axsBooksResults.axsNavObj.currentItem().elem;
-  var linksArray = current.getElementsByTagName('A');
-  var currentLink;
-  for (var i=0; currentLink = linksArray[i]; i++){
-    if (currentLink.textContent == axsBooksResults.MORE_EDITIONS_STRING){
-      axsBooksResults.axsJAXObj.clickElem(currentLink, shift);
-      return;
-    }
-  }
-  axsBooksResults.axsJAXObj.speakTextViaNode(axsBooksResults.NO_OTHER_EDITIONS_STRING);
-};
-
-
 axsBooksResults.goSearch =  function () { // slash key
   // Focus on the top search field
   var f = document.getElementsByName('q')[0];
@@ -154,7 +131,6 @@ axsBooksResults.goSearch =  function () { // slash key
  * @param evt {event} the keyboard event.
  * @return {boolean}
  */
-
 axsBooksResults.keyHandler = function(evt){
   if (evt.keyCode == 27) {
     axsBooksResults.axsJAXObj.lastFocusedNode.blur();
@@ -167,70 +143,17 @@ axsBooksResults.keyHandler = function(evt){
   //If Ctrl is held, it must be for some AT.
   if (evt.ctrlKey) return true;
 
-  // tvr: This loses shift for Enter
-  var command =  axsBooksResults.keyCodeMap[evt.keyCode] ||
-                 axsBooksResults.charCodeMap[evt.charCode];
+  var command =  axsBooksResults.charCodeMap[evt.charCode];
 
   if (command)  return  command();
 
   return true;
 };
 
-
-axsBooksResults.goToNextResult = function(){
-  var nav = axsBooksResults.axsNavObj;
-  var currentIndex = nav.navItemIdxs[nav.navListIdx];
-
-  var nextElem = nav.nextItem().elem;
-  var nextIndex = nav.navItemIdxs[nav.navListIdx];
-
-  if (nextIndex < currentIndex){
-    var xpath = "//img[contains(@src,'nav_next.gif')]/parent::*";
-    var axs = axsBooksResults.axsJAXObj;
-    nextElem = axs.evalXPath(xpath, document.documentElement)[0];
-    axs.clickElem(nextElem,false);
-  } else {
-    axsBooksResults.axsJAXObj.goTo(nextElem);
-  }
-};
-
-
-axsBooksResults.goToPrevResult = function(){
-  var nav = axsBooksResults.axsNavObj;
-  var currentIndex = nav.navItemIdxs[nav.navListIdx];
-
-  var prevElem = nav.prevItem().elem;
-  var prevIndex = nav.navItemIdxs[nav.navListIdx];
-
-  if (prevIndex > currentIndex){
-    var xpath = "//img[contains(@src,'nav_previous.gif')]/parent::*";
-    var axs = axsBooksResults.axsJAXObj;
-    prevElem = axs.evalXPath(xpath, document.documentElement)[0];
-    axs.clickElem(prevElem,false);
-  } else {
-    axsBooksResults.axsJAXObj.goTo(prevElem);
-  }
-};
-
-
-axsBooksResults.keyCodeMap = {
-13 : axsBooksResults.openResult, // enter
-33 : axsBooksResults.goToPrevPage, // page up
-34 : axsBooksResults.goToNextPage // page-down
-};
-
-
 axsBooksResults.charCodeMap = {
 63 : function () {
     axsBooksResults.axsJAXObj.speakTextViaNode(axsBooksResults.HELP);}, // ?
-65 : function () {axsBooksResults.aboutPage(true);}, // cap A
-97 : function () {axsBooksResults.aboutPage(false);}, //  a
-69 : function () {axsBooksResults.editions(true);}, // cap E
-101 : function () {axsBooksResults.editions(false);}, // e
-110 : function () {axsBooksResults.goToNextResult();}, // n
-112 : function () {axsBooksResults.goToPrevResult();}, // p
 47 : axsBooksResults.goSearch
 };
-
 
 axsBooksResults.init();
