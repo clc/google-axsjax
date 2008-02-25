@@ -129,7 +129,8 @@ AxsNav.prototype.announceCurrentList = function(){
 };
 
 /**
- * Goes to the next item and returns it
+ * Goes to the next item and returns it; if there is no next item, this will
+ * wrap to the first item in the list.
  * @return {Object?} The next item. Use item.elem to get at the DOM node.
  */
 AxsNav.prototype.nextItem = function(){
@@ -157,7 +158,26 @@ AxsNav.prototype.nextItem = function(){
 };
 
 /**
- * Goes to the previous item and returns it
+ * Goes to the next item and returns it; if this causes wrapping and
+ * there is a tailTarget on the list, then this will act on that target
+ * and return null instead.
+ * @return {Object?} The next item. Use item.elem to get at the DOM node.
+ */
+AxsNav.prototype.fwdItem = function(){
+  var currentList = this.navArray[this.navListIdx];
+  var oldIndex = this.navItemIdxs[this.navListIdx];
+  var item = this.nextItem();
+  var newIndex = this.navItemIdxs[this.navListIdx];
+  if ((currentList.tailTarget !== null) && (newIndex <= oldIndex)){
+    this.actOnTarget(currentList.tailTarget);
+    return null;
+  }
+  return item;
+};
+
+/**
+ * Goes to the previous item and returns it; if there is no previous item, this
+ * will wrap to the last item in the list.
  * @return {Object?} The previous item. Use item.elem to get at the DOM node.
  */
 AxsNav.prototype.prevItem = function(){
@@ -185,6 +205,24 @@ AxsNav.prototype.prevItem = function(){
 };
 
 /**
+ * Goes to the previous item and returns it; if this causes wrapping and
+ * there is a headTarget on the list, then this will act on that target
+ * and return null instead.
+ * @return {Object?} The previous item. Use item.elem to get at the DOM node.
+ */
+AxsNav.prototype.backItem = function(){
+  var currentList = this.navArray[this.navListIdx];
+  var oldIndex = this.navItemIdxs[this.navListIdx];
+  var item = this.prevItem();
+  var newIndex = this.navItemIdxs[this.navListIdx];
+  if ((currentList.headTarget !== null) && (newIndex >= oldIndex)){
+    this.actOnTarget(currentList.headTarget);
+    return null;
+  }
+  return item;
+};
+
+/**
  * Returns the current item.
  * @return {Object?} The current item. Use item.elem to get at the DOM node.
  */
@@ -206,17 +244,16 @@ AxsNav.prototype.currentItem = function(){
 };
 
 /**
- * This function will act on the current item based on what action was specified
+ * This function will act on the item based on what action was specified
  * in the Content Navigation Listing.
+ * @param {Object?} The item to act on. Use item.elem to get at the DOM node.
  */
-AxsNav.prototype.actOnCurrentItem = function(){
-  var currentItem = this.currentItem();
-
-  if (currentItem !== null){
-    if (currentItem.action == 'click'){
-      this.axs_.clickElem(currentItem.elem, false);
+AxsNav.prototype.actOnItem = function(item){
+  if (item !== null){
+    if (item.action == 'click'){
+      this.axs_.clickElem(item.elem, false);
     } else {
-      this.axs_.goTo(currentItem.elem);
+      this.axs_.goTo(item.elem);
     }
   }
 };
@@ -249,6 +286,8 @@ AxsNav.prototype.assignKeysToMethod = function(keyArray, charMap, keyMap, method
       keyMap[33] = method;
     } else if (key == 'PGDOWN'){
       keyMap[34] = method;
+    } else if (key == 'ENTER'){
+      keyMap[13] = method;
     } else {
       charMap[key.charCodeAt(0)] = method;
     }
@@ -265,31 +304,42 @@ AxsNav.prototype.assignKeysToMethod = function(keyArray, charMap, keyMap, method
  * @param {number} navListIdx  Index of the list that these keypresses are
  *                             associated with.
  *
- * @param {number} direction  Negative indicates moving backwards,
- *                            zero or positive indicates moving forward.
+ * @param {string}  navTaskStr  "next","prev","fwd","back"
  */
-AxsNav.prototype.assignItemKeys = function(keyStr, navListIdx, direction){
+AxsNav.prototype.assignItemKeys = function(keyStr, navListIdx, navTaskStr){
   var keys = new Array();
   if (keyStr === ''){
     return;
   }
   keys = keyStr.split(' ');
   var self = this;
-  if (direction < 0){
+  if (navTaskStr == 'prev'){
     this.assignKeysToMethod( keys,
                              this.charCodeMaps[navListIdx],
                              this.keyCodeMaps[navListIdx],
                              function(){
-                               self.prevItem();
-                               self.actOnCurrentItem();
+                               self.actOnItem(self.prevItem());
+                             } );
+  } else if (navTaskStr == 'next') {
+    this.assignKeysToMethod( keys,
+                             this.charCodeMaps[navListIdx],
+                             this.keyCodeMaps[navListIdx],
+                             function(){
+                               self.actOnItem(self.nextItem());
+                             } );
+  } else if (navTaskStr == 'back') {
+    this.assignKeysToMethod( keys,
+                             this.charCodeMaps[navListIdx],
+                             this.keyCodeMaps[navListIdx],
+                             function(){
+                               self.actOnItem(self.backItem());
                              } );
   } else {
     this.assignKeysToMethod( keys,
                              this.charCodeMaps[navListIdx],
                              this.keyCodeMaps[navListIdx],
                              function(){
-                               self.nextItem();
-                               self.actOnCurrentItem();
+                               self.actOnItem(self.fwdItem());
                              } );
   }
 };
@@ -319,8 +369,7 @@ AxsNav.prototype.assignHotKeys = function(keyStr, navListIdx){
                            this.topKeyCodeMap,
                            function(){
                              self.navListIdx = navListIdx;
-                             self.nextItem();
-                             self.actOnCurrentItem();
+                             self.actOnItem(self.nextItem());
                            } );
 };
 
@@ -379,11 +428,11 @@ AxsNav.prototype.assignTargetKeys = function(target, charMap, keyMap){
 AxsNav.prototype.actOnTarget = function(target){
   var xpath = target.xpath;
   var rootNode = this.axs_.getActiveDocument().documentElement;
-  if ( (xpath.indexOf('/') !== 0) && (xpath.indexOf('id(') !== 0) ){
-    rootNode = this.currentItem();
+  if (xpath.indexOf('.') === 0){
+    rootNode = this.currentItem().elem;
   }
   var elems = this.axs_.evalXPath(xpath,rootNode);
-  if ( (elems === null) || (typeof(elems) == 'undefined') ){
+  if (elems.length < 1){
     this.axs_.speakTextViaNode(target.emptyMsg);
   } else {
     this.axs_.clickElem(elems[0], false);
@@ -448,8 +497,10 @@ AxsNav.prototype.setUpNavKeys = function(cnlDOM, emptyLists){
     var keyMap = new Object();
     this.charCodeMaps.push(charMap);
     this.keyCodeMaps.push(keyMap);
-    this.assignItemKeys(list.nextKeys, i, 1);
-    this.assignItemKeys(list.prevKeys, i, -1);
+    this.assignItemKeys(list.nextKeys, i, "next");
+    this.assignItemKeys(list.prevKeys, i, "prev");
+    this.assignItemKeys(list.fwdKeys, i, "fwd");
+    this.assignItemKeys(list.backKeys, i, "back");
     this.assignHotKeys(list.hotKeys, i);
     var j;
     for (j=0, target; target = list.targets[j]; j++){
@@ -535,16 +586,18 @@ AxsNav.prototype.navInit = function(cnlString, opt_customNavMethod){
     navList.hotKeys = currentList.getAttribute('hotkey') || '';
     navList.nextKeys = currentList.getAttribute('next') || '';
     navList.prevKeys = currentList.getAttribute('prev') || '';
+    navList.fwdKeys = currentList.getAttribute('fwd') || '';
+    navList.backKeys = currentList.getAttribute('back') || '';
     navList.emptyMsg = currentList.getAttribute('onEmpty') || '';
     navList.tailTarget = null;
     navList.headTarget = null;
     navList.items = this.makeItemsArray(currentList,i);
     navList.targets = this.makeTargetsArray(currentList);
-    for (var j=0, target; target = navList.targets[j]; j++){
-      if (target.trigger == 'listTail'){
-        navList.tailTarget = target;
-      } else if (target.trigger == 'listHead'){
-        navList.headTarget = target;
+    for (var j=0, listTarget; listTarget = navList.targets[j]; j++){
+      if (listTarget.trigger == 'listTail'){
+        navList.tailTarget = listTarget;
+      } else if (listTarget.trigger == 'listHead'){
+        navList.headTarget = listTarget;
       }
     }
 

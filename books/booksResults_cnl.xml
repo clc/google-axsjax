@@ -3,6 +3,15 @@
     <item>
       id('results_container')/table[*]/tbody/tr/td[2]
     </item>
+    <target title='Open result' hotkey='ENTER'>
+      .//h2/a
+    </target>
+    <target title='About this book' hotkey='a'>
+      .//a[contains(text(),'About')]
+    </target>
+    <target title='More editions' hotkey='e' onEmpty='There are no other editions available.'>
+      .//a[contains(text(),'editions')]
+    </target>
     <target title='Next page' trigger='listTail'>
       //img[contains(@src,'nav_next.gif')]/parent::*
     </target>
