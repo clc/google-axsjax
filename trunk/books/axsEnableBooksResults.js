@@ -25,18 +25,9 @@
 var axsBooksResults = {};
 
 axsBooksResults.HELP =
-    'The following shortcut keys are available. ' +
-    'Down arrow or N, go to the next result. ' +
-    'Up arrow or P, go to the previous result. ' +
-    'Right arrow or J, cycle to the next result. ' +
-    'Left arrow or K, cycle to the previous result. ' +
-    'Enter, go to the current result. ' +
-    'Slash, jump to search field. ' +
-    'Escape, leave search field. ' +
-    'A, go to the about page. ' +
-    'Page up, go to the previous page. ' +
-    'Page down, go to the next page. ';
-
+    'The following shortcut keys are available. '+
+    'Slash, enter search field. ' +
+    'Escape, leave search field. ';
 
 /**
  * The AxsJAX object that will do the tickling and speaking.
@@ -63,7 +54,7 @@ axsBooksResults.init = function(){
   var cnlString = "<cnl>" +
       "<list title='Cycle Results' next='RIGHT j' prev='LEFT k' fwd='f' back='b'>" +
       "<item>" +
-      "id('results_container')/table[*]/tbody/tr/td[2]" +
+      "id('results_container')//div[@class='resbdy']" +
       "</item>" +
       "<target title='Open result' hotkey='ENTER'>" +
       ".//h2/a" +
@@ -90,6 +81,9 @@ axsBooksResults.init = function(){
       "</cnl>";
 
   axsBooksResults.axsNavObj.navInit(cnlString, null);
+  axsBooksResults.HELP = axsBooksResults.HELP + 
+                         axsBooksResults.axsNavObj.localHelpString() +
+                         axsBooksResults.axsNavObj.globalHelpString();
 
   //Read the first thing on the page.
   //Use a set time out just in case the browser is not entirely ready yet.

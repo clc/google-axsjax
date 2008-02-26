@@ -24,6 +24,8 @@
  * @constructor
  */
 var AxsNav = function(axsJAXObj){
+  this.nextListKeys = '';
+  this.prevListKeys = '';
   this.navArray = new Array();
   this.navListIdx = 0;
   this.navItemIdxs = new Array();
@@ -35,6 +37,14 @@ var AxsNav = function(axsJAXObj){
   this.keyCodeMaps = new Array();
   this.axs_ = axsJAXObj;
 };
+
+//Constant strings to be internationalized
+AxsNav.NEXTLIST_STRING = ', next list. ';
+AxsNav.PREVLIST_STRING = ', previous list. ';
+AxsNav.GOFORWARD_STRING = ', go forward. ';
+AxsNav.GOBACKWARDS_STRING = ', go backwards. ';
+AxsNav.CYCLENEXT_STRING = ', cycle next. ';
+AxsNav.CYCLEPREV_STRING = ', cycle previous. ';
 
 /**
  * Makes an array of items given a navigation list node and its index.
@@ -469,12 +479,12 @@ AxsNav.prototype.setUpNavKeys = function(cnlDOM, emptyLists){
   }
 
   //Moving through lists
-  var nextListKeys = new Array();
-  var nextListStr = cnlNode.getAttribute('next') || '';
-  if (nextListStr !== ''){
-    nextListKeys = nextListStr.split(' ');
+  var keys = new Array();
+  this.nextListKeys = cnlNode.getAttribute('next') || '';
+  if (this.nextListKeys !== ''){
+    keys = this.nextListKeys.split(' ');
   }
-  this.assignKeysToMethod( nextListKeys,
+  this.assignKeysToMethod( keys,
                            this.topCharCodeMap,
                            this.topKeyCodeMap,
                            function(){
@@ -482,12 +492,12 @@ AxsNav.prototype.setUpNavKeys = function(cnlDOM, emptyLists){
                              self.announceCurrentList();
                            } );
 
-  var prevListKeys = new Array();
-  var prevListStr = cnlNode.getAttribute('prev') || '';
-  if (prevListStr !== ''){
-    prevListKeys = prevListStr.split(' ');
+  keys = new Array();
+  this.prevListKeys = cnlNode.getAttribute('prev') || '';
+  if (this.prevListKeys !== ''){
+    keys = this.prevListKeys.split(' ');
   }
-  this.assignKeysToMethod( prevListKeys,
+  this.assignKeysToMethod( keys,
                            this.topCharCodeMap,
                            this.topKeyCodeMap,
                            function(){
@@ -643,4 +653,64 @@ AxsNav.prototype.navInit = function(cnlString, opt_customNavMethod){
   } else {
     opt_customNavMethod(cnlDOM,this.navArray,emptyLists,this.targetsArray);
   }
+};
+
+
+/**
+ * Generates a help string for the globally available keys.
+ * Keys which are specific to the current list are NOT included.
+ *
+ * @return {string} The help string for globally available keys.
+ */
+AxsNav.prototype.globalHelpString = function(){
+  var helpStr = "";
+  if (this.nextListKeys !== ''){
+    helpStr = helpStr + this.nextListKeys + AxsNav.NEXTLIST_STRING;
+  }
+  if (this.prevListKeys !== ''){
+    helpStr = helpStr + this.prevListKeys + AxsNav.PREVLIST_STRING ;
+  }
+  var i = 0;
+  var target = null;
+  for (i=0, target; target = this.targetsArray[i]; i++){
+    if (target.hotkeyStr !== ''){
+      helpStr = helpStr + target.hotkeyStr + ', ' + target.title + '. ';
+    }
+  }
+  var list = null;
+  for (i=0, list; list = this.navArray[i]; i++){
+    if (list.hotKeys !== ''){
+      helpStr = helpStr + list.hotKeys + ', ' + list.title + '. ';
+    }
+  }
+  return helpStr;
+};
+
+/**
+ * Generates a help string for locally available keys.
+ * Keys which are global are NOT included.
+ *
+ * @return {string} The help string for locally available keys.
+ */
+AxsNav.prototype.localHelpString = function(){
+  var currentList = this.navArray[this.navListIdx];
+  var helpStr = "";
+  if (currentList.fwdKeys !== ''){
+    helpStr = helpStr + currentList.fwdKeys + AxsNav.GOFORWARD_STRING;
+  }
+  if (currentList.backKeys !== ''){
+    helpStr = helpStr + currentList.backKeys + AxsNav.GOBACKWARDS_STRING;
+  }
+  if (currentList.nextKeys !== ''){
+    helpStr = helpStr + currentList.nextKeys + AxsNav.CYCLENEXT_STRING;
+  }
+  if (currentList.prevKeys !== ''){
+    helpStr = helpStr + currentList.prevKeys + AxsNav.CYCLEPREV_STRING;
+  }
+  for (var i=0, target; target = currentList.targets[i]; i++){
+    if (target.hotkeyStr !== ''){
+      helpStr = helpStr + target.hotkeyStr + ', ' + target.title + '. ';
+    }
+  }
+  return helpStr;
 };
