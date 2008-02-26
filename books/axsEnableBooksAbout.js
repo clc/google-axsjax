@@ -30,8 +30,8 @@ axsBooksAbout.MORE_STRING = 'more';
 //These are strings to be spoken to the user
 axsBooksAbout.HELP =
     'The following shortcut keys are available. ' +
-    'Down arrow or N, go to the next category. ' +
-    'Up arrow or P, go to the previous category. ' +
+    'Down arrow or H, go to the next category. ' +
+    'Up arrow or L, go to the previous category. ' +
     'Right arrow or J, cycle to the next item in the current category. ' +
     'Left arrow or K, cycle to the previous item in the current category. ' +
     'Enter, act on the current item. ' +
@@ -62,7 +62,7 @@ axsBooksAbout.init = function(){
   axsBooksAbout.expandAllMoreLinks();
 
 
-  var cnlString = "<cnl next='DOWN n' prev='UP p'>" +
+  var cnlString = "<cnl next='DOWN h' prev='UP l'>" +
     "<list title='Search results' next='RIGHT j' prev='LEFT k'>" +
     "<item>" +
     "id('search')//div[@class='searchresult']" +

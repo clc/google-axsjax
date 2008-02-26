@@ -52,7 +52,7 @@ axsBooksResults.init = function(){
 
   var cnlString = "<cnl>" +
       "<list title='Cycle Results' next='RIGHT j' prev='LEFT k' " +
-      "fwd='f' back='b'>" +
+      "fwd='n' back='p'>" +
       "<item>" +
       "id('results_container')//div[@class='resbdy']" +
       "</item>" +
