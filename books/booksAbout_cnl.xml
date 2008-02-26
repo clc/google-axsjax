@@ -37,7 +37,7 @@
         </list>
         <list title='Places mentioned in this book' next='RIGHT j' prev='LEFT k'>
 		<item>
-                  id('gmap']/div/div[@class='result']
+                  id('gmap')/div/div[@class='result']
 		</item>
         </list>
         <list title='References from books' next='RIGHT j' prev='LEFT k'>
