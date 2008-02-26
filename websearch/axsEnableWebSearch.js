@@ -35,22 +35,8 @@ axsWebSearch.WEB_SEARCH_URL = 'http://www.google.com/search?q=';
 //These are strings to be spoken to the user
 axsWebSearch.HELP_STRING =
     'The following shortcut keys are available. ' +
-    'Down arrow or N, go to the next category. ' +
-    'Up arrow or P, go to the previous category. ' +
-    'Right arrow or J, go to the next item. ' +
-    'Left arrow or K, go to the previous item. ' +
-    'Enter, open the current item. ' +
-    'Shift and Enter, open the current item ' +
-    'in a new window. ' +
-    'Slash, jump to search blank. ' +
-    'Escape, leave search blank. ' +
-    '1, read the one box. ' +
-    'F, go forward through the results. ' +
-    'A, cycle through advertisements. ' +
-    'C, cycle through alternate categories to search in. ' +
-    'S, cycle through related searches. ' +
-    'Page up, go to the previous page. ' +
-    'Page down, go to the next page. ';
+    'Slash, enter search field. ' +
+    'Escape, leave search field. ';
 
 axsWebSearch.PAGECONTENT_RELATED_SEARCH_STRING = 'Searches related to:';
 
@@ -139,6 +125,10 @@ axsWebSearch.init = function(){
 
 
   axsWebSearch.axsNavObj.navInit(cnlString, null);
+  axsWebSearch.HELP_STRING = axsWebSearch.HELP_STRING +
+                             axsWebSearch.axsNavObj.localHelpString() +
+                             axsWebSearch.axsNavObj.globalHelpString();
+
 
 
 
