@@ -1,7 +1,7 @@
 <cnl>
   <list title='Cycle Results' next='RIGHT j' prev='LEFT k' fwd='f' back='b'>
     <item>
-      id('results_container')/table[*]/tbody/tr/td[2]
+      id('results_container')//div[@class='resbdy']
     </item>
     <target title='Open result' hotkey='ENTER'>
       .//h2/a

@@ -287,8 +287,6 @@ axsWebSearch.getCurrentURLQueryString = function(){
   return URL.substring(searchQueryStart, searchQueryEnd);
 };
 
-
-
 axsWebSearch.switchToAccessibleSearch = function(){
   if ( (document.baseURI.indexOf('http://www.google.com/custom') === 0) ||
        (document.baseURI.indexOf('http://www.google.com/cse') === 0) ){

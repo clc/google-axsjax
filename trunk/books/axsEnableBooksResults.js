@@ -43,7 +43,6 @@ axsBooksResults.axsNavObj = null;
 /*
  * Initialize
  */
-
 axsBooksResults.init = function(){
   axsBooksResults.axsJAXObj = new AxsJAX(true);
   axsBooksResults.axsNavObj = new AxsNav(axsBooksResults.axsJAXObj);
@@ -52,7 +51,8 @@ axsBooksResults.init = function(){
   document.addEventListener('keypress', axsBooksResults.keyHandler, true);
 
   var cnlString = "<cnl>" +
-      "<list title='Cycle Results' next='RIGHT j' prev='LEFT k' fwd='f' back='b'>" +
+      "<list title='Cycle Results' next='RIGHT j' prev='LEFT k' " +
+      "fwd='f' back='b'>" +
       "<item>" +
       "id('results_container')//div[@class='resbdy']" +
       "</item>" +
@@ -62,7 +62,8 @@ axsBooksResults.init = function(){
       "<target title='About this book' hotkey='a'>" +
       ".//a[contains(text(),'About')]" +
       "</target>" +
-      "<target title='More editions' hotkey='e' onEmpty='There are no other editions available.'>" +
+      "<target title='More editions' hotkey='e' " +
+      "onEmpty='There are no other editions available.'>" +
       ".//a[contains(text(),'editions')]" +
       "</target>" +
       "<target title='Next page' trigger='listTail'>" +
@@ -125,8 +126,7 @@ axsBooksResults.keyHandler = function(evt){
   //If Ctrl is held, it must be for some AT.
   if (evt.ctrlKey) return true;
 
-  var command =  axsBooksResults.charCodeMap[evt.charCode];
-
+  var command = axsBooksResults.charCodeMap[evt.charCode];
   if (command)  return  command();
 
   return true;
