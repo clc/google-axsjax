@@ -69,7 +69,7 @@ axsWebSearch.init = function(){
   //Do any necessary preparations for browsing here
   axsWebSearch.formatAdAreaSide();
 
-  var cnlString = "<cnl next='DOWN n' prev='UP p'>" +
+  var cnlString = "<cnl next='DOWN h' prev='UP l'>" +
       "<list title='One Box' hotkey='1' next='RIGHT j' prev='LEFT k' " +
       "onEmpty='There is no one box on this page.'>" +
       "<item count='1'>" +
@@ -79,7 +79,7 @@ axsWebSearch.init = function(){
       "id('res')/div[@class='e']" +
       "</item> " +
       "</list>" +
-      "<list title='Results' hotkey='f' next='RIGHT j' prev='LEFT k' fwd='f' back='b'>" +
+      "<list title='Results' hotkey='n' next='RIGHT j' prev='LEFT k' fwd='n' back='p'>" +
       "<item count='1'>" +
       "id('res')//td[@class='j']/ul/li[text()='Make sure all words are spelled correctly.']/parent::*/parent::*" +
       "</item>" +

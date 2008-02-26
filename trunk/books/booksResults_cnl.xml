@@ -1,9 +1,9 @@
 <cnl>
-  <list title='Cycle Results' next='RIGHT j' prev='LEFT k' fwd='f' back='b'>
+  <list title='Cycle Results' next='RIGHT j' prev='LEFT k' fwd='n' back='p'>
     <item>
       id('results_container')//div[@class='resbdy']
     </item>
-    <target title='Open result' hotkey='ENTER'>
+    <target title='Open result' hotkey='ENTER' onEmpty='This article is unavailable.'>
       .//h2/a
     </target>
     <target title='About this book' hotkey='a'>
