@@ -109,24 +109,22 @@ function pickScript(){
 }
 
 function urlIsGoogle(){
-  var googleString = 'google.';
+  var pattern0 = /^\w{0,}\.google\.com$/;          // *.google.com
+  var pattern1 = /^\w{0,}\.google\.\w{2}$/;        // *.google.XX
+  var pattern2 = /^\w{0,}\.google\.\w{2}\.\w{2}$/; // *.google.XX.XX
+
   var hostUrl = document.location.host;
-  hostUrl = hostUrl.substring(hostUrl.indexOf('.') + 1);
-  var gsIdx = hostUrl.indexOf(googleString);
-  if (gsIdx !== 0){
-    return false;
-  }
-  var hostEnding = hostUrl.substring(gsIdx+googleString.length);
-  if (hostEnding == 'com'){
+
+  if (pattern0.test(hostUrl)){
     return true;
   }
-  if (hostEnding.length == 2){
+  if (pattern1.test(hostUrl)){
     return true;
   }
-  if ((hostEnding.length == 5) && (hostEnding.indexOf('.') == 2)){
+  if (pattern2.test(hostUrl)){
     return true;
   }
-  return false;
+  return false
 }
 
 
