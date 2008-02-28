@@ -124,7 +124,7 @@ function urlIsGoogle(){
   if (pattern2.test(hostUrl)){
     return true;
   }
-  return false
+  return false;
 }
 
 
