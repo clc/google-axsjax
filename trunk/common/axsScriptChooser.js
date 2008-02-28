@@ -43,45 +43,59 @@ function pickScript(){
   theScript.type = 'text/javascript';
   var currentURL = document.baseURI;
 
+  //Check for commands
   if (currentURL.indexOf('#AxsJAX_Cmd=GetImgText') != -1){
     theScript.src = baseURL + 'common/cmd/imgText-exp.js';
     shouldInsertScripts = true;
-  }  else if (currentURL.indexOf('http://www.google.com/reader/') === 0){
-    theScript.src = baseURL + 'reader/axsEnableReader.js';
-    shouldInsertScripts = true;
-  } else if ((currentURL === 'http://www.google.com/')
-      || (currentURL.indexOf('http://www.google.com/search') === 0)
-      || (currentURL.indexOf('http://www.google.com/custom') === 0)
-      || (currentURL.indexOf('http://www.google.com/cse') === 0)){
-    theScript.src = baseURL + 'websearch/axsEnableWebSearch.js';
-    shouldInsertScripts = true;    
-  } else if ( currentURL.indexOf('http://images.google.com/images') === 0 ){
-    theScript.src = baseURL + 'imagesearch/axsEnableImageSearch.js';
-    shouldInsertScripts = true;
-  } else if (currentURL.indexOf('http://scholar.google.com/scholar') === 0){
-    theScript.src = baseURL + 'scholar/axsEnableScholar.js';
-    shouldInsertScripts = true;
-  } else if (currentURL.indexOf('http://books.google.com/') === 0){
-    theScript.src = baseURL + 'books/axsEnableBooks.js';
-    shouldInsertScripts = true;
-  } else if (currentURL.indexOf('http://mail.google.com/') === 0){
-    if (currentURL.indexOf('&view=cw&fs=1&tf=1') != -1){
-      theScript.src = baseURL + 'gmail/axsEnableTalk.js';
-    } else {
-      theScript.src = baseURL + 'gmail/axsEnableGMail.js';
+  }
+
+  //Check for Google
+  else if(urlIsGoogle()){
+    var path = document.location.pathname;
+    var prefix = document.location.host;
+    prefix = prefix.substring(0,prefix.indexOf('.'));
+    if (path.indexOf('/reader/') === 0){
+      theScript.src = baseURL + 'reader/axsEnableReader.js';
+      shouldInsertScripts = true;
     }
-    shouldInsertScripts = true;
-  } else if (currentURL === 'http://www.minijuegosgratis.com/juegos/jawbreaker/jawbreaker.htm'){
+    else if ((prefix == 'www')
+        || (path.indexOf('/search') === 0)
+        || (path.indexOf('/custom') === 0)
+        || (path.indexOf('/cse') === 0)){
+      theScript.src = baseURL + 'websearch/axsEnableWebSearch.js';
+      shouldInsertScripts = true;
+    }
+    else if ( (prefix == 'images') && (path.indexOf('/images') === 0 ) ){
+      theScript.src = baseURL + 'imagesearch/axsEnableImageSearch.js';
+      shouldInsertScripts = true;
+    }
+    else if ( (prefix == 'scholar') && (path.indexOf('/scholar') === 0 ) ){
+      theScript.src = baseURL + 'scholar/axsEnableScholar.js';
+      shouldInsertScripts = true;
+    }
+    else if (prefix == 'mail'){
+      if (currentURL.indexOf('&view=cw&fs=1&tf=1&ver=4z1ea2of9ihcy9k8lkip018ww#') != -1){
+        theScript.src = baseURL + 'gmail/axsEnableTalk.js';
+      } else {
+        theScript.src = baseURL + 'gmail/axsEnableGMail.js';
+      }
+      shouldInsertScripts = true;
+    }
+  }
+  else if (currentURL === 'http://www.minijuegosgratis.com/juegos/jawbreaker/jawbreaker.htm'){
     theScript.src = baseURL + 'jawbreaker/axsEnableJawbreaker.js';
-    shouldInsertScripts = true;    
-  } else if ((currentURL.indexOf('http://www.xkcd.com') === 0) || (currentURL.indexOf('http://xkcd.com') === 0)){
+    shouldInsertScripts = true;
+  }
+  else if ((currentURL.indexOf('http://www.xkcd.com') === 0) || (currentURL.indexOf('http://xkcd.com') === 0)){
     theScript.src = baseURL + 'xkcd/axsEnableXKCD.js';
     shouldInsertScripts = true;
-  } else if ( (currentURL.indexOf('http://www.ohnorobot.com/transcribe.pl?comicid=apKHvCCc66NMg') === 0) &&
+  }
+  else if ( (currentURL.indexOf('http://www.ohnorobot.com/transcribe.pl?comicid=apKHvCCc66NMg') === 0) &&
             (currentURL.indexOf('#AxsJAX_Cmd') != -1)){
     theScript.src = baseURL + 'xkcd/axsEnableXKCD_TranscriptFetcher.js';
     shouldInsertScripts = true;
   }
+
 
   if (shouldInsertScripts){
     document.getElementsByTagName('head')[0].appendChild(theLib);
@@ -89,5 +103,27 @@ function pickScript(){
     document.getElementsByTagName('head')[0].appendChild(theScript);
   }
 }
+
+function urlIsGoogle(){
+  var googleString = 'google.';
+  var hostUrl = document.location.host;
+  hostUrl = hostUrl.substring(hostUrl.indexOf('.') + 1);
+  var gsIdx = hostUrl.indexOf(googleString);
+  if (gsIdx !== 0){
+    return false;
+  }
+  var hostEnding = hostUrl.substring(gsIdx+googleString.length);
+  if (hostEnding == 'com'){
+    return true;
+  }
+  if (hostEnding.length == 2){
+    return true;
+  }
+  if ((hostEnding.length == 5) && (hostEnding.indexOf('.') == 2)){
+    return true;
+  }
+  return false;
+}
+
 
 pickScript();
