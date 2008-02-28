@@ -69,6 +69,10 @@ function pickScript(){
       theScript.src = baseURL + 'imagesearch/axsEnableImageSearch.js';
       shouldInsertScripts = true;
     }
+    else if (prefix == 'books'){
+      theScript.src = baseURL + 'books/axsEnableBooks.js';
+      shouldInsertScripts = true;
+    }
     else if ( (prefix == 'scholar') && (path.indexOf('/scholar') === 0 ) ){
       theScript.src = baseURL + 'scholar/axsEnableScholar.js';
       shouldInsertScripts = true;
