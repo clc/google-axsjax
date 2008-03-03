@@ -78,7 +78,7 @@ function pickScript(){
       shouldInsertScripts = true;
     }
     else if (prefix == 'mail'){
-      if (currentURL.indexOf('&view=cw&fs=1&tf=1&ver=4z1ea2of9ihcy9k8lkip018ww#') != -1){
+      if (currentURL.indexOf('&view=cw&fs=1&tf=1') != -1){
         theScript.src = baseURL + 'gmail/axsEnableTalk.js';
       } else {
         theScript.src = baseURL + 'gmail/axsEnableGMail.js';
