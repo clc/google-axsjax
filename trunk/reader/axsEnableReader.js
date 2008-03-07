@@ -30,6 +30,7 @@ var axsReader = {};
 /** Messages to be spoken to the user */
 axsReader.ARTICLES_LOADED_STRING = 'Articles loaded.';
 axsReader.BUNDLES_LOADED_STRING = 'Bundles loaded.';
+axsReader.RECOMMENDATIONS_LOADED_STRING = 'Recommendations loaded.';
 axsReader.RESULTS_LOADED_STRING = 'Results loaded.';
 axsReader.NO_RESULTS_STRING = 'Your search did not match any feeds. ' +
     'Please make sure all words are spelled correctly, ' +
@@ -63,9 +64,12 @@ axsReader.HELP_STRING = 'N, read the next item. ' +
 
 /**
  * The AxsJAX object that will do the tickling and speaking.
- * @type AxsJAX
+ * @type AxsJAX?
  */
 axsReader.axsJAXObj = null;
+
+
+axsReader.loadingBundles = false;
 
 /** Array and index for the feed bundles */
 axsReader.feedBundlesArray = null;
@@ -74,13 +78,6 @@ axsReader.currentFeedBundle = -1;
 /** Array and index for the feed search results */
 axsReader.currentFeedResult = -1;
 axsReader.feedResultsArray = null;
-
-/**
- *  Track whether or not an input element is focused to determine if the
- *  hot keys should be active
- */
-axsReader.inputFocused = false;
-axsReader.lastFocusedObject = null;
 
 
 axsReader.tagSelectorTopDivId = null;
@@ -97,8 +94,6 @@ axsReader.init = function(){
   window.addEventListener('DOMAttrModified', axsReader.domAttrModifiedHandler,
                           true);
   window.addEventListener('keypress', axsReader.extraKeyboardNavHandler, true);
-  window.addEventListener('focus', axsReader.focusHandler, true);
-  window.addEventListener('blur', axsReader.blurHandler, true);
 };
 
 
@@ -109,20 +104,34 @@ axsReader.init = function(){
  */
 
 axsReader.domInsertionHandler = function(event){
-  if (event.target.firstChild &&
-      event.target.firstChild.id == 'directory-search-results'){
+  var target = event.target;
+
+  if (target.firstChild &&
+      target.firstChild.id == 'directory-search-results'){
     axsReader.inputFocused = false; //There is no blur event when the
                                     //search results get loaded
     axsReader.findFeedResults();
     if (axsReader.feedResultsArray.length > 0){
-      axsReader.axsJAXObj.speakText(axsReader.RESULTS_LOADED_STRING);
+      axsReader.axsJAXObj.speakTextViaNode(axsReader.RESULTS_LOADED_STRING);
     } else {
-      axsReader.axsJAXObj.speakText(axsReader.NO_RESULTS_STRING);
+      axsReader.axsJAXObj.speakTextViaNode(axsReader.NO_RESULTS_STRING);
+    }
+  }
+  //Click on bundles tab to synchronize what is on screen with what the user
+  //is hearing.
+  if (target.firstChild &&
+      target.firstChild.id == 'directory-box'){
+    if (axsReader.loadingBundles){
+      axsReader.loadingBundles = false;
+      window.setTimeout(function(){
+        var bundlesTab = document.getElementById('bundles-tab-header');
+        axsReader.axsJAXObj.clickElem(bundlesTab,false);
+      },100);
     }
   }
   //Autofocus on the email input blank if the email this story function is used.
-  if (event.target.className == 'action-area'){
-    var inputArray = event.target.getElementsByTagName('INPUT');
+  if (target.className == 'action-area'){
+    var inputArray = target.getElementsByTagName('INPUT');
     for (var i=0; i<inputArray.length; i++){
       if (inputArray[i].className == 'email-this-to'){
         inputArray[i].focus();
@@ -131,10 +140,10 @@ axsReader.domInsertionHandler = function(event){
     }
   }
   //Handle tag navigation
-  if (event.target.className ==
+  if (target.className ==
           'banner banner-background label-keyboard-selector'){
-    axsReader.axsJAXObj.assignId(event.target);
-    axsReader.tagSelectorTopDivId = event.target.id;
+    axsReader.axsJAXObj.assignId(target);
+    axsReader.tagSelectorTopDivId = target.id;
     //Must be done as a timeout as the childNodes do not exist at this point
     window.setTimeout(axsReader.announceSelectedTag,100);
   }
@@ -152,39 +161,11 @@ axsReader.announceSelectedTag = function(){
 
 
 axsReader.findSelectedTag = function(tagSelectorTopDiv){
-  var allTagsArray = tagSelectorTopDiv.getElementsByTagName('li');
-  for (var i=0; i < allTagsArray.length; i++){
-    if (allTagsArray[i].className == 'selected'){
-      return allTagsArray[i];
-    }
-  }
-  return null;
+  var xpath = "//li[@class='selected']";
+  return axsReader.axsJAXObj.evalXPath(xpath,tagSelectorTopDiv)[0];
 };
 
-/**
- * When an input blank has focus, the keystrokes should go into the blank
- * and should not trigger hot key commands.
- * @param event {event} A Focus event
- */
-axsReader.focusHandler = function(event){
-  if ((event.target.tagName == 'INPUT') ||
-      (event.target.tagName == 'TEXTAREA')){
-    axsReader.inputFocused = true;
-  }
-  axsReader.lastFocusedObject = event.target;
-};
 
-/**
- * When no input blanks have focus, the keystrokes should trigger hot key
- * commands.
- * @param event {event} A Blur event
- */
-axsReader.blurHandler = function (event){
-  if ((event.target.tagName == 'INPUT') ||
-      (event.target.tagName == 'TEXTAREA')){
-    axsReader.inputFocused = false;
-  }
-};
 
 /**
  * Reader will modify the className or id attributes of a node to cause
@@ -203,31 +184,30 @@ axsReader.domAttrModifiedHandler = function(evt){
   if ( ((attrib == 'id') && (newVal == 'current-entry')) ||
        ((attrib == 'class') && ((newVal == 'link cursor') ||
                                 (newVal == 'link selected cursor'))) ){
-    axsReader.axsJAXObj.putNullForNoAltImages(target);
     axsReader.axsJAXObj.speakNode(target);
     //Alert users when articles are loaded
   } else if( (target.id == 'viewer-box')
              && (attrib == 'class')
              && (oldVal == 'hidden')){
-    axsReader.axsJAXObj.speakText(axsReader.ARTICLES_LOADED_STRING);
+    axsReader.axsJAXObj.speakTextViaNode(axsReader.ARTICLES_LOADED_STRING);
     //Star and unstar articles
   } else if( (attrib == 'class')
              && (newVal == 'item-star-active star link')
              && (oldVal == 'item-star star link')){
-    axsReader.axsJAXObj.speakText(axsReader.ITEM_STARRED_STRING);
+    axsReader.axsJAXObj.speakTextViaNode(axsReader.ITEM_STARRED_STRING);
   } else if( (attrib == 'class')
              && (newVal == 'item-star star link')
              && (oldVal == 'item-star-active star link')){
-    axsReader.axsJAXObj.speakText(axsReader.ITEM_UNSTARRED_STRING);
+    axsReader.axsJAXObj.speakTextViaNode(axsReader.ITEM_UNSTARRED_STRING);
     //Share and unshare articles
   } else if( (attrib == 'class')
              && (newVal == 'broadcast-active broadcast link')
              && (oldVal == 'broadcast-inactive broadcast link')){
-    axsReader.axsJAXObj.speakText(axsReader.ITEM_SHARED_STRING);
+    axsReader.axsJAXObj.speakTextViaNode(axsReader.ITEM_SHARED_STRING);
   } else if( (attrib == 'class')
              && (newVal == 'broadcast-inactive broadcast link')
              && (oldVal == 'broadcast-active broadcast link')){
-    axsReader.axsJAXObj.speakText(axsReader.ITEM_UNSHARED_STRING);
+    axsReader.axsJAXObj.speakTextViaNode(axsReader.ITEM_UNSHARED_STRING);
     //Alert for when email messages are not sent
   } else if( (attrib == 'class')
              && (oldVal == 'form-error-message email-this-to-error hidden')){
@@ -236,7 +216,7 @@ axsReader.domAttrModifiedHandler = function(evt){
   } else if( (attrib == 'class')
              && (newVal == 'info-message')
              && (oldVal == 'info-message hidden')){
-    axsReader.axsJAXObj.speakNode(target);
+    axsReader.axsJAXObj.speakTextViaNode(target);
   } else if ( (attrib == 'class')
              && (newVal ==
                      'banner banner-background label-keyboard-selector hidden')
@@ -253,7 +233,7 @@ axsReader.domAttrModifiedHandler = function(evt){
  */
 axsReader.extraKeyboardNavHandler = function(event){
   if (event.ctrlKey){ //None of these commands involve Ctrl.
-                    //If Ctrl is held, it must be for some AT. 
+                    //If Ctrl is held, it must be for some AT.
     return true;
   }
 
@@ -268,54 +248,26 @@ axsReader.extraKeyboardNavHandler = function(event){
     return true;
   }
 
-  // The following code corrects broken keyboard handling
-  if (axsReader.inputFocused){
-    //Fix the "cc me" checkbox
-    if (axsReader.lastFocusedObject &&
-        (axsReader.lastFocusedObject.name == 'ccMe')){
-      if (event.keyCode == 9){   //Tab
-        axsReader.navigateToClosestSendButton(event.target);
-        return false;
-      }
-      if (event.keyCode == 13){  //Enter - workaround for broken check/uncheck
-        axsReader.axsJAXObj.clickElem(event.target, false);
-        axsReader.axsJAXObj.assignId(event.target);
-        window.setTimeout("document.getElementById('"
-                           + event.target.id + "').focus();",0);
-        return false;
-      }
-    }
-    //For all other inputs, do nothing
-    return true;
-  }
+  var lastFocusedNode = axsReader.axsJAXObj.lastFocusedNode;
+
 
   //Fix the "Send" article email button
-  if (axsReader.lastFocusedObject &&
-       (axsReader.lastFocusedObject.textContent == 'Send')){
+  if (lastFocusedNode && (lastFocusedNode.textContent == 'Send')){
     if (event.keyCode == 9){      //Tab
-      axsReader.navigateToClosestCancelButton(axsReader.lastFocusedObject);
+      axsReader.navigateToClosestCancelButton(lastFocusedNode);
       return false;
     }
-    if (event.keyCode == 13){      //Enter
-      axsReader.axsJAXObj.clickElem(axsReader.lastFocusedObject, false);
-      return false;
-    }
-    return true;
   }
 
-  //Fix the "Cancel" article email button
-  if (axsReader.lastFocusedObject &&
-       (axsReader.lastFocusedObject.textContent == 'Cancel')){
-    if (event.keyCode == 13){      //Enter
-      axsReader.axsJAXObj.clickElem(axsReader.lastFocusedObject, false);
-      return false;
-    }
-    return true;
-  }
+
   //**The following code adds keyboard shortcuts that do not exist
-
-  if (event.charCode == 98){      // b
+  if ( (event.charCode == 98) || (event.charCode == 66)){      // b or B
     axsReader.browseFeedBundles();
+    return false;
+  }
+
+  if (event.charCode == 82){      // R
+    axsReader.browseRecommendations();
     return false;
   }
 
@@ -325,36 +277,60 @@ axsReader.extraKeyboardNavHandler = function(event){
   }
 
   if (event.charCode == 63){      // ?
-    axsReader.axsJAXObj.speakText(axsReader.HELP_STRING);
+    axsReader.axsJAXObj.speakTextViaNode(axsReader.HELP_STRING);
     return false;
   }
 
   //**The following code is specific to certain contexts
   //**and should not be done all the time.
 
-  //Only on the feed bundles page
+
   var viewerPageContainer = document.getElementById('viewer-page-container');
   var containerContent = null;
   if (viewerPageContainer.firstChild){
     containerContent = viewerPageContainer.firstChild.firstChild;
   }
+
+
+
+  //For the discover feeds page
   if ( (viewerPageContainer.className != 'hidden') &&
        (containerContent.id == 'directory-box') ){
-    if (event.charCode == 110 ){   // n
-      axsReader.navigateToNextFeedBundle();
-      return false;
-    }
-    if (event.charCode == 112){   // p
-      axsReader.navigateToPrevFeedBundle();
-      return false;
-    }
-    if (event.charCode == 115){   //  s
-      window.setTimeout(axsReader.focusFeedsSearch,10);
-      return false;
-    }
-    if (event.keyCode == 13){         // Enter
-      axsReader.subscribeToCurrentFeedBundle();
-      return false;
+    var bundleContents = document.getElementById('bundles-tab-contents');
+    var recommendationContents =
+        document.getElementById('recommendations-tab-contents');
+    //Only on the feed bundles page
+    if (bundleContents.className.indexOf('hidden') == -1){
+      if (event.charCode == 110 ){   // n
+        axsReader.navigateToNextFeedBundle();
+        return false;
+      }
+      if (event.charCode == 112){   // p
+        axsReader.navigateToPrevFeedBundle();
+        return false;
+      }
+      if (event.charCode == 115){   //  s
+        window.setTimeout(axsReader.focusFeedsSearch,10);
+        return false;
+      }
+      if (event.keyCode == 13){         // Enter
+        axsReader.subscribeToCurrentFeedBundle();
+        return false;
+      }
+      //Only on the recommendations page
+    } else if (recommendationContents.className.indexOf('hidden') == -1){
+      if (event.charCode == 110 ){   // n
+        axsReader.navigateToNextResult();
+        return false;
+      }
+      if (event.charCode == 112){   // p
+        axsReader.navigateToPrevResult();
+        return false;
+      }
+      if (event.keyCode == 13){         // Enter
+        axsReader.actOnCurrentResult();
+        return false;
+      }
     }
   }
   //Only on the feed search results page
@@ -398,25 +374,40 @@ axsReader.unsubscribeFromFeedCurrentlyOpen = function(){
  * Open the "Browse feed bundles" panel
  */
 axsReader.browseFeedBundles = function(){
-  document.location =
-    'http://www.google.com/reader/view/#directory-page';
-  axsReader.axsJAXObj.speakText(axsReader.BUNDLES_LOADED_STRING);
+  var baseURL = document.documentURI.split('#')[0];
+  document.location = baseURL + '#directory-page';
+  axsReader.axsJAXObj.speakTextViaNode(axsReader.BUNDLES_LOADED_STRING);
   axsReader.feedBundlesArray = new Array();
+  var bundlesTab = document.getElementById('bundles-tab-header');
+  if (bundlesTab){
+    axsReader.axsJAXObj.clickElem(bundlesTab,false);
+  } else {
+    axsReader.loadingBundles = true;
+  }
 };
+
+axsReader.browseRecommendations = function(){
+  var baseURL = document.documentURI.split('#')[0];
+  document.location = baseURL + '#directory-page';
+  axsReader.axsJAXObj.speakTextViaNode(axsReader.RECOMMENDATIONS_LOADED_STRING);
+  axsReader.feedResultsArray = new Array();
+  axsReader.loadingBundles = false;
+  var recTab = document.getElementById('recommendations-tab-header');
+  if (recTab){
+    axsReader.axsJAXObj.clickElem(recTab,false);
+  }
+};
+
 
  /**
  * Load the feed bundles that are shown into an array that can be more easily
  * traversed.
  */
 axsReader.findFeedBundles = function(){
-  axsReader.feedBundlesArray = new Array();
-  var bundlesList = document.getElementById('bundles-list');
-  for (var i = 0, bundle; bundle = bundlesList.childNodes[i]; i++) {
-    if ( (bundle.nodeType == 1) &&
-         (bundle.id != 'show-more-bundles-container') ){
-      axsReader.feedBundlesArray.push(bundle);
-    }
-  }
+  var xpath =
+      "//div[@id='bundles-list']/div[@id!='show-more-bundles-container']";
+  axsReader.feedBundlesArray =
+      axsReader.axsJAXObj.evalXPath(xpath,document.body);
   axsReader.currentFeedBundle = -1;
 };
 
@@ -464,7 +455,7 @@ axsReader.announceCurrentFeedBundle = function(){
     }
   var bundleName = currentFeedBundleNode.firstChild.firstChild.textContent;
   var announcementString = bundleName + subscriptionStatus;
-  axsReader.axsJAXObj.speakText(announcementString);
+  axsReader.axsJAXObj.speakTextViaNode(announcementString);
 };
 
 /**
@@ -476,7 +467,7 @@ axsReader.subscribeToCurrentFeedBundle = function(){
       axsReader.feedBundlesArray[axsReader.currentFeedBundle];
   var subscribeButton = currentFeedBundleNode.getElementsByTagName('table')[0];
   axsReader.axsJAXObj.clickElem(subscribeButton, false);
-  axsReader.axsJAXObj.speakText(axsReader.SUBSCRIBING_STRING);
+  axsReader.axsJAXObj.speakTextViaNode(axsReader.SUBSCRIBING_STRING);
 };
 
 /**
@@ -496,13 +487,12 @@ axsReader.focusFeedsSearch = function(){
  * traversed. Consider the next/prev page links as part of this array.
  */
 axsReader.findFeedResults = function(){
+  var xpath =
+      "//div[@id='directory-search-results']//div[@class='feed-result-row']";
+  var results = axsReader.axsJAXObj.evalXPath(xpath,document.body);                                                                         
   axsReader.feedResultsArray = new Array();
-  var resultsList = document.getElementById('directory-search-results');
-  var divArray = resultsList.getElementsByTagName('div');
-  for (var i = 0, result; result = divArray[i]; i++) {
-    if (result.className == 'row'){
-      axsReader.feedResultsArray.push(result);
-    }
+  for (var i = 0, result; result = results[i]; i++) {
+    axsReader.feedResultsArray.push(result);
   }
   var prevPage =
     document.getElementById('directory-search-results-previous-page');
@@ -512,13 +502,28 @@ axsReader.findFeedResults = function(){
   axsReader.currentFeedResult = -1;
 };
 
+ /**
+ * Recommendations are structured almost the same as feed search results
+ */
+axsReader.findRecommendations = function(){
+  var xpath = "//div[@id='rec-feeds-list']/div[@class='feed-result-row']";
+  axsReader.feedResultsArray =
+      axsReader.axsJAXObj.evalXPath(xpath,document.body);
+  axsReader.currentFeedResult = -1;
+};
+
+
 /**
  * Navigate to the next feed search result and announce what it is and
  * whether or not the user has subscribed to it already.
  */
 axsReader.navigateToNextResult = function(){
   if (axsReader.feedResultsArray.length === 0){
-    axsReader.findFeedResults();
+    if (document.documentURI.indexOf('#directory-search') != -1){
+      axsReader.findFeedResults();
+    } else {
+      axsReader.findRecommendations();
+    }
   }
   axsReader.currentFeedResult++;
   if (axsReader.currentFeedResult >= axsReader.feedResultsArray.length){
@@ -533,7 +538,11 @@ axsReader.navigateToNextResult = function(){
  */
 axsReader.navigateToPrevResult = function(){
   if (axsReader.feedResultsArray.length === 0){
-    axsReader.findFeedResults();
+    if (document.documentURI.indexOf('#directory-search') != -1){
+      axsReader.findFeedResults();
+    } else {
+      axsReader.findRecommendations();
+    }
     axsReader.currentFeedResult = axsReader.feedResultsArray.length;
   }
   axsReader.currentFeedResult--;
@@ -572,7 +581,7 @@ axsReader.announceCurrentFeedResult = function(){
                          + ' '
                          + theFeedResult.childNodes[4].textContent;
     }
-  axsReader.axsJAXObj.speakText(announcementString);
+  axsReader.axsJAXObj.speakTextViaNode(announcementString);
   currentFeedResultNode.scrollIntoView(true);
 };
 
@@ -592,31 +601,18 @@ axsReader.actOnCurrentResult = function(){
   } else {
     var subscribeButton = currentFeedResultNode.childNodes[2].childNodes[8];
     axsReader.axsJAXObj.clickElem(subscribeButton, false);
-    axsReader.axsJAXObj.speakText(axsReader.SUBSCRIBING_STRING);
+    axsReader.axsJAXObj.speakTextViaNode(axsReader.SUBSCRIBING_STRING);
   }
 };
 
 /**
  * End: Code for working with Feed Search
  */
-
-axsReader.navigateToClosestSendButton = function(checkboxNode){
-  var emailBodyArea = checkboxNode.parentNode.parentNode.parentNode;//Expect TD
-  var tablesArray = emailBodyArea.getElementsByTagName('table');
-  var sendButton = tablesArray[0].getElementsByTagName('span')[0];
-  sendButton.tabIndex = 0;
-  axsReader.axsJAXObj.setAttributeOf(sendButton,'role','button');
-  sendButton.focus();
-};
-
-
 axsReader.navigateToClosestCancelButton = function(enterButtonSpan){
   var enterButtonRow = enterButtonSpan.parentNode.parentNode.parentNode;
   var enterButtonTable = enterButtonRow.parentNode.parentNode; //Expect TD
   var cancelButtonTable = enterButtonTable.nextSibling;
   var cancelButton = cancelButtonTable.getElementsByTagName('span')[0];
-  cancelButton.tabIndex = 0;  
-  axsReader.axsJAXObj.setAttributeOf(cancelButton,'role','button');
   cancelButton.focus();
 };
 
