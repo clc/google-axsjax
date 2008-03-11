@@ -33,10 +33,9 @@ axsWebSearch.ACCESSIBLE_SEARCH_URL =
 axsWebSearch.WEB_SEARCH_URL = 'http://www.google.com/search?q=';
 
 //These are strings to be spoken to the user
-axsWebSearch.HELP_STRING =
-    'The following shortcut keys are available. ' +
-    'Slash, enter search field. ' +
-    'Escape, leave search field. ';
+axsWebSearch.HELP_STRING_PRE = 'The following shortcut keys are available. ';
+axsWebSearch.HELP_STRING_POST =  'Slash, enter search field. ' +
+                                 'Escape, leave search field. ';
 
 axsWebSearch.PAGECONTENT_RELATED_SEARCH_STRING = 'Searches related to:';
 
@@ -87,10 +86,10 @@ axsWebSearch.init = function(){
       "id('res')/div[*]/div[@class='g']" +
       "</item>" +
       "<target title='Next page' trigger='listTail'>" +
-      "id('nn')/parent::*" +
+      "id('nn')/.." +
       "</target>" +
       "<target title='Prev page' trigger='listHead'>" +
-      "id('np')/parent::*" +
+      "id('np')/.." +
       "</target>" +
       "</list>" +
       "<list title='Sponsored Links' hotkey='a' next='RIGHT j' prev='LEFT k' " +
@@ -115,21 +114,18 @@ axsWebSearch.init = function(){
       "</item>" +
       "</list>" +
       "<target title='Next page' hotkey='PGDOWN'>" +
-      "id('nn')/parent::*" +
+      "id('nn')/.." +
       "</target>" +
       "<target title='Previous page' hotkey='PGUP'>" +
-      "id('np')/parent::*" +
+      "id('np')/.." +
       "</target>" +
       "</cnl>";
 
 
 
   axsWebSearch.axsNavObj.navInit(cnlString, null);
-  axsWebSearch.HELP_STRING = axsWebSearch.HELP_STRING +
-                             axsWebSearch.axsNavObj.localHelpString() +
-                             axsWebSearch.axsNavObj.globalHelpString();
-
-
+  axsWebSearch.HELP_STRING_POST = axsWebSearch.axsNavObj.globalHelpString() +
+                                  axsWebSearch.HELP_STRING_POST;
 
 
   //Read the first thing on the page.
@@ -182,7 +178,10 @@ axsWebSearch.extraKeyboardNavHandler = function(evt){
   }
 
   if (evt.charCode == 63){ // ? (question mark)
-    axsWebSearch.axsJAXObj.speakTextViaNode(axsWebSearch.HELP_STRING);
+    var helpStr = axsWebSearch.HELP_STRING_PRE +
+                  axsWebSearch.axsNavObj.localHelpString() +
+                  axsWebSearch.HELP_STRING_POST;
+    axsWebSearch.axsJAXObj.speakTextViaNode(helpStr);
     return false;
   }
   return true;

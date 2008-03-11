@@ -25,7 +25,8 @@
 var axsScholar = {};
 
 //These are strings to be spoken to the user
-axsScholar.HELP = 'The following shortcut keys are available. ';
+axsScholar.HELP_PRE = 'The following shortcut keys are available. ';
+axsScholar.HELP_POST = '';
 
 /**
  * The AxsJAX object that will do the tickling and speaking.
@@ -83,23 +84,21 @@ axsScholar.init = function(){
     "./font/a[contains(text(),'Import into')]" +
     "</target>" +
     "<target title='Next page' trigger='listTail'>" +
-    "//img[contains(@src,'nav_next.gif')]/parent::*" +
+    "//img[contains(@src,'nav_next.gif')]/.." +
     "</target>" +
     "<target title='Prev page' trigger='listHead'>" +
-    "//img[contains(@src,'nav_previous.gif')]/parent::*" +
+    "//img[contains(@src,'nav_previous.gif')]/.." +
     "</target>" +
     "</list>" +
     "<target title='Next page' hotkey='PGDOWN'>" +
-    "//img[contains(@src,'nav_next.gif')]/parent::*" +
+    "//img[contains(@src,'nav_next.gif')]/.." +
     "</target>" +
     "<target title='Previous page' hotkey='PGUP'>" +
-    "//img[contains(@src,'nav_previous.gif')]/parent::*" +
+    "//img[contains(@src,'nav_previous.gif')]/.." +
     "</target>" +
     "</cnl>";
   axsScholar.axsNavObj.navInit(cnlString, null);
-  axsScholar.HELP = axsScholar.HELP +
-                    axsScholar.axsNavObj.localHelpString() +
-                    axsScholar.axsNavObj.globalHelpString();  
+  axsScholar.HELP_POST = axsScholar.axsNavObj.globalHelpString();
 
   //Read the first thing on the page.
   //Use a set time out just in case the browser is not entirely ready yet.
@@ -137,7 +136,10 @@ axsScholar.extraKeyboardNavHandler = function(evt){
   }
 
   if (evt.charCode == 63){ // ? (question mark)
-    axsScholar.axsJAXObj.speakTextViaNode(axsScholar.HELP);
+    var helpStr = axsScholar.HELP_PRE +
+                  axsScholar.axsNavObj.localHelpString() +
+                  axsScholar.HELP_POST;
+    axsScholar.axsJAXObj.speakTextViaNode(helpStr);
     return false;
   }
 

@@ -10,16 +10,16 @@
 
         <list title='Results' hotkey='n' next='RIGHT j' prev='LEFT k' fwd='n' back='p'>
 		<item count='1'>
-                  id('res')//td[@class='j']/ul/li[text()='Make sure all words are spelled correctly.']/parent::*/parent::*
+                  id('res')//td[@class='j']/ul/li[text()='Make sure all words are spelled correctly.']/../..
 		</item>
 		<item>
 		    id('res')/div[*]/div[@class='g']
 		</item>
 		<target title='Next page' trigger='listTail'>
-                  id('nn')/parent::*
+                  id('nn')/..
 		</target>
 		<target title='Prev page' trigger='listHead'>
-                  id('np')/parent::*
+                  id('np')/..
 		</target>
         </list>
 
@@ -45,9 +45,9 @@
 	</list>
 
         <target title='Next page' hotkey='PGDOWN'>
-          id('nn')/parent::*
+          id('nn')/..
         </target>
         <target title='Previous page' hotkey='PGUP'>
-          id('np')/parent::*
+          id('np')/..
         </target>
 </cnl>

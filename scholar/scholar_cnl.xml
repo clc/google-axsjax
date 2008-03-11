@@ -28,16 +28,16 @@
       ./font/a[contains(text(),'Import into')]
     </target>
     <target title='Next page' trigger='listTail'>
-      //img[contains(@src,'nav_next.gif')]/parent::*
+      //img[contains(@src,'nav_next.gif')]/..
     </target>
     <target title='Prev page' trigger='listHead'>
-      //img[contains(@src,'nav_previous.gif')]/parent::*
+      //img[contains(@src,'nav_previous.gif')]/..
     </target>
   </list>
   <target title='Next page' hotkey='PGDOWN'>
-    //img[contains(@src,'nav_next.gif')]/parent::*
+    //img[contains(@src,'nav_next.gif')]/..
   </target>
   <target title='Previous page' hotkey='PGUP'>
-    //img[contains(@src,'nav_previous.gif')]/parent::*
+    //img[contains(@src,'nav_previous.gif')]/..
   </target>
 </cnl>

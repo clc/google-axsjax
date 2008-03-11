@@ -24,10 +24,9 @@
 // create namespace
 var axsBooksResults = {};
 
-axsBooksResults.HELP =
-    'The following shortcut keys are available. '+
-    'Slash, enter search field. ' +
-    'Escape, leave search field. ';
+axsBooksResults.HELP_STRING_PRE = 'The following shortcut keys are available. ';
+axsBooksResults.HELP_STRING_POST = 'Slash, enter search field. ' +
+                                   'Escape, leave search field. ';
 
 /**
  * The AxsJAX object that will do the tickling and speaking.
@@ -67,24 +66,25 @@ axsBooksResults.init = function(){
       ".//a[contains(text(),'editions')]" +
       "</target>" +
       "<target title='Next page' trigger='listTail'>" +
-      "//img[contains(@src,'nav_next.gif')]/parent::*" +
+      "//img[contains(@src,'nav_next.gif')]/.." +
       "</target>" +
       "<target title='Prev page' trigger='listHead'>" +
-      "//img[contains(@src,'nav_previous.gif')]/parent::*" +
+      "//img[contains(@src,'nav_previous.gif')]/.." +
       "</target>" +
       "</list>" +
       "<target title='Next page' hotkey='PGDOWN'>" +
-      "//img[contains(@src,'nav_next.gif')]/parent::*" +
+      "//img[contains(@src,'nav_next.gif')]/.." +
       "</target>" +
       "<target title='Previous page' hotkey='PGUP'>" +
-      "//img[contains(@src,'nav_previous.gif')]/parent::*" +
+      "//img[contains(@src,'nav_previous.gif')]/.." +
       "</target>" +
       "</cnl>";
 
   axsBooksResults.axsNavObj.navInit(cnlString, null);
-  axsBooksResults.HELP = axsBooksResults.HELP + 
-                         axsBooksResults.axsNavObj.localHelpString() +
-                         axsBooksResults.axsNavObj.globalHelpString();
+  
+  axsBooksResults.HELP_STRING_POST =
+      axsBooksResults.axsNavObj.globalHelpString() +
+      axsBooksResults.HELP_STRING_POST;
 
   //Read the first thing on the page.
   //Use a set time out just in case the browser is not entirely ready yet.
@@ -134,7 +134,11 @@ axsBooksResults.keyHandler = function(evt){
 
 axsBooksResults.charCodeMap = {
 63 : function () {
-    axsBooksResults.axsJAXObj.speakTextViaNode(axsBooksResults.HELP);}, // ?
+       var helpStr = axsBooksResults.HELP_STRING_PRE +
+                     axsBooksResults.axsNavObj.localHelpString() +
+                     axsBooksResults.HELP_STRING_POST;
+       axsBooksResults.axsJAXObj.speakTextViaNode(helpStr);
+     }, // ?
 47 : axsBooksResults.goSearch
 };
 
