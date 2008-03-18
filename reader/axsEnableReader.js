@@ -42,6 +42,8 @@ axsReader.GOTO_PREV_PAGE_STRING = 'Go to the previous page.';
 axsReader.GOTO_NEXT_PAGE_STRING = 'Go to the next page.';
 axsReader.ITEM_STARRED_STRING = 'Star added.';
 axsReader.ITEM_UNSTARRED_STRING = 'Star removed.';
+axsReader.MARKED_READ_STRING = 'Marked red.';
+axsReader.MARKED_UNREAD_STRING = 'Marked unred.';
 axsReader.ITEM_SHARED_STRING = 'Shared.';
 axsReader.ITEM_UNSHARED_STRING = 'Not shared.';
 axsReader.THERE_ARE_STRING = 'There are ';
@@ -58,6 +60,7 @@ axsReader.HELP_STRING = 'N, read the next item. ' +
                         'for feeds blank. ' +
                         'Slash, search for articles in subscribed feeds.' +
                         'S, when reading articles, star the current article. ' +
+                        'M, mark the current article as red. ' +
                         'Shift + S, share the current article. ' +
                         'E, e-mail the current article. ' +
                         'T, edit tags for the current article.';
@@ -98,14 +101,16 @@ axsReader.init = function(){
 
 
 /**
- * When the feed search results are loaded, this will tell users that they can
- * proceed.
+ * DOM nodes are inserted when the articles/search results are loaded,
+ * when bundles are shown, when the email form is brought up, and
+ * when tag navigation is used.
  * @param event {event} A DOM Node Insertion event
  */
 
 axsReader.domInsertionHandler = function(event){
   var target = event.target;
-
+  // When the feed search results are loaded, this will tell users that they can
+  // proceed.
   if (target.firstChild &&
       target.firstChild.id == 'directory-search-results'){
     axsReader.inputFocused = false; //There is no blur event when the
@@ -208,6 +213,15 @@ axsReader.domAttrModifiedHandler = function(evt){
              && (newVal == 'broadcast-inactive broadcast link')
              && (oldVal == 'broadcast-active broadcast link')){
     axsReader.axsJAXObj.speakTextViaNode(axsReader.ITEM_UNSHARED_STRING);
+    //Mark and unmark articles as read
+  } else if( (attrib == 'class')
+             && (newVal == 'read-state-read read-state link')
+             && (oldVal == 'read-state-unread read-state link')){
+    axsReader.axsJAXObj.speakTextViaNode(axsReader.MARKED_READ_STRING);
+  } else if( (attrib == 'class')
+             && (newVal == 'read-state-unread read-state link')
+             && (oldVal == 'read-state-read read-state link')){
+    axsReader.axsJAXObj.speakTextViaNode(axsReader.MARKED_UNREAD_STRING);
     //Alert for when email messages are not sent
   } else if( (attrib == 'class')
              && (oldVal == 'form-error-message email-this-to-error hidden')){
@@ -237,6 +251,18 @@ axsReader.extraKeyboardNavHandler = function(event){
     return true;
   }
 
+  var lastFocusedNode = axsReader.axsJAXObj.lastFocusedNode;
+
+  if (event.keyCode == 27){ // ESC
+    lastFocusedNode.blur();
+    return false;
+  }
+
+  //Don't swallow keys for input fields
+  if (axsReader.axsJAXObj.inputFocused){
+    return true;
+  }
+
   //Handle navigation in the tag selector
   if (axsReader.tagSelectorTopDivId){
     if ((event.keyCode >= 37) || (event.keyCode <= 40)){     //Is an arrow key
@@ -248,9 +274,6 @@ axsReader.extraKeyboardNavHandler = function(event){
     return true;
   }
 
-  var lastFocusedNode = axsReader.axsJAXObj.lastFocusedNode;
-
-
   //Fix the "Send" article email button
   if (lastFocusedNode && (lastFocusedNode.textContent == 'Send')){
     if (event.keyCode == 9){      //Tab
@@ -258,7 +281,6 @@ axsReader.extraKeyboardNavHandler = function(event){
       return false;
     }
   }
-
 
   //**The following code adds keyboard shortcuts that do not exist
   if ( (event.charCode == 98) || (event.charCode == 66)){      // b or B
