@@ -659,7 +659,7 @@ axsGMail.chatWindowHandler = function(chatWindowDiv){
         if (evt.keyCode == 27){ // ESC
           return true;
         }
-        axsGMail.axsJAXObj.clickElem(chatWindowDiv.getElementsByTagName('img')[0],false);
+        axsGMail.axsJAXObj.clickElem(chatWindowDiv.getElementsByTagName('img')[3],false);
         return false;
       },
       true);
