@@ -140,6 +140,7 @@ axsWebSearch.init = function(){
 
 
   axsWebSearch.axsLensObj = new AxsLens(axsWebSearch.axsJAXObj);
+  axsWebSearch.axsNavObj.setLens(axsWebSearch.axsLensObj);
 
   //Read the first thing on the page.
   //Use a set time out just in case the browser is not entirely ready yet.
@@ -151,8 +152,8 @@ axsWebSearch.init = function(){
  */
 axsWebSearch.readTheFirstThing = function(evt){
   var firstElem = axsWebSearch.axsNavObj.nextItem().elem;
+  axsWebSearch.axsLensObj.view(firstElem);
   axsWebSearch.axsJAXObj.goTo(firstElem);
-  axsWebSearch.moveLens();
 };
 
 axsWebSearch.extraKeyboardNavHandler = function(evt){
@@ -210,8 +211,6 @@ axsWebSearch.extraKeyboardNavHandler = function(evt){
     axsWebSearch.axsJAXObj.speakTextViaNode(helpStr);
     return false;
   }
-
-  window.setTimeout("axsWebSearch.moveLens();",0);
 
   return true;
 };
@@ -339,12 +338,6 @@ axsWebSearch.switchToWebSearch = function(){
 //************
 //Functions for highlighting results
 //************
-
-axsWebSearch.moveLens = function(){
-  var current = axsWebSearch.axsNavObj.currentItem().elem;
-  axsWebSearch.axsLensObj.view(current);
-  current.scrollIntoView(true);
-};
 
 axsWebSearch.increaseMagnification = function(){
   axsWebSearch.magSize += 0.10;

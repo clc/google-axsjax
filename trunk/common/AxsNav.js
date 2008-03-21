@@ -36,6 +36,7 @@ var AxsNav = function(axsJAXObj){
   this.charCodeMaps = new Array();
   this.keyCodeMaps = new Array();
   this.axs_ = axsJAXObj;
+  this.lens = null;
 };
 
 //Constant strings to be internationalized
@@ -264,6 +265,9 @@ AxsNav.prototype.actOnItem = function(item){
     if (item.action == 'click'){
       this.axs_.clickElem(item.elem, false);
     } else {
+      if (this.lens !== null){
+        this.lens.view(item.elem);
+      }
       this.axs_.goTo(item.elem);
     }
   }
@@ -713,4 +717,16 @@ AxsNav.prototype.localHelpString = function(){
     }
   }
   return helpStr;
+};
+
+
+
+/**
+ * This function sets the lens to be used when going to an item's element.
+ *
+ * @param {AxsLens?} lens  The AxsLens object to be used.
+ *                         If null, no lens will be used.
+ */
+AxsNav.prototype.setLens = function(lens){
+  this.lens = lens;
 };
