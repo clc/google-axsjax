@@ -23,6 +23,9 @@
 
 
 
+
+
+
 // create namespace
 var axsWebSearch = {};
 
@@ -56,6 +59,14 @@ axsWebSearch.axsJAXObj = null;
  * @type AxsNav?
  */
 axsWebSearch.axsNavObj = null;
+
+
+/**
+ * The AxsLens object that will magnify content.
+ * @type AxsLens?
+ */
+axsWebSearch.axsLensObj = null;
+axsWebSearch.magSize = 0.70;
 
 axsWebSearch.init = function(){
   axsWebSearch.axsJAXObj = new AxsJAX(true);
@@ -128,6 +139,8 @@ axsWebSearch.init = function(){
                                   axsWebSearch.HELP_STRING_POST;
 
 
+  axsWebSearch.axsLensObj = new AxsLens(axsWebSearch.axsJAXObj);
+
   //Read the first thing on the page.
   //Use a set time out just in case the browser is not entirely ready yet.
   window.setTimeout(axsWebSearch.readTheFirstThing,100);
@@ -139,6 +152,7 @@ axsWebSearch.init = function(){
 axsWebSearch.readTheFirstThing = function(evt){
   var firstElem = axsWebSearch.axsNavObj.nextItem().elem;
   axsWebSearch.axsJAXObj.goTo(firstElem);
+  axsWebSearch.moveLens();
 };
 
 axsWebSearch.extraKeyboardNavHandler = function(evt){
@@ -177,6 +191,18 @@ axsWebSearch.extraKeyboardNavHandler = function(evt){
     return false;
   }
 
+  if (evt.charCode == 45){ // - (minus symbol)
+    axsWebSearch.decreaseMagnification();
+    return false;
+  }
+
+  if (evt.charCode == 61){ // = (equals symbol)
+    axsWebSearch.increaseMagnification();
+    return false;
+  }
+
+
+
   if (evt.charCode == 63){ // ? (question mark)
     var helpStr = axsWebSearch.HELP_STRING_PRE +
                   axsWebSearch.axsNavObj.localHelpString() +
@@ -184,6 +210,9 @@ axsWebSearch.extraKeyboardNavHandler = function(evt){
     axsWebSearch.axsJAXObj.speakTextViaNode(helpStr);
     return false;
   }
+
+  window.setTimeout("axsWebSearch.moveLens();",0);
+
   return true;
 };
 
@@ -304,5 +333,29 @@ axsWebSearch.switchToWebSearch = function(){
   var searchQuery = axsWebSearch.getCurrentURLQueryString();
   document.location = axsWebSearch.WEB_SEARCH_URL + searchQuery;
 };
+
+
+
+//************
+//Functions for highlighting results
+//************
+
+axsWebSearch.moveLens = function(){
+  var current = axsWebSearch.axsNavObj.currentItem().elem;
+  axsWebSearch.axsLensObj.view(current);
+  current.scrollIntoView(true);
+};
+
+axsWebSearch.increaseMagnification = function(){
+  axsWebSearch.magSize += 0.10;
+  axsWebSearch.axsLensObj.setMagnification(axsWebSearch.magSize);
+};
+
+axsWebSearch.decreaseMagnification = function(){
+  axsWebSearch.magSize -= 0.10;
+  axsWebSearch.axsLensObj.setMagnification(axsWebSearch.magSize);
+};
+
+
 
 axsWebSearch.init();
