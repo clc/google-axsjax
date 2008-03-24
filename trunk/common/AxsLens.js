@@ -27,7 +27,8 @@
  */
 var AxsLens = function(axsJAXObj){
   var activeDoc = axsJAXObj.getActiveDocument();
-  this.lens = activeDoc.createElement('div');
+  this.lens = activeDoc.createElement('span');
+  
   this.lens.style.backgroundColor = '#CCE6FF';
   this.lens.style.fontSizeAdjust = 0.70;
   this.lens.style.borderColor = '#0000CC';
@@ -36,7 +37,6 @@ var AxsLens = function(axsJAXObj){
   this.lens.style.position = 'absolute';
 
   this.lens.style.display = 'none';
-
   activeDoc.body.appendChild(this.lens);
 };
 
@@ -61,9 +61,10 @@ AxsLens.prototype.view = function(targetNode){
 
   this.lens.appendChild(targetNode.cloneNode(true));
 
-  this.lens.style.display = 'block';
-  this.lens.style.top = top;
-  this.lens.style.left = left;
+  this.lens.style.top = top + 'px';
+  this.lens.style.left = left + 'px';
+  this.lens.style.zIndex = 999;
+  this.lens.style.display = 'block';  
 };
 
 AxsLens.prototype.setMagnification = function(newSize){
