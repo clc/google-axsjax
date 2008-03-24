@@ -1,0 +1,7 @@
+<cnl next='' prev=''>
+  <list title='Gadgets' hotkey='' next='n' prev='p'>
+    <item>
+      id('modules')//div[@class='modbox']
+    </item>
+  </list>
+</cnl>
