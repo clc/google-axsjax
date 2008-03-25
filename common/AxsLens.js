@@ -30,7 +30,7 @@ var AxsLens = function(axsJAXObj){
   this.lens = activeDoc.createElement('span');
   
   this.lens.style.backgroundColor = '#CCE6FF';
-  this.lens.style.fontSizeAdjust = 0.70;
+  this.lens.style.fontSizeAdjust = 0.52;
   this.lens.style.borderColor = '#0000CC';
   this.lens.style.borderWidth = 'medium';
   this.lens.style.borderStyle = 'groove';
@@ -67,6 +67,12 @@ AxsLens.prototype.view = function(targetNode){
   this.lens.style.display = 'block';  
 };
 
-AxsLens.prototype.setMagnification = function(newSize){
-  this.lens.style.fontSizeAdjust = newSize;
+
+AxsLens.prototype.setMagnification = function(multiplier){
+  //fontSizeAdjust is based on the aspect value of the font.
+  //The default aspect value of Arial is .52
+  var fontSizeAdjust = multiplier * 0.52;
+
+
+  this.lens.style.fontSizeAdjust = fontSizeAdjust;
 };

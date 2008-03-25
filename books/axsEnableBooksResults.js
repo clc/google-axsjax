@@ -49,7 +49,7 @@ axsBooksResults.init = function(){
   //Add event listeners
   document.addEventListener('keypress', axsBooksResults.keyHandler, true);
 
-  var cnlString = "<cnl>" +
+  var cnrString = "<cnr>" +
       "<list title='Cycle Results' next='RIGHT j' prev='LEFT k' " +
       "fwd='n' back='p'>" +
       "<item>" +
@@ -78,9 +78,9 @@ axsBooksResults.init = function(){
       "<target title='Previous page' hotkey='PGUP'>" +
       "//img[contains(@src,'nav_previous.gif')]/.." +
       "</target>" +
-      "</cnl>";
+      "</cnr>";
 
-  axsBooksResults.axsNavObj.navInit(cnlString, null);
+  axsBooksResults.axsNavObj.navInit(cnrString, null);
   
   axsBooksResults.HELP_STRING_POST =
       axsBooksResults.axsNavObj.globalHelpString() +

@@ -66,7 +66,7 @@ axsWebSearch.axsNavObj = null;
  * @type AxsLens?
  */
 axsWebSearch.axsLensObj = null;
-axsWebSearch.magSize = 0.70;
+axsWebSearch.magSize = 1.5;
 
 axsWebSearch.init = function(){
   axsWebSearch.axsJAXObj = new AxsJAX(true);
@@ -79,7 +79,7 @@ axsWebSearch.init = function(){
   //Do any necessary preparations for browsing here
   axsWebSearch.formatAdAreaSide();
 
-  var cnlString = "<cnl next='DOWN h' prev='UP l'>" +
+  var cnrString = "<cnr next='DOWN h' prev='UP l'>" +
       "<list title='One Box' hotkey='1' next='RIGHT j' prev='LEFT k' " +
       "onEmpty='There is no one box on this page.'>" +
       "<item count='1'>" +
@@ -130,17 +130,18 @@ axsWebSearch.init = function(){
       "<target title='Previous page' hotkey='PGUP'>" +
       "id('np')/.." +
       "</target>" +
-      "</cnl>";
+      "</cnr>";
 
 
 
-  axsWebSearch.axsNavObj.navInit(cnlString, null);
+  axsWebSearch.axsNavObj.navInit(cnrString, null);
   axsWebSearch.HELP_STRING_POST = axsWebSearch.axsNavObj.globalHelpString() +
                                   axsWebSearch.HELP_STRING_POST;
 
 
   axsWebSearch.axsLensObj = new AxsLens(axsWebSearch.axsJAXObj);
   axsWebSearch.axsNavObj.setLens(axsWebSearch.axsLensObj);
+  axsWebSearch.axsLensObj.setMagnification(axsWebSearch.magSize);
 
   //Read the first thing on the page.
   //Use a set time out just in case the browser is not entirely ready yet.

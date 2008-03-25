@@ -48,22 +48,25 @@ axsIG.axsNavObj = null;
 
 axsIG.axsLensObj = null;
 
+axsIG.magSize = 1.5;
+
 
 axsIG.init = function(){
   axsIG.axsJAXObj = new AxsJAX(true);
   axsIG.axsNavObj = new AxsNav(axsIG.axsJAXObj);
   axsIG.axsLensObj = new AxsLens(axsIG.axsJAXObj);
   axsIG.axsNavObj.setLens(axsIG.axsLensObj);
+  axsIG.axsLensObj.setMagnification(axsIG.magSize);
 
-  var cnlString = "<cnl next='' prev=''>" +
+  var cnrString = "<cnr next='' prev=''>" +
                   "<list title='Gadgets' hotkey='' next='n' prev='p'>" +
                   "<item>" +
                   "id('modules')//div[@class='modbox']" +
                   "</item>" +
                   "</list>" +
-                  "</cnl>";
+                  "</cnr>";
 
-  axsIG.axsNavObj.navInit(cnlString, null);
+  axsIG.axsNavObj.navInit(cnrString, null);
 
   //Add event listeners
   document.addEventListener('keypress', axsIG.keyHandler,
@@ -131,12 +134,12 @@ axsIG.announceFirstGadget = function(){
 
 axsIG.increaseMagnification = function(){
   axsIG.magSize += 0.10;
-  axsIG.axsLensObj.setMagnification(axsWebSearch.magSize);
+  axsIG.axsLensObj.setMagnification(axsIG.magSize);
 };
 
 axsIG.decreaseMagnification = function(){
   axsIG.magSize -= 0.10;
-  axsIG.axsLensObj.setMagnification(axsWebSearch.magSize);
+  axsIG.axsLensObj.setMagnification(axsIG.magSize);
 };
 
 window.setTimeout("axsIG.init();",1000);

@@ -57,7 +57,11 @@ function pickScript(){
     var path = document.location.pathname;
     var prefix = document.location.host;
     prefix = prefix.substring(0,prefix.indexOf('.'));
-    if ((prefix == 'www')
+    if ((prefix == 'www') && (path.indexOf('/ig') === 0)){
+      theScript.src = baseURL + 'igoogle/axsEnableIGoogle.js';
+      shouldInsertScripts = true;
+    }
+    else if ((prefix == 'www')
         || (path.indexOf('/search') === 0)
         || (path.indexOf('/custom') === 0)
         || (path.indexOf('/cse') === 0)){

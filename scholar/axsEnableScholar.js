@@ -48,7 +48,7 @@ axsScholar.init = function(){
   document.addEventListener('keypress', axsScholar.extraKeyboardNavHandler,
                              true);
 
-  var cnlString = "<cnl>" +
+  var cnrString = "<cnr>" +
     "<list title='Cycle Results' next='RIGHT j' " +
     "prev='LEFT k' fwd='n' back='p'>" +
     "<item>" +
@@ -96,8 +96,8 @@ axsScholar.init = function(){
     "<target title='Previous page' hotkey='PGUP'>" +
     "//img[contains(@src,'nav_previous.gif')]/.." +
     "</target>" +
-    "</cnl>";
-  axsScholar.axsNavObj.navInit(cnlString, null);
+    "</cnr>";
+  axsScholar.axsNavObj.navInit(cnrString, null);
   axsScholar.HELP_POST = axsScholar.axsNavObj.globalHelpString();
 
   //Read the first thing on the page.

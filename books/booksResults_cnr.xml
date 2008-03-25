@@ -1,4 +1,4 @@
-<cnl>
+<cnr>
   <list title='Cycle Results' next='RIGHT j' prev='LEFT k' fwd='n' back='p'>
     <item>
       id('results_container')//div[@class='resbdy']
@@ -25,4 +25,4 @@
   <target title='Previous page' hotkey='PGUP'>
     //img[contains(@src,'nav_previous.gif')]/..
   </target>
-</cnl>
+</cnr>

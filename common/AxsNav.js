@@ -56,10 +56,10 @@ AxsNav.CYCLEPREV_STRING = ', cycle previous. ';
  */
 AxsNav.prototype.makeItemsArray = function(listNode, listIdx){
   var itemsArray = new Array();
-  var cnlItems = listNode.getElementsByTagName('item');
-  for (var i=0,entry; entry = cnlItems[i]; i++){
+  var cnrItems = listNode.getElementsByTagName('item');
+  for (var i=0,entry; entry = cnrItems[i]; i++){
     //Do this in a try-catch block since there are multiple
-    //sets of cnlItems and even if one set does not exist as expected,
+    //sets of cnrItems and even if one set does not exist as expected,
     //the other sets should still be available.
     try{
       var xpath = entry.textContent;
@@ -462,13 +462,13 @@ AxsNav.prototype.actOnTarget = function(target){
 
 /**
  * This function attaches the default AxsJAX key handler for navigation.
- * @param {Node} cnlDOM  DOM of the Content Navigation Listing.
+ * @param {Node} cnrDOM  DOM of the Content Navigation Rule.
  * @param {Array} emptyLists  An array of lists which have zero items.
  */
 
-AxsNav.prototype.setUpNavKeys = function(cnlDOM, emptyLists){
+AxsNav.prototype.setUpNavKeys = function(cnrDOM, emptyLists){
   var self = this;
-  var cnlNode = cnlDOM.firstChild;
+  var cnrNode = cnrDOM.firstChild;
   var i;
 
   this.topCharCodeMap = new Object();
@@ -484,7 +484,7 @@ AxsNav.prototype.setUpNavKeys = function(cnlDOM, emptyLists){
 
   //Moving through lists
   var keys = new Array();
-  this.nextListKeys = cnlNode.getAttribute('next') || '';
+  this.nextListKeys = cnrNode.getAttribute('next') || '';
   if (this.nextListKeys !== ''){
     keys = this.nextListKeys.split(' ');
   }
@@ -497,7 +497,7 @@ AxsNav.prototype.setUpNavKeys = function(cnlDOM, emptyLists){
                            } );
 
   keys = new Array();
-  this.prevListKeys = cnlNode.getAttribute('prev') || '';
+  this.prevListKeys = cnrNode.getAttribute('prev') || '';
   if (this.prevListKeys !== ''){
     keys = this.prevListKeys.split(' ');
   }
@@ -556,8 +556,8 @@ AxsNav.prototype.setUpNavKeys = function(cnlDOM, emptyLists){
 
 AxsNav.prototype.makeTargetsArray = function(listNode){
   var targetsArray = new Array();
-  var cnlTargets = listNode.getElementsByTagName('target');
-  for (var i=0,entry; entry = cnlTargets[i]; i++){
+  var cnrTargets = listNode.getElementsByTagName('target');
+  for (var i=0,entry; entry = cnrTargets[i]; i++){
     var target = new Object();
     target.xpath = entry.textContent;
     target.title = entry.getAttribute('title') || '';
@@ -574,24 +574,24 @@ AxsNav.prototype.makeTargetsArray = function(listNode){
  * Builds up the navigation system of lists of items.
  * This system uses the idea of multiple cursors and the visitor pattern.
  *
- * @param {string} cnlString  An XML string that contains the information needed
- *                            to build up the content navigation listings.
+ * @param {string} cnrString  An XML string that contains the information needed
+ *                            to build up the content navigation rule.
  *
  * @notypecheck {Function?} opt_customNavMethod
  *                                A custom navigation method provided by
  *                                the caller. This navigation method will be
- *                                given the DOM created from the cnlString, the
+ *                                given the DOM created from the cnrString, the
  *                                navigation array of lists of items,
  *                                and an array of all the lists which had
  *                                zero items. If this is null, the default
  *                                AxsJAX nav handler will be used.
  */
-AxsNav.prototype.navInit = function(cnlString, opt_customNavMethod){
+AxsNav.prototype.navInit = function(cnrString, opt_customNavMethod){
   var parser = new DOMParser();
-  var cnlDOM = parser.parseFromString(cnlString, 'text/xml');
+  var cnrDOM = parser.parseFromString(cnrString, 'text/xml');
 
   //Build up the navigation lists
-  var lists = cnlDOM.getElementsByTagName('list');
+  var lists = cnrDOM.getElementsByTagName('list');
   this.navArray = new Array();
   this.navListIdx = 0;
   this.navItemIdxs = new Array();
@@ -636,8 +636,8 @@ AxsNav.prototype.navInit = function(cnlString, opt_customNavMethod){
   this.targetsArray = new Array();
   this.targetsIdx = 0;
   var currentNode;
-  var cnlNode = cnlDOM.firstChild;
-  for (i=0, currentNode; currentNode = cnlNode.childNodes[i]; i++){
+  var cnrNode = cnrDOM.firstChild;
+  for (i=0, currentNode; currentNode = cnrNode.childNodes[i]; i++){
     if (currentNode.tagName == 'target'){
       var target = new Object();
       target.xpath = currentNode.textContent;
@@ -653,9 +653,9 @@ AxsNav.prototype.navInit = function(cnlString, opt_customNavMethod){
   //Bind lists and targets to keys if there is no custom handler specified
   if ( (opt_customNavMethod === null) ||
        (typeof(opt_customNavMethod) == 'undefined') ){
-    this.setUpNavKeys(cnlDOM,emptyLists);
+    this.setUpNavKeys(cnrDOM,emptyLists);
   } else {
-    opt_customNavMethod(cnlDOM,this.navArray,emptyLists,this.targetsArray);
+    opt_customNavMethod(cnrDOM,this.navArray,emptyLists,this.targetsArray);
   }
 };
 
@@ -724,8 +724,8 @@ AxsNav.prototype.localHelpString = function(){
 /**
  * This function sets the lens to be used when going to an item's element.
  *
- * @param {AxsLens?} lens  The AxsLens object to be used.
- *                         If null, no lens will be used.
+ * @param {Object?} lens  The AxsLens object to be used.
+ *                        If null, no lens will be used.
  */
 AxsNav.prototype.setLens = function(lens){
   this.lens = lens;
