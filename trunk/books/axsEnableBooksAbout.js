@@ -62,7 +62,7 @@ axsBooksAbout.init = function(){
   axsBooksAbout.expandAllMoreLinks();
 
 
-  var cnlString = "<cnl next='DOWN h' prev='UP l'>" +
+  var cnrString = "<cnr next='DOWN h' prev='UP l'>" +
     "<list title='Search results' next='RIGHT j' prev='LEFT k'>" +
     "<item>" +
     "id('search')//div[@class='searchresult']" +
@@ -134,9 +134,9 @@ axsBooksAbout.init = function(){
     "/html/body/table[@class='lads']/tbody/tr[*]/td[1]" +
     "</item>" +
     "</list>" + 
-    "</cnl>";
+    "</cnr>";
 
-  axsBooksAbout.axsNavObj.navInit(cnlString, null);
+  axsBooksAbout.axsNavObj.navInit(cnrString, null);
   axsBooksAbout.fixAllPageLinks();
 
   // Speak the page title

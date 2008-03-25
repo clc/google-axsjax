@@ -1,4 +1,4 @@
-<cnl next='DOWN h' prev='UP l'>
+<cnr next='DOWN h' prev='UP l'>
         <list title='One Box' hotkey='1' next='RIGHT j' prev='LEFT k' onEmpty='There is no one box on this page.'>
 		<item count='1'>
                   id('res')/p[*]
@@ -50,4 +50,4 @@
         <target title='Previous page' hotkey='PGUP'>
           id('np')/..
         </target>
-</cnl>
+</cnr>
