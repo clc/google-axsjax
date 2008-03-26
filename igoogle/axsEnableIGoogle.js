@@ -131,7 +131,6 @@ axsIG.announceFirstGadget = function(){
   axsIG.axsJAXObj.goTo(firstElem);
 };
 
-
 axsIG.increaseMagnification = function(){
   axsIG.magSize += 0.10;
   axsIG.axsLensObj.setMagnification(axsIG.magSize);
@@ -140,6 +139,11 @@ axsIG.increaseMagnification = function(){
 axsIG.decreaseMagnification = function(){
   axsIG.magSize -= 0.10;
   axsIG.axsLensObj.setMagnification(axsIG.magSize);
+};
+
+
+axsIG.cleanUpGadget = function(modboxNode){
+  modboxNode.getElementsByTagName('DIV')
 };
 
 window.setTimeout("axsIG.init();",1000);
