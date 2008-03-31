@@ -193,12 +193,12 @@ axsWebSearch.extraKeyboardNavHandler = function(evt){
     return false;
   }
 
-  if ( (evt.charCode == 45) || (evt.charCode == 95) ){ // - or _ (minus symbol)
+  if ( (evt.charCode == 45) || (evt.charCode == 111) ){ // - (minus symbol) or o
     axsWebSearch.decreaseMagnification();
     return false;
   }
 
-  if ( (evt.charCode == 61) || (evt.charCode == 43) ){ // = (equals symbol)
+  if ( (evt.charCode == 61) || (evt.charCode == 105) ){ // = (equal symbol) or i
     axsWebSearch.increaseMagnification();
     return false;
   }
