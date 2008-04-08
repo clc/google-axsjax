@@ -453,7 +453,7 @@ axsGMail.CV_domAttrModifiedHandler = function(evt){
   var target = evt.target;
 
   //Going to a new message causes an arrow to become visible to the left of the message
-  if ( (attrib == 'class') && (newVal == 'AG5mQe NGQVAc') ){
+  if ( (attrib == 'class') && (newVal == 'AG5mQe') ){
     var cvItem = target.nextSibling;
     if (cvItem.tagName == 'IMG'){
       cvItem = cvItem.nextSibling;
