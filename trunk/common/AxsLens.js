@@ -26,18 +26,27 @@
  * @constructor
  */
 var AxsLens = function(axsJAXObj){
+  this.multiplier = 1.5;
+
   var activeDoc = axsJAXObj.getActiveDocument();
   this.lens = activeDoc.createElement('span');
-  
+
   this.lens.style.backgroundColor = '#CCE6FF';
-  this.lens.style.fontSizeAdjust = 0.52;
   this.lens.style.borderColor = '#0000CC';
   this.lens.style.borderWidth = 'medium';
   this.lens.style.borderStyle = 'groove';
   this.lens.style.position = 'absolute';
+  this.magnifyText();
 
   this.lens.style.display = 'none';
   activeDoc.body.appendChild(this.lens);
+
+  // Firefox on Windows can use fontSizeAdjust which is easier
+  // and more precise. Use sniffing code from example at:
+  // http://www.mozilla.org/docs/web-developer/sniffer/browser_type.html
+  var agt = navigator.userAgent.toLowerCase();
+  this.is_win   = ( (agt.indexOf("win")!=-1) || (agt.indexOf("16bit")!=-1) );
+  this.is_win = false;
 };
 
 AxsLens.prototype.view = function(targetNode){
@@ -61,6 +70,9 @@ AxsLens.prototype.view = function(targetNode){
 
   this.lens.appendChild(targetNode.cloneNode(true));
 
+  this.magnifyText();
+  this.enlargeImages();
+
   this.lens.style.top = top + 'px';
   this.lens.style.left = left + 'px';
   this.lens.style.zIndex = 999;
@@ -69,10 +81,41 @@ AxsLens.prototype.view = function(targetNode){
 
 
 AxsLens.prototype.setMagnification = function(multiplier){
-  //fontSizeAdjust is based on the aspect value of the font.
-  //The default aspect value of Arial is .52
-  var fontSizeAdjust = multiplier * 0.52;
-
-
-  this.lens.style.fontSizeAdjust = fontSizeAdjust;
+  this.multiplier = multiplier;
+  this.magnifyText();
+  this.enlargeImages();
 };
+
+AxsLens.prototype.enlargeImages = function(){
+  var images = this.lens.getElementsByTagName('img');
+  for (var i=0,image; image = images[i]; i++){
+    if (!image.hasAttribute('Axs_OrigHeight')){
+      image.setAttribute('Axs_OrigHeight', image.height);
+      image.setAttribute('Axs_OrigWidth', image.width);
+    }
+    image.height = image.getAttribute('Axs_OrigHeight') * this.multiplier;
+    image.width = image.getAttribute('Axs_OrigWidth') * this.multiplier;
+  }
+};
+
+AxsLens.prototype.magnifyText = function(){
+  if (this.is_win){
+    // fontSizeAdjust is based on the aspect value of the font.
+    // The default aspect value of Arial is .52
+    var fontSizeAdjust = this.multiplier * 0.52;
+    this.lens.style.fontSizeAdjust = fontSizeAdjust;
+  } else if (this.lens.firstChild){
+    var descendants = this.lens.firstChild.getElementsByTagName('*');
+    for (var i=0, child; child=descendants[i]; i++){
+      if (!child.Axs_OrigFontSize){
+        var style = window.getComputedStyle(child, null);
+        child.Axs_OrigFontSize =  style.fontSize.substring(0,style.fontSize.length-2);
+      }
+    }
+    for (i=0, child; child=descendants[i]; i++){
+      child.style.fontSize = (child.Axs_OrigFontSize * this.multiplier) + 'px !important';
+    }
+  }
+};
+
+var foo = false;

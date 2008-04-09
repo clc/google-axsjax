@@ -94,7 +94,7 @@ axsWebSearch.init = function(){
       "id('res')//td[@class='j']/ul/li[text()='Make sure all words are spelled correctly.']/parent::*/parent::*" +
       "</item>" +
       "<item>" +
-      "id('res')/div[*]/div[@class='g']" +
+      "id('res')//div[@class='g']" +
       "</item>" +
       "<target title='Next page' trigger='listTail'>" +
       "id('nn')/.." +
@@ -116,6 +116,9 @@ axsWebSearch.init = function(){
       "prev='LEFT k' onEmpty='There are no related searches.'>" +
       "<item>" +
       "id('res')/table[*]/tbody/tr[*]/td[*]/a" +
+      "</item>" +
+      "<item>" +
+      "body/table[*]/tbody/tr[*]/td[*]/a/b/.." +
       "</item>" +
       "</list>" +
       "<list title='Alternate Search Categories' hotkey='c' next='RIGHT j' " +
