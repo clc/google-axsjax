@@ -38,7 +38,9 @@ axsWebSearch.WEB_SEARCH_URL = 'http://www.google.com/search?q=';
 //These are strings to be spoken to the user
 axsWebSearch.HELP_STRING_PRE = 'The following shortcut keys are available. ';
 axsWebSearch.HELP_STRING_POST =  'Slash, enter search field. ' +
-                                 'Escape, leave search field. ';
+                                 'Escape, leave search field. ' +
+                                 'Equals, enlarge the current item. ' +
+                                 'Minus, shrink the current item. ';
 
 axsWebSearch.PAGECONTENT_RELATED_SEARCH_STRING = 'Searches related to:';
 
@@ -196,12 +198,12 @@ axsWebSearch.extraKeyboardNavHandler = function(evt){
     return false;
   }
 
-  if ( (evt.charCode == 45) || (evt.charCode == 111) ){ // - (minus symbol) or o
+  if (evt.charCode == 45){ // - (minus symbol)
     axsWebSearch.decreaseMagnification();
     return false;
   }
 
-  if ( (evt.charCode == 61) || (evt.charCode == 105) ){ // = (equal symbol) or i
+  if (evt.charCode == 61){ // = (equal symbol) 
     axsWebSearch.increaseMagnification();
     return false;
   }
