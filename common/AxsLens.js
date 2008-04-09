@@ -46,7 +46,6 @@ var AxsLens = function(axsJAXObj){
   // http://www.mozilla.org/docs/web-developer/sniffer/browser_type.html
   var agt = navigator.userAgent.toLowerCase();
   this.is_win   = ( (agt.indexOf("win")!=-1) || (agt.indexOf("16bit")!=-1) );
-  this.is_win = false;
 };
 
 AxsLens.prototype.view = function(targetNode){
