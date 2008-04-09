@@ -13,7 +13,7 @@
                   id('res')//td[@class='j']/ul/li[text()='Make sure all words are spelled correctly.']/../..
 		</item>
 		<item>
-		    id('res')/div[*]/div[@class='g']
+		    id('res')//div[@class='g']
 		</item>
 		<target title='Next page' trigger='listTail'>
                   id('nn')/..
@@ -36,7 +36,10 @@
 		<item>
 		    id('res')/table[*]/tbody/tr[*]/td[*]/a
 		</item>
-	</list>
+		<item>
+		    body/table[*]/tbody/tr[*]/td[*]/a/b/..
+		</item>
+  </list>
 
         <list title='Alternate Search Categories' hotkey='c' next='RIGHT j' prev='LEFT k' onEmpty='There are no other categories to search within.'>
 		<item>
