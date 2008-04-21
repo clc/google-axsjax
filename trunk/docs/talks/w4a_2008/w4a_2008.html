@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xml:lang="en"
+      lang="en">
+<head>
+    <title>AxsJAX: A Talking Translation Bot Using Google IM</title>
+    <meta http-equiv="Content-Type"
+          content="text/html; charset=us-ascii" />
+    <meta name="copyright"
+          content="Copyright &copy; 2008 Google" />
+    <meta name="font-size-adjustment"
+          content="-1" />
+    <link rel="stylesheet"
+          href="w3c-blue2.css"
+          type="text/css"
+          media="screen, projection, print" />
+    <script src="slidy.js"
+          type="text/javascript">
+    </script>
+</head>
+
+<body>
+    <!-- this defines the slide background -->
+
+    <div class="background">
+        <div class="header">
+            <!-- sized and colored via CSS -->
+            </div>
+            <!-- hidden style graphics to ensure they are saved with other content -->
+        <img class="hidden"
+             src="bullet.png"
+             alt="" /> <img class="hidden"
+             src="fold.bmp"
+             alt="" /> <img class="hidden"
+             src="unfold.bmp"
+             alt="" /> <img class="hidden"
+             src="fold-dim.bmp"
+             alt="" /> <img class="hidden"
+             src="nofold-dim.bmp"
+             alt="" /> <img class="hidden"
+             src="unfold-dim.bmp"
+             alt="" /> <img class="hidden"
+             src="bullet-fold.gif"
+             alt="" /> <img class="hidden"
+             src="bullet-unfold.gif"
+             alt="" /> <img class="hidden"
+             src="bullet-fold-dim.gif"
+             alt="" /> <img class="hidden"
+             src="bullet-nofold-dim.gif"
+             alt="" /> <img class="hidden"
+             src="bullet-unfold-dim.gif"
+             alt="" /> 
+
+        <div class="footer">
+            <!-- modify the following text as appropriate -->
+            AxsJAX: A Talking Translation Bot Using Google IM<br />
+             April 2008
+        </div>
+    </div>
+
+    <div class="slide cover"
+         style="background-color: white">
+        <div class="header">
+            <h1>AxsJAX: A Talking Translation Bot Using Google IM</h1>
+
+            <p>Charles L. Chen,
+            &lt;<a href="mailto:clchen@google.com">clchen@google.com</a>&gt;</p>
+
+            <p>T.V. Raman,
+            &lt;<a href="mailto:raman@google.com">raman@google.com</a>&gt;</p>
+        </div><br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+         <img style="display: block; margin-left: auto; margin-right: auto"
+             src="braille_logo.png"
+             alt="The Google logo in Braille." />
+    </div>
+
+    <div class="slide">
+        <h1>Overview</h1>
+
+        <ul>
+            <li>Introduction</li>
+
+            <li>User interaction model for IM chat in Gmail</li>
+
+            <li>Injecting ARIA</li>
+
+            <li>Talking Translation Bot</li>
+
+            <li>Q &amp; A</li>
+        </ul>
+    </div>
+
+    <div class="slide">
+        <h1>Introduction</h1>
+        <ul>
+            <li>
+                Web 1.0
+                <ul>
+                    <li>Web pages are static documents</li>
+
+                    <li>Interaction limited to simple form
+                    controls</li>
+                </ul>
+            </li>
+
+            <li>
+                Web 2.0
+                <ul>
+                    <li>Web pages are dynamic</li>
+
+                    <li>Interaction with custom complex
+                    widgets</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div class="slide">
+        <h1>WAI-ARIA</h1>
+        <ul>
+            <li>AT need to ask the browser what an element is</li>
+
+            <li>Browsers need to identify that element and its
+            associated properties in a meaningful way</li>
+
+            <li>
+                <a href="http://www.w3.org/WAI/intro/aria">ARIA</a>
+                provides this 
+
+                <ul>
+                    <li>Map leaf level widgets to their equivalents
+                    in traditional desktop applications</li>
+
+                    <li>When there is an update, give the AT some
+                    hints about what should be spoken</li>
+
+                    <li>DOM + JS: assembly language of the
+                    web</li>
+                  
+                    <li>ARIA adds a few special operators</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div class="slide">
+        <h1>WAI-ARIA</h1>
+        <ul>
+            <li>
+                Roles (with related properties)
+                <ul>
+                    <li>"slider" role for DIVs that have JavaScript
+                    + CSS which act as sliders</li>
+
+                    <li>AT will see these DIVs as slider widgets in
+                    a desktop app</li>
+                </ul>
+            </li>
+
+            <li>
+                Live Regions
+                <ul>
+                    <li>Regions with dynamic content</li>
+                    <li>Hint for how updates to these regions
+                    should be processed</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+
+
+    <div class="slide">
+        <h1>User interaction model for IM chat in Gmail</h1>
+        <ul>
+            <li>
+                Common contact list used for e-mail and instant messaging
+            </li>
+
+            <li>
+                Chat can be initiated from a single shortcut key
+            </li>
+
+            <li>
+                Display updates when new chat messages are sent/received
+            </li>
+
+            <li>
+                AT should speak these display updates
+            </li>
+        </ul>
+    </div>
+
+
+
+    <div class="slide">
+        <h1>Injecting ARIA</h1>
+        <ul>
+            <li>
+                <a href='http://google-axsjax.googlecode.com'>AxsJAX</a>
+                <ul>
+                  <li>Web applications are more than the sum of their leaf level widgets</li>
+                  <li>Application specific higher level logic for a smooth user experience</li>
+                  <li>JavaScript framework for injecting accessibility enhancements in existing Web 2.0 applications</li>
+                </ul>
+
+            </li>
+
+            <li>
+                Enhancements for Gmail IM
+                <ul>
+                  <li>Added <code>aria-live="rude"</code></li>
+                  <li>Gives the new message the highest priority</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+
+
+    <div class="slide">
+        <h1><a href='http://googletalk.blogspot.com/2007/12/merry-christmas-god-jul-and.html'>Google Translation Bot</a></h1>
+
+        <ul>
+<li>Uses <a href='http://www.google.com/translate_t'>Google Translate</a></li>
+                  <li>Add a translation bot into your contact list (en2zh@bot.talk.google.com)</li>
+                  <li>When you send the bot a message, the bot echoes the translated message back.</li>
+                </ul>
+
+    </div>
+
+    <div class="slide">
+        <h1>Talking Translation Bot</h1>
+          <ul>
+<li>A translation bot that chats on IM + <br/> ARIA markup that makes the AT speak chat messages + <br/> an AT that supports multiple languages <br/> = <br/> a Talking Translation Bot</li>
+        </ul>
+    </div>
+
+
+
+    <div class="slide">
+        <h1>Q &amp; A</h1>
+
+        <ul>
+            <li>Thank you for your time!</li>
+        </ul>
+    </div>
+</body>
+</html>
