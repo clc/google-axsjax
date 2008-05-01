@@ -108,13 +108,13 @@ AxsLens.prototype.magnifyText = function(){
     for (var i=0, child; child=descendants[i]; i++){
       if (!child.Axs_OrigFontSize){
         var style = window.getComputedStyle(child, null);
-        child.Axs_OrigFontSize =  style.fontSize.substring(0,style.fontSize.length-2);
+        var sizeStr = style.fontSize;
+        child.Axs_OrigFontSize = sizeStr.substring(0,sizeStr.length-2);
       }
     }
     for (i=0, child; child=descendants[i]; i++){
-      child.style.fontSize = (child.Axs_OrigFontSize * this.multiplier) + 'px !important';
+      child.style.fontSize = (child.Axs_OrigFontSize * this.multiplier)
+                             + 'px !important';
     }
   }
 };
-
-var foo = false;
