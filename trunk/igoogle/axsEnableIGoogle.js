@@ -24,14 +24,17 @@
 // create namespace
 var axsIG = {};
 
-//These are strings used to find specific links
+//These are strings used to find specific nodes
+axsIG.unavailableInfoXPath = './/*[text() == "Information is temporarily unavailable."]';
 
 //These are strings to be spoken to the user
-axsIG.HELP_STRING_PRE = 'The following shortcut keys are available. ';
-axsIG.HELP_STRING_POST = 'Slash, jump to search field. ' +
-                         'Escape, leave the search field. ' +
-                         'Equals, increase magnification. ' +
-                         'Minus, decrease magnification. '; 
+axsIG.HELP_STRING = 'The following shortcut keys are available. ' +
+                    'N, next gadget. ' +
+                    'P, previous gadget. ' +
+                    'Slash, jump to search field. ' +
+                    'Escape, leave the search field. ' +
+                    'Equals, increase magnification. ' +
+                    'Minus, decrease magnification. ';
 
 
 
@@ -59,7 +62,7 @@ axsIG.init = function(){
   axsIG.axsLensObj.setMagnification(axsIG.magSize);
 
   var cnrString = "<cnr next='' prev=''>" +
-                  "<list title='Gadgets' hotkey='' next='n' prev='p'>" +
+                  "<list title='Gadgets' hotkey='' next='' prev=''>" +
                   "<item>" +
                   "id('modules')//div[@class='modbox']" +
                   "</item>" +
@@ -75,7 +78,7 @@ axsIG.init = function(){
 
   // Speak the first gadget
   // Use a set time out just in case the browser is not entirely ready yet.
-  window.setTimeout(axsIG.announceFirstGadget,100);
+  window.setTimeout(axsIG.goToNextGadget,100);
 };
 
 
@@ -113,23 +116,24 @@ axsIG.keyHandler = function(evt){
     return false;
   }
 
+  if (evt.charCode == 110){ // n
+    axsIG.goToNextGadget();
+    return false;
+  }
+
+  if (evt.charCode == 112){ // p
+    axsIG.goToPrevGadget();
+    return false;
+  }
+
   if (evt.charCode == 63){ // ? (question mark)
-    var helpStr = axsIG.HELP_STRING_PRE +
-                  axsIG.axsNavObj.localHelpString() +
-                  axsIG.HELP_STRING_POST;
-    axsIG.axsJAXObj.speakTextViaNode(helpStr);
+    axsIG.axsJAXObj.speakTextViaNode(axsIG.HELP_STRING);
     return false;
   }
 
   return true;
 };
 
-
-axsIG.announceFirstGadget = function(){
-  var firstElem = axsIG.axsNavObj.nextItem().elem;
-  axsIG.axsLensObj.view(firstElem);
-  axsIG.axsJAXObj.goTo(firstElem);
-};
 
 axsIG.increaseMagnification = function(){
   axsIG.magSize += 0.10;
@@ -142,8 +146,37 @@ axsIG.decreaseMagnification = function(){
 };
 
 
-axsIG.cleanUpGadget = function(modboxNode){
-  modboxNode.getElementsByTagName('DIV')
+axsIG.cleanUpGadgetTextInLens = function(){
+  var menuControl = axsIG.axsJAXObj.evalXPath(".//a[@class='ddbox']",axsIG.axsLensObj.lens)[0];
+  var minControl = axsIG.axsJAXObj.evalXPath(".//a[@class='minbox']",axsIG.axsLensObj.lens)[0];
+  var delControl = axsIG.axsJAXObj.evalXPath(".//a[@class='delbox']",axsIG.axsLensObj.lens)[0];
+  menuControl.tabIndex = -1;
+  minControl.tabIndex = -1;
+  delControl.tabIndex = -1;
+  var garbageNodes = axsIG.axsJAXObj.evalXPath(axsIG.unavailableInfoXPath,axsIG.axsLensObj.lens);
+  if (garbageNodes === null){
+    return;
+  }
+  for (var i=0, node; node=garbageNodes[i]; i++){
+    node.textContent = "";
+  }
+};
+
+
+
+axsIG.goToNextGadget = function(){
+  var gadget = axsIG.axsNavObj.nextItem().elem;
+  axsIG.axsLensObj.view(gadget);
+  axsIG.cleanUpGadgetTextInLens();
+  axsIG.axsJAXObj.goTo(axsIG.axsLensObj.lens);
+};  
+
+
+axsIG.goToPrevGadget = function(){
+  var gadget = axsIG.axsNavObj.prevItem().elem;
+  axsIG.axsLensObj.view(gadget);
+  axsIG.cleanUpGadgetTextInLens();
+  axsIG.axsJAXObj.goTo(axsIG.axsLensObj.lens);
 };
 
 window.setTimeout("axsIG.init();",1000);
