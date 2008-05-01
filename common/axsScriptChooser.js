@@ -61,13 +61,6 @@ function pickScript(){
       theScript.src = baseURL + 'igoogle/axsEnableIGoogle.js';
       shouldInsertScripts = true;
     }
-    else if ((prefix == 'www')
-        || (path.indexOf('/search') === 0)
-        || (path.indexOf('/custom') === 0)
-        || (path.indexOf('/cse') === 0)){
-      theScript.src = baseURL + 'websearch/axsEnableWebSearch.js';
-      shouldInsertScripts = true;
-    }
     else if ( (prefix == 'images') && (path.indexOf('/images') === 0 ) ){
       theScript.src = baseURL + 'imagesearch/axsEnableImageSearch.js';
       shouldInsertScripts = true;
@@ -86,6 +79,17 @@ function pickScript(){
       } else {
         theScript.src = baseURL + 'gmail/axsEnableGMail.js';
       }
+      shouldInsertScripts = true;
+    }
+    else if (path.indexOf('/calendar') === 0 ){
+      theScript.src = baseURL + 'calendar/axsEnableCalendar.js';
+      shouldInsertScripts = true;
+    }
+    else if ((prefix == 'www')
+        || (path.indexOf('/search') === 0)
+        || (path.indexOf('/custom') === 0)
+        || (path.indexOf('/cse') === 0)){
+      theScript.src = baseURL + 'websearch/axsEnableWebSearch.js';
       shouldInsertScripts = true;
     }
   }

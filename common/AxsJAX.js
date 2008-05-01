@@ -284,8 +284,18 @@ AxsJAX.prototype.putNullForNoAltImages = function(targetNode){
  */
 AxsJAX.prototype.clickElem = function(targetNode, shiftKey){
   var activeDoc = this.getActiveDocument();
+  //Generate a click event and send it to the target
   var evt = activeDoc.createEvent('MouseEvents');
   evt.initMouseEvent('click',true,true,activeDoc.defaultView,
+                     1,0,0,0,0,false,false,shiftKey,false,0,null);
+  //Use a try block here so that if the AJAX fails and it is a link,
+  //it can still fall through and retry by setting the document.location.
+  try{
+    targetNode.dispatchEvent(evt);
+  } catch(e){}
+  //Some AJAX apps use mouse down instead of click
+  evt = activeDoc.createEvent('MouseEvents');
+  evt.initMouseEvent('mousedown',true,true,activeDoc.defaultView,
                      1,0,0,0,0,false,false,shiftKey,false,0,null);
   //Use a try block here so that if the AJAX fails and it is a link,
   //it can still fall through and retry by setting the document.location.
@@ -298,13 +308,15 @@ AxsJAX.prototype.clickElem = function(targetNode, shiftKey){
   if ( !targetNode.onclick &&
        (targetNode.tagName == 'A') &&
        targetNode.href &&
-       (targetNode.href.indexOf('http') === 0) ){
+       ( (targetNode.href.indexOf('http') === 0) || 
+	     (targetNode.href.indexOf('javascript:') === 0)) ){
     if (shiftKey){
       window.open(targetNode.href);
     } else {
       document.location = targetNode.href;
     }
   }
+  
 };
 
 
