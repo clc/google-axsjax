@@ -380,4 +380,4 @@ axsBooksPreview.charCodeMap = {
 };
 
 
-axsBooksPreview.init();
+window.setTimeout(axsBooksPreview.init,500);
