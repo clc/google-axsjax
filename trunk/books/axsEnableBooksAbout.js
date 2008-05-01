@@ -278,4 +278,5 @@ axsBooksAbout.charCodeMap = {
   47 : axsBooksAbout.goSearch
 };
 
-axsBooksAbout.init();
+
+window.setTimeout(axsBooksAbout.init,0);

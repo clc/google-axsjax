@@ -142,4 +142,4 @@ axsBooksResults.charCodeMap = {
 47 : axsBooksResults.goSearch
 };
 
-axsBooksResults.init();
+window.setTimeout(axsBooksResults.init,0);
