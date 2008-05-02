@@ -185,11 +185,11 @@ axsCal.openAddFriendCalendar = function(){
 /* Functions for working with the events on the current calendar */
 axsCal.updateEventsArray = function(){
   var rootNode = document.getElementById('allDayGrid');
-  var xpath = "//div[@class='adc']";
+  var xpath = ".//div[@class='adc']";
   var allDayEvents = axsCal.axsJAXObj.evalXPath(xpath, rootNode); 
   
   rootNode = document.getElementById('grid');
-  xpath = "//div[@class='chip']";
+  xpath = ".//div[@class='chip']";
   var regularEvents = axsCal.axsJAXObj.evalXPath(xpath, rootNode);
   
   axsCal.eventsArray = new Array();
@@ -290,7 +290,7 @@ axsCal.activateInfowindow = function(){
 
 axsCal.deleteEventInfowindow = function(){
   var rootNode = document.getElementById('infowindow');
-  var xpath = "//font/a[text()='Delete']";
+  var xpath = ".//font/a[text()='Delete']";
   var deleteLink = axsCal.axsJAXObj.evalXPath(xpath, rootNode)[0];
   axsCal.axsJAXObj.clickElem(deleteLink,false);  
 };
