@@ -2,7 +2,7 @@
 //http://www.minijuegosgratis.com/juegos/jawbreaker/jawbreaker.htm
 
 var axsJb = {};
-
+                                
 axsJb.keyboardLocked = false;
 axsJb.row = 0;
 axsJb.col = 0;
@@ -12,6 +12,7 @@ axsJb.HELP_STRING = 'The following keys are available. ' +
                         'N, start a new game. ' +
                         'Arrow keys or H,J,K,L, navigate the board one ball at a time. ' +
                         'A,E,T,B, jump to the edges of the board. ' +
+                        'Capital R,G,B,Y,P, jump to the next ball of that color. ' +
                         'R, read the current row. ' +
                         'C, read the current column. ' +
                         'S, read the current stats. ' +
@@ -157,7 +158,72 @@ axsJb.findFirstBallInRow = function(){
   return -1;
 };
 
+axsJb.gotoNext = function(color){
+  var uTargetImgUrl = 'p_' + color + '.gif';
+  var sTargetImgUrl = 's_' + color + '.gif';
+  var col = axsJb.col + 1;
+  var row = axsJb.row;
+  var ballImg = null;
+  for ( ; col <= axsJb.MAXCOL; col++){
+    ballImg = axsJb.getBallImgNode(row,col);
+    if ((axsJb.getUrlOfBallImg(ballImg) == uTargetImgUrl) || (axsJb.getUrlOfBallImg(ballImg) == sTargetImgUrl)){
+      axsJb.col = col;
+      axsJb.row = row;
+      axsJb.getCurrentPosition();
+      return;
+    }
+  }
+  row++;
+  for ( ; row <= axsJb.MAXROW; row++){
+    for (col = 0; col <= axsJb.MAXCOL; col++){
+      ballImg = axsJb.getBallImgNode(row,col);
+      if ((axsJb.getUrlOfBallImg(ballImg) == uTargetImgUrl) || (axsJb.getUrlOfBallImg(ballImg) == sTargetImgUrl)){
+        axsJb.col = col;
+        axsJb.row = row;
+        axsJb.getCurrentPosition();
+        return;
+      }
+    }
+  }
+  ballImg = axsJb.getBallImgNode(axsJb.row,axsJb.col);
+  if ((axsJb.getUrlOfBallImg(ballImg) == uTargetImgUrl) || (axsJb.getUrlOfBallImg(ballImg) == sTargetImgUrl)){
+    axsJb.getCurrentPosition();
+    return;
+  }
+  axsJb.axsJaxObj.speakTextViaNode('No ' + color + ' left.');
+};
 
+
+axsJb.undo = function(){
+  var undoButton = document.getElementById('menu-undo');
+  if (undoButton.disabled === true){
+    axsJb.axsJaxObj.speakTextViaNode('Nothing to undo.');
+  } else {
+    axsJb.axsJaxObj.clickElem(undoButton, false);
+    axsJb.axsJaxObj.speakTextViaNode('Last action undone.');
+  }
+};
+
+axsJb.up = function(){
+  axsJb.row--;
+  if (axsJb.row < 0){ axsJb.row = 0; }
+  axsJb.getCurrentPosition();
+};
+axsJb.down = function(){
+  axsJb.row++;
+  if (axsJb.row > axsJb.MAXROW){  axsJb.row = axsJb.MAXROW; }
+  axsJb.getCurrentPosition();
+};
+axsJb.left = function(){
+  axsJb.col--;
+  if (axsJb.col < 0){ axsJb.col = 0; }
+  axsJb.getCurrentPosition();
+};
+axsJb.right = function(){
+  axsJb.col++;
+  if (axsJb.col > axsJb.MAXCOL){ axsJb.col = axsJb.MAXCOL; }
+  axsJb.getCurrentPosition();
+};
 
 axsJb.keyboardHandler = function(evt){
   if (evt.charCode == 110){ // n
@@ -171,93 +237,13 @@ axsJb.keyboardHandler = function(evt){
     axsJb.axsJaxObj.speakTextViaNode(axsJb.HELP_STRING);
   }
 
-  if (axsJb.keyboardLocked === true){
-    return;
-  }
+  if (axsJb.keyboardLocked === true) return false;
+  
+  var command =  axsJb.keyCodeMap[evt.keyCode] ||
+                 axsJb.charCodeMap[evt.charCode];
 
-  if (evt.charCode == 117){ // u
-    var undoButton = document.getElementById('menu-undo');
-    if (undoButton.disabled === true){
-      axsJb.axsJaxObj.speakTextViaNode('Nothing to undo.');
-    } else {
-      axsJb.axsJaxObj.clickElem(undoButton, false);
-      axsJb.axsJaxObj.speakTextViaNode('Last action undone.');
-    }
-  }
-  if (evt.charCode == 97){      //a
-    var targCol = axsJb.findFirstBallInRow();
-    if (targCol != -1){    
-      axsJb.col = targCol;
-    }
-    axsJb.getCurrentPosition();
-  }
-  if (evt.charCode == 101){       //e
-    axsJb.col = axsJb.MAXCOL;
-    axsJb.getCurrentPosition();
-  }
-  if (evt.charCode == 116){      //t
-    var targRow = axsJb.findFirstBallInCol();
-    if (targRow != -1){    
-      axsJb.row = targRow;
-    }
-    axsJb.getCurrentPosition();
-  }
-  if (evt.charCode == 98){       //b
-    axsJb.row = axsJb.MAXROW;
-    axsJb.getCurrentPosition();
-  }
-
-  if (evt.charCode == 61){       //= (equals)
-    axsJb.sayColorCounts();
-  }
-
-  if (evt.keyCode == 38 ||
-      evt.charCode == 107){ // Up arrow or k
-    axsJb.row--;
-    if (axsJb.row < 0){ axsJb.row = 0; }
-    axsJb.getCurrentPosition();
-  }
-  if (evt.keyCode == 37 ||
-      evt.charCode == 104){ // Left arrow  or h
-    axsJb.col--;
-    if (axsJb.col < 0){ axsJb.col = 0; }
-    axsJb.getCurrentPosition();
-  }
-  if (evt.keyCode == 40 ||
-      evt.charCode == 106){ // Down arrow or j 
-    axsJb.row++;
-    if (axsJb.row > axsJb.MAXROW){  axsJb.row = axsJb.MAXROW; }
-    axsJb.getCurrentPosition();
-  }
-  if (evt.keyCode == 39 ||
-      evt.charCode == 108){ // Right arrow or l
-    axsJb.col++;
-    if (axsJb.col > axsJb.MAXCOL){ axsJb.col = axsJb.MAXCOL; }
-    axsJb.getCurrentPosition();
-  }
-  if (evt.charCode == 32){ // Space
-    axsJb.axsJaxObj.clickElem(axsJb.getBallImgNode(axsJb.row,axsJb.col), false);
-    if (axsJb.getUrlOfBallImg(axsJb.getBallImgNode(axsJb.row,axsJb.col)).indexOf('s_') === 0){
-      axsJb.sayStats();
-    } else {      
-      var totalScore = document.getElementById('userscore').textContent;
-      axsJb.axsJaxObj.speakTextViaNode('Total ' + totalScore);
-    }  
-  }
-  if (evt.charCode == 115){ // s
-    axsJb.sayStats();
-  }
-  if (evt.charCode == 99){ // c
-    axsJb.speakCol();
-  }
-  if (evt.charCode == 114){ // r
-    axsJb.speakRow();
-  }
-  if (evt.charCode == 100){ //d
-    jb.deselectBlocks();
-    axsJb.axsJaxObj.speakTextViaNode('Deselected. ');
-  }
-
+  if (command)  return  command();
+  return false;
 };
 
 axsJb.init = function(){
@@ -274,5 +260,61 @@ axsJb.init = function(){
     window.setTimeout(function(){axsJb.axsJaxObj.speakTextViaNode(textStr);},0);
   };
 };
+
+axsJb.keyCodeMap = {
+  38 : axsJb.up,    // Up arrow
+  40 : axsJb.down,    // Down arrow
+  37 : axsJb.left,    // Left arrow
+  39 : axsJb.right    // Right arrow
+};
+
+axsJb.charCodeMap = {
+  117 : axsJb.undo,   // u
+   97 : function() {    // a
+          var targCol = axsJb.findFirstBallInRow();
+          if (targCol != -1) axsJb.col = targCol;
+          axsJb.getCurrentPosition();
+        },
+  101 : function() {    // e
+          axsJb.col = axsJb.MAXCOL;
+          axsJb.getCurrentPosition();
+        },
+  116 : function() {    // t
+          var targRow = axsJb.findFirstBallInCol();
+          if (targRow != -1) axsJb.row = targRow;
+          axsJb.getCurrentPosition();
+        },
+   98 : function() {    // b
+          axsJb.row = axsJb.MAXROW;
+          axsJb.getCurrentPosition();
+        },
+   61 : axsJb.sayColorCounts,    // =
+  107 : axsJb.up,    // k
+  104 : axsJb.down,    // h
+  106 : axsJb.left,    // j
+  108 : axsJb.right,    // l
+   32 : function() {    // SPACE
+          axsJb.axsJaxObj.clickElem(axsJb.getBallImgNode(axsJb.row,axsJb.col), false);
+          if (axsJb.getUrlOfBallImg(axsJb.getBallImgNode(axsJb.row,axsJb.col)).indexOf('s_') === 0){
+            axsJb.sayStats();
+          } else {
+            var totalScore = document.getElementById('userscore').textContent;
+            axsJb.axsJaxObj.speakTextViaNode('Total ' + totalScore);
+          }
+        },
+  115 : axsJb.sayStats,    // s
+   99 : axsJb.speakCol,    // c
+  114 : axsJb.speakRow,    // r
+  100 : function() {    // d
+          jb.deselectBlocks();
+          axsJb.axsJaxObj.speakTextViaNode('Deselected. ');
+        },
+   82 :  function() { axsJb.gotoNext('red'); },    // R
+   71 :  function() { axsJb.gotoNext('green'); },    // G
+   66 :  function() { axsJb.gotoNext('blue'); },    // B
+   89 :  function() { axsJb.gotoNext('yellow'); },    // Y
+   80 :  function() { axsJb.gotoNext('purple'); }    // P
+};
+
 
 axsJb.init();
