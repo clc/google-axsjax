@@ -114,7 +114,6 @@ axsCal.domInsertionHandler = function(evt){
 
 /* Functions for working with the Calendars List */
 axsCal.getCalendars = function(){
-  axsCal.calendarsIndex = -1;
   var rootNode = document.getElementById('todrawfav');
   var xpath = "table";
   axsCal.calendarsArray = axsCal.axsJAXObj.evalXPath(xpath, rootNode);
@@ -156,12 +155,16 @@ axsCal.goToPrevCalendar = function(){
 };
 
 axsCal.toggleCalendarSelection = function(){
-  if (axsCal.calendarsArray.length === 0){
-    axsCal.getCalendars();
+  axsCal.getCalendars();
+  var rootNode = axsCal.calendarsArray[axsCal.calendarsIndex];
+  var xpath = ".//div[@class='calMenuLabel']";
+  var calendarLabel = axsCal.axsJAXObj.evalXPath(xpath, rootNode)[0];
+  if (calendarLabel){
+    axsCal.axsJAXObj.clickElem(calendarLabel,false);
+  } else {
+    var checkBox = rootNode.getElementsByTagName('input')[0];
+    axsCal.axsJAXObj.clickElem(checkBox,false);
   }
-  var currentCalendar = axsCal.calendarsArray[axsCal.calendarsIndex];
-  var checkBox = currentCalendar.getElementsByTagName('input')[0];
-  axsCal.axsJAXObj.clickElem(checkBox,false);
   axsCal.speakCurrentCalendar();
   return false;
 };
