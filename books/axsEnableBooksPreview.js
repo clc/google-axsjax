@@ -68,6 +68,10 @@ axsBooksPreview.resultsIndex = 0;
  * to use two-page view  with full text.
  */
 axsBooksPreview.init = function(){
+  if (!document.body){
+    window.setTimeout(axsBooksPreview.init,500);
+    return;
+  }
   axsBooksPreview.axsJAXObj = new AxsJAX(true);
 
   //Add event listeners
@@ -102,7 +106,6 @@ axsBooksPreview.init = function(){
   }
   axsBooksPreview.expandAllMoreLinks();
   axsBooksPreview.buildResultsArray();
-
 };
 
 
@@ -379,5 +382,4 @@ axsBooksPreview.charCodeMap = {
 47 : axsBooksPreview.goSearch
 };
 
-
-window.setTimeout(axsBooksPreview.init,500);
+axsBooksPreview.init();
