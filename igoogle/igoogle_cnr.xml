@@ -1,5 +1,5 @@
-<cnr next='' prev=''>
-  <list title='Gadgets' hotkey='' next='n' prev='p'>
+<cnr>
+  <list title='Gadgets'>
     <item>
       id('modules')//div[@class='modbox']
     </item>
