@@ -45,14 +45,18 @@ forms and web applications so that your keystrokes will be sent
 to the web page itself. When you are on the Jawbreaker page,
 the following keys are available:
 
-  -  ? (question mark): Brings up a list of keyboard commands
-  -  n: Start a new game
+  -  ? (question mark): Brings up a list of keyboard commands.
+  -  n: Starts a new game.
   -  Arrow keys OR h,j,k,l: Navigate the board one ball at a time. The ball's color and coordinates will be announced.
   -  a,e,t,b: Jump to the edges of the board.
+  -  Capital R,G,B,Y,P: Jump to the next ball of a specific color.
   -  r: Reads the current row that you are on.
   -  c: Reads the current column that you are on.
-  -  s: Reads the current stats (balls selected, points that would be earned for making the currently selected balls disappear, total score)
+  -  s: Reads the current stats (balls selected, points that would be earned for making the currently selected balls disappear, total score).
+  -  = (equals): Reads the current number of balls remaining for each color.
   -  Space: If the current ball is not selected, pressing space will select the group of balls that the current ball belongs to if it is part of a group. If the current ball is selected, pressing space confirms the selection and makes the selected group disappear.
+  -  d: Deselects the currently selected balls.
+  -  u: Undoes the last confirmed selection.
 
 
 
