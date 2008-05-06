@@ -305,8 +305,8 @@ axsJb.charCodeMap = {
         },
    61 : axsJb.sayColorCounts,    // =
   107 : axsJb.up,    // k
-  104 : axsJb.down,    // h
-  106 : axsJb.left,    // j
+  104 : axsJb.left,    // h
+  106 : axsJb.down,    // j
   108 : axsJb.right,    // l
    32 : function() {    // SPACE
           axsJb.axsJaxObj.clickElem(axsJb.getBallImgNode(axsJb.row,axsJb.col), false);

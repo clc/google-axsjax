@@ -1,0 +1,172 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+               "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+lang="en" xml:lang="en">
+<head>
+<title>AxsJAX-Enhanced Google Calendar User Guide</title>
+<meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
+<meta name="generator" content="Org-mode"/>
+<meta name="generated" content="2008/05/06 10:36:23"/>
+<meta name="author" content="T.V. Raman, Charles L. Chen"/>
+<style type="text/css">
+  html {
+	font-family: Times, serif;
+	font-size: 12pt;
+  }
+  .title { text-align: center; }
+  .todo  { color: red; }
+  .done { color: green; }
+  .timestamp { color: grey }
+  .timestamp-kwd { color: CadetBlue }
+  .tag { background-color:lightblue; font-weight:normal }
+  .target { background-color: lavender; }
+  pre {
+	border: 1pt solid #AEBDCC;
+	background-color: #F3F5F7;
+	padding: 5pt;
+	font-family: courier, monospace;
+  }
+  table { border-collapse: collapse; }
+  td, th {
+	vertical-align: top;
+	<!--border: 1pt solid #ADB9CC;-->
+  }
+</style>
+</head><body>
+<h1 class="title">AxsJAX-Enhanced Google Calendar User Guide</h1>
+<h2>Table of Contents</h2>
+<ul>
+<li><a href="#sec-1">1 Introduction To AxsJAX-Enhanced Google Calendar</a>
+<ul>
+<li><a href="#sec-2">1.1 What Is AxsJAX-Enhanced Google Calendar?</a></li>
+<li><a href="#sec-3">1.2 How Can I Start Using AxsJAX-Enhanced Google Calendar?</a></li>
+<li><a href="#sec-4">1.3 How Do I Use These Features?</a></li>
+</ul>
+</li>
+</ul>
+
+<h2><a name="sec-1">1 Introduction To AxsJAX-Enhanced Google Calendar</a></h2>
+
+
+
+<h3><a name="sec-2">1.1 What Is AxsJAX-Enhanced Google Calendar?</a></h3>
+
+
+
+<p>
+AxsJAX-Enhanced Google Calendar is the same as Google Calendar with
+the following additional features:
+</p>
+<ul>
+<li>
+Keyboard access for navigating events and for retrieving additional information about an event
+</li>
+<li>
+Keyboard access for traversing the list of calendars and selecting/deselecting calendars
+</li>
+<li>
+Spoken feedback via the user's assistive technology for user actions
+
+
+
+</li>
+</ul>
+<h3><a name="sec-3">1.2 How Can I Start Using AxsJAX-Enhanced Google Calendar?</a></h3>
+
+
+<p>
+The simplest way to get started is to use <a href="http://firevox.clcworld.net/">Fire Vox</a> and check the
+"Site Specific Enhancements" option. By default, this option is
+checked, so if you did not change it, then you should be ready to
+go. To start using AxsJAX-Enhanced Google Calendar, all you
+need to do is go to <a href="http://calendar.google.com/">Google Calendar </a> - the AxsJAX enhancements will
+automatically be added for you. There is nothing Fire Vox
+specific about AxsJAX - to use a different setup, all you need to
+do is make sure that you have the following:
+</p>
+<ol>
+<li>
+A modern Web browser like Firefox 2.0 or later that supports
+W3C ARIA.
+</li>
+<li>
+An adaptive technology that will respond correctly to the
+accessibility enhancements introduced by W3C ARIA.
+In particular, many of the enhancements injected by AxsJAX
+depend on support for <i>live regions</i> a feature that enables
+adaptive technologies like screen readers and self-voicing
+browsers deal correctly with asynchronous updates to
+portions of a Web page.
+
+</li>
+</ol>
+If your setup meets these requirements, you can either install
+<a href="http://addons.mozilla.org/firefox/748">GreaseMonkey</a> and install the <a href="http://google-axsjax.googlecode.com/svn/trunk/googleScriptLoader.user.js">GreaseMonkey script for AxsJAX enhancements</a> or you can install <a href="https://www.google.com/accounts/Login?continue=http%3A%2F%2Fcode.google.com%2Fp%2Fgoogle-axsjax%2Fdownloads%2Flist">the bookmarklet for AxsJAX enhancements.</a> Keep in mind that if you use the bookmarklet
+approach, you will have to activate the bookmarklet when you
+visit the Google Calendar start page  in order to activate the AxsJAX
+enhancements.
+
+
+<h3><a name="sec-4">1.3 How Do I Use These Features?</a></h3>
+
+
+<p>
+All of the AxsJAX enhancements are designed to augment the
+existing keyboard support present in regular Google Calendar by
+generating additional focus events so that the assistive
+technology automatically speaks the item having focus. If your
+assistive technology uses different modes e.g., <i>browse-mode</i> in
+JFW, please switch to the mode that you use for working with
+forms and web applications so that your keystrokes will be sent
+to the web page itself. When you are on the Google Calendar page,
+the following keys are available:
+</p>
+<ul>
+<li>
+ ? (question mark): Lists the keyboard commands
+</li>
+<li>
+ t: Go to today
+</li>
+<li>
+ n or j: Go to the next day
+</li>
+<li>
+ p or k: Go to the previous day
+</li>
+<li>
+ Down arrow: Go to the next event
+</li>
+<li>
+ Up arrow: Go to the previous event
+</li>
+<li>
+ i: Get information about the current event.
+</li>
+<li>
+ q: Go to the Quick Add field for quickly creating events by typing in natural language phrases such as "meeting 3:30 to 4:30 PM tomorrow". <a href="http://www.google.com/support/calendar/bin/answer.py?answer=36604#text">See this page for more details on using Quick Add.</a> 
+</li>
+<li>
+ c: Go to the create event form.
+</li>
+<li>
+ f: Go to the field for adding a friend's calendar.
+</li>
+<li>
+ l: Go to the next calendar in the list of calendars.
+</li>
+<li>
+ ; (semi-colon): Go to the previous calendar in the list of calendars.
+</li>
+<li>
+ Space: Select/deselect the current calendar.
+
+
+</li>
+</ul>
+<p class="author"> Author: T.V. Raman, Charles L. Chen
+<a href="mailto:clchen@google.com">&lt;clchen@google.com&gt;</a>
+</p>
+<p class="date"> Date: 2008/05/06 10:36:23</p>
+</body>
+</html>
