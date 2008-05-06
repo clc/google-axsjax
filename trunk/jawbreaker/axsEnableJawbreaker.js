@@ -161,9 +161,12 @@ axsJb.findFirstBallInRow = function(){
 axsJb.gotoNext = function(color){
   var uTargetImgUrl = 'p_' + color + '.gif';
   var sTargetImgUrl = 's_' + color + '.gif';
-  var col = axsJb.col + 1;
+  var col = axsJb.col;
   var row = axsJb.row;
   var ballImg = null;
+  //Look for another ball of the specified color in the same row in a column
+  //after the current column.
+  col++;
   for ( ; col <= axsJb.MAXCOL; col++){
     ballImg = axsJb.getBallImgNode(row,col);
     if ((axsJb.getUrlOfBallImg(ballImg) == uTargetImgUrl) || (axsJb.getUrlOfBallImg(ballImg) == sTargetImgUrl)){
@@ -173,6 +176,8 @@ axsJb.gotoNext = function(color){
       return;
     }
   }
+  //No balls of the specified color in the current row. Look for one in rows and
+  //columns after the current row.
   row++;
   for ( ; row <= axsJb.MAXROW; row++){
     for (col = 0; col <= axsJb.MAXCOL; col++){
@@ -185,11 +190,21 @@ axsJb.gotoNext = function(color){
       }
     }
   }
-  ballImg = axsJb.getBallImgNode(axsJb.row,axsJb.col);
-  if ((axsJb.getUrlOfBallImg(ballImg) == uTargetImgUrl) || (axsJb.getUrlOfBallImg(ballImg) == sTargetImgUrl)){
-    axsJb.getCurrentPosition();
-    return;
+  //No balls of the specified color in the rows and columns after the current
+  //row. Start looking from the very top of the board (0,0).
+  row = 0;
+  for ( ; row <= axsJb.MAXROW; row++){
+    for (col = 0; col <= axsJb.MAXCOL; col++){
+      ballImg = axsJb.getBallImgNode(row,col);
+      if ((axsJb.getUrlOfBallImg(ballImg) == uTargetImgUrl) || (axsJb.getUrlOfBallImg(ballImg) == sTargetImgUrl)){
+        axsJb.col = col;
+        axsJb.row = row;
+        axsJb.getCurrentPosition();
+        return;
+      }
+    }
   }
+  //There are no balls of the specified color left on the board.
   axsJb.axsJaxObj.speakTextViaNode('No ' + color + ' left.');
 };
 
