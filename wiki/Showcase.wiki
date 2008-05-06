@@ -10,6 +10,8 @@ access-enabled using AxsJAX. [http://google-axsjax.googlecode.com/svn/trunk/docs
 
   * [http://mail.google.com Google Gmail] [http://google-axsjax.googlecode.com/svn/trunk/docs/gmail_userguide.html User Guide]
 
+  * [http://calendar.google.com Google Calendar] [http://google-axsjax.googlecode.com/svn/trunk/docs/calendar_userguide.html User Guide]
+
   * [http://reader.google.com Google Reader] [http://google-axsjax.googlecode.com/svn/trunk/docs/reader_userguide.html User Guide]
 
   * [http://scholar.google.com Google Scholar]  [http://google-axsjax.googlecode.com/svn/trunk/docs/scholar_userguide.html User Guide]
