@@ -84,8 +84,8 @@ individual items with single keystrokes as listed below.
   - / (slash): Puts focus on the /search for books/ field.
   - s: Puts focus on the search within this book field.
   - Esc: Takes focus away from the currently focused search field.
-  - n or Down Arrow: Cycles to the next category.
-  - p or Up Arrow: Cycles to the previous category.
+  - h or Down Arrow: Cycles to the next category.
+  - l or Up Arrow: Cycles to the previous category.
   - j or Right Arrow: Puts focus on the next item in the current category. If you are on the last item of the category, you will be taken back to the first item.
   - k or Left Arrow: Puts focus on the previous item in the current category. If you are on the first item of the category, you will be taken to the last item.
   - Enter: Follows the link for the current item that has focus if there is a link.
