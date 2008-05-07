@@ -6,10 +6,14 @@
   soundManager.onload = commandMonitor;
   
   var commandMonitorDelay = 100;
+  var stopTime = -1;
+  var currentSoundID = null;
+  
   
   function commandMonitor(){
     var cmd = '#AxsSoundCmd=';
 	var play = 'Play(';
+	var playSeg = 'PlaySeg(';
 	var stop = 'Stop()';
 	
     var params = document.location.toString();
@@ -22,13 +26,35 @@
 	  return;
 	}
 	
-	// Play the target URL if the play command is used
+	// Play the target URL if the Play command is used
 	var playCommand = (params.indexOf(play) != -1);
 	if (playCommand){
 	  var audioUrlStart = params.indexOf(play) + play.length;
 	  var audioUrlEnd = params.length-1;
       var audioUrl = params.substring(audioUrlStart,audioUrlEnd);
-	  soundManager.play('mySound',audioUrl);
+	  soundManager.stopAll();
+	  soundManager.play(audioUrl,audioUrl);
+	  currentSoundID = audioUrl;	
+	  updateStats();
+	  window.setTimeout(function(){commandMonitor();},commandMonitorDelay);
+	  return;
+	}
+	
+	// Play the specified segment of the target URL if the PlaySeg command is used
+	var playSegCommand = (params.indexOf(playSeg) != -1);
+	if (playSegCommand){
+	  var argsStart = params.indexOf(playSeg) + playSeg.length;
+	  var argsEnd = params.length-1;
+	  var argsString = params.substring(argsStart,argsEnd);
+	  var argsArray = argsString.split(',');
+	  var segEnd = argsArray[argsArray.length-1];
+	  var segStart = argsArray[argsArray.length-2];
+	  var url = argsArray[0];	  
+	  // Perform reassembly if the url had commas
+	  for (var i=1,arg; (arg=argsArray[i]) && (i<argsArray.length-2); i++){
+	    url = url + ',' + arg;
+	  }
+	  startPlaySeg(url,segStart,segEnd);
 	  updateStats();
 	  window.setTimeout(function(){commandMonitor();},commandMonitorDelay);
 	  return;
@@ -40,6 +66,26 @@
 	window.setTimeout(function(){commandMonitor();},commandMonitorDelay);
   };
   
+  
+  function startPlaySeg(url,segStart,segEnd){
+    if(!soundManager.getSoundById(url)){
+      soundManager.createSound({
+            id: url, 
+            url: url,
+            autoPlay: false,
+            autoLoad: true,
+		    stream : false,
+    	    onload : function(){soundManager.setPosition(url,segStart); soundManager.play(url);}
+          });  	
+	} else {
+	  soundManager.stopAll();
+	  soundManager.setPosition(url,segStart); 
+	  soundManager.play(url);
+	}  
+    stopTime = segEnd;
+	currentSoundID = url;	
+  };
+  
   function updateStats(){
     var loc = document.location.toString();
 	if (loc.indexOf('#') == -1){
@@ -47,11 +93,22 @@
 	}
 	loc = loc.substring(0,loc.indexOf('#')+1);
 	
-	var time = soundManager.getSoundById('mySound').position;
+	if (currentSoundID === null){
+	  document.location = loc;
+	  return;
+	}
+	
+	var time = soundManager.getSoundById(currentSoundID).position;
 	var stats = 'Time=' + time;
+	
+	if ((stopTime != -1) && (time >= stopTime)){
+	  stopTime = -1;
+	  soundManager.stopAll();
+	}
 	
 	document.location = loc + stats;
   };
+  
 						
 </script>
 
