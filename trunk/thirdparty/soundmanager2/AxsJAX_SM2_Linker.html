@@ -1,0 +1,58 @@
+<html>
+<head>
+<title>AxsJAX-SoundManager2 Linker iFrame</title>
+<script type="text/javascript" src="script/soundmanager2.js"></script>
+<script>
+  soundManager.onload = commandMonitor;
+  
+  var commandMonitorDelay = 100;
+  
+  function commandMonitor(){
+    var cmd = '#AxsSoundCmd=';
+	var play = 'Play(';
+	var stop = 'Stop()';
+	
+    var params = document.location.toString();
+	
+	// If this is not a command, update the stats and do nothing
+	var isCommand = (params.indexOf(cmd) != -1);
+	if (!isCommand){
+	  updateStats();
+	  window.setTimeout(function(){commandMonitor();},commandMonitorDelay);
+	  return;
+	}
+	
+	// Play the target URL if the play command is used
+	var playCommand = (params.indexOf(play) != -1);
+	if (playCommand){
+	  var audioUrlStart = params.indexOf(play) + play.length;
+	  var audioUrlEnd = params.length-1;
+      var audioUrl = params.substring(audioUrlStart,audioUrlEnd);
+	  soundManager.play('mySound',audioUrl);
+	  updateStats();
+	  window.setTimeout(function(){commandMonitor();},commandMonitorDelay);
+	  return;
+	}
+	
+	// Stop or invalid command 
+	soundManager.stopAll();
+	updateStats();  
+	window.setTimeout(function(){commandMonitor();},commandMonitorDelay);
+  };
+  
+  function updateStats(){
+    var loc = document.location.toString();
+	if (loc.indexOf('#') == -1){
+	  loc = loc + '#';
+	}
+	loc = loc.substring(0,loc.indexOf('#')+1);
+	
+	var time = soundManager.getSoundById('mySound').position;
+	var stats = 'Time=' + time;
+	
+	document.location = loc + stats;
+  };
+						
+</script>
+
+</head>
