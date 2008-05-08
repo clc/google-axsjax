@@ -17,7 +17,9 @@
 	var parentUrlStart = params.indexOf(parentUrlCmd) + parentUrlCmd.length;
 	var parentUrlEnd = params.length;
     parentUrl = params.substring(parentUrlStart,parentUrlEnd);
-	parentUrl = parentUrl.substring(0,parentUrl.indexOf('#'));	
+	if (parentUrl.indexOf('#') != -1){
+	  parentUrl = parentUrl.substring(0,parentUrl.indexOf('#'));	
+	}  
 	parent.location = parentUrl + '#InitSuccess';
 	commandMonitor();
   }
