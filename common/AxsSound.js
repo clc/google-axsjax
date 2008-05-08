@@ -23,7 +23,7 @@
  * @constructor
  */
 var AxsSound = function(){
-  this.sm2BaseURL = 'http://www.corp.google.com/~clchen/AxsJAX/thirdparty/soundmanager2/'; //'http://google-axsjax.googlecode.com/svn/trunk/thirdparty/soundmanager2/';
+  this.sm2BaseURL = 'http://google-axsjax.googlecode.com/svn/trunk/thirdparty/soundmanager2/';
   this.sm2LinkerFrame = null;
 };
 

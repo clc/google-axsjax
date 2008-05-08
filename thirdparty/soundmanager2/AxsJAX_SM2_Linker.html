@@ -102,6 +102,7 @@
   }
   
   function updateStats(){
+	alert(parent.document);
     var loc = parent.location.toString();
 	if (loc.indexOf('#') == -1){
 	  loc = loc + '#';
@@ -127,6 +128,7 @@
 	
 	var stats = 'Time=' + time;
 	parent.location = loc + stats;
+	
   };
   
 						
