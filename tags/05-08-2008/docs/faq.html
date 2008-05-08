@@ -1,0 +1,308 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+               "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+lang="en" xml:lang="en">
+<head>
+<title>AxsJAX Frequently Asked Questions</title>
+<meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
+<meta name="generator" content="Org-mode"/>
+<meta name="generated" content="2007/10/30 14:35:13"/>
+<meta name="author" content="T.V. Raman, Charles L. Chen"/>
+<style type="text/css">
+  html {
+	font-family: Times, serif;
+	font-size: 12pt;
+  }
+  .title { text-align: center; }
+  .todo  { color: red; }
+  .done { color: green; }
+  .timestamp { color: grey }
+  .timestamp-kwd { color: CadetBlue }
+  .tag { background-color:lightblue; font-weight:normal }
+  .target { background-color: lavender; }
+  pre {
+	border: 1pt solid #AEBDCC;
+	background-color: #F3F5F7;
+	padding: 5pt;
+	font-family: courier, monospace;
+  }
+  table { border-collapse: collapse; }
+  td, th {
+	vertical-align: top;
+	<!--border: 1pt solid #ADB9CC;-->
+  }
+</style>
+</head><body>
+<h1 class="title">AxsJAX Frequently Asked Questions</h1>
+<h2>Table of Contents</h2>
+<ul>
+<li><a href="#sec-1">1 Introduction To AxsJAX </a>
+<ul>
+<li><a href="#sec-2">1.1 What Is AxsJAX?</a></li>
+<li><a href="#sec-3">1.2 What New Opportunities Does AxsJAX  Open Up?</a></li>
+<li><a href="#sec-4">1.3 What Are Its Accessibility Goals?</a></li>
+<li><a href="#sec-5">1.4 AxsJAX Uses JavaScript --- Isn't That Inaccessible?</a></li>
+<li><a href="#sec-6">1.5 Is AxsJAX Specific To Google Applications?</a></li>
+<li><a href="#sec-7">1.6 What Are The Long-term Goals For AxsJAX?</a></li>
+<li><a href="#sec-8">1.7 How Is AxsJAX Pronounced?</a></li>
+</ul>
+</li>
+<li><a href="#sec-9">2 AxsJAX Technical Overview</a>
+<ul>
+<li><a href="#sec-10">2.1 What Prerequisites Does AxsJAX Assume?</a></li>
+<li><a href="#sec-11">2.2 How Does AxsJAX Leverage W3C ARIA?</a></li>
+<li><a href="#sec-12">2.3 What Google Applications Does It Presently Enhance?</a></li>
+<li><a href="#sec-13">2.4 How Does  AxsJAX  Help Screen Reader Vendors?</a></li>
+<li><a href="#sec-14">2.5 How Does AxsJAX Help The Evolution Of Access Standards?</a></li>
+<li><a href="#sec-15">2.6 How Does AxsJAX Inject Accessibility?</a></li>
+<li><a href="#sec-16">2.7 How Can Web Developers Experience AxsJAX Enhancements?</a></li>
+</ul>
+</li>
+</ul>
+
+<h2><a name="sec-1">1 Introduction To AxsJAX </a></h2>
+
+
+
+<h3><a name="sec-2">1.1 What Is AxsJAX?</a></h3>
+
+
+
+<p>
+Web 2.0 applications are  powered by AJAX --- Asynchronous JavaScript And
+XML. AxsJAX leverages AJAX techniques to inject accessibility
+support into  Web 2.0 applications.
+</p>
+
+<h3><a name="sec-3">1.2 What New Opportunities Does AxsJAX  Open Up?</a></h3>
+
+
+<p>
+AJAX techniques have helped Web developers create live
+applications within Web browsers. The AxsJAX framework helps
+inject accessibility features into these applications so that
+users of adaptive technologies such as screen readers and
+self-voicing browsers experience the same level of interactivity
+that is now taken for granted by users of Web 2.0 applications.
+</p>
+
+<h3><a name="sec-4">1.3 What Are Its Accessibility Goals?</a></h3>
+
+<p>Our  accessibility goals include but are not limited to:
+</p>
+<ul>
+<li>
+Discover and codify design patterns  for access-enabling AJAX applications.
+</li>
+<li>
+Serve as a test-bed for implementors of adaptive technologies
+in extending their tools to handle Web 2.0 applications.
+</li>
+<li>
+Help discover and fill-in  gaps  in the various
+standards  that deal with the accessibility of AJAX
+applications.
+
+
+</li>
+</ul>
+<h3><a name="sec-5">1.4 AxsJAX Uses JavaScript --- Isn't That Inaccessible?</a></h3>
+
+
+<p>
+Web applications that use JavaScript have traditionally proven an
+access barrier to screen reader users for the following reasons:
+</p>
+<ul>
+<li>
+Adaptive technologies cannot always interpret the meaning of
+actions invoked via JavaScript.
+</li>
+<li>
+Asynchronous page updates leave screen readers at a loss as
+to what to speak.
+
+</li>
+</ul>A set of W3C specifications collectively refered to as 
+<a href="http://www.w3.org/TR/2007/WD-aria-roadmap-20071019/">W3C ARIA</a> is addressing these issues. Though AJAX applications will
+continue to remain unusable from legacy browsers like lynx,
+there is no reason why they should remain forever inaccessible to
+users of adaptive technologies.
+
+<p>
+Finally, JavaScript in the browser is a powerful mechanism that
+has enabled us to turn the Web from a world of static documents to a
+platform for deploying dynamic end-user applications. The primary
+goal of the AxsJAX framework 
+is to leverage these same advantages presented by JavaScript in
+the browser to create flexible, powerful accessibility solutions.
+</p>
+
+<h3><a name="sec-6">1.5 Is AxsJAX Specific To Google Applications?</a></h3>
+
+
+
+<p>
+We are open-sourcing the AxsJAX framework early in its
+development to foster a healthy community around the concept of
+access-enabling Web applications by injecting accessibility
+enhancements  via JavaScript.
+</p>
+<p>
+AxsJAX  initially targets  Google applications. As we
+discover design patterns that work, we are refactoring these into
+common modules that foster code reuse. Notice that these common
+modules are not Google specific, and can be leveraged to inject
+accessibility enhancements to <b>any</b> application deployed on the
+Web.
+</p>
+
+
+<h3><a name="sec-7">1.6 What Are The Long-term Goals For AxsJAX?</a></h3>
+
+
+
+<p>
+The long-term goals of AxsJAX  will be largely end-user driven.
+This initial release hints at the type of end-user benefits that
+can be enabled via such a framework.
+Our goal is to create a healthy community built on an open
+framework for enhancing the accessibility of Web 2.0
+applications.
+</p>
+
+<h3><a name="sec-8">1.7 How Is AxsJAX Pronounced?</a></h3>
+
+
+<p>
+AxsJAX is pronounced Access Jax  to rhyme with AJAX.
+</p>
+
+<h2><a name="sec-9">2 AxsJAX Technical Overview</a></h2>
+
+
+<h3><a name="sec-10">2.1 What Prerequisites Does AxsJAX Assume?</a></h3>
+
+
+<p>
+AxsJAX injects accessibility enhancements as defined by <a href="http://www.w3.org/TR/2007/WD-aria-roadmap-20071019/">W3C ARIA</a>.
+The prerequisites for experiencing its benefits include:
+</p>
+<ol>
+<li>
+A modern Web browser like Firefox 2.0 or later that supports
+W3C ARIA.
+</li>
+<li>
+Adaptive technologies that respond correctly to the
+accessibility enhancements introduced by W3C ARIA.
+</li>
+<li>
+In particular, many of the enhancements injected by AxsJAX
+depend on support for <i>live regions</i> a feature that enables
+adaptive technologies like screen readers and self-voicing
+browsers deal correctly with asynchronous updates to
+portions of a Web page.
+
+</li>
+</ol>
+
+<h3><a name="sec-11">2.2 How Does AxsJAX Leverage W3C ARIA?</a></h3>
+
+
+
+<p>
+W3C ARIA is a collection of specifications that is presently
+under development at the W3C.
+Early support for W3C ARIA is available in Firefox 2.0, and its
+features are beginning to be leveraged by newer versions of
+screen readers.
+</p>
+<p>
+W3C ARIA works by enhancing the  DOM with accessibility specific
+properties. The AxsJAX framework enables the injection of such
+DOM properties into existing Web applications via JavaScript.
+It provides a light-weight yet flexibile mechanism for
+experimenting with various design patterns for enhancing the
+accessibility of AJAX applications.
+</p>
+
+<h3><a name="sec-12">2.3 What Google Applications Does It Presently Enhance?</a></h3>
+
+
+
+<ul>
+<li>
+Google Reader
+</li>
+<li>
+Google Search 
+
+</li>
+</ul>
+<h3><a name="sec-13">2.4 How Does  AxsJAX  Help Screen Reader Vendors?</a></h3>
+
+
+
+<p>
+The set of specifications collectively known as <a href="http://www.w3.org/TR/2007/WD-aria-roadmap-20071019/%20GMT%3B%20Path%3D/ Set-Cookie:%20TPExits%3Dnull|null|null|10|null|null|%3B%20Expires%3DWed,%2001-Oct-2008%2022:22:31%20GMT%3B%20Path%3D/ Connection:%20close Content-Type:%20text/html%3B%20charset%3DISO-8859-1 ">W3C ARIA</a> is still
+under active development. Applications that have been enhanced
+via AxsJAX provide real-life examples for testing ARIA support
+within new versions of screen readers. Thus, whereas individual
+test-suites help screen reader developers test support for a
+given feature, AxsJAX enabled applications provide live examples
+for carrying out end-to-end testing.
+</p>
+
+<h3><a name="sec-14">2.5 How Does AxsJAX Help The Evolution Of Access Standards?</a></h3>
+
+
+
+<p>
+W3C ARIA is still under active development. By access-enabling
+complete applications, AxsJAX helps in the development of the W3C
+ARIA specifications by discovering what works and by identifying
+gaps that  need to be filled.
+</p>
+
+<h3><a name="sec-15">2.6 How Does AxsJAX Inject Accessibility?</a></h3>
+
+
+<p>
+The AxsJAX framework  can inject accessibility enhancements into
+existing Web 2.0 applications using any of several standard Web
+techniques:
+</p><ul>
+<li>
+As <i>bookmarklets</i> --- small snippets of JavaScript that are
+used to create <b>smart</b> bookmarks.
+</li>
+<li>
+Using GreaseMonkey --- a powerful browser extension that
+allows end-users to customize the look and feel of Web sites
+via custom scripts.
+
+</li>
+</ul>In particular, the accessibility enhancements provided by AxsJAX
+are not tied to any single injection technique, and we  are
+looking to the Open Source community to come up with additional
+innovative means for  performing 
+such enhancements.
+
+
+
+<h3><a name="sec-16">2.7 How Can Web Developers Experience AxsJAX Enhancements?</a></h3>
+
+
+<p>
+The open source <a href="http://firevox.clcworld.net/">Fire Vox</a> extension to Firefox
+provides an ideal tool for  Web developers who may not necessarily have commercial
+screen readers available for testing.
+Fire Vox is a cross-platform self-voicing extension to Firefox
+that includes early support for most of the leading edge features of W3C ARIA.
+</p><p class="author"> Author: T.V. Raman, Charles L. Chen
+<a href="mailto:raman@google.com, clchen@google.com">&lt;raman@google.com, clchen@google.com&gt;</a>
+</p>
+<p class="date"> Date: 2007/10/30 14:35:13</p>
+</body>
+</html>

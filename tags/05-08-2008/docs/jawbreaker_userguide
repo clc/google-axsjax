@@ -1,0 +1,69 @@
+#    -*- mode: org -*-
+* Introduction To AxsJAX-Enhanced Jawbreaker
+
+** What Is AxsJAX-Enhanced Jawbreaker?
+
+
+AxsJAX-Enhanced Jawbreaker is [[http://www.minijuegosgratis.com/juegos/jawbreaker/jawbreaker.htm][a regular Jawbreaker game]] that was AxsJAXed. Jawbreaker is a puzzle game that challenges the player to get as high a score as possible by eliminating as many balls of the same color in one shot as possible. [[http://en.wikipedia.org/wiki/Jawbreaker_(Pocket_PC_game)][For a detailed explanation on the history and rules of this game, please see the Wikipedia article on Jawbreaker.]]
+
+
+** How Can I Start Using AxsJAX-Enhanced Jawbreaker?
+
+The simplest way to get started is to use [[http://firevox.clcworld.net/][Fire Vox]] and check the
+"Site Specific Enhancements" option. By default, this option is
+checked, so if you did not change it, then you should be ready to
+go. To start using AxsJAX-Enhanced Jawbreaker, all you
+need to do is go to [[http://www.minijuegosgratis.com/juegos/jawbreaker/jawbreaker.htm][the Jawbreaker game page]] - the AxsJAX enhancements will
+automatically be added for you. There is nothing Fire Vox
+specific about AxsJAX - to use a different setup, all you need to
+do is make sure that you have the following:
+
+  1. A modern Web browser like Firefox 2.0 or later that supports
+     W3C ARIA.
+  2. An adaptive technology that will respond correctly to the
+     accessibility enhancements introduced by W3C ARIA.
+     In particular, many of the enhancements injected by AxsJAX
+     depend on support for /live regions/ a feature that enables
+     adaptive technologies like screen readers and self-voicing
+     browsers deal correctly with asynchronous updates to
+     portions of a Web page.
+
+If your setup meets these requirements, you can either install
+[[http://addons.mozilla.org/firefox/748][GreaseMonkey]] and install the [[http://google-axsjax.googlecode.com/svn/trunk/googleScriptLoader.user.js][GreaseMonkey script for AxsJAX
+enhancements]] or you can install [[https://www.google.com/accounts/Login?continue=http%3A%2F%2Fcode.google.com%2Fp%2Fgoogle-axsjax%2Fdownloads%2Flist][the bookmarklet for AxsJAX
+enhancements.]] Keep in mind that if you use the bookmarklet
+approach, you will have to activate the bookmarklet when you
+visit the Jawbreaker page in order to activate the AxsJAX
+enhancements.
+
+** How Do I Use These Features?
+
+The AxsJAX enhancements provide keyboard navigation for the game. If your
+assistive technology uses different modes e.g., /browse-mode/ in
+JFW, please switch to the mode that you use for working with
+forms and web applications so that your keystrokes will be sent
+to the web page itself. When you are on the Jawbreaker page,
+the following keys are available:
+
+  -  ? (question mark): Brings up a list of keyboard commands.
+  -  n: Starts a new game.
+  -  Arrow keys OR h,j,k,l: Navigate the board one ball at a time. The ball's color and coordinates will be announced.
+  -  a,e,t,b: Jump to the edges of the board.
+  -  Capital R,G,B,Y,P: Jump to the next ball of a specific color.
+  -  r: Reads the current row that you are on.
+  -  c: Reads the current column that you are on.
+  -  s: Reads the current stats (balls selected, points that would be earned for making the currently selected balls disappear, total score).
+  -  = (equals): Reads the current number of balls remaining for each color.
+  -  Space: If the current ball is not selected, pressing space will select the group of balls that the current ball belongs to if it is part of a group. If the current ball is selected, pressing space confirms the selection and makes the selected group disappear.
+  -  d: Deselects the currently selected balls.
+  -  u: Undoes the last confirmed selection.
+
+
+
+
+#+TITLE:     AxsJAX-Enhanced Jawbreaker User Guide
+#+AUTHOR:    T.V. Raman, Charles L. Chen
+#+EMAIL:     raman@google.com
+#+EMAIL: clchen@google.com
+#+LANGUAGE:  en
+#+OPTIONS:   H:3 num:t toc:t \n:nil @:t ::t |:t ^:t f:t *:t TeX:t LaTeX:nil skip:t p:nil

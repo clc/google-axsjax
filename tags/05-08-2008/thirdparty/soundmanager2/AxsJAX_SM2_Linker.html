@@ -1,0 +1,140 @@
+<html>
+<head>
+<title>AxsJAX-SoundManager2 Linker iFrame</title>
+<script type="text/javascript" src="script/soundmanager2.js"></script>
+<script>
+  soundManager.onload = init;
+  
+  var commandMonitorDelay = 100;
+  var stopTime = -1;
+  var currentSoundID = null;
+  var isPlaying = false;
+  var parentUrl = null;
+  
+  function init(){
+    var parentUrlCmd = '#Parent=';
+    var params = document.location.toString();
+	var parentUrlStart = params.indexOf(parentUrlCmd) + parentUrlCmd.length;
+	var parentUrlEnd = params.length;
+    parentUrl = params.substring(parentUrlStart,parentUrlEnd);
+	if (parentUrl.indexOf('#') != -1){
+	  parentUrl = parentUrl.substring(0,parentUrl.indexOf('#'));	
+	}  
+	parent.location = parentUrl + '#InitSuccess';
+	commandMonitor();
+  }
+  
+  function commandMonitor(){
+    var cmd = '#AxsSoundCmd=';
+	var play = 'Play(';
+	var playSeg = 'PlaySeg(';
+	var stop = 'Stop()';
+	
+    var params = document.location.toString();
+	
+	// If this is not a command, update the stats and do nothing
+	var isCommand = (params.indexOf(cmd) != -1);
+	if (!isCommand){
+	  updateStats();
+	  window.setTimeout(function(){commandMonitor();},commandMonitorDelay);
+	  return;
+	}
+	
+	// Play the target URL if the Play command is used
+	var playCommand = (params.indexOf(play) != -1);
+	if (playCommand){
+	  var audioUrlStart = params.indexOf(play) + play.length;
+	  var audioUrlEnd = params.length-1;
+      var audioUrl = params.substring(audioUrlStart,audioUrlEnd);
+	  soundManager.stopAll();
+	  soundManager.play(audioUrl,audioUrl);
+	  currentSoundID = audioUrl;	
+	  isPlaying = true;
+	  clearCommand();
+	  updateStats();
+	  window.setTimeout(function(){commandMonitor();},commandMonitorDelay);
+	  return;
+	}
+	
+	// Play the specified segment of the target URL if the PlaySeg command is used
+	var playSegCommand = (params.indexOf(playSeg) != -1);
+	if (playSegCommand){
+	  var argsStart = params.indexOf(playSeg) + playSeg.length;
+	  var argsEnd = params.length-1;
+	  var argsString = params.substring(argsStart,argsEnd);
+	  var argsArray = argsString.split(',');
+	  var segEnd = argsArray[argsArray.length-1];
+	  var segStart = argsArray[argsArray.length-2];
+	  var url = argsArray[0];	  
+	  // Perform reassembly if the url had commas
+	  for (var i=1,arg; (arg=argsArray[i]) && (i<argsArray.length-2); i++){
+	    url = url + ',' + arg;
+	  }
+	  startPlaySeg(url,segStart,segEnd);
+	  updateStats();
+	  window.setTimeout(function(){commandMonitor();},commandMonitorDelay);
+	  return;
+	}
+	
+	// Stop or invalid command 
+	soundManager.stopAll();
+	clearCommand();
+	updateStats();  
+	window.setTimeout(function(){commandMonitor();},commandMonitorDelay);
+  };
+  
+  
+  function startPlaySeg(url,segStart,segEnd){
+    if(!soundManager.getSoundById(url)){
+      soundManager.createSound({
+            id: url, 
+            url: url,
+            autoPlay: false,
+            autoLoad: true,
+		    stream : false,
+    	    onload : function(){soundManager.setPosition(url,segStart); soundManager.play(url);}
+          });  	
+	} else {
+	  soundManager.stopAll();
+	  soundManager.setPosition(url,segStart); 
+	  soundManager.play(url);
+	}  
+    stopTime = segEnd;
+	currentSoundID = url;	
+	isPlaying = true;
+	clearCommand();
+  };
+  
+  function clearCommand(){
+    var loc = document.location.toString();
+	if (loc.indexOf('#') == -1){
+	  loc = loc + '#';
+	}
+	loc = loc.substring(0,loc.indexOf('#')+1);
+    document.location = loc;
+  }
+  
+  function updateStats(){
+    if (currentSoundID === null){
+	  return;
+	}
+	var time = soundManager.getSoundById(currentSoundID).position;
+	
+	if ((stopTime != -1) && (time >= stopTime)){
+	  stopTime = -1;
+	  soundManager.stopAll();	  
+	  isPlaying = false;
+	  time = -1;
+	} else if (soundManager.getSoundById(currentSoundID).playState === 0){  
+	  isPlaying = false;	
+	  time = -1;
+	}
+	
+	var stats = 'Time=' + time;
+	parent.location = parentUrl + '#' + stats;	
+  };
+  
+						
+</script>
+
+</head>

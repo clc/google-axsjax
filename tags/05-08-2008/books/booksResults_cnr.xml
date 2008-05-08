@@ -1,0 +1,28 @@
+<cnr>
+  <list title='Cycle Results' next='RIGHT j' prev='LEFT k' fwd='n' back='p'>
+    <item>
+      id('results_container')//div[@class='resbdy']
+    </item>
+    <target title='Open result' hotkey='ENTER' onEmpty='This article is unavailable.'>
+      .//h2/a
+    </target>
+    <target title='About this book' hotkey='a'>
+      .//a[contains(text(),'About')]
+    </target>
+    <target title='More editions' hotkey='e' onEmpty='There are no other editions available.'>
+      .//a[contains(text(),'editions')]
+    </target>
+    <target title='Next page' trigger='listTail'>
+      //img[contains(@src,'nav_next.gif')]/..
+    </target>
+    <target title='Prev page' trigger='listHead'>
+      //img[contains(@src,'nav_previous.gif')]/..
+    </target>
+  </list>
+  <target title='Next page' hotkey='PGDOWN'>
+    //img[contains(@src,'nav_next.gif')]/..
+  </target>
+  <target title='Previous page' hotkey='PGUP'>
+    //img[contains(@src,'nav_previous.gif')]/..
+  </target>
+</cnr>

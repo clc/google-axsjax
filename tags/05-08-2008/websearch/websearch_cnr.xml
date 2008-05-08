@@ -1,0 +1,56 @@
+<cnr next='DOWN h' prev='UP l'>
+        <list title='One Box' hotkey='1' next='RIGHT j' prev='LEFT k' onEmpty='There is no one box on this page.'>
+		<item count='1'>
+                  id('res')/p[*]
+		</item>
+		<item count='1'>
+                  id('res')/div[@class='e']
+		</item>          
+        </list>
+
+        <list title='Results' hotkey='n' next='RIGHT j' prev='LEFT k' fwd='n' back='p'>
+		<item count='1'>
+                  id('res')//td[@class='j']/ul/li[text()='Make sure all words are spelled correctly.']/../..
+		</item>
+		<item>
+		    id('res')//div[@class='g']
+		</item>
+		<target title='Next page' trigger='listTail'>
+                  id('nn')/..
+		</target>
+		<target title='Prev page' trigger='listHead'>
+                  id('np')/..
+		</target>
+        </list>
+
+        <list title='Sponsored Links' hotkey='a' next='RIGHT j' prev='LEFT k' onEmpty='There are no sponsored links on this page.'>
+		<item>
+		    id('tads')/div[*]
+		</item>
+		<item>
+		    id('mbEnd')/tbody/tr[*]/td/font/span[*]
+		</item>
+	</list>
+
+        <list title='Related Searches' hotkey='s' next='RIGHT j' prev='LEFT k' onEmpty='There are no related searches.'>
+		<item>
+		    id('res')/table[*]/tbody/tr[*]/td[*]/a
+		</item>
+		<item>
+		    body/table[*]/tbody/tr[*]/td[*]/a/b/..
+		</item>
+  </list>
+
+        <list title='Alternate Search Categories' hotkey='c' next='RIGHT j' prev='LEFT k' onEmpty='There are no other categories to search within.'>
+		<item>
+		    body/table[*]/tbody/tr/td[*]/font/a[@class='q']
+		</item>
+	</list>
+
+        <target title='Next page' hotkey='PGDOWN'>
+          id('nn')/..
+        </target>
+        <target title='Previous page' hotkey='PGUP'>
+          id('np')/..
+        </target>
+</cnr>

@@ -1,0 +1,56 @@
+#    -*- mode: org -*-
+* Introduction To AxsJAX-Enhanced xkcd
+
+** What Is AxsJAX-Enhanced xkcd?
+
+
+AxsJAX-Enhanced xkcd is the same as the regular [[http://xkcd.com][xkcd web comic]] with the following additional features:
+
+  - Direct keyyboard access to primary tasks  such as first comic, previous comic, random comic, next comic, and latest comic.
+  - Comments from the author added to the alt text of the comic
+  - Transcripts (transcribed and posted on ohnorobot.com by xkcd fans) added to the alt text of the comic for all comics that have transcripts available
+
+
+** How Can I Start Using AxsJAX-Enhanced xkcd?
+
+The simplest way to get started is to use [[http://firevox.clcworld.net/][Fire Vox]] and check the "Site Specific Enhancements" option. By default, this option is checked, so if you did not change it, then you should be ready to go. To start using AxsJAX-Enhanced xkcd, all you need to do is go to [[http://xkcd.com][xkcd]] - the AxsJAX enhancements will automatically be added for you. 
+There is nothing Fire Vox specific about AxsJAX - to use a different setup, all you need to do is make sure that you have the following:
+
+  1. A modern Web browser like Firefox 2.0 or later that supports
+     W3C ARIA.
+  2. An adaptive technology that will respond correctly to the
+     accessibility enhancements introduced by W3C ARIA.
+     In particular, many of the enhancements injected by AxsJAX
+     depend on support for /live regions/ a feature that enables
+     adaptive technologies like screen readers and self-voicing
+     browsers deal correctly with asynchronous updates to
+     portions of a Web page.
+
+If your setup meets these requirements, you can install
+[[http://addons.mozilla.org/firefox/748][GreaseMonkey]] and install the [[http://google-axsjax.googlecode.com/svn/trunk/googleScriptLoader.user.js][GreaseMonkey script for AxsJAX
+enhancements]].
+
+** How Do I Use These Features?
+
+All of the AxsJAX enhancements are activated through the
+keyboard. If your assistive technology uses modes, e.g., /browse
+mode/ in JFW, please switch to the mode that you use for working
+with forms and web applications so that your keystrokes will be
+sent to the web page itself. When you are on the xkcd page, the following keys are available:
+
+  - ? (question mark): Brings up a list of the keyboard commands
+  - / (slash): Puts focus on the search field
+  - Esc: Takes focus away from the search field
+  - Down arrow or n: Go to the next comic
+  - Up arrow or p: Go to the previous comic
+  - 1: Jump to the first comic
+  - 0: Jump to the latest comic
+  - r: Jump to a random comic
+  - Space: Repeat the current comic
+
+#+TITLE:     AxsJAX-Enhanced xkcd User Guide
+#+AUTHOR:    T.V. Raman, Charles L. Chen
+#+EMAIL:     raman@google.com
+#+EMAIL: clchen@google.com
+#+LANGUAGE:  en
+#+OPTIONS:   H:3 num:t toc:t \n:nil @:t ::t |:t ^:t f:t *:t TeX:t LaTeX:nil skip:t p:nil

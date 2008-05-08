@@ -1,0 +1,551 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xml:lang="en"
+      lang="en">
+<head>
+    <title>Improving Access To Web Interaction At Google</title>
+    <meta http-equiv="Content-Type"
+          content="text/html; charset=us-ascii" />
+    <meta name="copyright"
+          content="Copyright &copy; 2008 Google" />
+    <meta name="font-size-adjustment"
+          content="-1" />
+    <link rel="stylesheet"
+          href="w3c-blue2.css"
+          type="text/css"
+          media="screen, projection, print" />
+    <script src="slidy.js"
+          type="text/javascript">
+    </script>
+</head>
+
+<body>
+    <!-- this defines the slide background -->
+
+    <div class="background">
+        <div class="header">
+            <!-- sized and colored via CSS -->
+            </div>
+            <!-- hidden style graphics to ensure they are saved with other content -->
+        <img class="hidden"
+             src="bullet.png"
+             alt="" /> <img class="hidden"
+             src="fold.bmp"
+             alt="" /> <img class="hidden"
+             src="unfold.bmp"
+             alt="" /> <img class="hidden"
+             src="fold-dim.bmp"
+             alt="" /> <img class="hidden"
+             src="nofold-dim.bmp"
+             alt="" /> <img class="hidden"
+             src="unfold-dim.bmp"
+             alt="" /> <img class="hidden"
+             src="bullet-fold.gif"
+             alt="" /> <img class="hidden"
+             src="bullet-unfold.gif"
+             alt="" /> <img class="hidden"
+             src="bullet-fold-dim.gif"
+             alt="" /> <img class="hidden"
+             src="bullet-nofold-dim.gif"
+             alt="" /> <img class="hidden"
+             src="bullet-unfold-dim.gif"
+             alt="" /> 
+
+        <div class="footer">
+            <!-- modify the following text as appropriate -->
+            Improving Access To Web Interaction At Google<br />
+             March 2008
+        </div>
+    </div>
+
+    <div class="slide cover"
+         style="background-color: white">
+        <div class="header">
+            <h1>Improving Access To Web Interaction At Google</h1>
+
+            <p>Charles L. Chen,
+            &lt;<a href="mailto:clchen@google.com">clchen@google.com</a>&gt;</p>
+
+            <p>T.V. Raman,
+            &lt;<a href="mailto:raman@google.com">raman@google.com</a>&gt;</p>
+        </div><br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+         <img style="display: block; margin-left: auto; margin-right: auto"
+             src="braille_logo.png"
+             alt="The Google logo in Braille." />
+    </div>
+
+    <div class="slide">
+        <h1>Overview</h1>
+
+        <ul>
+            <li>Accessibility Challenges for Web Interaction</li>
+
+            <li>Access Enabling UI Libraries</li>
+
+            <li>Building Accessibility from the Ground Up</li>
+
+            <li>Gap Analysis</li>
+
+            <li>Design Consequences</li>
+
+            <li>Q &amp; A</li>
+        </ul>
+    </div>
+
+    <div class="slide">
+        <h1>Accessibility Challenges for Web Interaction</h1>
+
+        <ul>
+            <li>
+                Web 1.0 
+
+                <ul>
+                    <li>Web pages are static documents</li>
+
+                    <li>Interaction limited to simple form
+                    controls</li>
+                </ul>
+            </li>
+
+            <li>
+                Web 2.0 
+
+                <ul>
+                    <li>Web pages are dynamic</li>
+
+                    <li>Interaction with custom complex
+                    widgets</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div class="slide">
+        <h1>WAI-ARIA</h1>
+
+        <ul>
+            <li>AT need to ask the browser what an element is</li>
+
+            <li>Browsers need to identify that element and its
+            associated properties in a meaningful way</li>
+
+            <li>
+                <a href="http://www.w3.org/WAI/intro/aria">ARIA</a>
+                provides this 
+
+                <ul>
+                    <li>Map leaf level widgets to their equivalents
+                    in traditional desktop applications</li>
+
+                    <li>When there is an update, give the AT some
+                    hints about what should be spoken</li>
+
+                    <li>DOM + JS is the assembly language of the
+                    web - ARIA adds a few special operators to
+                    this</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div class="slide">
+        <h1>WAI-ARIA</h1>
+
+        <ul>
+            <li>
+                Roles (with related properties) 
+
+                <ul>
+                    <li>"slider" role for DIVs that have JavaScript
+                    + CSS which act as sliders</li>
+
+                    <li>AT will see these DIVs as slider widgets in
+                    a desktop app</li>
+                </ul>
+            </li>
+
+            <li>
+                Live Regions 
+
+                <ul>
+                    <li>Regions with dynamic content</li>
+
+                    <li>Hint for how updates to these regions
+                    should be processed</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div class="slide">
+        <h1>WAI-ARIA</h1>
+
+        <ul>
+            <li>
+                Experiencing Web Apps with ARIA
+                <ul>
+                  <li>
+                    Web app uses ARIA
+                  </li>
+                  <li>
+                    ARIA aware browser + AT combination
+                  </li>
+                  <li>
+                    Turn off browse mode so that you can interact with the web application as an application and not as a document
+                  </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div class="slide">
+        <h1>Access Enabling UI Libraries</h1>
+
+        <ul>
+            <li>
+                <a href="http://code.google.com/webtoolkit/">Google
+                Web Toolkit</a> 
+
+                <ul>
+                    <li>Enables web developers to program in a
+                    higher level language (Java)</li>
+
+                    <li>Compiles it to the assembly language of the
+                    Web (HTML DOM and JS)</li>
+
+                    <li>Accessible building blocks for GWT 1.5</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div class="slide">
+        <h1>Building Accessibility from the Ground Up</h1>
+
+        <ul>
+            <li>
+                Design principles 
+
+                <ul>
+                    <li>Leave the visual look and feel intact</li>
+
+                    <li>Keyboard support as a general usability
+                    enhancement</li>
+
+                    <li>ARIA enabled automatically for application
+                    developers</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div class="slide">
+        <h1>Building Accessibility from the Ground Up</h1>
+
+        <ul>
+            <li>
+                Benefits to application developers 
+
+                <ul>
+                    <li>Widgets are accessible by default</li>
+
+                    <li>Existing applications get improvements
+                    automatically</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div class="slide">
+        <h1>Building Accessibility from the Ground Up</h1>
+
+        <ul>
+            <li>
+                Benefits to end users 
+
+                <ul>
+                    <li>ARIA aware AT can treat web applications as
+                    just applications</li>
+
+                    <li>Web widgets presented as traditional
+                    desktop counterparts</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div class="slide">
+        <h1>Building Accessibility from the Ground Up</h1>
+
+        <ul>
+            <li>
+                Benefits to the community
+                <ul>
+                    <li>Browser implementors and AT vendors can test against real web apps</li>
+
+                    <li>AT users can start experiencing web apps with ARIA support</li>
+
+                    <li>Gap analysis
+                      <ul>
+                        <li>Improving the spec</li>
+                        <li>Improving GWT</li>
+                      </ul>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div class="slide">
+        <h1>Gap Analysis</h1>
+
+        <ul>
+            <li>Web applications are more than the sum of their
+            leaf level widgets</li>
+
+            <li>The AT user has to drive two applications
+            simultaneously; the web app to do the task and the
+            screen reader to discover what the web app has
+            done</li>
+
+            <li>Visually impaired users should use the application
+            the same way as a sighted user and get feedback through
+            their AT</li>
+
+            <li><a href='http://google-axsjax.googlecode.com'>Script enhanced accessibility for a smoother user
+            experience</a></li>
+        </ul>
+    </div>
+
+    <div class="slide">
+        <h1>Gap Analysis</h1>
+
+        <ul>
+            <li>Creating a good user experience for traditional
+            desktop apps</li>
+
+            <li>Start with the accessibility API so that all the
+            widgets are accessible</li>
+
+            <li>
+                Use an application specific script to handle higher
+                level logic 
+
+                <ul>
+                    <li>Word processors</li>
+
+                    <li>Calendar applications</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div class="slide">
+        <h1>Gap Analysis</h1>
+
+        <ul>
+            <li>
+                Script enhanced accessibility can be made available
+                by: 
+
+                <ul>
+                    <li>Web application providers injecting the
+                    needed augmentation based on user preferences.
+                    Such injection has to be independent of any
+                    given adaptive technology to avoid a
+                    combinatorial explosion.</li>
+
+                    <li>AT vendors injecting such augmentation for
+                    their AT.</li>
+
+                    <li>
+                        Web user agents relying on metadata to
+                        identify relevant portions of a Web user
+                        interface, and exposing such metadata via
+                        reflection to the adaptive technology. 
+
+                        <ul>
+                            <li>Higher level information</li>
+
+                            <li>Outlook mail folders, not
+                            individual checkboxes</li>
+                        </ul>
+                    </li>
+
+                    <li>The Web community at large experimenting
+                    with different approaches that work at Web
+                    scale. Such large-scale experimentation can be
+                    used to discover and codify design patterns
+                    that work as a means of arriving at the next
+                    generation of accessibility techniques.</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div class="slide">
+        <h1><a href='http://reader.google.com'>Google
+        Reader</a></h1>
+
+        <ul>
+            <li>Feed reader</li>
+
+            <li>Web feeds - updated content from websites</li>
+
+            <li>
+                Advantages for the user: 
+
+                <ul>
+                    <li>Only subscribe to feeds that are of
+                    interest</li>
+
+                    <li>Just the content without the clutter</li>
+
+                    <li>One place to look for updates instead of
+                    going to the individual sites</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div class="slide">
+        <h1><a href='http://reader.google.com'>Google
+        Reader</a></h1><img src="reader.png"
+             alt="Screen shot of Google Reader" />
+    </div>
+
+    <div class="slide">
+        <h1><a href='http://reader.google.com'>Google
+        Reader</a></h1>
+
+        <ul>
+            <li>More akin to a desktop application than a web
+            page</li>
+
+            <li>Users need to be able to do more than just identify
+            the individual widgets</li>
+
+            <li>
+            <a href="http://www.google.com/help/reader/faq.html#shortcuts">
+            Reader is already a keyboard driven app</a></li>
+
+            <li>Users should automatically hear the current
+            feed/article when they navigate to it</li>
+        </ul>
+    </div>
+
+    <div class="slide">
+        <h1><a href='http://reader.google.com'>Google
+        Reader</a></h1>
+
+        <ul>
+            <li>Initially released as a script for
+            experimentation</li>
+
+            <li>Enhanced version is now integrated and available as
+            part of Reader</li>
+
+            <li>General pattern: Experiment and discover what is
+            useful, take lessons learned and integrate back into
+            product</li>
+        </ul>
+    </div>
+
+    <div class="slide">
+        <h1><a href='http://www.google.com'>Google Search</a></h1>
+
+        <ul>
+            <li>AJAX improving usability</li>
+
+            <li>Press a key to go to the next result</li>
+
+            <li>When on the last result, that same key loads the
+            next page and goes to the first result</li>
+        </ul>
+    </div>
+
+    <div class="slide">
+        <h1>
+        <a href='http://mail.google.com'>Gmail</a></h1><img src="gmail_inbox.png"
+             alt="Screen shot of the Gmail inbox." />
+    </div>
+
+    <div class="slide">
+        <h1>
+        <a href='http://mail.google.com'>Gmail</a></h1><img src="gmail_msg.png"
+             alt="Screen shot of Gmail messages shown as a conversation." />
+        </div>
+
+    <div class="slide">
+        <h1><a href='http://mail.google.com'>Gmail</a></h1>
+
+        <ul>
+            <li>
+            <a href='http://mail.google.com/support/bin/answer.py?hl=en&amp;answer=6594'>
+            Also a keyboard driven app</a></li>
+
+            <li>Speak the sender, subject, snippet, and timestamp
+            when the user goes to the next/previous message in the
+            inbox</li>
+
+            <li>Read the message when the user moves
+            to the next/previous message in the conversation</li>
+
+            <li>Announce alerts ("Your message has been sent.")
+            when they appear</li>
+
+            <li>Speak instant messages from the chat system inside
+            Gmail</li>
+        </ul>
+    </div>
+
+    <div class="slide">
+        <h1>Design Consequences</h1>
+
+        <ul>
+            <li>
+                A talking translation system 
+
+                <ul>
+                    <li>
+                    <a href='http://googletalk.blogspot.com/2007/12/merry-christmas-god-jul-and.html'>
+                    Google Translation Bots</a></li>
+
+                    <li>Combine this with script enhanced
+                    accessibility and an AT capable of multiple
+                    languages</li>
+                </ul>
+            </li>
+
+            <li>
+                Enhanced usability for all 
+
+                <ul>
+                    <li>Keyboard navigation - more efficient for
+                    power users</li>
+
+                    <li>Mobile devices</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div class="slide">
+        <h1>Q &amp; A</h1>
+
+        <ul>
+            <li>Thank you for your time!</li>
+        </ul>
+    </div>
+</body>
+</html>

@@ -1,0 +1,7 @@
+<cnr>
+  <list title='Gadgets'>
+    <item>
+      id('modules')//div[@class='modbox']
+    </item>
+  </list>
+</cnr>
