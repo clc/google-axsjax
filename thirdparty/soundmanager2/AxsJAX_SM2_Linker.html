@@ -103,14 +103,14 @@
   };
   
   function clearCommand(){
-  /*
+
     var loc = document.location.toString();
 	if (loc.indexOf('#') == -1){
 	  loc = loc + '#';
 	}
 	loc = loc.substring(0,loc.indexOf('#')+1);
     document.location = loc;
-	*/
+
   }
   
   function updateStats(){
@@ -141,13 +141,8 @@
 	var stats = 'Time=' + time;
 	parent.location = loc + stats;
 	*/
-    var loc = document.location.toString();
-	if (loc.indexOf('#') == -1){
-	  loc = loc + '#';
-	}
-	loc = loc.substring(0,loc.indexOf('#')+1);
+
     if (currentSoundID === null){
-	  document.location = loc;
 	  parent.location = parentUrl + '#';
 	  return;
 	}
@@ -164,9 +159,7 @@
 	}
 	
 	var stats = 'Time=' + time;
-	document.location = loc + stats;
-	parent.location = parentUrl + '#' + stats;
-	
+	parent.location = parentUrl + '#' + stats;	
   };
   
 						
