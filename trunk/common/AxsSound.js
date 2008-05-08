@@ -20,25 +20,22 @@
 
 /**
  * Class for playing sound from a URL.
- * @param {Object} axsJAXObj  An instance of an AxsJAX object.
  * @constructor
  */
-var AxsSound = function(axsJAXObj){
-  this.sm2BaseURL = 'http://google-axsjax.googlecode.com/svn/trunk/thirdparty/soundmanager2/';
-  this.axsJAXObj = axsJAXObj;
+var AxsSound = function(){
+  this.sm2BaseURL = 'http://www.corp.google.com/~clchen/AxsJAX/thirdparty/soundmanager2/'; //'http://google-axsjax.googlecode.com/svn/trunk/thirdparty/soundmanager2/';
   this.sm2LinkerFrame = null;
 };
 
 AxsSound.prototype.init = function(){
-  var activeDoc = this.axsJAXObj.getActiveDocument();
-  this.sm2LinkerFrame = activeDoc.createElement('iframe');
+  this.sm2LinkerFrame = document.createElement('iframe');
   this.sm2LinkerFrame.src = this.sm2BaseURL + 'AxsJAX_SM2_Linker.html';
   this.sm2LinkerFrame.width = '0%';
   this.sm2LinkerFrame.height = '0%';
   this.sm2LinkerFrame.style.top = '-1000';
   this.sm2LinkerFrame.style.left = '-1000';
   this.sm2LinkerFrame.style.position = 'absolute';
-  activeDoc.getElementsByTagName('body')[0].appendChild(this.sm2LinkerFrame);    
+  document.getElementsByTagName('body')[0].appendChild(this.sm2LinkerFrame);    
 };
 
 AxsSound.prototype.play = function(url){
@@ -51,9 +48,37 @@ AxsSound.prototype.play = function(url){
   this.sm2LinkerFrame.src = this.sm2BaseURL + 'AxsJAX_SM2_Linker.html' + '#AxsSoundCmd=Play(' + url + ')'; 
 };
 
+AxsSound.prototype.playSeg = function(url,startTime,endTime){
+  if (this.sm2LinkerFrame === null){
+    this.init();
+	var self = this;
+    window.setTimeout(function(){self.playSeg(url,startTime,endTime);},500);
+	return;
+  }
+  this.sm2LinkerFrame.src = this.sm2BaseURL + 'AxsJAX_SM2_Linker.html' + '#AxsSoundCmd=PlaySeg(' + url + ',' + startTime + ',' + endTime + ')'; 
+};
+
 AxsSound.prototype.stop = function(){
   if (this.sm2LinkerFrame === null){
 	return;
   }
   this.sm2LinkerFrame.src = this.sm2BaseURL + 'AxsJAX_SM2_Linker.html' + '#AxsSoundCmd=Stop()';  
+};
+
+AxsSound.prototype.getTime = function(){
+  if (this.sm2LinkerFrame === null){
+	return -1;
+  }
+  var timeKeyword = 'Time=';
+  var timeStr = unescape(document.location.hash);
+  var timeStart = timeStr.indexOf(timeKeyword) + timeKeyword.length;
+  var time = parseInt(timeStr.substring(timeStart),10);
+  return time;
+};
+
+AxsSound.prototype.isPlaying = function(){
+  if (this.getTime() == -1){
+    return false;
+  }
+  return true;
 };

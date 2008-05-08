@@ -8,6 +8,7 @@
   var commandMonitorDelay = 100;
   var stopTime = -1;
   var currentSoundID = null;
+  var isPlaying = false;
   
   
   function commandMonitor(){
@@ -35,6 +36,8 @@
 	  soundManager.stopAll();
 	  soundManager.play(audioUrl,audioUrl);
 	  currentSoundID = audioUrl;	
+	  isPlaying = true;
+	  clearCommand();
 	  updateStats();
 	  window.setTimeout(function(){commandMonitor();},commandMonitorDelay);
 	  return;
@@ -62,6 +65,7 @@
 	
 	// Stop or invalid command 
 	soundManager.stopAll();
+	clearCommand();
 	updateStats();  
 	window.setTimeout(function(){commandMonitor();},commandMonitorDelay);
   };
@@ -84,29 +88,45 @@
 	}  
     stopTime = segEnd;
 	currentSoundID = url;	
+	isPlaying = true;
+	clearCommand();
   };
   
-  function updateStats(){
+  function clearCommand(){
     var loc = document.location.toString();
+	if (loc.indexOf('#') == -1){
+	  loc = loc + '#';
+	}
+	loc = loc.substring(0,loc.indexOf('#')+1);
+    document.location = loc;
+  }
+  
+  function updateStats(){
+    var loc = parent.location.toString();
 	if (loc.indexOf('#') == -1){
 	  loc = loc + '#';
 	}
 	loc = loc.substring(0,loc.indexOf('#')+1);
 	
 	if (currentSoundID === null){
-	  document.location = loc;
+	  parent.location = loc;
 	  return;
 	}
-	
+
 	var time = soundManager.getSoundById(currentSoundID).position;
-	var stats = 'Time=' + time;
 	
 	if ((stopTime != -1) && (time >= stopTime)){
 	  stopTime = -1;
-	  soundManager.stopAll();
+	  soundManager.stopAll();	  
+	  isPlaying = false;
+	  time = -1;
+	} else if (soundManager.getSoundById(currentSoundID).playState === 0){  
+	  isPlaying = false;	
+	  time = -1;
 	}
 	
-	document.location = loc + stats;
+	var stats = 'Time=' + time;
+	parent.location = loc + stats;
   };
   
 						
