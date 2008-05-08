@@ -25,6 +25,7 @@
 var AxsSound = function(){
   this.sm2BaseURL = 'http://google-axsjax.googlecode.com/svn/trunk/thirdparty/soundmanager2/';
   this.sm2LinkerFrame = null;
+  this.initSucceeded = false;
 };
 
 AxsSound.prototype.init = function(){
@@ -35,11 +36,21 @@ AxsSound.prototype.init = function(){
   this.sm2LinkerFrame.style.top = '-1000';
   this.sm2LinkerFrame.style.left = '-1000';
   this.sm2LinkerFrame.style.position = 'absolute';
-  document.getElementsByTagName('body')[0].appendChild(this.sm2LinkerFrame);   
+  document.getElementsByTagName('body')[0].appendChild(this.sm2LinkerFrame);  
+  this.checkInitStatus();
+};
+
+AxsSound.prototype.checkInitStatus = function(){
+  if (document.location.hash == '#InitSuccess'){
+    this.initSucceeded = true;
+	return;	
+  }
+  var self = this;
+  window.setTimeout(function(){self.checkInitStatus();},100);
 };
 
 AxsSound.prototype.play = function(url){
-  if (this.sm2LinkerFrame === null){
+  if (!this.initSucceeded){
     this.init();
 	var self = this;
     window.setTimeout(function(){self.play(url);},500);
@@ -49,7 +60,7 @@ AxsSound.prototype.play = function(url){
 };
 
 AxsSound.prototype.playSeg = function(url,startTime,endTime){
-  if (this.sm2LinkerFrame === null){
+  if (!this.initSucceeded){
     this.init();
 	var self = this;
     window.setTimeout(function(){self.playSeg(url,startTime,endTime);},500);
@@ -59,14 +70,14 @@ AxsSound.prototype.playSeg = function(url,startTime,endTime){
 };
 
 AxsSound.prototype.stop = function(){
-  if (this.sm2LinkerFrame === null){
+  if (!this.initSucceeded){
 	return;
   }
   this.sm2LinkerFrame.src = this.sm2BaseURL + 'AxsJAX_SM2_Linker.html' + '#AxsSoundCmd=Stop()';  
 };
 
 AxsSound.prototype.getTime = function(){
-  if (this.sm2LinkerFrame === null){
+  if (!this.initSucceeded){
 	return -1;
   }
   var timeKeyword = 'Time=';
