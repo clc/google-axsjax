@@ -29,13 +29,13 @@ var AxsSound = function(){
 
 AxsSound.prototype.init = function(){
   this.sm2LinkerFrame = document.createElement('iframe');
-  this.sm2LinkerFrame.src = this.sm2BaseURL + 'AxsJAX_SM2_Linker.html';
+  this.sm2LinkerFrame.src = this.sm2BaseURL + 'AxsJAX_SM2_Linker.html' + '#Parent=' + document.location.toString();
   this.sm2LinkerFrame.width = '0%';
   this.sm2LinkerFrame.height = '0%';
   this.sm2LinkerFrame.style.top = '-1000';
   this.sm2LinkerFrame.style.left = '-1000';
   this.sm2LinkerFrame.style.position = 'absolute';
-  document.getElementsByTagName('body')[0].appendChild(this.sm2LinkerFrame);    
+  document.getElementsByTagName('body')[0].appendChild(this.sm2LinkerFrame);   
 };
 
 AxsSound.prototype.play = function(url){
