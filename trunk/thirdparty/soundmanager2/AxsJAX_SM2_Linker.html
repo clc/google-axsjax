@@ -14,9 +14,11 @@
   function init(){
     var parentUrlCmd = '#Parent=';
     var params = document.location.toString();
+	alert(params);
 	var parentUrlStart = params.indexOf(parentUrlCmd) + parentUrlCmd.length;
 	var parentUrlEnd = params.length;
     parentUrl = params.substring(parentUrlStart,parentUrlEnd);
+	alert(parentUrl);
 	parentUrl = parentUrl.substring(0,parentUrl.indexOf('#'));	
 	commandMonitor();
   }
@@ -159,7 +161,6 @@
 	}
 	
 	var stats = 'Time=' + time;
-alert(parentUrl + '#' + stats);
 	parent.location = parentUrl + '#' + stats;	
   };
   
