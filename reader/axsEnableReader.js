@@ -184,7 +184,7 @@ axsReader.domAttrModifiedHandler = function(evt){
   var attrib = evt.attrName;
   var newVal = evt.newValue;
   var oldVal = evt.prevValue;
-  var target = evt.target;
+  var target = evt.target; 
   //Article, feed tree, and tag navigation
   if ( ((attrib == 'id') && (newVal == 'current-entry')) ||
        ((attrib == 'class') && ((newVal == 'link cursor') ||
@@ -197,30 +197,30 @@ axsReader.domAttrModifiedHandler = function(evt){
     axsReader.axsJAXObj.speakTextViaNode(axsReader.ARTICLES_LOADED_STRING);
     //Star and unstar articles
   } else if( (attrib == 'class')
-             && (newVal == 'item-star-active star link')
-             && (oldVal == 'item-star star link')){
+             && (newVal.indexOf('item-star-active') != -1)
+             && (oldVal.indexOf('item-star ') != -1)){
     axsReader.axsJAXObj.speakTextViaNode(axsReader.ITEM_STARRED_STRING);
   } else if( (attrib == 'class')
-             && (newVal == 'item-star star link')
-             && (oldVal == 'item-star-active star link')){
+             && (newVal.indexOf('item-star ') != -1)
+             && (oldVal.indexOf('item-star-active') != -1)){
     axsReader.axsJAXObj.speakTextViaNode(axsReader.ITEM_UNSTARRED_STRING);
     //Share and unshare articles
   } else if( (attrib == 'class')
-             && (newVal == 'broadcast-active broadcast link')
-             && (oldVal == 'broadcast-inactive broadcast link')){
+             && (newVal.indexOf('broadcast-active') != -1)
+             && (oldVal.indexOf('broadcast-inactive') != -1)){
     axsReader.axsJAXObj.speakTextViaNode(axsReader.ITEM_SHARED_STRING);
   } else if( (attrib == 'class')
-             && (newVal == 'broadcast-inactive broadcast link')
-             && (oldVal == 'broadcast-active broadcast link')){
+             && (newVal.indexOf('broadcast-inactive') != -1)
+             && (oldVal.indexOf('broadcast-active') != -1)){
     axsReader.axsJAXObj.speakTextViaNode(axsReader.ITEM_UNSHARED_STRING);
     //Mark and unmark articles as read
   } else if( (attrib == 'class')
-             && (newVal == 'read-state-read read-state link')
-             && (oldVal == 'read-state-unread read-state link')){
+             && (newVal.indexOf('read-state-not-kept-unread') != -1)
+             && (oldVal.indexOf('read-state-kept-unread') != -1)){
     axsReader.axsJAXObj.speakTextViaNode(axsReader.MARKED_READ_STRING);
   } else if( (attrib == 'class')
-             && (newVal == 'read-state-unread read-state link')
-             && (oldVal == 'read-state-read read-state link')){
+             && (newVal.indexOf('read-state-kept-unread') != -1)
+             && (oldVal.indexOf('read-state-not-kept-unread') != -1)){
     axsReader.axsJAXObj.speakTextViaNode(axsReader.MARKED_UNREAD_STRING);
     //Alert for when email messages are not sent
   } else if( (attrib == 'class')
