@@ -82,6 +82,9 @@ AxsSound.prototype.getTime = function(){
   }
   var timeKeyword = 'Time=';
   var timeStr = unescape(document.location.hash);
+  if (timeStr.indexOf(timeKeyword) == -1){
+	return -1;  
+  }
   var timeStart = timeStr.indexOf(timeKeyword) + timeKeyword.length;
   var time = parseInt(timeStr.substring(timeStart),10);
   return time;
