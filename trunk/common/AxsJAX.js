@@ -145,16 +145,17 @@ AxsJAX.prototype.speakNode = function(targetNode, opt_noFocusChange){
   } else {
     var oldRole = this.getAttributeOf(targetNode,'role');
     this.setAttributeOf(targetNode,'role','row');
-    this.activeParent.tabIndex = -1;
-    this.activeParent.blur();
-    this.setAttributeOf(this.activeParent,'activedescendant',null);
-
-
-
-    this.activeParent.focus();
-    this.setAttributeOf(this.activeParent,'activedescendant',targetNode.id);
-
-
+	
+    var currentFocusedNode = this.lastFocusedNode;
+    // Use the body if there is no last focused node or if the last focused node is the entire document.
+    if ((!currentFocusedNode) || (currentFocusedNode.nodeType == 9)){
+      this.activeParent.tabIndex = -1;
+      currentFocusedNode = this.activeParent;
+    }
+    currentFocusedNode.blur();
+    this.setAttributeOf(currentFocusedNode,'activedescendant',null);
+    currentFocusedNode.focus();
+    this.setAttributeOf(currentFocusedNode,'activedescendant',targetNode.id);
     //Restore the original role of the targetNode
     var self = this;
     window.setTimeout(
@@ -434,8 +435,8 @@ AxsJAX.prototype.tabKeyHandler = function(evt, selfRef){
  * @param {Node} targetNode The HTML node to be spoken.
  */
 AxsJAX.prototype.goTo = function(targetNode){
-  targetNode.scrollIntoView(true);
   this.speakNode(targetNode);
+  targetNode.scrollIntoView(true);
   this.markPosition(targetNode);
 };
 
