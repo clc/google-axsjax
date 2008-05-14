@@ -31,7 +31,7 @@ axsSky.HELP_STRING = 'The following shortcut keys are available. ' +
                      'N, go to the next item. ' +
                      'P, go to the previous item. ' +
                      'Enter, open the current item. ' +
-                     'H, go to the home menu. ' +
+                     'T, go to the top menu. ' +
                      'Escape, stop the podcast that is currently playing. ';
 
 axsSky.ITEMS_LOADED = 'Items loaded.';
@@ -197,7 +197,7 @@ axsSky.charCodeMap = {
 		},
   110 : axsSky.nextItem,
   112 : axsSky.prevItem,
-  104 : axsSky.goToHome
+  116 : axsSky.goToHome
 };
 
 window.setTimeout(axsSky.init,500);
