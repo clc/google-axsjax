@@ -85,6 +85,10 @@ function pickScript(){
       theScript.src = baseURL + 'calendar/axsEnableCalendar.js';
       shouldInsertScripts = true;
     }
+    else if (path.indexOf('/sky') === 0 ){
+      theScript.src = baseURL + 'sky/axsEnableSky.js';
+      shouldInsertScripts = true;
+    }
     else if ((prefix == 'www')
         || (path.indexOf('/search') === 0)
         || (path.indexOf('/custom') === 0)
