@@ -178,6 +178,10 @@ axsSky.keyHandler = function(evt){
 
   if (axsSky.axsJAXObj.inputFocused) return true;
   
+  if (axsSky.axsJAXObj.lastFocusedNode.tagName == 'A'){
+    return true;
+  }
+  
   var command =  axsSky.keyCodeMap[evt.keyCode] ||
                  axsSky.charCodeMap[evt.charCode];
 
