@@ -51,13 +51,12 @@ AxsNav.CYCLEPREV_STRING = ', cycle previous. ';
  * Makes an array of items given a navigation list node and its index.
  * Elements associated with a list will be marked as such.
  * @param {Node} listNode The navigation list node
- * @param {number} listIdx The index of the navigation list node
  * @return {Array} The array of items.
  */
-AxsNav.prototype.makeItemsArray = function(listNode, listIdx){
+AxsNav.prototype.makeItemsArray = function(listNode){
   var itemsArray = new Array();
   var cnrItems = listNode.getElementsByTagName('item');
-  for (var i=0,entry; entry = cnrItems[i]; i++){
+  for (var i = 0, entry; entry = cnrItems[i]; i++){
     //Do this in a try-catch block since there are multiple
     //sets of cnrItems and even if one set does not exist as expected,
     //the other sets should still be available.
@@ -66,11 +65,11 @@ AxsNav.prototype.makeItemsArray = function(listNode, listIdx){
       var htmlElem = this.axs_.getActiveDocument().documentElement;
       var elems = this.axs_.evalXPath(xpath, htmlElem);
       var idxStr = entry.getAttribute('index') || '0';
-      var idx = parseInt(idxStr,10);      
+      var idx = parseInt(idxStr, 10);
       var count = elems.length - idx;
       var countStr = entry.getAttribute('count') || '*';
       if (countStr != '*'){
-        count = parseInt(countStr,10);
+        count = parseInt(countStr, 10);
       }
       var end = count + idx;
       var action = entry.getAttribute('action') || 'goto';
@@ -82,10 +81,10 @@ AxsNav.prototype.makeItemsArray = function(listNode, listIdx){
           if (typeof(item.elem.AxsNavInfo) == 'undefined'){
             item.elem.AxsNavInfo = new Object();
           }
-          item.elem.AxsNavInfo[listIdx] = itemsArray.length;
+          item.elem.AxsNavInfo[this.navArray.length] = itemsArray.length;
           itemsArray.push(item);
         }
-        idx++;  
+        idx++;
       }
     }
     catch(err){ }
@@ -258,7 +257,8 @@ AxsNav.prototype.currentItem = function(){
  * This function will act on the item based on what action was specified
  * in the Content Navigation Listing.
  *
- * @param {Object?} item The item to act on. Use item.elem to get at the DOM node.
+ * @param {Object?} item The item to act on. 
+ *      Use item.elem to get at the DOM node.
  */
 AxsNav.prototype.actOnItem = function(item){
   if (item !== null){
@@ -286,8 +286,11 @@ AxsNav.prototype.actOnItem = function(item){
  *
  * @param {Function} method  Method to be be associated with the array of keys
  */
-AxsNav.prototype.assignKeysToMethod = function(keyArray, charMap, keyMap, method){
-  for (var i=0; i<keyArray.length; i++){
+AxsNav.prototype.assignKeysToMethod = function(keyArray, 
+                                               charMap, 
+                                               keyMap, 
+                                               method){
+  for (var i = 0; i < keyArray.length; i++){
     var key = keyArray[i];
     if (key == 'LEFT'){
       keyMap[37] = method;
@@ -329,33 +332,33 @@ AxsNav.prototype.assignItemKeys = function(keyStr, navListIdx, navTaskStr){
   keys = keyStr.split(' ');
   var self = this;
   if (navTaskStr == 'prev'){
-    this.assignKeysToMethod( keys,
-                             this.charCodeMaps[navListIdx],
-                             this.keyCodeMaps[navListIdx],
-                             function(){
-                               self.actOnItem(self.prevItem());
-                             } );
+    this.assignKeysToMethod(keys,
+                            this.charCodeMaps[navListIdx],
+                            this.keyCodeMaps[navListIdx],
+                            function(){
+                              self.actOnItem(self.prevItem());
+                            });
   } else if (navTaskStr == 'next') {
-    this.assignKeysToMethod( keys,
-                             this.charCodeMaps[navListIdx],
-                             this.keyCodeMaps[navListIdx],
-                             function(){
-                               self.actOnItem(self.nextItem());
-                             } );
+    this.assignKeysToMethod(keys,
+                            this.charCodeMaps[navListIdx],
+                            this.keyCodeMaps[navListIdx],
+                            function(){
+                              self.actOnItem(self.nextItem());
+                            });
   } else if (navTaskStr == 'back') {
-    this.assignKeysToMethod( keys,
-                             this.charCodeMaps[navListIdx],
-                             this.keyCodeMaps[navListIdx],
-                             function(){
-                               self.actOnItem(self.backItem());
-                             } );
+    this.assignKeysToMethod(keys,
+                            this.charCodeMaps[navListIdx],
+                            this.keyCodeMaps[navListIdx],
+                            function(){
+                              self.actOnItem(self.backItem());
+                            });
   } else {
-    this.assignKeysToMethod( keys,
-                             this.charCodeMaps[navListIdx],
-                             this.keyCodeMaps[navListIdx],
-                             function(){
-                               self.actOnItem(self.fwdItem());
-                             } );
+    this.assignKeysToMethod(keys,
+                            this.charCodeMaps[navListIdx],
+                            this.keyCodeMaps[navListIdx],
+                            function(){
+                              self.actOnItem(self.fwdItem());
+                            });
   }
 };
 
@@ -379,13 +382,13 @@ AxsNav.prototype.assignHotKeys = function(keyStr, navListIdx){
   }
   keys = keyStr.split(' ');
   var self = this;
-  this.assignKeysToMethod( keys,
-                           this.topCharCodeMap,
-                           this.topKeyCodeMap,
-                           function(){
-                             self.navListIdx = navListIdx;
-                             self.actOnItem(self.nextItem());
-                           } );
+  this.assignKeysToMethod(keys,
+                          this.topCharCodeMap,
+                          this.topKeyCodeMap,
+                          function(){
+                            self.navListIdx = navListIdx;
+                            self.actOnItem(self.nextItem());
+                          });
 };
 
 /**
@@ -406,12 +409,12 @@ AxsNav.prototype.assignEmptyMsgKeys = function(keyStr, emptyMsg){
   }
   keys = keyStr.split(' ');
   var self = this;
-  this.assignKeysToMethod( keys,
-                      this.topCharCodeMap,
-                      this.topKeyCodeMap,
-                      function(){
-                        self.axs_.speakTextViaNode(emptyMsg);
-                      } );
+  this.assignKeysToMethod(keys,
+                          this.topCharCodeMap,
+                          this.topKeyCodeMap,
+                          function(){
+                            self.axs_.speakTextViaNode(emptyMsg);
+                          });
 
 };
 
@@ -432,12 +435,12 @@ AxsNav.prototype.assignTargetKeys = function(target, charMap, keyMap){
   }
   keys = target.hotkeyStr.split(' ');
   var self = this;
-  this.assignKeysToMethod( keys,
-                           charMap,
-                           keyMap,
-                           function(){
-                             self.actOnTarget(target);
-                            } );
+  this.assignKeysToMethod(keys,
+                          charMap,
+                          keyMap,
+                          function(){
+                            self.actOnTarget(target);
+                          });
 };
 
 /**
@@ -478,7 +481,7 @@ AxsNav.prototype.setUpNavKeys = function(cnrDOM, emptyLists){
 
   //Acting on global targets
   var target;
-  for (i=0, target; target = this.targetsArray[i]; i++){
+  for (i = 0, target; target = this.targetsArray[i]; i++){
     this.assignTargetKeys(target, this.topCharCodeMap, this.topKeyCodeMap);
   }
 
@@ -488,49 +491,49 @@ AxsNav.prototype.setUpNavKeys = function(cnrDOM, emptyLists){
   if (this.nextListKeys !== ''){
     keys = this.nextListKeys.split(' ');
   }
-  this.assignKeysToMethod( keys,
-                           this.topCharCodeMap,
-                           this.topKeyCodeMap,
-                           function(){
-                             self.nextList();
-                             self.announceCurrentList();
-                           } );
+  this.assignKeysToMethod(keys,
+                          this.topCharCodeMap,
+                          this.topKeyCodeMap,
+                          function(){
+                            self.nextList();
+                            self.announceCurrentList();
+                          });
 
   keys = new Array();
   this.prevListKeys = cnrNode.getAttribute('prev') || '';
   if (this.prevListKeys !== ''){
     keys = this.prevListKeys.split(' ');
   }
-  this.assignKeysToMethod( keys,
-                           this.topCharCodeMap,
-                           this.topKeyCodeMap,
-                           function(){
-                             self.prevList();
-                             self.announceCurrentList();
-                           } );
+  this.assignKeysToMethod(keys,
+                          this.topCharCodeMap,
+                          this.topKeyCodeMap,
+                          function(){
+                            self.prevList();
+                            self.announceCurrentList();
+                          });
 
 
   //Moving through items and handling per-list targets
   var list;
-  for (i=0, list; list = this.navArray[i]; i++){
+  for (i = 0, list; list = this.navArray[i]; i++){
     var charMap = new Object();
     var keyMap = new Object();
     this.charCodeMaps.push(charMap);
     this.keyCodeMaps.push(keyMap);
-    this.assignItemKeys(list.nextKeys, i, "next");
-    this.assignItemKeys(list.prevKeys, i, "prev");
-    this.assignItemKeys(list.fwdKeys, i, "fwd");
-    this.assignItemKeys(list.backKeys, i, "back");
+    this.assignItemKeys(list.nextKeys, i, 'next');
+    this.assignItemKeys(list.prevKeys, i, 'prev');
+    this.assignItemKeys(list.fwdKeys, i, 'fwd');
+    this.assignItemKeys(list.backKeys, i, 'back');
     this.assignHotKeys(list.hotKeys, i);
     var j;
-    for (j=0, target; target = list.targets[j]; j++){
+    for (j = 0, target; target = list.targets[j]; j++){
       this.assignTargetKeys(target, charMap, keyMap);
     }
   }
 
   //Dealing with empty lists with hotkeys
   var emptyList;
-  for (i=0, emptyList; emptyList = emptyLists[i]; i++){
+  for (i = 0, emptyList; emptyList = emptyLists[i]; i++){
     this.assignEmptyMsgKeys(emptyList.hotKeys, emptyList.emptyMsg);
   }
 
@@ -542,11 +545,11 @@ AxsNav.prototype.setUpNavKeys = function(cnrDOM, emptyLists){
                      if (evt.ctrlKey) return true;
                      if (self.axs_.inputFocused) return true;
                      var idx = self.navListIdx;
-                     var command =  self.keyCodeMaps[idx][evt.keyCode] ||
-                                    self.charCodeMaps[idx][evt.charCode];
+                     var command = self.keyCodeMaps[idx][evt.keyCode] ||
+                                   self.charCodeMaps[idx][evt.charCode];
                      if (command) return command();
-                     command =  self.topKeyCodeMap[evt.keyCode] ||
-                                self.topCharCodeMap[evt.charCode];
+                     command = self.topKeyCodeMap[evt.keyCode] ||
+                               self.topCharCodeMap[evt.charCode];
                      if (command) return command();
                    };
 
@@ -557,7 +560,7 @@ AxsNav.prototype.setUpNavKeys = function(cnrDOM, emptyLists){
 AxsNav.prototype.makeTargetsArray = function(listNode){
   var targetsArray = new Array();
   var cnrTargets = listNode.getElementsByTagName('target');
-  for (var i=0,entry; entry = cnrTargets[i]; i++){
+  for (var i = 0, entry; entry = cnrTargets[i]; i++){
     var target = new Object();
     target.xpath = entry.textContent;
     target.title = entry.getAttribute('title') || '';
@@ -600,7 +603,7 @@ AxsNav.prototype.navInit = function(cnrString, opt_customNavMethod){
 
   var i;
   var currentList;
-  for (i=0, currentList; currentList = lists[i]; i++){
+  for (i = 0, currentList; currentList = lists[i]; i++){
     var navList = new Object();
     navList.title = currentList.getAttribute('title') || '';
     navList.hotKeys = currentList.getAttribute('hotkey') || '';
@@ -611,9 +614,9 @@ AxsNav.prototype.navInit = function(cnrString, opt_customNavMethod){
     navList.emptyMsg = currentList.getAttribute('onEmpty') || '';
     navList.tailTarget = null;
     navList.headTarget = null;
-    navList.items = this.makeItemsArray(currentList,i);
+    navList.items = this.makeItemsArray(currentList);
     navList.targets = this.makeTargetsArray(currentList);
-    for (var j=0, listTarget; listTarget = navList.targets[j]; j++){
+    for (var j = 0, listTarget; listTarget = navList.targets[j]; j++){
       if (listTarget.trigger == 'listTail'){
         navList.tailTarget = listTarget;
       } else if (listTarget.trigger == 'listHead'){
@@ -625,7 +628,7 @@ AxsNav.prototype.navInit = function(cnrString, opt_customNavMethod){
       //Only add nav lists that have content to the array
       this.navArray.push(navList);
       this.navItemIdxs.push(-1);
-    } else if ( navList.hotKeys !== ''){
+    } else if (navList.hotKeys !== ''){
       //Record empty nav lists if the user can jump to them directly
       emptyLists.push(navList);
     }
@@ -637,7 +640,7 @@ AxsNav.prototype.navInit = function(cnrString, opt_customNavMethod){
   this.targetsIdx = 0;
   var currentNode;
   var cnrNode = cnrDOM.firstChild;
-  for (i=0, currentNode; currentNode = cnrNode.childNodes[i]; i++){
+  for (i = 0, currentNode; currentNode = cnrNode.childNodes[i]; i++){
     if (currentNode.tagName == 'target'){
       var target = new Object();
       target.xpath = currentNode.textContent;
@@ -651,11 +654,11 @@ AxsNav.prototype.navInit = function(cnrString, opt_customNavMethod){
   }
 
   //Bind lists and targets to keys if there is no custom handler specified
-  if ( (opt_customNavMethod === null) ||
-       (typeof(opt_customNavMethod) == 'undefined') ){
-    this.setUpNavKeys(cnrDOM,emptyLists);
+  if ((opt_customNavMethod === null) ||
+      (typeof(opt_customNavMethod) == 'undefined')){
+    this.setUpNavKeys(cnrDOM, emptyLists);
   } else {
-    opt_customNavMethod(cnrDOM,this.navArray,emptyLists,this.targetsArray);
+    opt_customNavMethod(cnrDOM, this.navArray, emptyLists, this.targetsArray);
   }
 };
 
@@ -667,22 +670,22 @@ AxsNav.prototype.navInit = function(cnrString, opt_customNavMethod){
  * @return {string} The help string for globally available keys.
  */
 AxsNav.prototype.globalHelpString = function(){
-  var helpStr = "";
+  var helpStr = '';
   if (this.nextListKeys !== ''){
     helpStr = helpStr + this.nextListKeys + AxsNav.NEXTLIST_STRING;
   }
   if (this.prevListKeys !== ''){
-    helpStr = helpStr + this.prevListKeys + AxsNav.PREVLIST_STRING ;
+    helpStr = helpStr + this.prevListKeys + AxsNav.PREVLIST_STRING;
   }
   var i = 0;
   var target = null;
-  for (i=0, target; target = this.targetsArray[i]; i++){
+  for (i = 0, target; target = this.targetsArray[i]; i++){
     if (target.hotkeyStr !== ''){
       helpStr = helpStr + target.hotkeyStr + ', ' + target.title + '. ';
     }
   }
   var list = null;
-  for (i=0, list; list = this.navArray[i]; i++){
+  for (i = 0, list; list = this.navArray[i]; i++){
     if (list.hotKeys !== ''){
       helpStr = helpStr + list.hotKeys + ', ' + list.title + '. ';
     }
@@ -698,7 +701,7 @@ AxsNav.prototype.globalHelpString = function(){
  */
 AxsNav.prototype.localHelpString = function(){
   var currentList = this.navArray[this.navListIdx];
-  var helpStr = "";
+  var helpStr = '';
   if (currentList.fwdKeys !== ''){
     helpStr = helpStr + currentList.fwdKeys + AxsNav.GOFORWARD_STRING;
   }
@@ -711,7 +714,7 @@ AxsNav.prototype.localHelpString = function(){
   if (currentList.prevKeys !== ''){
     helpStr = helpStr + currentList.prevKeys + AxsNav.CYCLEPREV_STRING;
   }
-  for (var i=0, target; target = currentList.targets[i]; i++){
+  for (var i = 0, target; target = currentList.targets[i]; i++){
     if (target.hotkeyStr !== ''){
       helpStr = helpStr + target.hotkeyStr + ', ' + target.title + '. ';
     }
