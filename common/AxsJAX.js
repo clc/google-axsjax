@@ -38,16 +38,16 @@ var AxsJAX = function(useTabKeyFix){
   //Monitor focus and blur
   //These return "true" so that any page actions based on
   //focus and blur will still occur.
-  document.addEventListener('focus', 
+  document.addEventListener('focus',
                             function(evt){
                               self.lastFocusedNode = evt.target;
                               if ((evt.target.tagName == 'INPUT') ||
                                   (evt.target.tagName == 'TEXTAREA')){
                                 self.inputFocused = true;
-                              }                              
-                              return true; 
+                              }
+                              return true;
                             }, true);
-  document.addEventListener('blur', 
+  document.addEventListener('blur',
                             function(evt){
                               self.lastFocusedNode = null;
                               if ((evt.target.tagName == 'INPUT') ||
@@ -56,12 +56,14 @@ var AxsJAX = function(useTabKeyFix){
                               }
                               return true;
                             }, true);
-  
+
   //Activate the tab key fix if needed
   if (useTabKeyFix){
     this.tabKeyFixOn = true;
     document.addEventListener('keypress',
-                              function(event){self.tabKeyHandler(event,self);},
+                              function(event){
+                                self.tabKeyHandler(event, self);
+                              },
                               true);
     // Record in a custom DOM property:
     document.body.AXSJAX_TABKEYFIX_ADDED = true;
@@ -84,9 +86,11 @@ AxsJAX.prototype.setActiveParent = function(targetNode){
   this.activeParent = targetNode;
   var activeDoc = this.getActiveDocument();
   if (this.tabKeyFixOn && !activeDoc.body.AXSJAX_TABKEYFIX_ADDED){
-    var self = this;          
+    var self = this;
     activeDoc.addEventListener('keypress',
-                               function(event){self.tabKeyHandler(event,self);},
+                               function(event){
+                                 self.tabKeyHandler(event, self);
+                               },
                                true);
     activeDoc.body.AXSJAX_TABKEYFIX_ADDED = true;
   }
@@ -118,15 +122,15 @@ AxsJAX.prototype.getActiveDocument = function(){
  * to mirror the visual indication that a node is the current node
  * by speaking its contents as soon as as it becomes the current node.
  * @param {Node} targetNode The HTML node to be spoken.
- * @param {boolean}opt_noFocusChange  Specify if focus should move to targetNode
+ * @param {boolean} opt_noFocusChange  Specify if focus must move to targetNode
  */
 AxsJAX.prototype.speakNode = function(targetNode, opt_noFocusChange){
   if (!targetNode.id){
     this.assignId(targetNode);
   }
   if (opt_noFocusChange){
-    this.setAttributeOf(targetNode,'live','rude');
-    this.setAttributeOf(targetNode,'atomic','true');
+    this.setAttributeOf(targetNode, 'live', 'rude');
+    this.setAttributeOf(targetNode, 'atomic', 'true');
     var activeDoc = this.getActiveDocument();
 
     // It would be simpler to retain the dummyNode once it has been created
@@ -136,36 +140,37 @@ AxsJAX.prototype.speakNode = function(targetNode, opt_noFocusChange){
     var dummyNode = activeDoc.createElement('div');
     dummyNode.textContent = ' ';
     dummyNode.name = 'AxsJAX_dummyNode';
-    if ( targetNode.lastChild &&
-         targetNode.lastChild.name &&
-         (targetNode.lastChild.name == dummyNode.name) ){
+    if (targetNode.lastChild &&
+        targetNode.lastChild.name &&
+        (targetNode.lastChild.name == dummyNode.name)){
       targetNode.removeChild(targetNode.lastChild);
     }
     targetNode.appendChild(dummyNode);
   } else {
-    var oldRole = this.getAttributeOf(targetNode,'role');
-    this.setAttributeOf(targetNode,'role','row');
-	
+    var oldRole = this.getAttributeOf(targetNode, 'role');
+    this.setAttributeOf(targetNode, 'role', 'row');
+
     var currentFocusedNode = this.lastFocusedNode;
-    // Use the body if there is no last focused node or if the last focused node is the entire document.
+    // Use the body if there is no last focused node or
+    // if the last focused node is the entire document.
     if ((!currentFocusedNode) || (currentFocusedNode.nodeType == 9)){
       this.activeParent.tabIndex = -1;
       currentFocusedNode = this.activeParent;
     }
     currentFocusedNode.blur();
-    this.setAttributeOf(currentFocusedNode,'activedescendant',null);
+    this.setAttributeOf(currentFocusedNode, 'activedescendant', null);
     currentFocusedNode.focus();
-    this.setAttributeOf(currentFocusedNode,'activedescendant',targetNode.id);
+    this.setAttributeOf(currentFocusedNode, 'activedescendant', targetNode.id);
     //Restore the original role of the targetNode
     var self = this;
     window.setTimeout(
         function(){
           if (oldRole){
-            self.setAttributeOf(targetNode,'role',oldRole);
+            self.setAttributeOf(targetNode, 'role', oldRole);
           } else {
-            self.removeAttributeOf(targetNode,'role');
+            self.removeAttributeOf(targetNode, 'role');
           }
-        },0);
+        }, 0);
   }
 };
 
@@ -185,11 +190,11 @@ AxsJAX.prototype.speakText = function(textString){
   //receives and processes the live region event correctly.
   //Since this is only a string, it is safe to do this without considering
   //the active document of the AxsJAX object.
-  var doc =  window.content.document;
+  var doc = window.content.document;
   var audioNode = doc.createElement('span');
   audioNode.id = 'AxsJAX_audioNode';
   audioNode.style.visibility = 'hidden';
-  this.setAttributeOf(audioNode,'live','rude');
+  this.setAttributeOf(audioNode, 'live', 'rude');
   var oldAudioNode = doc.getElementById(audioNode.id);
   if (oldAudioNode){
     doc.body.removeChild(oldAudioNode);
@@ -224,27 +229,28 @@ AxsJAX.prototype.speakText = function(textString){
 AxsJAX.prototype.speakTextViaNode = function(textString, opt_anchorNode){
   var pixelId = 'AxsJAX_pixelAudioNode';
   var pixelName = 'AxsJAX_pixelAudioNode';
-  var encodedClearPixel = 'data:image/gif;base64,R0lGODlhAQABAIAAANvf7wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==';
+  var encodedClearPixel = 'data:image/gif;base64,R0lGODlhAQABAIAAANvf7wAAA' +
+                          'CH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==';
   var activeDoc = this.getActiveDocument();
   var pixelNode = null;
-  if (opt_anchorNode)  {
-    if ( opt_anchorNode.previousSibling &&
-         opt_anchorNode.previousSibling.name == pixelName ){
+  if (opt_anchorNode){
+    if (opt_anchorNode.previousSibling &&
+        opt_anchorNode.previousSibling.name == pixelName){
       pixelNode = opt_anchorNode.previousSibling;
     } else {
       pixelNode = activeDoc.createElement('img');
       pixelNode.name = pixelName;
-      pixelNode.setAttribute('tabindex',0);
+      pixelNode.setAttribute('tabindex', 0);
       pixelNode.style.outline = 'none';
       pixelNode.src = encodedClearPixel;
       opt_anchorNode.parentNode.insertBefore(pixelNode, opt_anchorNode);
       this.forceATSync(pixelNode);
     }
-    pixelNode.setAttribute('alt',textString);
-    pixelNode.setAttribute('title',textString);
+    pixelNode.setAttribute('alt', textString);
+    pixelNode.setAttribute('title', textString);
     // Use a setTimeout here as Firefox attribute setting can be quirky
     // (tabIndex is not always set soon enough).
-    window.setTimeout(function(){pixelNode.blur();pixelNode.focus();},0);
+    window.setTimeout(function(){pixelNode.blur();pixelNode.focus();}, 0);
   } else {
     pixelNode = activeDoc.getElementById(pixelId);
     if (!pixelNode){
@@ -253,8 +259,8 @@ AxsJAX.prototype.speakTextViaNode = function(textString, opt_anchorNode){
       pixelNode.src = encodedClearPixel;
       activeDoc.body.appendChild(pixelNode);
     }
-    pixelNode.setAttribute('alt',textString);
-    pixelNode.setAttribute('title',textString);
+    pixelNode.setAttribute('alt', textString);
+    pixelNode.setAttribute('title', textString);
 
     this.speakNode(pixelNode);
   }
@@ -287,8 +293,8 @@ AxsJAX.prototype.clickElem = function(targetNode, shiftKey){
   var activeDoc = this.getActiveDocument();
   //Generate a click event and send it to the target
   var evt = activeDoc.createEvent('MouseEvents');
-  evt.initMouseEvent('click',true,true,activeDoc.defaultView,
-                     1,0,0,0,0,false,false,shiftKey,false,0,null);
+  evt.initMouseEvent('click', true, true, activeDoc.defaultView,
+                     1, 0, 0, 0, 0, false, false, shiftKey, false, 0, null);
   //Use a try block here so that if the AJAX fails and it is a link,
   //it can still fall through and retry by setting the document.location.
   try{
@@ -296,8 +302,8 @@ AxsJAX.prototype.clickElem = function(targetNode, shiftKey){
   } catch(e){}
   //Some AJAX apps use mouse down instead of click
   evt = activeDoc.createEvent('MouseEvents');
-  evt.initMouseEvent('mousedown',true,true,activeDoc.defaultView,
-                     1,0,0,0,0,false,false,shiftKey,false,0,null);
+  evt.initMouseEvent('mousedown', true, true, activeDoc.defaultView,
+                     1, 0, 0, 0, 0, false, false, shiftKey, false, 0, null);
   //Use a try block here so that if the AJAX fails and it is a link,
   //it can still fall through and retry by setting the document.location.
   try{
@@ -306,18 +312,17 @@ AxsJAX.prototype.clickElem = function(targetNode, shiftKey){
   //Clicking on a link does not cause traversal because of script
   //privilege limitations. The traversal has to be done by setting
   //document.location.
-  if ( !targetNode.onclick &&
-       (targetNode.tagName == 'A') &&
-       targetNode.href &&
-       ( (targetNode.href.indexOf('http') === 0) || 
-	     (targetNode.href.indexOf('javascript:') === 0)) ){
+  if (!targetNode.onclick &&
+      (targetNode.tagName == 'A') &&
+      targetNode.href &&
+      ((targetNode.href.indexOf('http') === 0) ||
+       (targetNode.href.indexOf('javascript:') === 0))){
     if (shiftKey){
       window.open(targetNode.href);
     } else {
       document.location = targetNode.href;
     }
   }
-  
 };
 
 
@@ -337,7 +342,7 @@ AxsJAX.prototype.sendKey = function(targetNode, theKey,
                                     holdCtrl, holdAlt, holdShift){
   var keyCode = 0;
   var charCode = 0;
-  if (theKey == "ENTER"){
+  if (theKey == 'ENTER'){
     keyCode = 13;
   }
   else if (theKey.length == 1){
@@ -345,8 +350,8 @@ AxsJAX.prototype.sendKey = function(targetNode, theKey,
   }
   var activeDoc = this.getActiveDocument();
   var evt = activeDoc.createEvent('KeyboardEvent');
-  evt.initKeyEvent('keypress',true,true,null,holdCtrl,
-                   holdAlt,holdShift,false,keyCode,charCode);
+  evt.initKeyEvent('keypress', true, true, null, holdCtrl,
+                   holdAlt, holdShift, false, keyCode, charCode);
   targetNode.dispatchEvent(evt);
 };
 
@@ -361,14 +366,14 @@ AxsJAX.prototype.sendKey = function(targetNode, theKey,
  * This is optional; if null, it will use "AxsJAX_ID_".
  * @return {String} The ID that the targetNode now has.
  */
-AxsJAX.prototype.assignId = function(targetNode,opt_prefixString){
+AxsJAX.prototype.assignId = function(targetNode, opt_prefixString){
   if (!targetNode){
     return '';
   }
   if (targetNode.id){
     return targetNode.id;
   }
-  var prefix =  opt_prefixString ||  'AxsJAX_ID_';
+  var prefix = opt_prefixString || 'AxsJAX_ID_';
   targetNode.id = prefix + this.ID_NUM_++;
   return targetNode.id;
 };
@@ -394,10 +399,10 @@ AxsJAX.prototype.markPosition = function(targetNode){
   }
   var allDescendants = targetNode.getElementsByTagName('*');
   for (var i = 0, currentNode; currentNode = allDescendants[i]; i++){
-    if ( (currentNode.tagName == 'A') ||
-         (currentNode.tagName == 'INPUT') ||
-         ( currentNode.hasAttribute('tabindex') &&
-           (currentNode.tabIndex != -1) )  ){
+    if ((currentNode.tagName == 'A') ||
+        (currentNode.tagName == 'INPUT') ||
+        (currentNode.hasAttribute('tabindex') &&
+         (currentNode.tabIndex != -1))){
       this.tabbingStartPosNode = currentNode;
       return true;
     }
@@ -445,7 +450,9 @@ AxsJAX.prototype.goTo = function(targetNode){
  * Sets the attribute of the targetNode to the value.
  * Use this rather than a direct set attribute to abstract away ARIA
  * naming changes.
- * @param {Node} targetNode The HTML node to be spoken.
+ * @param {Node} targetNode The HTML node to have the attribute set on
+ * @param {string} attribute The attribute to set.
+ * @param {string} value The value the attribute should be set to.
  */
 AxsJAX.prototype.setAttributeOf = function(targetNode, attribute, value){
   //Add the aria- to attributes
@@ -501,7 +508,7 @@ AxsJAX.prototype.forceATSync = function(targetNode){
   var loc = activeDoc.baseURI;
   var indexOfHash = loc.indexOf('#');
   if (indexOfHash != -1){
-    loc = loc.substring(0,indexOfHash);
+    loc = loc.substring(0, indexOfHash);
   }
   activeDoc.location = loc + '#' + id;
 };
@@ -511,6 +518,9 @@ AxsJAX.prototype.forceATSync = function(targetNode){
  * that match. The code for this function was taken from Mihai Parparita's GMail
  * Macros Greasemonkey Script.
  * http://gmail-greasemonkey.googlecode.com/svn/trunk/scripts/gmail-new-macros.user.js
+ * @param {string} expression The XPath expression to evaluate
+ * @param {Node} rootNode The HTML node to start evaluating the XPath from
+ * @return {Array} The array of children nodes that match
  */
 AxsJAX.prototype.evalXPath = function(expression, rootNode) {
   try {
@@ -521,7 +531,7 @@ AxsJAX.prototype.evalXPath = function(expression, rootNode) {
       XPathResult.ORDERED_NODE_ITERATOR_TYPE,
       null); // no existing results
   } catch (err) {
-    return null;
+    return [];
   }
   var results = [];
   // Convert result to JS array
