@@ -32,6 +32,7 @@ var axsGMail = {};
 axsGMail.EXPAND_ALL_STRING = "Expand all";
 
 //These are strings to be spoken to the user
+axsGMail.LOADED_STRING = 'Messages loaded.';
 axsGMail.UNREAD_STRING = 'Unread. ';
 axsGMail.READ_STRING = 'Red. ';
 axsGMail.SELECTED_STRING = 'Selected. ';
@@ -46,6 +47,7 @@ axsGMail.ONLINE_STRING = ', online.';
 axsGMail.OFFLINE_STRING = ', offline.';
 axsGMail.IDLE_STRING = ', idle.';
 axsGMail.CHAT_BUDDIES_STRING = 'Chat buddies';
+
 
 axsGMail.HELP_STRING =
     'The following shortcut keys are available. ' +
@@ -144,6 +146,7 @@ axsGMail.init = function(gmObj){
   //Use a setTimeOut since chat area loads later
   window.setTimeout(function(){axsGMail.chat_prepChatField();},100);
 
+  axsGMail.axsJAXObj.speakTextViaNode(axsGMail.LOADED_STRING,null);
 };
 
 
