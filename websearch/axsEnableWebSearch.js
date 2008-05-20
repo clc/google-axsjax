@@ -111,7 +111,7 @@ axsWebSearch.init = function(){
       "id('tads')/div[*]" +
       "</item>" +
       "<item>" +
-      "id('mbEnd')/tbody/tr[*]/td/font/span[*]" +
+      "id('mbEnd')/tbody/tr[*]/td/span[*]" +
       "</item>" +
       "</list>" +
       "<list title='Related Searches' hotkey='s' next='RIGHT j' " +

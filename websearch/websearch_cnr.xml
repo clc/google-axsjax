@@ -28,7 +28,7 @@
 		    id('tads')/div[*]
 		</item>
 		<item>
-		    id('mbEnd')/tbody/tr[*]/td/font/span[*]
+		    id('mbEnd')/tbody/tr[*]/td/span[*]
 		</item>
 	</list>
 
