@@ -26,11 +26,12 @@ var AxsSound = function(){
   this.sm2BaseURL = 'http://google-axsjax.googlecode.com/svn/trunk/thirdparty/soundmanager2/';
   this.sm2LinkerFrame = null;
   this.initSucceeded = false;
+  this.verbosity = 'minimal';
 };
 
 AxsSound.prototype.init = function(){
   this.sm2LinkerFrame = document.createElement('iframe');
-  this.sm2LinkerFrame.src = this.sm2BaseURL + 'AxsJAX_SM2_Linker.html' + '#Parent=' + document.location.toString();
+  this.sm2LinkerFrame.src = this.sm2BaseURL + 'AxsJAX_SM2_Linker.html' + '#Verbosity=' + this.verbosity + ',Parent=' + document.location.toString();
   this.sm2LinkerFrame.width = '0%';
   this.sm2LinkerFrame.height = '0%';
   this.sm2LinkerFrame.style.top = '-1000';
