@@ -49,8 +49,8 @@ axsScholar.init = function(){
                              true);
 
   var cnrString = "<cnr>" +
-    "<list title='Cycle Results' next='RIGHT j' " +
-    "prev='LEFT k' fwd='n' back='p'>" +
+    "<list title='Cycle Results' next='DOWN j' " +
+    "prev='UP k' fwd='n' back='p'>" +
     "<item>" +
     "//p[@class='g']" +
     "</item>" +
