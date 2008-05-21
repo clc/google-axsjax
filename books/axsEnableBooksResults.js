@@ -50,7 +50,7 @@ axsBooksResults.init = function(){
   document.addEventListener('keypress', axsBooksResults.keyHandler, true);
 
   var cnrString = "<cnr>" +
-      "<list title='Cycle Results' next='RIGHT j' prev='LEFT k' " +
+      "<list title='Cycle Results' next='DOWN j' prev='UP k' " +
       "fwd='n' back='p'>" +
       "<item>" +
       "id('results_container')//div[@class='resbdy']" +

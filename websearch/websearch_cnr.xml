@@ -1,5 +1,5 @@
-<cnr next='DOWN h' prev='UP l'>
-        <list title='One Box' hotkey='1' next='RIGHT j' prev='LEFT k' onEmpty='There is no one box on this page.'>
+<cnr next='RIGHT l' prev='LEFT h'>
+        <list title='One Box' hotkey='1' next='DOWN j' prev='UP k' onEmpty='There is no one box on this page.'>
 		<item count='1'>
                   id('res')/p[*]
 		</item>
@@ -8,7 +8,7 @@
 		</item>          
         </list>
 
-        <list title='Results' hotkey='n' next='RIGHT j' prev='LEFT k' fwd='n' back='p'>
+        <list title='Results' hotkey='n' next='DOWN j' prev='UP k' fwd='n' back='p'>
 		<item count='1'>
                   id('res')//td[@class='j']/ul/li[text()='Make sure all words are spelled correctly.']/../..
 		</item>
@@ -23,7 +23,7 @@
 		</target>
         </list>
 
-        <list title='Sponsored Links' hotkey='a' next='RIGHT j' prev='LEFT k' onEmpty='There are no sponsored links on this page.'>
+        <list title='Sponsored Links' hotkey='a' next='DOWN j' prev='UP k' onEmpty='There are no sponsored links on this page.'>
 		<item>
 		    id('tads')/div[*]
 		</item>
@@ -32,7 +32,7 @@
 		</item>
 	</list>
 
-        <list title='Related Searches' hotkey='s' next='RIGHT j' prev='LEFT k' onEmpty='There are no related searches.'>
+        <list title='Related Searches' hotkey='s' next='DOWN j' prev='UP k' onEmpty='There are no related searches.'>
 		<item>
 		    id('res')/table[*]/tbody/tr[*]/td[*]/a
 		</item>
@@ -41,7 +41,7 @@
 		</item>
   </list>
 
-        <list title='Alternate Search Categories' hotkey='c' next='RIGHT j' prev='LEFT k' onEmpty='There are no other categories to search within.'>
+        <list title='Alternate Search Categories' hotkey='c' next='DOWN j' prev='UP k' onEmpty='There are no other categories to search within.'>
 		<item>
 		    body/table[*]/tbody/tr/td[*]/font/a[@class='q']
 		</item>

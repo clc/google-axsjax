@@ -30,10 +30,10 @@ axsBooksAbout.MORE_STRING = 'more';
 //These are strings to be spoken to the user
 axsBooksAbout.HELP =
     'The following shortcut keys are available. ' +
-    'Down arrow or H, go to the next category. ' +
-    'Up arrow or L, go to the previous category. ' +
-    'Right arrow or J, cycle to the next item in the current category. ' +
-    'Left arrow or K, cycle to the previous item in the current category. ' +
+    'Right arrow or L, go to the next category. ' +
+    'Left arrow or H, go to the previous category. ' +
+    'Down arrow or J, cycle to the next item in the current category. ' +
+    'Up arrow or K, cycle to the previous item in the current category. ' +
     'Enter, act on the current item. ' +
     'Slash, jump to the book search blank. ' +
     'S, jump to the "Search in this book" blank. ' +
@@ -62,79 +62,79 @@ axsBooksAbout.init = function(){
   axsBooksAbout.expandAllMoreLinks();
 
 
-  var cnrString = "<cnr next='DOWN h' prev='UP l'>" +
-    "<list title='Search results' next='RIGHT j' prev='LEFT k'>" +
-    "<item>" +
-    "id('search')//div[@class='searchresult']" +
-    "</item>" +
-    "</list>" +
-    "<list title='Summary' next='RIGHT j' prev='LEFT k'>" +
-    "<item count='1'>" +
-    "id('coverandmetadata')" +
-    "</item>" +
-    "<item count='1'>" +
-    "id('synopsistext')" +
-    "</item>" +
-    "</list>" +
-    "<list title='Buy or borrow this book' next='RIGHT j' prev='LEFT k'>" +
-    "<item>" +
-    "id('summary_content')/div[*]/table/tbody/tr[*]/td[@class='btblinks']" +
-    "</item>" +
-    "</list>" +
-    "<list title='Reviews' next='RIGHT j' prev='LEFT k'>" +
-    "<item>" +
-    "id('reviews')//td" +
-    "</item>" +
-    "</list>" +
-    "<list title='Keywords' next='RIGHT j' prev='LEFT k'>" +
-    "<item>" +
-    "id('keywords')//a" +
-    "</item>" +
-    "<item>" +
-    "id('keywords_v')//a" +
-    "</item>" +
-    "</list>" +
-    "<list title='Popular passages' next='RIGHT j' prev='LEFT k'>" +
-    "<item>" +
-    "id('quotes')//p[@class='quot']" +
-    "</item>" +
-    "</list>" +
-    "<list title='Places mentioned in this book' next='RIGHT j' prev='LEFT k'>" +
-    "<item>" +
-    "id('gmap')/div/div[@class='result']" +
-    "</item>" +
-    "</list>" +
-    "<list title='References from books' next='RIGHT j' prev='LEFT k'>" +
-    "<item>" +
-    "id('book_citations')//div[@class='resbdy']" +
-    "</item>" +
-    "</list>" +
-    "<list title='References from scholarly works' next='RIGHT j' prev='LEFT k'>" +
-    "<item>" +
-    "id('scholar_citations')//p[@class='resbdy']" +
-    "</item>" +
-    "</list>" +
-    "<list title='References from web pages' next='RIGHT j' prev='LEFT k'>" +
-    "<item>" +
-    "id('web_references')//p[@class='resbdy']" +
-    "</item>" +
-    "</list>" +
-    "<list title='Other editions' next='RIGHT j' prev='LEFT k'>" +
-    "<item>" +
-    "id('book_other_versions')//div[@class='resbdy']" +
-    "</item>" +
-    "</list>" +
-    "<list title='Related books' next='RIGHT j' prev='LEFT k'>" +
-    "<item>" +
-    "id('similarbooks')//div[@class='resbdy']" +
-    "</item>" +
-    "</list>" +
-    "<list title='Sponsored links' next='RIGHT j' prev='LEFT k'>" +
-    "<item>" +
-    "/html/body/table[@class='lads']/tbody/tr[*]/td[1]" +
-    "</item>" +
-    "</list>" + 
-    "</cnr>";
+  var cnrString = "<cnr next='RIGHT l' prev='LEFT h'>" +
+      "<list title='Search results' next='DOWN j' prev='UP k'>" +
+      "<item>" +
+      "id('search')//div[@class='searchresult']" +
+      "</item>" +
+      "</list>" +
+      "<list title='Summary' next='DOWN j' prev='UP k'>" +
+      "<item count='1'>" +
+      "id('coverandmetadata')" +
+      "</item>" +
+      "<item count='1'>" +
+      "id('synopsistext')" +
+      "</item>" +
+      "</list>" +
+      "<list title='Buy or borrow this book' next='DOWN j' prev='UP k'>" +
+      "<item>" +
+      "id('summary_content')/div[*]/table/tbody/tr[*]/td[@class='btblinks']" +
+      "</item>" +
+      "</list>" +
+      "<list title='Reviews' next='DOWN j' prev='UP k'>" +
+      "<item>" +
+      "id('reviews')//td" +
+      "</item>" +
+      "</list>" +
+      "<list title='Keywords' next='DOWN j' prev='UP k'>" +
+      "<item>" +
+      "id('keywords')//a" +
+      "</item>" +
+      "<item>" +
+      "id('keywords_v')//a" +
+      "</item>" +
+      "</list>" +
+      "<list title='Popular passages' next='DOWN j' prev='UP k'>" +
+      "<item>" +
+      "id('quotes')//p[@class='quot']" +
+      "</item>" +
+      "</list>" +
+      "<list title='Places mentioned in this book' next='DOWN j' prev='UP k'>" +
+      "<item>" +
+      "id('gmap')/div/div[@class='result']" +
+      "</item>" +
+      "</list>" +
+      "<list title='References from books' next='DOWN j' prev='UP k'>" +
+      "<item>" +
+      "id('book_citations')//div[@class='resbdy']" +
+      "</item>" +
+      "</list>" +
+      "<list title='References from scholarly works' next='DOWN j' prev='UP k'>" +
+      "<item>" +
+      "id('scholar_citations')//p[@class='resbdy']" +
+      "</item>" +
+      "</list>" +
+      "<list title='References from web pages' next='DOWN j' prev='UP k'>" +
+      "<item>" +
+      "id('web_references')//p[@class='resbdy']" +
+      "</item>" +
+      "</list>" +
+      "<list title='Other editions' next='DOWN j' prev='UP k'>" +
+      "<item>" +
+      "id('book_other_versions')//div[@class='resbdy']" +
+      "</item>" +
+      "</list>" +
+      "<list title='Related books' next='DOWN j' prev='UP k'>" +
+      "<item>" +
+      "id('similarbooks')//div[@class='resbdy']" +
+      "</item>" +
+      "</list>" +
+      "<list title='Sponsored links' next='DOWN j' prev='UP k'>" +
+      "<item>" +
+      "/html/body/table[@class='lads']/tbody/tr[*]/td[1]" +
+      "</item>" +
+      "</list>" +
+      "</cnr>";
 
   axsBooksAbout.axsNavObj.navInit(cnrString, null);
   axsBooksAbout.fixAllPageLinks();
