@@ -27,11 +27,28 @@ var AxsSound = function(){
   this.sm2LinkerFrame = null;
   this.initSucceeded = false;
   this.verbosity = 'minimal';
+  this.busyInitializing = false;
+};
+
+AxsSound.prototype.setVerbosity = function(verbosity){
+  this.verbosity = verbosity;
 };
 
 AxsSound.prototype.init = function(){
+  if (this.busyInitializing){
+    return;
+  }
+  this.busyInitializing = true;
+  if (this.sm2LinkerFrame !== null){
+    this.sm2LinkerFrame.parentNode.removeChild(this.sm2LinkerFrame);
+	this.sm2LinkerFrame = null;
+  }
   this.sm2LinkerFrame = document.createElement('iframe');
-  this.sm2LinkerFrame.src = this.sm2BaseURL + 'AxsJAX_SM2_Linker.html' + '#Verbosity=' + this.verbosity + ',Parent=' + document.location.toString();
+  var loc = document.location.toString();
+  if (loc.indexOf('#') != -1){
+    loc = loc.substring(0,loc.indexOf('#'));
+  }
+  this.sm2LinkerFrame.src = this.sm2BaseURL + 'AxsJAX_SM2_Linker.html' + '#Verbosity=' + this.verbosity + ',Parent=' + loc;
   this.sm2LinkerFrame.width = '0%';
   this.sm2LinkerFrame.height = '0%';
   this.sm2LinkerFrame.style.top = '-1000';
@@ -44,6 +61,7 @@ AxsSound.prototype.init = function(){
 AxsSound.prototype.checkInitStatus = function(){
   if (document.location.hash == '#InitSuccess'){
     this.initSucceeded = true;
+	this.busyInitializing = false;
 	return;	
   }
   var self = this;
