@@ -49,6 +49,7 @@ var AxsJAX = function(useTabKeyFix){
                             }, true);
   document.addEventListener('blur',
                             function(evt){
+						      self.removeAttributeOf(self.lastFocusedNode, 'aria-activedescendant');
                               self.lastFocusedNode = null;
                               if ((evt.target.tagName == 'INPUT') ||
                                   (evt.target.tagName == 'TEXTAREA')){
