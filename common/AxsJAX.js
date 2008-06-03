@@ -49,7 +49,9 @@ var AxsJAX = function(useTabKeyFix){
                             }, true);
   document.addEventListener('blur',
                             function(evt){
-						      self.removeAttributeOf(self.lastFocusedNode, 'aria-activedescendant');
+							  if (self.lastFocusedNode){
+						        self.removeAttributeOf(self.lastFocusedNode, 'aria-activedescendant');
+							  }
                               self.lastFocusedNode = null;
                               if ((evt.target.tagName == 'INPUT') ||
                                   (evt.target.tagName == 'TEXTAREA')){
@@ -158,7 +160,6 @@ AxsJAX.prototype.speakNode = function(targetNode, opt_noFocusChange){
       this.activeParent.tabIndex = -1;
       currentFocusedNode = this.activeParent;
     }
-    currentFocusedNode.blur();
     this.setAttributeOf(currentFocusedNode, 'activedescendant', null);
     currentFocusedNode.focus();
     this.setAttributeOf(currentFocusedNode, 'activedescendant', targetNode.id);
