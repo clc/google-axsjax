@@ -67,6 +67,7 @@ axsSkel.init = function(){
   axsSkel.axsNavObj.setLens(axsSkel.axsLensObj);
   axsSkel.axsLensObj.setMagnification(axsSkel.magSize);
   
+  //Delete the next line when you are done with your script.
   alert('AxsSkel loaded and initialized!');
 };
 
