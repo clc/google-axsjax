@@ -262,9 +262,11 @@ AxsNav.prototype.currentItem = function(){
  */
 AxsNav.prototype.actOnItem = function(item){
   if (item !== null){
-    if ((item.action.indexOf('CALL:') === 0) && (item.action.indexOf('(') === -1)){
+    if ((item.action !== null) &&
+        (item.action.indexOf('CALL:') === 0) &&
+        (item.action.indexOf('(') === -1)){
 	  var func = eval(item.action.substring(5));
-	  func(item.elem);
+	  func(item);
     } else {
       if (this.lens !== null){
         this.lens.view(item.elem);
