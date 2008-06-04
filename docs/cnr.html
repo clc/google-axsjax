@@ -1,0 +1,290 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+               "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+lang="en" xml:lang="en">
+<head>
+<title>AxsJAX Content Navigation Rules (CNR) Reference</title>
+<meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
+<meta name="generator" content="Org-mode"/>
+<meta name="generated" content="2008/06/04 10:47:41"/>
+<meta name="author" content="T.V. Raman, Charles L. Chen"/>
+<style type="text/css">
+  html {
+	font-family: Times, serif;
+	font-size: 12pt;
+  }
+  .title { text-align: center; }
+  .todo  { color: red; }
+  .done { color: green; }
+  .timestamp { color: grey }
+  .timestamp-kwd { color: CadetBlue }
+  .tag { background-color:lightblue; font-weight:normal }
+  .target { background-color: lavender; }
+  pre {
+	border: 1pt solid #AEBDCC;
+	background-color: #F3F5F7;
+	padding: 5pt;
+	font-family: courier, monospace;
+  }
+  table { border-collapse: collapse; }
+  td, th {
+	vertical-align: top;
+	<!--border: 1pt solid #ADB9CC;-->
+  }
+</style>
+</head><body>
+<h1 class="title">AxsJAX Content Navigation Rules (CNR) Reference</h1>
+<h2>Table of Contents</h2>
+<ul>
+<li><a href="#sec-1">1 Introduction</a></li>
+<li><a href="#sec-2">2 Data Types </a>
+<ul>
+<li><a href="#sec-3">2.1 KEY</a></li>
+<li><a href="#sec-4">2.2 STRING</a></li>
+<li><a href="#sec-5">2.3 ACTION</a></li>
+<li><a href="#sec-6">2.4 INTEGER</a></li>
+<li><a href="#sec-7">2.5 TRIGGER</a></li>
+</ul>
+</li>
+<li><a href="#sec-8">3 CNR Elements</a>
+<ul>
+<li><a href="#sec-9">3.1 cnr</a></li>
+<li><a href="#sec-10">3.2 list</a></li>
+<li><a href="#sec-11">3.3 item</a></li>
+<li><a href="#sec-12">3.4 target</a></li>
+</ul>
+</li>
+</ul>
+
+<h2><a name="sec-1">1 Introduction</a></h2>
+
+
+<p>
+Think of a content rich site as a site with many trails through it. In each 
+trail, there is content. You can greatly improve the usability of a busy pages 
+by providing efficient keyboard navigation to move through these trails. 
+This can be a more effective approach than providing section headings alone as 
+it allows for grouping related content, filtering out content that is not 
+relevant to what the user is immediately interested in, and controlling the 
+granularity of each item in a given trail. The content navigation rule (CNR) 
+system in AxsNav allows you to easily define these trails. 
+</p>
+<p>
+The CNR system is designed to handle cases where not all of the content is 
+present. If a trail that you have defined happens to have no items, then for 
+that instance, the CNR system will discard that trail. Therefore, when you 
+write CNRs, you should do it for the case where all of the content is present.
+</p>
+<p>
+To make it easier for users to discover the keyboard navigation commands for 
+the page, the CNR system can automatically generate a help string with all 
+the possible commands. This help generation mechanism takes the user's current 
+position into account - it will only report actions that can be done from the 
+present state. Here is some sample code for generating and speaking the help 
+string:
+<pre>
+ var helpStr = "The following shortcut keys are available: " +
+               axsNavObj.localHelpString() +
+               axsNavObj.globalHelpString();
+ axsJAXObj.speakTextViaNode(helpStr);
+</pre>
+</p>
+
+<h2><a name="sec-2">2 Data Types </a></h2>
+
+
+<h3><a name="sec-3">2.1 KEY</a></h3>
+
+<p>Any character that is letter, number, or punctuation found on the keyboard 
+OR a string that is "LEFT", "DOWN", "UP", "RIGHT", "ENTER", "PGUP", 
+"PGDOWN". Note that the case of the letter will matter - if you only assign 
+"a" to do something, pressing "A" will not cause that to happen.
+</p>
+
+<h3><a name="sec-4">2.2 STRING</a></h3>
+
+<p>An arbitrary string of text
+</p>
+
+<h3><a name="sec-5">2.3 ACTION</a></h3>
+
+<p>A string that specifies what action should take place when the AxsNav 
+system navigates to something. If no acceptable action is specified, the 
+default action will take place.
+</p><ul>
+<li>"CALL:functionName"<br/>
+Will call the specified function with what the AxsNav system navigated to 
+as the argument. For example:
+<pre>
+ &lt;item action="CALL:foo"&gt; //some/xpath/expression/here &lt;/item&gt;
+</pre>
+will cause AxsNav to make the call
+<pre>
+ foo(currentItemObject)
+</pre>
+when AxsNav moves through the items defined by that item element.
+
+</li>
+</ul>
+<h3><a name="sec-6">2.4 INTEGER</a></h3>
+
+<p>An integer 
+</p>
+
+<h3><a name="sec-7">2.5 TRIGGER</a></h3>
+
+<p>A string that specifies what trigger should cause the AxsNav system to 
+click on a target. 
+</p><ul>
+<li>"listTail"<br/>
+Trigger is activated if the user is at the end of the list and tries to go 
+forward.
+</li>
+<li>"listHead"<br/>
+Trigger is activated if the user is at the start of the list and tries to 
+go backward.     
+
+</li>
+</ul>
+<h2><a name="sec-8">3 CNR Elements</a></h2>
+
+
+
+<h3><a name="sec-9">3.1 cnr</a></h3>
+
+<p>This is the root level element of the CNR file. The cnr element can 
+contain lists and targets.
+</p><ul>
+<li>next<br/>
+Value is a space delimited list of KEYs. Pressing any of these keys will 
+cause the AxsNav to switch to the next list. After the last list, this will 
+loop to the first list.
+</li>
+<li>prev<br/>
+Value is a space delimited list of KEYs. Pressing any of these keys will 
+cause the AxsNav to switch to the previous list. After the first list, this 
+will loop to the last list.
+
+</li>
+</ul>
+<h3><a name="sec-10">3.2 list</a></h3>
+
+<p>This is a child element of the cnr element. A list is a trail that the 
+user can go through on the page. Lists can contain items and targets.
+</p><ul>
+<li>title<br/>
+Value is a STRING. When the user switches to this list, this is what will 
+be spoken by the AT.
+</li>
+<li>hotkey<br/>
+Value is a space delimited list of KEYs. Pressing any of these keys will 
+cause AxsNav to switch to this list and immediately read the next item of 
+this list.
+</li>
+<li>onEmpty<br/>
+Value is a STRING. If this list is empty and the user tries to access it 
+with a hotkey, the onEmpty string will be spoken by the AT. Note that 
+AxsNav automatically discards empty lists so if there are not hotkeys 
+assigned to the list, it is not necessary to have an onEmpty message.
+</li>
+<li>next<br/>
+Value is a space delimited list of KEYs. Pressing any of these keys will 
+cause the AxsNav to go to the next item in this list. After the last item, 
+this will always loop to the first item.
+</li>
+<li>prev<br/>
+Value is a space delimited list of KEYs. Pressing any of these keys will 
+cause the AxsNav to go to the previous item in this list. After the first 
+item, this will always loop to the last item.
+</li>
+<li>fwd<br/>
+Value is a space delimited list of KEYs. Pressing any of these keys will 
+cause the AxsNav to go to the next item in this list. After the last item, 
+if there is a target element with a trigger of "listTail" for this list, 
+that target will be acted upon. Otherwise, this is the same as the next 
+attribute.
+</li>
+<li>back<br/>
+Value is a space delimited list of KEYs. Pressing any of these keys will 
+cause the AxsNav to go to the next item in this list. After the last item, 
+if there is a target element with a trigger of "listHead" for this list, 
+that target will be acted upon. Otherwise, this is the same as the prev 
+attribute.
+
+</li>
+</ul>
+<h3><a name="sec-11">3.3 item</a></h3>
+
+<p>This is a child element of the list element. The item element is an 
+xpath expression that returns a set of nodes which belong in the list. If a 
+list has more than one item element, the set of nodes that will be in the 
+list is the union of all the sets of nodes returned by the xpaths of all 
+the item elements.
+</p><ul>
+<li>index<br/>
+Value is an INTEGER. Specifies the first node in the set of nodes returned 
+by the xpath which should be added to the set of nodes for the item. The 
+default is 0 (starts from the first node).
+</li>
+<li>count<br/>
+Value is an INTEGER. Specifies the total number of nodes to add to the set 
+of nodes for the item. The default is to add all of the nodes starting from 
+the 'index'.
+</li>
+<li>action<br/>
+Value is an ACTION. Does the action specified when a node in the set of 
+nodes for the item is navigated to by the AxsNav system. If no action is 
+specified, the default action is to magnify the item if AxsNav is given a 
+magnifier, go to the element associated with the item, speak the element.
+
+</li>
+</ul>
+<h3><a name="sec-12">3.4 target</a></h3>
+
+<p>This is a child element of the cnr and list elements. The target 
+element is an xpath expression that returns the node that should be 
+clicked. Note that targets in a list can be relative to the items in that 
+list. Thus having:
+<pre>
+ &lt;item&gt;
+  //p[@class='g']
+ &lt;/item&gt;
+ &lt;target title='Open result' hotkey='ENTER'&gt;
+   ./span[@class='w']
+ &lt;/target&gt;
+</pre>
+means that if the user is currently on
+<pre>
+ getNodesWithXPath("//p[@class='g']")[2]
+</pre>
+then the element that will be clicked when the user presses Enter is
+<pre>
+ getNodesWithXPath("//p[@class='g']/span[@class='w']")[2]
+</pre>
+</p><ul>
+<li>title<br/>
+Value is a STRING. This is used for generating the help string.
+</li>
+<li>hotkey<br/>
+Value is a space delimited list of KEYs. Pressing any of these keys will 
+cause AxsNav to click on the target if the target is active. Targets that 
+are children of the cnr element are active all the time. Targets that are 
+children of the list element are only active when that list item is the 
+current list.
+</li>
+<li>trigger<br/>
+Value is a TRIGGER.
+</li>
+<li>onEmpty<br/>
+Value is a STRING. If there is no target and the user tries to access it, 
+the onEmpty string will be spoken by the AT. 
+
+
+
+</li>
+</ul><p class="author"> Author: T.V. Raman, Charles L. Chen
+<a href="mailto:raman@google.com, clchen@google.com">&lt;raman@google.com, clchen@google.com&gt;</a>
+</p>
+<p class="date"> Date: 2008/06/04 10:47:41</p>
+</body>
+</html>
