@@ -72,7 +72,7 @@ AxsNav.prototype.makeItemsArray = function(listNode){
         count = parseInt(countStr, 10);
       }
       var end = count + idx;
-      var action = entry.getAttribute('action') || 'goto';
+      var action = entry.getAttribute('action') || null;
       while (idx < end){
         var item = new Object();
         item.action = action;
@@ -262,8 +262,9 @@ AxsNav.prototype.currentItem = function(){
  */
 AxsNav.prototype.actOnItem = function(item){
   if (item !== null){
-    if (item.action == 'click'){
-      this.axs_.clickElem(item.elem, false);
+    if ((item.action.indexOf('CALL:') === 0) && (item.action.indexOf('(') === -1)){
+	  var func = eval(item.action.substring(5));
+	  func(item.elem);
     } else {
       if (this.lens !== null){
         this.lens.view(item.elem);
