@@ -12,23 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//Inject the necessary AxsJAX scripts
-
-var theLib = document.createElement('script');
-theLib.type = 'text/javascript';
-theLib.src = 'http://google-axsjax.googlecode.com/svn/trunk/common/AxsJAX.js';
-var navLib = document.createElement('script');
-navLib.type = 'text/javascript';
-navLib.src = 'http://google-axsjax.googlecode.com/svn/trunk/common/AxsNav.js';
-var lensLib = document.createElement('script');
-lensLib.type = 'text/javascript';
-lensLib.src = 'http://google-axsjax.googlecode.com/svn/trunk/common/AxsLens.js';
-
-document.getElementsByTagName('head')[0].appendChild(theLib);	
-document.getElementsByTagName('head')[0].appendChild(navLib);	
-document.getElementsByTagName('head')[0].appendChild(lensLib);	
-
-
 /**
  * @fileoverview AxsJAX to enhance accessibility
  * of Skel. 
@@ -37,15 +20,8 @@ document.getElementsByTagName('head')[0].appendChild(lensLib);
  * you should do a global replace of "axsSkel" with 
  * "axsWhateverYourAppNameIs" and update this fileoverview.
  *
- * Note that this skeleton assumes you are developing by 
- * writing straight into a Greasemonkey script.
- * If you are developing with a script chooser and that is
- * already injecting the AxsJAX libraries, you should delete
- * lines 15-29 of this skeleton script.
- *
  * @author clchen@google.com (Charles L. Chen)
  */
-
 // create namespace
 var axsSkel = {};
 
@@ -90,6 +66,8 @@ axsSkel.init = function(){
   axsSkel.axsLensObj = new AxsLens(axsSkel.axsJAXObj);
   axsSkel.axsNavObj.setLens(axsSkel.axsLensObj);
   axsSkel.axsLensObj.setMagnification(axsSkel.magSize);
+  
+  alert('AxsSkel loaded and initialized!');
 };
 
 
