@@ -1,0 +1,7 @@
+<cnr next='RIGHT l' prev='LEFT h'>
+  <list title='Cycle Results' next='DOWN j' prev='UP k' fwd='n' back='p'>
+    <item>
+      /html/body/table[3]/tbody/tr[not(@class)]
+    </item>
+  </list>
+</cnr>
