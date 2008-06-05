@@ -110,7 +110,7 @@ axsWebSearch.init = function(){
       "<list title='One Box' hotkey='1' next='DOWN j' prev='UP k' " +
       "onEmpty='There is no one box on this page.'>" +
       "<item count='1'>" +
-      "id('res')/p[*]" +
+      "id('res')/p" +
       "</item>" +
       "<item count='1'>" +
       "id('res')/div[@class='e']" +
@@ -135,10 +135,10 @@ axsWebSearch.init = function(){
       "<list title='Sponsored Links' hotkey='a' next='DOWN j' prev='UP k' " +
       "onEmpty='There are no sponsored links on this page.'>" +
       "<item>" +
-      "id('tads')/div[*]" +
+      "id('tads')/div" +
       "</item>" +
       "<item>" +
-      "id('mbEnd')/tbody/tr[*]/td/span[*]" +
+      "id('mbEnd')/tbody/tr[*]/td/span" +
       "</item>" +
       "</list>" +
       "<list title='Related Searches' hotkey='s' next='DOWN j' prev='UP k' " +
@@ -348,7 +348,7 @@ axsWebSearch.decreaseMagnification = function(){
 
 /**
  * Provides keyboard handling
- * @param {event} evt A keypress event
+ * @param {Object} evt A keypress event
  * @return {boolean} Indicates whether the keypress was handled
  */
 axsWebSearch.extraKeyboardNavHandler = function(evt){
