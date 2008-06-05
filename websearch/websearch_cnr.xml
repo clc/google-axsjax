@@ -1,7 +1,7 @@
 <cnr next='RIGHT l' prev='LEFT h'>
         <list title='One Box' hotkey='1' next='DOWN j' prev='UP k' onEmpty='There is no one box on this page.'>
 		<item count='1'>
-                  id('res')/p[*]
+                  id('res')/p
 		</item>
 		<item count='1'>
                   id('res')/div[@class='e']
@@ -25,10 +25,10 @@
 
         <list title='Sponsored Links' hotkey='a' next='DOWN j' prev='UP k' onEmpty='There are no sponsored links on this page.'>
 		<item>
-		    id('tads')/div[*]
+		    id('tads')/div
 		</item>
 		<item>
-		    id('mbEnd')/tbody/tr[*]/td/span[*]
+		    id('mbEnd')/tbody/tr[*]/td/span
 		</item>
 	</list>
 
