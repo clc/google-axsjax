@@ -36,6 +36,12 @@ function pickScript(){
   var sndLib = document.createElement('script');
   sndLib.type = 'text/javascript';
   sndLib.src = baseURL + 'common/AxsSound.js';
+  var pkLib = document.createElement('script');  
+  pkLib.type = 'text/javascript';
+  pkLib.src = baseURL + 'common/PowerKey.js';
+  
+  var scriptsArray = new Array();
+  scriptsArray.push(theLib);
 
   //Do not insert anything if the scripts are already inserted.
   var scriptArray = document.getElementsByTagName('script');
@@ -56,24 +62,33 @@ function pickScript(){
   }
 
   //Check for Google
-  else if(urlIsGoogle()){
+  else if(urlIsGoogle()){  
     var path = document.location.pathname;
     var prefix = document.location.host;
     prefix = prefix.substring(0,prefix.indexOf('.'));
     if ((prefix == 'www') && (path.indexOf('/ig') === 0)){
       theScript.src = baseURL + 'igoogle/axsEnableIGoogle.js';
+      scriptsArray.push(navLib);
+      scriptsArray.push(lensLib);
+      shouldInsertScripts = true;
+    }
+    else if ((prefix == 'www') && (path.indexOf('/sky') === 0)){
+      theScript.src = baseURL + 'sky/axsEnableSky.js';
+      scriptsArray.push(sndLib);
+      shouldInsertScripts = true;
+    }
+    else if (path.indexOf('/calendar') === 0 ){
+      theScript.src = baseURL + 'calendar/axsEnableCalendar.js';
+      scriptsArray.push(pkLib);
       shouldInsertScripts = true;
     }
     else if ( (prefix == 'images') && (path.indexOf('/images') === 0 ) ){
       theScript.src = baseURL + 'imagesearch/axsEnableImageSearch.js';
       shouldInsertScripts = true;
     }
-    else if (prefix == 'books'){
-      theScript.src = baseURL + 'books/axsEnableBooks.js';
-      shouldInsertScripts = true;
-    }
     else if ( (prefix == 'scholar') && (path.indexOf('/scholar') === 0 ) ){
       theScript.src = baseURL + 'scholar/axsEnableScholar.js';
+      scriptsArray.push(navLib);
       shouldInsertScripts = true;
     }
     else if (prefix == 'mail'){
@@ -84,25 +99,25 @@ function pickScript(){
       }
       shouldInsertScripts = true;
     }
-    else if (path.indexOf('/calendar') === 0 ){
-      theScript.src = baseURL + 'calendar/axsEnableCalendar.js';
+    else if (path.indexOf('/products') === 0 ){
+      theScript.src = baseURL + 'productsearch/axsEnableProductSearch.js';
+      scriptsArray.push(navLib);
+      scriptsArray.push(lensLib);
       shouldInsertScripts = true;
-    }
-    else if (path.indexOf('/sky') === 0 ){
-      theScript.src = baseURL + 'sky/axsEnableSky.js';
-      shouldInsertScripts = true;
-    }
+    }	
     else if ((prefix == 'www')
         || (path.indexOf('/search') === 0)
         || (path.indexOf('/custom') === 0)
         || (path.indexOf('/cse') === 0)){
       theScript.src = baseURL + 'websearch/axsEnableWebSearch.js';
+      scriptsArray.push(navLib);
+      scriptsArray.push(lensLib);
       shouldInsertScripts = true;
     }
   }
   else if (currentURL === 'http://www.minijuegosgratis.com/juegos/jawbreaker/jawbreaker.htm'){
     theScript.src = baseURL + 'jawbreaker/axsEnableJawbreaker.js';
-    shouldInsertScripts = true;
+    shouldInsertScripts = true;    
   }
   else if ((currentURL.indexOf('http://www.xkcd.com') === 0) || (currentURL.indexOf('http://xkcd.com') === 0)){
     theScript.src = baseURL + 'xkcd/axsEnableXKCD.js';
@@ -113,14 +128,13 @@ function pickScript(){
     theScript.src = baseURL + 'xkcd/axsEnableXKCD_TranscriptFetcher.js';
     shouldInsertScripts = true;
   }
-
+  
 
   if (shouldInsertScripts){
-    document.getElementsByTagName('head')[0].appendChild(theLib);
-    document.getElementsByTagName('head')[0].appendChild(navLib);
-    document.getElementsByTagName('head')[0].appendChild(lensLib);
-    document.getElementsByTagName('head')[0].appendChild(sndLib);
-    document.getElementsByTagName('head')[0].appendChild(theScript);
+    scriptsArray.push(theScript);
+	for (var i=0,script; script = scriptsArray[i]; i++){
+      document.getElementsByTagName('head')[0].appendChild(script);	
+	}
   }
 }
 
