@@ -1,7 +1,7 @@
 <cnr next='RIGHT l' prev='LEFT h'>
         <list title='One Box' hotkey='1' next='DOWN j' prev='UP k' onEmpty='There is no one box on this page.'>
-		<item count='1'>
-                  id('res')/p
+		<item count='1' comment='Use a [*] here since some one boxes have an extra garbage node that is empty at the start.'>
+                  id('res')/p[*]
 		</item>
 		<item count='1'>
                   id('res')/div[@class='e']

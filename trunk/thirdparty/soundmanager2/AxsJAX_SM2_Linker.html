@@ -27,7 +27,9 @@
 	if (parentUrl.indexOf('#') != -1){
 	  parentUrl = parentUrl.substring(0,parentUrl.indexOf('#'));	
 	}  
-	parent.location = parentUrl + '#InitSuccess';
+	if (verbosity != 'none'){
+	  parent.location = parentUrl + '#InitSuccess';
+	}	
     parentUpdated = false;
 	commandMonitor();
   }
@@ -144,6 +146,10 @@
 	  isPlaying = false;	
 	  time = -1;
 	  parentUpdated = false;
+	}
+	
+	if (verbosity == 'none'){
+	  return;
 	}
 	
 	if (verbosity == 'minimal'){

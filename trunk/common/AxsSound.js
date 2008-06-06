@@ -23,13 +23,18 @@
  * @constructor
  */
 var AxsSound = function(){
-  this.sm2BaseURL = 'http://google-axsjax.googlecode.com/svn/trunk/thirdparty/soundmanager2/';
+//  this.sm2BaseURL = 'http://google-axsjax.googlecode.com/svn/trunk/thirdparty/soundmanager2/';
+  this.sm2BaseURL = 'http://www.corp.google.com/~clchen/AxsJAX/thirdparty/soundmanager2/';
   this.sm2LinkerFrame = null;
   this.initSucceeded = false;
   this.verbosity = 'minimal';
   this.busyInitializing = false;
+  this.initChecks = 0;
 };
 
+
+// Verbosity can be:
+// "verbose", "minimal" or "none"
 AxsSound.prototype.setVerbosity = function(verbosity){
   this.verbosity = verbosity;
 };
@@ -39,6 +44,7 @@ AxsSound.prototype.init = function(){
     return;
   }
   this.busyInitializing = true;
+  this.initChecks = 0;
   if (this.sm2LinkerFrame !== null){
     this.sm2LinkerFrame.parentNode.removeChild(this.sm2LinkerFrame);
 	this.sm2LinkerFrame = null;
@@ -64,8 +70,14 @@ AxsSound.prototype.checkInitStatus = function(){
 	this.busyInitializing = false;
 	return;	
   }
+  if ((this.verbosity == 'none') && (this.initChecks > 0)){
+    this.initSucceeded = true;
+	this.busyInitializing = false;
+	return;	  
+  }
   var self = this;
   window.setTimeout(function(){self.checkInitStatus();},100);
+  this.initChecks++;
 };
 
 AxsSound.prototype.play = function(url){
