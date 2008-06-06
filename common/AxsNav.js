@@ -36,7 +36,11 @@ var AxsNav = function(axsJAXObj){
   this.charCodeMaps = new Array();
   this.keyCodeMaps = new Array();
   this.axs_ = axsJAXObj;
-  this.lens = null;
+  this.lens_ = null;
+  this.snd_ = null;
+  this.LIST_SND_URL = 'http://google-axsjax.googlecode.com/svn/trunk/common/earcons/list.mp3';
+  this.ITEM_SND_URL = 'http://google-axsjax.googlecode.com/svn/trunk/common/earcons/item.mp3';
+  this.LOOP_SND_URL = 'http://google-axsjax.googlecode.com/svn/trunk/common/earcons/loop.mp3';
 };
 
 //Constant strings to be internationalized
@@ -109,6 +113,9 @@ AxsNav.prototype.nextList = function(){
   if (currentList.entryTarget !== null){
     this.actOnTarget(currentList.entryTarget);
   }
+  if (this.snd_ !== null){
+    this.snd_.play(this.LIST_SND_URL);
+  }
   return currentList;
 };
 
@@ -127,6 +134,9 @@ AxsNav.prototype.prevList = function(){
   var currentList = this.navArray[this.navListIdx];
   if (currentList.entryTarget !== null){
     this.actOnTarget(currentList.entryTarget);
+  }
+  if (this.snd_ !== null){
+    this.snd_.play(this.LIST_SND_URL);
   }
   return currentList;
 };
@@ -167,23 +177,26 @@ AxsNav.prototype.nextItem = function(){
     }
   }
   this.navItemIdxs[this.navListIdx]++;
+  var looped = false;
   if (this.navItemIdxs[this.navListIdx] >= items.length){
     this.navItemIdxs[this.navListIdx] = 0;
+    looped = true;
   }
   var itemIndex = this.navItemIdxs[this.navListIdx];   
   // Perform a validity check to determine if the xpaths should be re-evaluated
-  while ((items[itemIndex].elem.parentNode === null) &&
-         (this.navItemIdxs[this.navListIdx] < items.length)){
-    itemIndex = this.navItemIdxs[this.navListIdx]++;  
-  }
-  if (itemIndex == items.length){
-    // The rest of the items in this list have been invalidated;
-    // rerun the xpaths.
+  if (items[itemIndex].elem.parentNode === null){
 	currentList.items = this.makeItemsArray(currentList.cnrNode);
 	this.navItemIdxs[this.navListIdx] = 0;
 	itemIndex = this.navItemIdxs[this.navListIdx];
   }  
   this.lastItem = items[itemIndex];
+  if (this.snd_ !== null){
+    if (looped){
+	  this.snd_.play(this.LOOP_SND_URL);
+	} else {
+      this.snd_.play(this.ITEM_SND_URL);
+	}
+  }
   return this.lastItem;
 };
 
@@ -226,23 +239,26 @@ AxsNav.prototype.prevItem = function(){
     }
   }
   this.navItemIdxs[this.navListIdx]--;
+  var looped = false;
   if (this.navItemIdxs[this.navListIdx] < 0){
     this.navItemIdxs[this.navListIdx] = items.length - 1;
+    looped = true;
   }
   var itemIndex = this.navItemIdxs[this.navListIdx];   
   // Perform a validity check to determine if the xpaths should be re-evaluated
-  while ((items[itemIndex].elem.parentNode === null) &&
-         (this.navItemIdxs[this.navListIdx] >= 0)){
-    itemIndex = this.navItemIdxs[this.navListIdx]--;  
-  }
-  if (itemIndex < 0){
-    // The rest of the items in this list have been invalidated;
-    // rerun the xpaths.
+  if (items[itemIndex].elem.parentNode === null){
 	currentList.items = this.makeItemsArray(currentList.cnrNode);
 	this.navItemIdxs[this.navListIdx] = currentList.items.length;
 	itemIndex = this.navItemIdxs[this.navListIdx];
   }  
   this.lastItem = items[itemIndex];
+  if (this.snd_ !== null){
+    if (looped){
+	  this.snd_.play(this.LOOP_SND_URL);
+	} else {
+      this.snd_.play(this.ITEM_SND_URL);
+	}
+  }
   return this.lastItem;
 };
 
@@ -300,8 +316,8 @@ AxsNav.prototype.actOnItem = function(item){
 	  var func = eval(item.action.substring(5));
 	  func(item);
     } else {
-      if (this.lens !== null){
-        this.lens.view(item.elem);
+      if (this.lens_ !== null){
+        this.lens_.view(item.elem);
       }
       this.axs_.goTo(item.elem);
     }
@@ -770,5 +786,23 @@ AxsNav.prototype.localHelpString = function(){
  *                        If null, no lens will be used.
  */
 AxsNav.prototype.setLens = function(lens){
-  this.lens = lens;
+  this.lens_ = lens;
 };
+
+
+/**
+ * This function sets the lens to be used when going to an item's element.
+ *
+ * @param {Object?} snd   The AxsSound object to be used.
+ *                        The AxsSound object should already have its 
+ *                        verbosity set and be initialized.
+ *                        If null, no sound object will be used.
+ */
+AxsNav.prototype.setSound = function(snd){
+  this.snd_ = snd;
+};
+
+
+
+
+
