@@ -105,7 +105,11 @@ AxsNav.prototype.nextList = function(){
   if (this.navListIdx >= this.navArray.length){
     this.navListIdx = 0;
   }
-  return this.navArray[this.navListIdx];
+  var currentList = this.navArray[this.navListIdx];
+  if (currentList.entryTarget !== null){
+    this.actOnTarget(currentList.entryTarget);
+  }
+  return currentList;
 };
 
 /**
@@ -120,7 +124,11 @@ AxsNav.prototype.prevList = function(){
   if (this.navListIdx < 0){
     this.navListIdx = this.navArray.length - 1;
   }
-  return this.navArray[this.navListIdx];
+  var currentList = this.navArray[this.navListIdx];
+  if (currentList.entryTarget !== null){
+    this.actOnTarget(currentList.entryTarget);
+  }
+  return currentList;
 };
 
 /**
@@ -617,6 +625,7 @@ AxsNav.prototype.navInit = function(cnrString, opt_customNavMethod){
     navList.emptyMsg = currentList.getAttribute('onEmpty') || '';
     navList.tailTarget = null;
     navList.headTarget = null;
+	navList.entryTarget = null;
     navList.items = this.makeItemsArray(currentList);
     navList.targets = this.makeTargetsArray(currentList);
     for (var j = 0, listTarget; listTarget = navList.targets[j]; j++){
@@ -624,6 +633,8 @@ AxsNav.prototype.navInit = function(cnrString, opt_customNavMethod){
         navList.tailTarget = listTarget;
       } else if (listTarget.trigger == 'listHead'){
         navList.headTarget = listTarget;
+      } else if (listTarget.trigger == 'listEntry'){
+        navList.entryTarget = listTarget;
       }
     }
 
