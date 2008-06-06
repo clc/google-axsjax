@@ -27,7 +27,7 @@
 	if (parentUrl.indexOf('#') != -1){
 	  parentUrl = parentUrl.substring(0,parentUrl.indexOf('#'));	
 	}  
-	if (verbosity != 'none'){
+	if ((verbosity == 'minimal') || (verbosity == 'verbose')){	
 	  parent.location = parentUrl + '#InitSuccess';
 	}	
     parentUpdated = false;
@@ -159,10 +159,12 @@
 	    parentUpdated = true;
 	  }
 	}  
-	  
-	if (prevTime != time){
-	  var stats = 'Time=' + time;
-	  parent.location = parentUrl + '#' + stats;	
+
+	if ((verbosity == 'minimal') || (verbosity == 'verbose')){	
+	  if (prevTime != time){
+	    var stats = 'Time=' + time;
+	    parent.location = parentUrl + '#' + stats;	
+ 	  }
 	}
 	prevTime = time;
   };
