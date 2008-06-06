@@ -1,0 +1,182 @@
+
+#    -*- mode: org -*-
+* Setting Up Your Development Environment
+
+While there are many ways to set up your development environment for working 
+with AxsJAX, this tutorial will cover the easiest way to setup and get going. 
+You may substitute any of the tools here for ones that you are more comfortable 
+with that have the same functionality, but this guide will assume that you are 
+using the tools listed here.
+
+  1. [[http://portableapps.com/apps/internet/firefox_portable][Get Portable Firefox.]] This will give you a sandboxed version of Firefox with a clean profile so that you don't need to worry about conflicts with any existing extensions. 
+  2. Install the following extensions on your Portable Firefox:
+    - [[https://addons.mozilla.org/en-US/firefox/addon/748][Greasemonkey]]  for injecting scripts.
+    - [[https://addons.mozilla.org/en-US/firefox/addon/1192][XPather]]  for interactively discovering XPath locators.
+    - [[https://addons.mozilla.org/en-US/firefox/addon/1100][Event Spy]]  for inspecting events as they happen.
+    - [[http://www.firevox.clcworld.net/installation.html][Fire Vox]]  for adding spoken output to Firefox.
+  3. Download the [[http://www.server2go-web.de/download/download.html]["MICRO-PACKAGE" of Server2Go]] and unzip it to your hard drive.
+  4. Save the [[http://google-axsjax.googlecode.com/svn/trunk/skel/axsSkel.js][axsSkel.js]] file under the "htdocs" directory of where you unzipped Server2Go in the previous step.
+  5. Start Server2Go. You will get a browser window with a URL that looks like "http://127.0.0.1:4001/" and a page that says you are running Server2Go successfully. Make a note of what your URL is.
+  6. Install [[http://google-axsjax.googlecode.com/svn/trunk/skel/axsSkelLoader.user.js][axsSkelLoader.user.js]] as a Greasemonkey script. By default this will run on all pages; you may want to change this to only run on the page that you will be working on by going to Tools > Greasemonkey > Manage User Scripts and editing the "Included Pages" setting to just be your target page.
+  7. Go to Tools > Greasemonkey > Manage User Scripts and select "axsSkelLoader". Click "Edit". Look at the line that reads:
+    : /* Modify this line to match where you have the script that you are working on */
+    : myScript.src = 'http://127.0.0.1:4001/axsSkel.js';
+    and verify that this URL is indeed what your URL was in step 5. If not, change it to match and save the file.
+  8. Go to the site you wish to apply AxsJAX to. You should get an alert box saying: "AxsSkel loaded and initialized!"
+  
+  
+
+* Applying AxsJAX to Content Rich Sites
+
+1. Write a [[cnr.html][Content Navigation Rule (CNR)]] for the site. 
+An easy way to generate the xpaths is to use the DOM Inspector in Firefox 
+with XPather. That will give you a raw xpath that you can then simplify and 
+generalize.
+
+2. Replace this line:
+:var cnrString = "PUT THE CNR XML HERE";
+in your axsSkel.js file with the CNR that you wrote in the previous step.
+
+3. Try it out! At this point, the navigation should be working and you should 
+be able to easily get to all the content on the page. If there is important 
+content that you cannot reach, make sure that you are really including it in 
+your xpath expressions. As in step 1, XPather and DOM Inspector are 
+indispensable.
+	   
+4. If there is more functionality that needs to be enabled, you can augment 
+the axsSkel.js file with your own functions that are tailored for the site. 
+
+* Example: Enhancing Google Product Search Via AxsJAX
+
+** Writing the CNR file
+
+The main trail here is the list of items returned by Product Search. Let's 
+try to find the xpath for those items. Use DOM Inspector and click on the 
+first result. That will select a node in the DOM tree. If that selection is 
+too narrow, move up the tree until you select more. When you are satisfied 
+with what the flashing rectangle has selected, note the XPath expression that 
+you get.
+
+[[http://google-axsjax.googlecode.com/svn/trunk/docs/tutorial/images/xpath_00.png]]
+
+Now use DOM Inspector and click on the second result. Notice that the second 
+result's xpath is quite similar to the first result's.
+
+[[http://google-axsjax.googlecode.com/svn/trunk/docs/tutorial/images/xpath_01.png]]
+
+The first xpath is:
+: /html/body/table[3]/tbody/tr[2]
+and the second is:
+: /html/body/table[3]/tbody/tr[3]
+
+Based on that, a good guess for the xpath for all the results would be:
+: /html/body/table[3]/tbody/tr[*]
+Let's put that into XPather and see what we get.
+
+[[http://google-axsjax.googlecode.com/svn/trunk/docs/tutorial/images/xpath_02.png]]
+
+This is pretty close to what we want, but we are getting an extra node at the 
+front. Notice that this extra node has a class name.
+To exclude it, let's change the xpath to only include nodes without class"
+: /html/body/table[3]/tbody/tr[not(@class)]
+
+[[http://google-axsjax.googlecode.com/svn/trunk/docs/tutorial/images/xpath_03.png]]
+
+Success! Now we only have the search results. 
+
+At this point, all we have to do is decide on the navigation keys we want to use and then 
+write the CNR.
+
+[[http://google-axsjax.googlecode.com/svn/trunk/docs/tutorial/productSearch_cnr_00.xml][Here's the CNR file that we got.]]
+
+** Putting the CNR file into the JS file.
+This step is pretty easy. Open up your axsSkel.js file and put in the CNR 
+string.
+
+[[http://google-axsjax.googlecode.com/svn/trunk/docs/tutorial/axsProductSearch_00.js][This is the JS file that we got.]]
+
+** Load up http://www.google.com/products and do a search.
+Ok, not bad for a first attempt. It mostly works, but there are definitely 
+some areas for improvement. For starters, the user isn't taken to the next 
+page when they reach the end of a page of results and try to go forward. 
+Similarly, they should be taken to the previous page if they reach the first 
+result and try to go backward. Let's add targets with "listTail"/"listHead" 
+triggers to address this. Just like in the first step, we use DOM Inspector
+and XPather to discover what the xpaths for the next/previous page links are.
+Also, the user should be able to just hit ENTER to go to the result, so let's 
+add a target with ENTER as a hotkey for that as well.
+
+[[http://google-axsjax.googlecode.com/svn/trunk/docs/tutorial/productSearch_cnr_01.xml][Here's the CNR file that we got.]]
+
+** Add custom functions to improve the behavior of the page.
+
+Now that we can easily go through the results, is there anything else that we 
+can do to improve this page? As a matter of fact, there is! Listening closely 
+to what the results sound like, we can hear that the spoken feedback is not 
+exactly what we would like to hear. For instance, the first image of the 
+result has no alt text and some AT will read the entire URL. That image should 
+just be omitted as there is no reason for the user to hear that. Also, the 
+star rating is repeated since each star has an alt tag that says how many 
+stars there are, and the text of the different parts of the result tend to run 
+together. Let's write a short JavaScript function that will process each 
+result by adding some smart formatting to it before speaking it. We can then 
+use the "action" attribute of the item element in our CNR to call our function 
+instead of using the default action of going to the node and speaking it.
+
+While we're at it, we should also add a function that causes the first result 
+on a page to be spoken when the page is loaded.
+
+Here's the code for reformatting the results to create a much better auditory 
+user interface experience:
+: axsProductSearch.speakResult = function(item){
+:   var resultRow = item.elem;
+:   var title = axsProductSearch.getTitle(resultRow);
+:   var desc = axsProductSearch.getDesc(resultRow);
+:   var price = axsProductSearch.getPrice(resultRow);
+:   var seller = axsProductSearch.getSeller(resultRow);
+:   var ratings = axsProductSearch.getRatings(resultRow);
+:   var checkout = axsProductSearch.getCheckout(resultRow);
+:   
+:   var message = title + '. ' + 
+:                 price + '. ' +  
+:   			  desc  + 				
+: 				  seller + '. ' +
+: 				  ratings +
+: 				  checkout;
+:   
+:   axsProductSearch.axsLensObj.view(resultRow);
+:   resultRow.scrollIntoView(true);
+:   axsProductSearch.axsJAXObj.speakTextViaNode(message);
+: };
+
+[[http://google-axsjax.googlecode.com/svn/trunk/docs/tutorial/images/products_done.png]]
+
+Now, what the user hears for the above screen shot is:
+
+Google e. encyclopedia. $29.99. In partnership with Google, DK presents the 
+e.encyclopedia, a revolutionary approach to children's reference publishing. 
+An illustrated general encyclopedia ... Buy this at Adoremus Books. 64 seller 
+ratings averages out to 5 stars. Accepts Google Checkout.
+
+
+
+
+
+[[http://google-axsjax.googlecode.com/svn/trunk/docs/tutorial/axsProductSearch_01.js][Here is the JS file that we got at the end.]]
+	   
+
+** Wrapping Things Up 
+This AxsJAX script for Product Search is basically done. Of course, 
+there are a few things to polish up such as adding controls for search 
+refinements. To see how we're evolving this script, please see the 
+[[http://google-axsjax.googlecode.com/svn/trunk/productsearch]["productsearch" directory]] 
+in the AxsJAX project SVN repository.
+
+
+* Applying AxsJAX to Highly Interactive Sites
+
+#+TITLE:     Writing AxsJAX Scripts
+#+AUTHOR:    T.V. Raman, Charles L. Chen
+#+EMAIL:     raman@google.com, clchen@google.com
+#+LANGUAGE:  en
+#+OPTIONS:   H:3 num:t toc:t \n:nil @:t ::t |:t ^:t f:t *:t TeX:t LaTeX:nil skip:t p:nil
