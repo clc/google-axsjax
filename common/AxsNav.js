@@ -170,7 +170,19 @@ AxsNav.prototype.nextItem = function(){
   if (this.navItemIdxs[this.navListIdx] >= items.length){
     this.navItemIdxs[this.navListIdx] = 0;
   }
-  var itemIndex = this.navItemIdxs[this.navListIdx];
+  var itemIndex = this.navItemIdxs[this.navListIdx];   
+  // Perform a validity check to determine if the xpaths should be re-evaluated
+  while ((items[itemIndex].elem.parentNode === null) &&
+         (this.navItemIdxs[this.navListIdx] < items.length)){
+    itemIndex = this.navItemIdxs[this.navListIdx]++;  
+  }
+  if (itemIndex == items.length){
+    // The rest of the items in this list have been invalidated;
+    // rerun the xpaths.
+	currentList.items = this.makeItemsArray(currentList.cnrNode);
+	this.navItemIdxs[this.navListIdx] = 0;
+	itemIndex = this.navItemIdxs[this.navListIdx];
+  }  
   this.lastItem = items[itemIndex];
   return this.lastItem;
 };
@@ -217,7 +229,19 @@ AxsNav.prototype.prevItem = function(){
   if (this.navItemIdxs[this.navListIdx] < 0){
     this.navItemIdxs[this.navListIdx] = items.length - 1;
   }
-  var itemIndex = this.navItemIdxs[this.navListIdx];
+  var itemIndex = this.navItemIdxs[this.navListIdx];   
+  // Perform a validity check to determine if the xpaths should be re-evaluated
+  while ((items[itemIndex].elem.parentNode === null) &&
+         (this.navItemIdxs[this.navListIdx] >= 0)){
+    itemIndex = this.navItemIdxs[this.navListIdx]--;  
+  }
+  if (itemIndex < 0){
+    // The rest of the items in this list have been invalidated;
+    // rerun the xpaths.
+	currentList.items = this.makeItemsArray(currentList.cnrNode);
+	this.navItemIdxs[this.navListIdx] = currentList.items.length;
+	itemIndex = this.navItemIdxs[this.navListIdx];
+  }  
   this.lastItem = items[itemIndex];
   return this.lastItem;
 };
@@ -616,6 +640,7 @@ AxsNav.prototype.navInit = function(cnrString, opt_customNavMethod){
   var currentList;
   for (i = 0, currentList; currentList = lists[i]; i++){
     var navList = new Object();
+	navList.cnrNode = currentList;
     navList.title = currentList.getAttribute('title') || '';
     navList.hotKeys = currentList.getAttribute('hotkey') || '';
     navList.nextKeys = currentList.getAttribute('next') || '';
