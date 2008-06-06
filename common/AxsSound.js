@@ -23,8 +23,7 @@
  * @constructor
  */
 var AxsSound = function(){
-//  this.sm2BaseURL = 'http://google-axsjax.googlecode.com/svn/trunk/thirdparty/soundmanager2/';
-  this.sm2BaseURL = 'http://www.corp.google.com/~clchen/AxsJAX/thirdparty/soundmanager2/';
+  this.sm2BaseURL = 'http://google-axsjax.googlecode.com/svn/trunk/thirdparty/soundmanager2/';
   this.sm2LinkerFrame = null;
   this.initSucceeded = false;
   this.verbosity = 'minimal';
@@ -40,6 +39,9 @@ AxsSound.prototype.setVerbosity = function(verbosity){
 };
 
 AxsSound.prototype.init = function(){
+  if (this.initSucceeded){
+    return;
+  }	
   if (this.busyInitializing){
     return;
   }
