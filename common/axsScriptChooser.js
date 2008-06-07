@@ -112,6 +112,7 @@ function pickScript(){
       theScript.src = baseURL + 'websearch/axsEnableWebSearch.js';
       scriptsArray.push(navLib);
       scriptsArray.push(lensLib);
+      scriptsArray.push(sndLib);
       shouldInsertScripts = true;
     }
   }
