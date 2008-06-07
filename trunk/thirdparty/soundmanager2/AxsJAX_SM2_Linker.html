@@ -4,15 +4,17 @@
 <script type="text/javascript" src="script/soundmanager2.js"></script>
 <script>
   soundManager.onload = init;
-  
-  var commandMonitorDelay = 80;
-  var stopTime = -1;
-  var currentSoundID = null;
-  var isPlaying = false;
-  var parentUrl = '';
-  var verbosity = '';
-  var prevTime = -2;
-  var parentUpdated = true;
+
+  function reset(){
+    var commandMonitorDelay = 80;
+    var stopTime = -1;
+    var currentSoundID = null;
+    var isPlaying = false;
+    var parentUrl = '';
+    var verbosity = '';
+    var prevTime = -2;
+    var parentUpdated = true;  
+  }
   
   function init(){
 	var verbosityCmd = '#Verbosity=';
@@ -169,7 +171,8 @@
 	prevTime = time;
   };
   
-						
+  // Always run a reset to make sure that reloads work properly
+  reset();						
 </script>
 <META HTTP-EQUIV="Pragma" CONTENT="no-cache">
 </head>
