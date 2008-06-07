@@ -4,16 +4,24 @@
 <script type="text/javascript" src="script/soundmanager2.js"></script>
 <script>
   soundManager.onload = init;
-
+  var commandMonitorDelay = 80;
+  var stopTime = -1;
+  var currentSoundID = null;
+  var isPlaying = false;
+  var parentUrl = '';
+  var verbosity = '';
+  var prevTime = -2;
+  var parentUpdated = true;  
+  
   function reset(){
-    var commandMonitorDelay = 80;
-    var stopTime = -1;
-    var currentSoundID = null;
-    var isPlaying = false;
-    var parentUrl = '';
-    var verbosity = '';
-    var prevTime = -2;
-    var parentUpdated = true;  
+    commandMonitorDelay = 80;
+    stopTime = -1;
+    currentSoundID = null;
+    isPlaying = false;
+    parentUrl = '';
+    verbosity = '';
+    prevTime = -2;
+    parentUpdated = true;  
   }
   
   function init(){
@@ -148,10 +156,6 @@
 	  isPlaying = false;	
 	  time = -1;
 	  parentUpdated = false;
-	}
-	
-	if (verbosity == 'none'){
-	  return;
 	}
 	
 	if (verbosity == 'minimal'){
