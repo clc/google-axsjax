@@ -92,6 +92,14 @@ axsWebSearch.axsLensObj = null;
 axsWebSearch.magSize = 1.5;
 
 /**
+ * The AxsSound object that will play earcons
+ * @type AxsSound?
+ */
+axsWebSearch.axsSoundObj = null;
+
+
+
+/**
  * Initializes the web search script by starting up the AxsNav object
  * and attaching keyboard handlers. 
  */
@@ -110,7 +118,7 @@ axsWebSearch.init = function(){
       "<list title='One Box' hotkey='1' next='DOWN j' prev='UP k' " +
       "onEmpty='There is no one box on this page.'>" +
       "<item count='1'>" +
-      "id('res')/p" +
+      "id('res')/p[*]" +
       "</item>" +
       "<item count='1'>" +
       "id('res')/div[@class='e']" +
@@ -172,6 +180,11 @@ axsWebSearch.init = function(){
   axsWebSearch.axsLensObj = new AxsLens(axsWebSearch.axsJAXObj);
   axsWebSearch.axsNavObj.setLens(axsWebSearch.axsLensObj);
   axsWebSearch.axsLensObj.setMagnification(axsWebSearch.magSize);
+  
+  axsWebSearch.axsSoundObj = new AxsSound();
+  axsWebSearch.axsSoundObj.setVerbosity('none');
+  axsWebSearch.axsSoundObj.init();
+  axsWebSearch.axsNavObj.setSound(axsWebSearch.axsSoundObj);
 
   //Read the first thing on the page.
   //Use a set time out just in case the browser is not entirely ready yet.
