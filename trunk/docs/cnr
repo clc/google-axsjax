@@ -61,6 +61,8 @@ forward.
 **** "listHead"
 Trigger is activated if the user is at the start of the list and tries to 
 go backward.	 
+**** "listEntry"
+Trigger is activated if the user switches to this list.
 
 * CNR Elements
 	   

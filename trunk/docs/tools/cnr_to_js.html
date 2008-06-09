@@ -1,0 +1,46 @@
+<html>
+<head>
+<title>CNR File to JavaScript String</title>
+
+<script>
+function generateOutput(){
+  var input = document.getElementById('input');
+  var out = '  var cnrString = "';  
+  var whiteSpace = '                  "';
+  var charCount = 19;
+  for (var i = 0, c; c = input.value.charAt(i); i++){
+    if ((charCount > 77) || 
+	    (c == '\n')){
+	  out = out + '" +\n' + whiteSpace;
+	  charCount = 19;
+	}
+	if (c != '\n'){
+      out = out + c;
+	}
+	charCount++;
+  }
+  out = out + '";';  
+  var output = document.getElementById('output');
+  output.value = out;
+}
+
+</script>
+
+</head>
+<body>
+
+<label for='input'>Paste the contents of your CNR file below:</label>
+<br/>
+<textarea id='input' style="width:100%; height:40%"></textarea>
+
+<br/>
+<br/>
+<input type='button' value='Generate the JavaScript string' onclick='generateOutput();' style="width:20%">
+<br/>
+<br/>
+
+<label for='output'>Copy and paste the text below into your AxsJAX script:</label>
+<br/>
+<textarea id='output'  style="width:100%; height:40%"></textarea>
+
+</body>
