@@ -28,23 +28,23 @@ using the tools listed here.
 
 * Applying AxsJAX to Content Rich Sites
 
-1. Write a [[cnr.html][Content Navigation Rule (CNR)]] for the site. 
-An easy way to generate the xpaths is to use the DOM Inspector in Firefox 
-with XPather. That will give you a raw xpath that you can then simplify and 
-generalize.
+1. Write a [[http://google-axsjax.googlecode.com/svn/trunk/docs/cnr.html][Content Navigation Rule (CNR)]] for the site. [[http://google-axsjax.googlecode.com/svn/trunk/skel/skel_cnr.xml][Here is a skeleton CNR file to help you get started.]]
+   An easy way to generate the xpaths is to use the DOM Inspector in Firefox 
+   with XPather. That will give you a raw xpath that you can then simplify and 
+   generalize.
 
 2. Replace this line:
-:var cnrString = "PUT THE CNR XML HERE";
-in your axsSkel.js file with the CNR that you wrote in the previous step.
+   :var cnrString = "PUT THE CNR XML HERE";
+   in your axsSkel.js file with the CNR that you wrote in the previous step.
 
 3. Try it out! At this point, the navigation should be working and you should 
-be able to easily get to all the content on the page. If there is important 
-content that you cannot reach, make sure that you are really including it in 
-your xpath expressions. As in step 1, XPather and DOM Inspector are 
-indispensable.
+   be able to easily get to all the content on the page. If there is important 
+   content that you cannot reach, make sure that you are really including it in 
+   your xpath expressions. As in step 1, XPather and DOM Inspector are 
+   indispensable.
 	   
 4. If there is more functionality that needs to be enabled, you can augment 
-the axsSkel.js file with your own functions that are tailored for the site. 
+   the axsSkel.js file with your own functions that are tailored for the site. 
 
 * Example: Enhancing Google Product Search Via AxsJAX
 
@@ -95,7 +95,7 @@ string.
 
 [[http://google-axsjax.googlecode.com/svn/trunk/docs/tutorial/axsProductSearch_00.js][This is the JS file that we got.]]
 
-** Load up http://www.google.com/products and do a search.
+** Load up [[http://www.google.com/products][Google Product Search]] and do a search.
 Ok, not bad for a first attempt. It mostly works, but there are definitely 
 some areas for improvement. For starters, the user isn't taken to the next 
 page when they reach the end of a page of results and try to go forward. 
