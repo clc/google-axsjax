@@ -314,7 +314,7 @@ AxsNav.prototype.actOnItem = function(item){
 	// any confusion over where the focus is
 	// in case the user had tabbed elsewhere
 	// before using the navigation system.
-	if (this.axs_.lastFocusedNode){
+	if (this.axs_.lastFocusedNode && this.axs_.lastFocusedNode.blur){
 	    this.axs_.lastFocusedNode.blur();
 	}
     if ((item.action !== null) &&
