@@ -310,6 +310,13 @@ AxsNav.prototype.currentItem = function(){
  */
 AxsNav.prototype.actOnItem = function(item){
   if (item !== null){
+    // Do a blur before any action to avoid
+	// any confusion over where the focus is
+	// in case the user had tabbed elsewhere
+	// before using the navigation system.
+	if (this.axs_.lastFocusedNode){
+	    this.axs_.lastFocusedNode.blur();
+	}
     if ((item.action !== null) &&
         (item.action.indexOf('CALL:') === 0) &&
         (item.action.indexOf('(') === -1)){
