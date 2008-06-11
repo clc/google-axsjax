@@ -6,7 +6,7 @@ lang="en" xml:lang="en">
 <title>Writing AxsJAX Scripts</title>
 <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
 <meta name="generator" content="Org-mode"/>
-<meta name="generated" content="2008/06/09 17:27:57"/>
+<meta name="generated" content="2008/06/11 11:30:47"/>
 <meta name="author" content="T.V. Raman, Charles L. Chen"/>
 <style type="text/css">
   html {
@@ -42,12 +42,24 @@ lang="en" xml:lang="en">
 <ul>
 <li><a href="#sec-4">3.1 Writing the CNR file</a></li>
 <li><a href="#sec-5">3.2 Putting the CNR file into the JS file.</a></li>
-<li><a href="#sec-6">3.3 Load up Google Product Search and do a search.</a></li>
+<li><a href="#sec-6">3.3 Load up [[http://www.google.com/products][Google Product Search]] and do a search.</a></li>
 <li><a href="#sec-7">3.4 Add custom functions to improve the behavior of the page.</a></li>
 <li><a href="#sec-8">3.5 Wrapping Things Up </a></li>
 </ul>
 </li>
-<li><a href="#sec-9">4 Applying AxsJAX to Highly Interactive Sites</a></li>
+<li><a href="#sec-9">4 Applying AxsJAX to Highly Interactive Web Applications</a></li>
+<li><a href="#sec-10">5 Example: Enhancing Google Reader Via AxsJAX   </a>
+<ul>
+<li><a href="#sec-11">5.1 Making the app keyboard usable</a></li>
+<li><a href="#sec-12">5.2 Writing a CNR if necessary</a></li>
+<li><a href="#sec-13">5.3 Speaking the result of navigating the feeds</a></li>
+<li><a href="#sec-14">5.4 Speaking the result of user actions</a></li>
+<li><a href="#sec-15">5.5 Load up [[http://reader.google.com][Google Reader]] and try it out</a></li>
+<li><a href="#sec-16">5.6 Putting on the finishing touches</a></li>
+<li><a href="#sec-17">5.7 Wrapping Things Up </a></li>
+</ul>
+</li>
+<li><a href="#sec-18">6 References</a></li>
 </ul>
 
 <h2><a name="sec-1">1 Setting Up Your Development Environment</a></h2>
@@ -113,10 +125,13 @@ Go to the site you wish to apply AxsJAX to. You should get an alert box saying: 
 
 <ol>
 <li>
-Write a <a href="http://google-axsjax.googlecode.com/svn/trunk/docs/cnr.html">Content Navigation Rule (CNR)</a> for the site. <a href="http://google-axsjax.googlecode.com/svn/trunk/skel/skel_cnr.xml">Here is a skeleton CNR file to help you get started.</a>
-An easy way to generate the xpaths is to use the DOM Inspector in Firefox 
-with XPather. That will give you a raw xpath that you can then simplify and 
-generalize.
+Write a <a href="http://google-axsjax.googlecode.com/svn/trunk/docs/cnr.html">Content Navigation Rule (CNR)</a> for the site. <a href="http://google-axsjax.googlecode.com/svn/trunk/skel/skel_cnr.xml">Here is a skeleton CNR file to help you get started.</a> An easy way to
+generate the XPath expressions is to use the DOM Inspector in
+Firefox with XPather. DOM Inspector allows you to
+interactively select nodes in the DOM; XPather shows you the
+XPath expression that would locate that selection. This will
+give you an initial xpath expression that you can then
+simplify and generalize.
 
 </li>
 <li>
@@ -125,6 +140,7 @@ Replace this line:
 var cnrString = "PUT THE CNR XML HERE";
 </pre>
 in your axsSkel.js file with the CNR that you wrote in the previous step.
+<a href="http://google-axsjax.googlecode.com/svn/trunk/docs/tools/cnr_to_js.html">You can get a copy-paste friendly string by using this tool.</a>
 
 </li>
 <li>
@@ -150,11 +166,12 @@ the axsSkel.js file with your own functions that are tailored for the site.
 
 
 <p>
-The main trail here is the list of items returned by Product Search. Let's 
-try to find the xpath for those items. Use DOM Inspector and click on the 
-first result. That will select a node in the DOM tree. If that selection is 
-too narrow, move up the tree until you select more. When you are satisfied 
-with what the flashing rectangle has selected, note the XPath expression that 
+The main trail here is the list of items returned by Product
+Search. Let's try to find the xpath for those items. Use DOM
+Inspector and click on the first result. That will select a node
+in the DOM tree. If that selection is too narrow, move up the
+tree until you select more. When you are satisfied with what the
+flashing rectangle has selected, note the XPath expression that
 you get.
 </p>
 <p>
@@ -206,7 +223,7 @@ At this point, all we have to do is decide on the navigation keys we want to use
 write the CNR.
 </p>
 <p>
-<a href="http://google-axsjax.googlecode.com/svn/trunk/docs/tutorial/productSearch_cnr_00.xml">Here's the CNR file that we got.</a>
+<a href="http://google-axsjax.googlecode.com/svn/trunk/docs/tutorial/productSearch_cnr_00.xml">Here's the CNR file that we get.</a>
 </p>
 
 <h3><a name="sec-5">3.2 Putting the CNR file into the JS file.</a></h3>
@@ -215,41 +232,46 @@ write the CNR.
 string.
 </p>
 <p>
-<a href="http://google-axsjax.googlecode.com/svn/trunk/docs/tutorial/axsProductSearch_00.js">This is the JS file that we got.</a>
+<a href="http://google-axsjax.googlecode.com/svn/trunk/docs/tutorial/axsProductSearch_00.js">This is the JS file that we get.</a>
 </p>
 
 <h3><a name="sec-6">3.3 Load up <a href="http://www.google.com/products">Google Product Search</a> and do a search.</a></h3>
 
-<p>Ok, not bad for a first attempt. It mostly works, but there are definitely 
-some areas for improvement. For starters, the user isn't taken to the next 
-page when they reach the end of a page of results and try to go forward. 
-Similarly, they should be taken to the previous page if they reach the first 
-result and try to go backward. Let's add targets with "listTail"/"listHead" 
-triggers to address this. Just like in the first step, we use DOM Inspector
-and XPather to discover what the xpaths for the next/previous page links are.
-Also, the user should be able to just hit ENTER to go to the result, so let's 
-add a target with ENTER as a hotkey for that as well.
+<p>Ok, not bad for a first attempt. It mostly works, but there are
+definitely some areas for improvement. For starters, the user
+isn't taken to the next page when they reach the end of a page of
+results and try to go forward. Similarly, they should be taken to
+the previous page if they reach the first result and try to go
+backward. Let's add targets with "listTail"/"listHead" triggers
+to address this. Just like in the first step, we use DOM
+Inspector and XPather to discover what the xpaths for the
+next/previous page links are. Also, the user should be able to
+just hit ENTER to go to the result, so let's add a target with
+ENTER as a hotkey for that as well.
 </p>
 <p>
-<a href="http://google-axsjax.googlecode.com/svn/trunk/docs/tutorial/productSearch_cnr_01.xml">Here's the CNR file that we got.</a>
+<a href="http://google-axsjax.googlecode.com/svn/trunk/docs/tutorial/productSearch_cnr_01.xml">Here's the CNR file that we get.</a>
 </p>
 
 <h3><a name="sec-7">3.4 Add custom functions to improve the behavior of the page.</a></h3>
 
 
 <p>
-Now that we can easily go through the results, is there anything else that we 
-can do to improve this page? As a matter of fact, there is! Listening closely 
-to what the results sound like, we can hear that the spoken feedback is not 
-exactly what we would like to hear. For instance, the first image of the 
-result has no alt text and some AT will read the entire URL. That image should 
-just be omitted as there is no reason for the user to hear that. Also, the 
-star rating is repeated since each star has an alt tag that says how many 
-stars there are, and the text of the different parts of the result tend to run 
-together. Let's write a short JavaScript function that will process each 
-result by adding some smart formatting to it before speaking it. We can then 
-use the "action" attribute of the item element in our CNR to call our function 
-instead of using the default action of going to the node and speaking it.
+Now that we can easily go through the results, is there anything
+else that we can do to improve this page? As a matter of fact,
+there is! Listening closely to what the results sound like, we
+can hear that the spoken feedback is not exactly what we would
+like. For instance, the first image of the result has no
+alt text and some AT will read the entire URL. That image should
+just be omitted as there is no reason for the user to hear
+that. Also, the star rating is repeated since each star has an
+alt tag that says how many stars there are, and the text of the
+different parts of the result tend to run together. Let's write a
+short JavaScript function that will process each result by adding
+some smart formatting to it before speaking it. We can then use
+the "action" attribute of the item element in our CNR to call our
+function instead of using the default action of going to the node
+and speaking it.
 </p>
 <p>
 While we're at it, we should also add a function that causes the first result 
@@ -257,7 +279,7 @@ on a page to be spoken when the page is loaded.
 </p>
 <p>
 Here's the code for reformatting the results to create a much better auditory 
-user interface experience:
+user interface:
 <pre>
  axsProductSearch.speakResult = function(item){
    var resultRow = item.elem;
@@ -293,12 +315,8 @@ e.encyclopedia, a revolutionary approach to children's reference publishing.
 An illustrated general encyclopedia ... Buy this at Adoremus Books. 64 seller 
 ratings averages out to 5 stars. Accepts Google Checkout.
 </p>
-
-
-
-
 <p>
-<a href="http://google-axsjax.googlecode.com/svn/trunk/docs/tutorial/axsProductSearch_01.js">Here is the JS file that we got at the end.</a>
+<a href="http://google-axsjax.googlecode.com/svn/trunk/docs/tutorial/axsProductSearch_01.js">Here is the JS file that we get at the end.</a>
 </p>
 
 
@@ -312,12 +330,252 @@ in the AxsJAX project SVN repository.
 </p>
 
 
-<h2><a name="sec-9">4 Applying AxsJAX to Highly Interactive Sites</a></h2>
+<h2><a name="sec-9">4 Applying AxsJAX to Highly Interactive Web Applications</a></h2>
 
 
+<ol>
+<li>
+Make sure the app is keyboard usable. The goal is to make it possible to do 
+common actions from the keyboard very quickly; users should never need to 
+tab through multiple things on the page just to get at something. 
+
+</li>
+<li>
+If there are static portions on this app that could benefit from CNR, follow 
+the steps in the section above on [Applying AxsJAX to Content Rich Sites].
+Otherwise, replace this line:
+<pre>
+var cnrString = "PUT THE CNR XML HERE";
+</pre>
+with
+<pre>
+var cnrString = "";
+</pre>
+
+</li>
+<li>
+Decide on an action that you wish to speak the result of, then:
+<ol>
+<li>
+Use DOM Inspector to find and select the node of the app that contains 
+content which you know will change when you perform an action from the 
+keyboard. 
+
+</li>
+<li>
+Right-click on the node in the DOM tree and choose "Watch events..." to 
+bring up Event Spy. Make sure that "Mutation" is checked and nothing else.
+
+</li>
+<li>
+Perform the action from the keyboard and examine the event log to 
+determine what events are fired when the action is performed.
+
+</li>
+<li>
+Using this, write code for the axsSkel.nodeInsertedHandler or 
+axsSkel.attrModifiedHandler that will speak the result of the event.
+
+</li>
+</ol>
+</li>
+<li>
+Repeat the last step until all actions have their results spoken.
+
+</li>
+<li>
+Try it out! Think of the different tasks that users will want to do with the 
+the app. Is there a smooth workflow that can be done efficiently from the 
+keyboard alone? Is there enough auditory feedback so that the application 
+can be used without a monitor?
+
+</li>
+<li>
+If there is more functionality that needs to be enabled, you can augment 
+the axsSkel.js file with your own functions that are tailored for the site. 
+
+</li>
+</ol>
+
+<h2><a name="sec-10">5 Example: Enhancing Google Reader Via AxsJAX   </a></h2>
+
+
+
+<h3><a name="sec-11">5.1 Making the app keyboard usable</a></h3>
+
+<p>There's nothing to be done in this step since Google Reader is a power-user 
+app that has keyboard shortcuts for pretty much everything. 
+</p>
+
+<h3><a name="sec-12">5.2 Writing a CNR if necessary</a></h3>
+
+<p>This step can also be skipped for Google Reader as the navigation through the 
+feeds and articles is done entirely by Reader.
+</p>
+
+<h3><a name="sec-13">5.3 Speaking the result of navigating the feeds</a></h3>
+
+<p>Let's start by enabling spoken feedback for navigating the list of feeds. 
+Google Reader provides Shift + n / Shift + p to navigate forward / backward in 
+this list. When users do this, there is a highlight that indicates where they 
+are as shown in the screen shot below.
+<img src="http://google-axsjax.googlecode.com/svn/trunk/docs/tutorial/images/shift_n.png"/>
+</p>
+<p>
+Now that we know what area is going to change, we can watch for changes in that 
+area of the DOM using Event Spy.
+</p>
+<p>
+First, start up DOM Inspector, find the area that will change, and right click 
+on its node in the DOM tree. Then choose "Watch events..."
+<img src="http://google-axsjax.googlecode.com/svn/trunk/docs/tutorial/images/watch_events_00.png"/>
+</p>
+<p>
+Check the "Mutation" category, go back to the Reader, then hit Shift + n to 
+navigate to the next feed. You will see that the Event Log now has captured a 
+few events. 
+<img src="http://google-axsjax.googlecode.com/svn/trunk/docs/tutorial/images/watch_events_01.png"/>
+</p>
+<p>
+Uncheck the "Mutation" category so that you won't accidentally get more events. 
+Let's explore this log to see what caused the highlighting effect to appear. 
+It would make sense that something like this is done via CSS with classname 
+changes, so we should focus our search on the DOM events which involve class.
+After looking through the changes, we see something that looks quite promising. 
+It is a DOMAttrModified event that has:
+<pre>
+ attrName = 'class'
+ prevValue = 'link'
+ newValue = 'link cursor'
+</pre>
+This is the type of change that we expected; it is a change to the classname, 
+and the class name changes seem quite reasonable. The feed name was styled to 
+look like a regular link before we navigated to it, and then afterwards, it 
+still looked like a link but also acted as a cursor since it indicated our 
+position. And finally, the target of this event points at "Cool Tools", 
+which is the feed that we navigated to when we pressed Shift + n earlier.
+</p>
+<p>
+With this information, we are ready to write a few lines of JavaScript to 
+cause the user's assistive technology to speak when they navigate through the 
+feeds. Since the event we are interested in is a DOMAttrModified event, we 
+should modify axsSkel.attrModifiedHandler by adding a "if" condition that 
+matches the events that are occurring with the event that we are interested in.
+This is what the modified axsSkel.attrModifiedHandler looks like:
+<pre>
+axsSkel.attrModifiedHandler = function(evt){
+  var attrib = evt.attrName;
+  var newVal = evt.newValue;
+  var oldVal = evt.prevValue;
+  var target = evt.target;
+  // If the target node is something that should
+  // be spoken, speak it here.
+  if ( (attrib == 'class') &amp;&amp; 
+       (oldVal.indexOf('cursor') == -1) &amp;&amp;
+       (newVal.indexOf('cursor') != -1) ){
+    axsSkel.axsJAXObj.speakNode(target);
+  }
+};
+</pre>
+</p>
+
+<h3><a name="sec-14">5.4 Speaking the result of user actions</a></h3>
+
+<p>We can repeat what we just did for speaking the result of navigating the feed 
+list and do the same for other user actions. For example, reading the articles 
+when the user navigates to them.
+</p>
+<p>
+In this case, after looking at the Event Log, we find that the change is done 
+by changing the ID of the article to "current-entry". Here is the code that we 
+need to add to axsSkel.attrModifiedHandler:
+<pre>
+  if ( (attrib == 'id') &amp;&amp; 
+       (oldVal.indexOf('current-entry') == -1) &amp;&amp;
+       (newVal.indexOf('current-entry') != -1) ){
+    axsSkel.axsJAXObj.speakNode(target);
+  }  
+</pre>
+</p>
+<p>
+<a href="http://google-axsjax.googlecode.com/svn/trunk/docs/tutorial/axsReader_00.js">Here is the JS file that we get after providing speech feedback for navigating the feeds and their articles.</a>
+</p>
+
+
+<h3><a name="sec-15">5.5 Load up <a href="http://reader.google.com">Google Reader</a> and try it out</a></h3>
+
+<p>Just by adding two "if" statements to the axsSkel.attrModifiedHandler, we have 
+dramatically improved the usability of Google Reader. Now, the user can use the 
+built-in Reader shortcut keys to navigate the feeds and articles and hear 
+spoken feedback. 
+</p>
+<p>
+There are still a few improvements that we can make. For example, users should 
+get feedback when the articles are first loaded. To sighted users looking at 
+the screen, it is obvious when the articles have loaded, but to enable a good 
+eyes-free experience, it is important to let users know when the loading has 
+finished so that they know they can proceed.
+</p>
+<p>
+Another needed improvement is to let users know when they have starred or 
+unstarred an entry.
+</p>
+
+<h3><a name="sec-16">5.6 Putting on the finishing touches</a></h3>
+
+<p>We can make these two improvements quite easily by using the same techniques 
+we used earlier. Here's the code that we need to add to 
+axsSkel.attrModifiedHandler:
+</p>
+<p>
+<pre>
+ if( (target.id == 'viewer-box') &amp;&amp;
+       (attrib == 'class') &amp;&amp;
+       (oldVal.indexOf('hidden') != -1) &amp;&amp;
+       (newVal.indexOf('hidden') == -1)  ){
+     axsSkel.axsJAXObj.speakTextViaNode(axsSkel.ARTICLES_LOADED_STRING);
+   }
+   if( (attrib == 'class') &amp;&amp;
+       (oldVal.indexOf('item-star-active') == -1) &amp;&amp;
+         (newVal.indexOf('item-star-active') != -1) ){
+     axsSkel.axsJAXObj.speakTextViaNode(axsSkel.ITEM_STARRED_STRING);
+   }
+   if( (attrib == 'class') &amp;&amp;
+       (oldVal.indexOf('item-star-active') != -1) &amp;&amp;
+         (newVal.indexOf('item-star-active') == -1) ){
+     axsSkel.axsJAXObj.speakTextViaNode(axsSkel.ITEM_UNSTARRED_STRING);
+   }
+</pre>
+</p>
+<p>
+<a href="http://google-axsjax.googlecode.com/svn/trunk/docs/tutorial/axsReader_01.js">Here is the JS file that we get at the end.</a>
+</p>
+
+<h3><a name="sec-17">5.7 Wrapping Things Up </a></h3>
+
+<p>This AxsJAX script for Google Reader now has most of the functionality that we 
+want. Of course, there is still more to do. To see how we're evolving this 
+script, please see the 
+<a href="http://google-axsjax.googlecode.com/svn/trunk/reader">"reader" directory</a> 
+in the AxsJAX project SVN repository. 
+[[http://googleblog.blogspot.com/2008/03/aria-for-google-reader-in-praise-of.html][Also, Reader has already begun shipping its AxsJAX script as part of the product itself.]
+</p>
+
+<h2><a name="sec-18">6 References</a></h2>
+
+
+<p>
+Here are useful references for additional reading:
+</p>
+<ul>
+<li>
+<a href="http://www.google.com/search%3Fe%3DStructuredResults&q%3DXPath%2BTutorial&num%3D25">Online XPath Tutorials</a> 
+
+</li>
+</ul>
 <p class="author"> Author: T.V. Raman, Charles L. Chen
 <a href="mailto:raman@google.com, clchen@google.com">&lt;raman@google.com, clchen@google.com&gt;</a>
 </p>
-<p class="date"> Date: 2008/06/09 17:27:57</p>
+<p class="date"> Date: 2008/06/11 11:30:47</p>
 </body>
 </html>
