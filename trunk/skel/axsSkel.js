@@ -57,6 +57,8 @@ axsSkel.init = function(){
   axsSkel.axsNavObj = new AxsNav(axsSkel.axsJAXObj);
 
   //Add event listeners
+  document.addEventListener('DOMNodeInserted', axsSkel.nodeInsertedHandler, true);
+  document.addEventListener('DOMAttrModified', axsSkel.attrModifiedHandler, true);
   document.addEventListener('keypress', axsSkel.keyHandler, true);
   
   var cnrString = "PUT THE CNR XML HERE";
@@ -71,6 +73,20 @@ axsSkel.init = function(){
   alert('AxsSkel loaded and initialized!');
 };
 
+axsSkel.nodeInsertedHandler = function(evt){
+  var target = evt.target;
+  // If the target node is something that should
+  // be spoken, speak it here.
+};
+
+axsSkel.attrModifiedHandler = function(evt){
+  var attrib = evt.attrName;
+  var newVal = evt.newValue;
+  var oldVal = evt.prevValue;
+  var target = evt.target;
+  // If the target node is something that should
+  // be spoken, speak it here.
+};
 
 
 axsSkel.keyHandler = function(evt){

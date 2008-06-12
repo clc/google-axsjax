@@ -78,9 +78,7 @@ axsProductSearch.init = function(){
                   "<target title='Go to result' hotkey='ENTER'>" +
                   "./td[contains(@class,'ps-rcont')]/a" +
                   "</target>" + 
-                  "</list>" +
-
-				  
+                  "</list>" +				  
                   "<list title='Refine by price' next='DOWN j' prev='UP k'>" + 
                   "<item>" + 
                   "id('attr-div')//a[contains(@href,'lnk=prsugg')]" + 
@@ -137,7 +135,6 @@ axsProductSearch.init = function(){
                   "</target>" + 
                   "</list>" +				  
                   "</cnr>";
-				  
 
   axsProductSearch.axsNavObj.navInit(cnrString, null);
 
