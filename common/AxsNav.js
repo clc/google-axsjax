@@ -310,24 +310,51 @@ AxsNav.prototype.currentItem = function(){
  */
 AxsNav.prototype.actOnItem = function(item){
   if (item !== null){
-    // Do a blur before any action to avoid
-	// any confusion over where the focus is
-	// in case the user had tabbed elsewhere
-	// before using the navigation system.
+    var self = this;
+	
+    var doAction = function(){
+        if ((item.action !== null) &&
+            (item.action.indexOf('CALL:') === 0) &&
+            (item.action.indexOf('(') === -1)){
+	      var func = eval(item.action.substring(5));
+	      func(item);
+        } else {
+          if (self.lens_ !== null){
+            self.lens_.view(item.elem);
+          }
+          self.axs_.goTo(item.elem);
+	    }
+	  };  
+	  	  
+    // If there is a node that was focused, unfocus it so that
+	// any keys the user presses after using the nav system will not
+	// be sent to the wrong place.
 	if (this.axs_.lastFocusedNode && this.axs_.lastFocusedNode.blur){
-	    this.axs_.lastFocusedNode.blur();
+	  var oldNode = this.axs_.lastFocusedNode;
+	  // Set the lastFocusedNode to null to prevent AxsJAX's blur handler 
+	  // from kicking in as that blur handler will conflict with the 
+	  // temporary blur handler which results in screen readers not
+	  // speaking properly due to how the eventing system works.
+	  // Because we are not allowing the regular blur handler to work,
+	  // we need to make sure that we do the same work of cleaning up.
+	  this.axs_.lastFocusedNode = null; 
+	  if (oldNode.removeAttribute){
+        this.axs_.removeAttributeOf(oldNode, 'aria-activedescendant');
+	  }
+	  // The action needs to be done inside a temporary blur handler
+	  // because otherwise, there is a timing issue of when the events
+	  // get sent and screen readers won't speak.
+	  var tempBlurHandler = function(evt){	  
+	    evt.target.removeEventListener('blur',tempBlurHandler,true);
+		doAction();
+      };
+	  oldNode.addEventListener('blur',tempBlurHandler,true);
+	  oldNode.blur();
+	} else {
+	  doAction();
 	}
-    if ((item.action !== null) &&
-        (item.action.indexOf('CALL:') === 0) &&
-        (item.action.indexOf('(') === -1)){
-	  var func = eval(item.action.substring(5));
-	  func(item);
-    } else {
-      if (this.lens_ !== null){
-        this.lens_.view(item.elem);
-      }
-      this.axs_.goTo(item.elem);
-    }
+
+	
   }
 };
 
