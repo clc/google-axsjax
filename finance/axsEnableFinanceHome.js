@@ -28,7 +28,7 @@ axsFinance.EMPTY_STRING = '';
 axsFinance.SPACE_STRING = ' ';
 axsFinance.COMPANY_STRING = 'Company ';
 axsFinance.OR = ' or ';
-axsFinance.MKT_CAP_STRING = ' market capitalization ';
+axsFinance.MKT_CAP_STRING = ' market cap ';
 axsFinance.USD_STRING = ' US dollars ';
 axsFinance.VOLUME_STRING = ' volume ';
 axsFinance.UP_STRING = ' up by ';
@@ -50,22 +50,24 @@ axsFinance.volDescArray = new Array(axsFinance.COMPANY_STRING,
                                     ' ' + axsFinance.MKT_CAP_STRING,
                                     axsFinance.USD_STRING);
 
-axsFinance.recQuotesAndIndAndCurDescArray = new Array(axsFinance.EMPTY_STRING,
-                                            axsFinance.SPACE_STRING,
-                                            axsFinance.EMPTY_STRING,
-                                            axsFinance.OR,
-                                            axsFinance.EMPTY_STRING);
+axsFinance.IndAndCurDescArray = new Array(axsFinance.EMPTY_STRING,
+                                          axsFinance.SPACE_STRING,
+                                          axsFinance.EMPTY_STRING,
+                                          axsFinance.OR,
+                                          axsFinance.EMPTY_STRING);
+                                            
+axsFinance.recQuotesDescArray = new Array(axsFinance.EMPTY_STRING,
+                                          axsFinance.SPACE_STRING,
+                                          axsFinance.EMPTY_STRING,
+                                          axsFinance.OR,
+                                          axsFinance.MKT_CAP_STRING,
+                                          axsFinance.USD_STRING);
 
-axsFinance.SECT_SUM_TEMPLATE1_STRING = 
-    'On the down side, {0} percent of this sector is down by more than {1} ' +
-    'percent while ';
-axsFinance.SECT_SUM_TEMPLATE2_STRING =
-    '{0} percent of these companies are down by less than {1} percent. ';
-axsFinance.SECT_SUM_TEMPLATE3_STRING =
-    'On the up side, {0} percent of this sector is up less than {1} percent ' +
-    'while ';
-axsFinance.SECT_SUM_TEMPLATE4_STRING =
-    '{0} percent of these companies are up by more than {1} percent. ';
+axsFinance.SECT_SUM_TMPL_STRING = '. {0} percent of this sector is ' +
+		'down; {1} percent of all the companies are down by more than {2} ' +
+		'percent. {3} percent of this sector is up; {4} percent  of all the ' +
+		'companies are up by more than {5} percent.';
+   
 
 axsFinance.TABLE_XPATH_STRING = './descendant::table/descendant::td[@class]';
 
@@ -295,7 +297,7 @@ axsFinance.handleTableRowIndicesAndCurrencies = function(item) {
   textContents[3] = axsFinance.parseSpecialChars(textContent);
   //set string values
   var rowText = axsFinance.handleTableRow(textContents,
-      axsFinance.recQuotesAndIndAndCurDescArray);
+      axsFinance.IndAndCurDescArray);
   axsFinance.speakAndGo(item.elem, rowText);
 };
 
@@ -362,56 +364,61 @@ axsFinance.handleTableRowRecentQuotes = function(item) {
   textContents[4] = axsFinance.parseSpecialChars(columns[9].textContent);
 
   var rowText = axsFinance.handleTableRow(textContents,
-      axsFinance.recQuotesAndIndAndCurDescArray);
+      axsFinance.recQuotesDescArray);
   axsFinance.speakAndGo(item.elem, rowText);
 };
 
+
 axsFinance.handleTableRowSectorSummary = function(item) {
   //handle special chracters and order columns
-  var textContent = '';
+  var text = '';
   var textContents = new Array();
   var columns = item.elem.childNodes;
   //select table elements
   textContents[0] = columns[1].textContent;
   var index = textContents[0].indexOf('Cons.');
   if (index != -1) {
-  	textContents[0] = axsFinance.CONSUMERS_STRING +
+    textContents[0] = axsFinance.CONSUMERS_STRING +
                       textContents[0].substring(index + 5);
   }
   textContents[1] = axsFinance.parseSpecialChars(columns[3].textContent);
+  
   //select down table
   var downTable = axsFinance.axsJAXObj.evalXPath(axsFinance.TABLE_XPATH_STRING,
                                                  columns[5]);
-  //select table elements
-  textContent = downTable[0].title; 
-  textContents[2] = axsFinance.buildSentForSecSumBarFromTemplate(textContent,
-      axsFinance.SECT_SUM_TEMPLATE1_STRING);                                 
-  textContent = downTable[1].title;
-  textContents[3] = axsFinance.buildSentForSecSumBarFromTemplate(textContent,
-      axsFinance.SECT_SUM_TEMPLATE2_STRING);
+  //extract down numeric values
+  text = downTable[0].title; 
+  var downPercentage1 = Number(text.substring(0, text.indexOf(' ') - 1)); 
+  var treshold = Number(text.substring(text.lastIndexOf(' '), text.length - 1));
+  text = downTable[1].title;    
+  var downPercentage2 = Number(text.substring(0, text.indexOf(' ') - 1));  
+    
   //select up table
   var upTable = axsFinance.axsJAXObj.evalXPath(axsFinance.TABLE_XPATH_STRING,
                                                columns[7]);
-  //select table elements
-  textContent = upTable[0].title;
-  textContents[4] = axsFinance.buildSentForSecSumBarFromTemplate(textContent,
-      axsFinance.SECT_SUM_TEMPLATE3_STRING);
-  textContent = upTable[1].title;
-  textContents[5] = axsFinance.buildSentForSecSumBarFromTemplate(textContent,
-      axsFinance.SECT_SUM_TEMPLATE4_STRING);
-
+  //extract up numeric values
+  text = upTable[0].title;
+  var upPercentage1 = Number(text.substring(0, text.indexOf(' ') - 1)); 
+  text= upTable[1].title;    
+  var upPercentage2 = Number(text.substring(0, text.indexOf(' ') - 1)); 
+       
+  //array with values to be substituted in the template                                     
+  var numericValues = new Array();
+  numericValues[0] = downPercentage1 + downPercentage2;
+  numericValues[1] = downPercentage1;
+  numericValues[2] = treshold;
+  numericValues[3] = upPercentage1 + upPercentage2;
+  numericValues[4] = upPercentage2;
+  numericValues[5] = treshold;
+  //template used due to specific represenation
+  textContents[2] = axsFinance.populateTemplate(axsFinance.SECT_SUM_TMPL_STRING, 
+                                                numericValues);
+  
   var rowText = axsFinance.handleTableRow(textContents, null);
   axsFinance.speakAndGo(item.elem, rowText);
 };
 
-axsFinance.buildSentForSecSumBarFromTemplate = function(text, template) {
-  var values = new Array();
-  values[0] = text.substring(0, text.indexOf(' ') - 1);
-  values[1] = text.substring(text.lastIndexOf(' '), text.length - 1);
-  return axsFinance.buildSentenceFromTemplate(template, values);
-};
-
-axsFinance.buildSentenceFromTemplate = function(template, values) {
+axsFinance.populateTemplate = function(template, values) {
   var sentence = new String(template);
   for (var i = 0, value; i < values.length; i++) {	
     sentence = sentence.replace('{' + i + '}', values[i]);
@@ -430,7 +437,7 @@ axsFinance.handleTableRowTrendsNoVolume = function(item) {
 axsFinance.handleTableRowTrendsVolume = function(item) {
   //handle special chracters and order columns
   var textContents = axsFinance.getTableRowContentArray(item);
-  var rowText = axsFinance.handleTableRow(textContents,
+  var rowText = axsFinance.handleTableRow(textContents, 
                                           axsFinance.volDescArray);
   axsFinance.speakAndGo(item.elem, rowText);
 };

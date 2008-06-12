@@ -181,10 +181,10 @@ axsWebSearch.init = function(){
   axsWebSearch.axsNavObj.setLens(axsWebSearch.axsLensObj);
   axsWebSearch.axsLensObj.setMagnification(axsWebSearch.magSize);
   
-  axsWebSearch.axsSoundObj = new AxsSound();
-  axsWebSearch.axsSoundObj.setVerbosity('none');
-  axsWebSearch.axsSoundObj.init();
-  axsWebSearch.axsNavObj.setSound(axsWebSearch.axsSoundObj);
+//  axsWebSearch.axsSoundObj = new AxsSound();
+//  axsWebSearch.axsSoundObj.setVerbosity('none');
+//  axsWebSearch.axsSoundObj.init();
+//  axsWebSearch.axsNavObj.setSound(axsWebSearch.axsSoundObj);
 
   //Read the first thing on the page.
   //Use a set time out just in case the browser is not entirely ready yet.
