@@ -96,20 +96,39 @@ AxsNav.prototype.makeItemsArray = function(listNode){
   return itemsArray;
 };
 
+AxsNav.prototype.validateList = function(navList) {
+  var valid = true;
+  //Reload dynamic lists  
+  if ((navList.type == 'dynamic') && (navList.items.length === 0)){
+    navList.items = this.makeItemsArray(navList.cnrNode);;
+    navList.targets = this.makeTargetsArray(navList.cnrNode);
+    this.navItemIdxs[this.navListIdx] = -1;
+  }
+  if (navList.items.length === 0) {
+    valid = false;
+  } 
+  return valid;
+};
 
 /**
  * Goes to the next navigation list and returns it
  * @return {Object?} The next navigation list.
  */
-AxsNav.prototype.nextList = function(){
+AxsNav.prototype.nextList = function(){ 
   if (this.navArray.length < 1){
     return null;
   }
-  this.navListIdx++;
-  if (this.navListIdx >= this.navArray.length){
-    this.navListIdx = 0;
+  //Find the next list with items
+  for (var i = 0, list; list = this.navArray[i]; i++) {
+    this.navListIdx++;
+    if (this.navListIdx >= this.navArray.length){
+      this.navListIdx = 0; 
+    }      
+    if (this.validateList(this.navArray[this.navListIdx])) {
+    	break;
+    }
   }
-  var currentList = this.navArray[this.navListIdx];
+  var currentList = this.navArray[this.navListIdx]; 
   if (currentList.entryTarget !== null){
     this.actOnTarget(currentList.entryTarget);
   }
@@ -127,9 +146,15 @@ AxsNav.prototype.prevList = function(){
   if (this.navArray.length < 1){
     return null;
   }
-  this.navListIdx--;
-  if (this.navListIdx < 0){
-    this.navListIdx = this.navArray.length - 1;
+  //Find the next list with item 
+  for (var i = 0, list; list = this.navArray[i]; i++) {
+    this.navListIdx--;
+    if (this.navListIdx < 0){
+      this.navListIdx = this.navArray.length - 1;
+    }
+    if (this.validateList(this.navArray[this.navListIdx])) {
+      break;
+    }
   }
   var currentList = this.navArray[this.navListIdx];
   if (currentList.entryTarget !== null){
@@ -460,7 +485,7 @@ AxsNav.prototype.assignItemKeys = function(keyStr, navListIdx, navTaskStr){
  * @param {number} navListIdx  Index of the list that these keypresses are
  *                             associated with.
  */
-AxsNav.prototype.assignHotKeys = function(keyStr, navListIdx){
+AxsNav.prototype.assignHotKeys = function(keyStr, navListIdx, emptyMsg){
   var keys = new Array();
   if (keyStr === ''){
     return;
@@ -471,6 +496,10 @@ AxsNav.prototype.assignHotKeys = function(keyStr, navListIdx){
                           this.topCharCodeMap,
                           this.topKeyCodeMap,
                           function(){
+                          	if (!self.validateList(self.navArray[navListIdx])){
+                          		self.axs_.speakTextViaNode(emptyMsg);
+                          		return;
+                          	}
                             self.navListIdx = navListIdx;
                             self.actOnItem(self.nextItem());
                           });
@@ -544,6 +573,8 @@ AxsNav.prototype.actOnTarget = function(target){
     this.axs_.speakTextViaNode(target.emptyMsg);
   } else {
     this.axs_.clickElem(elems[0], false);
+    elems[0].scrollIntoView(true);
+    this.axs_.markPosition(elems[0]);
   }
 };
 
@@ -609,7 +640,7 @@ AxsNav.prototype.setUpNavKeys = function(cnrDOM, emptyLists){
     this.assignItemKeys(list.prevKeys, i, 'prev');
     this.assignItemKeys(list.fwdKeys, i, 'fwd');
     this.assignItemKeys(list.backKeys, i, 'back');
-    this.assignHotKeys(list.hotKeys, i);
+    this.assignHotKeys(list.hotKeys, i, list.emptyMsg);
     var j;
     for (j = 0, target; target = list.targets[j]; j++){
       this.assignTargetKeys(target, charMap, keyMap);
@@ -690,7 +721,7 @@ AxsNav.prototype.navInit = function(cnrString, opt_customNavMethod){
   var currentList;
   for (i = 0, currentList; currentList = lists[i]; i++){
     var navList = new Object();
-	navList.cnrNode = currentList;
+	  navList.cnrNode = currentList;
     navList.title = currentList.getAttribute('title') || '';
     navList.hotKeys = currentList.getAttribute('hotkey') || '';
     navList.nextKeys = currentList.getAttribute('next') || '';
@@ -698,9 +729,10 @@ AxsNav.prototype.navInit = function(cnrString, opt_customNavMethod){
     navList.fwdKeys = currentList.getAttribute('fwd') || '';
     navList.backKeys = currentList.getAttribute('back') || '';
     navList.emptyMsg = currentList.getAttribute('onEmpty') || '';
+    navList.type = currentList.getAttribute('type') || '';
     navList.tailTarget = null;
     navList.headTarget = null;
-	navList.entryTarget = null;
+	  navList.entryTarget = null;
     navList.items = this.makeItemsArray(currentList);
     navList.targets = this.makeTargetsArray(currentList);
     for (var j = 0, listTarget; listTarget = navList.targets[j]; j++){
@@ -713,7 +745,7 @@ AxsNav.prototype.navInit = function(cnrString, opt_customNavMethod){
       }
     }
 
-    if (navList.items.length > 0){
+    if (navList.items.length > 0 || navList.type == 'dynamic'){
       //Only add nav lists that have content to the array
       this.navArray.push(navList);
       this.navItemIdxs.push(-1);
@@ -750,7 +782,6 @@ AxsNav.prototype.navInit = function(cnrString, opt_customNavMethod){
     opt_customNavMethod(cnrDOM, this.navArray, emptyLists, this.targetsArray);
   }
 };
-
 
 /**
  * Generates a help string for the globally available keys.
