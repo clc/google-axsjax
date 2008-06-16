@@ -76,7 +76,7 @@ axsProductSearch.init = function(){
                   "//img[contains(@src,'G_oogle_arrow.gif')]/.." +
                   "</target>" +
                   "<target title='Go to result' hotkey='ENTER'>" +
-                  "./td/a[not(*)]" +
+                  "./td[contains(@class,'ps-rcont')]/a" +
                   "</target>" +
                   "</list>" +
                   "</cnr>";
