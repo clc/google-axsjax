@@ -42,6 +42,7 @@ var AxsJAX = function(useTabKeyFix){
                             function(evt){
                               self.lastFocusedNode = evt.target;
                               if ((evt.target.tagName == 'INPUT') ||
+							      (evt.target.tagName == 'SELECT') ||
                                   (evt.target.tagName == 'TEXTAREA')){
                                 self.inputFocused = true;
                               }
@@ -54,6 +55,7 @@ var AxsJAX = function(useTabKeyFix){
 							  }
                               self.lastFocusedNode = null;
                               if ((evt.target.tagName == 'INPUT') ||
+							      (evt.target.tagName == 'SELECT') ||
                                   (evt.target.tagName == 'TEXTAREA')){
                                 self.inputFocused = false;
                               }

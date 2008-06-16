@@ -41,6 +41,7 @@ var AxsNav = function(axsJAXObj){
   this.LIST_SND_URL = 'http://google-axsjax.googlecode.com/svn/trunk/common/earcons/list.mp3';
   this.ITEM_SND_URL = 'http://google-axsjax.googlecode.com/svn/trunk/common/earcons/item.mp3';
   this.LOOP_SND_URL = 'http://google-axsjax.googlecode.com/svn/trunk/common/earcons/loop.mp3';
+  this.keyHandler = null;
 };
 
 //Constant strings to be internationalized
@@ -568,7 +569,7 @@ AxsNav.prototype.actOnTarget = function(target){
   if (xpath.indexOf('.') === 0){
     rootNode = this.currentItem().elem;
   }
-  var elems = this.axs_.evalXPath(xpath,rootNode);
+  var elems = this.axs_.evalXPath(xpath,rootNode); 
   if (elems.length < 1){
     this.axs_.speakTextViaNode(target.emptyMsg);
   } else {	
@@ -662,9 +663,7 @@ AxsNav.prototype.setUpNavKeys = function(cnrDOM, emptyLists){
     this.assignEmptyMsgKeys(emptyList.hotKeys, emptyList.emptyMsg);
   }
 
-
-
-  var keyHandler = function(evt){
+  this.keyHandler = function(evt){
                      //None of these commands involve Ctrl.
                      //If Ctrl is held, it must be for some AT.
                      if (evt.ctrlKey) return true;
@@ -678,7 +677,7 @@ AxsNav.prototype.setUpNavKeys = function(cnrDOM, emptyLists){
                      if (command) return command();
                    };
 
-  document.addEventListener('keypress', keyHandler, true);
+  document.addEventListener('keypress', this.keyHandler, true);
 };
 
 
@@ -753,7 +752,6 @@ AxsNav.prototype.navInit = function(cnrString, opt_customNavMethod){
         navList.entryTarget = listTarget;
       }
     }
-
     if (navList.items.length > 0 || navList.type == 'dynamic'){
       //Only add nav lists that have content to the array
       this.navArray.push(navList);
@@ -783,6 +781,10 @@ AxsNav.prototype.navInit = function(cnrString, opt_customNavMethod){
     }
   }
 
+  //Remove the previous event listener if there was one
+  if (this.keyHandler !== null){
+    document.removeEventListener('keypress', this.keyHandler, true);
+  }
   //Bind lists and targets to keys if there is no custom handler specified
   if ((opt_customNavMethod === null) ||
       (typeof(opt_customNavMethod) == 'undefined')){
