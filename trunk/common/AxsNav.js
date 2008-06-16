@@ -571,9 +571,18 @@ AxsNav.prototype.actOnTarget = function(target){
   var elems = this.axs_.evalXPath(xpath,rootNode);
   if (elems.length < 1){
     this.axs_.speakTextViaNode(target.emptyMsg);
-  } else {
-    this.axs_.clickElem(elems[0], false);
-    elems[0].scrollIntoView(true);
+  } else {	
+    if (target.action.indexOf('CALL:') === 0  
+          && target.action.indexOf('(') === -1) {
+      var func = eval(target.action.substring(5));     
+      var item = new Object();
+      item.action = target.action;
+      item.elem = elems[0];
+      func(item);
+    } else {
+      this.axs_.clickElem(elems[0], false);
+      elems[0].scrollIntoView(true);
+    }
     this.axs_.markPosition(elems[0]);
   }
 };
