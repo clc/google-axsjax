@@ -288,23 +288,33 @@ AxsJAX.prototype.putNullForNoAltImages = function(targetNode){
 
 /**
  * Dispatches a left click event on the element that is the targetNode.
+ * Clicks go in the sequence of mousedown, mouseup, and click.
  * @param {Node} targetNode The target node of this operation.
  * @param {boolean} shiftKey Specifies if shift is held down.
  */
 AxsJAX.prototype.clickElem = function(targetNode, shiftKey){
   var activeDoc = this.getActiveDocument();
-  //Generate a click event and send it to the target
+  //Send a mousedown
   var evt = activeDoc.createEvent('MouseEvents');
-  evt.initMouseEvent('click', true, true, activeDoc.defaultView,
+  evt.initMouseEvent('mousedown', true, true, activeDoc.defaultView,
                      1, 0, 0, 0, 0, false, false, shiftKey, false, 0, null);
   //Use a try block here so that if the AJAX fails and it is a link,
   //it can still fall through and retry by setting the document.location.
   try{
     targetNode.dispatchEvent(evt);
   } catch(e){}
-  //Some AJAX apps use mouse down instead of click
+  //Send a mouse up
   evt = activeDoc.createEvent('MouseEvents');
-  evt.initMouseEvent('mousedown', true, true, activeDoc.defaultView,
+  evt.initMouseEvent('mouseup', true, true, activeDoc.defaultView,
+                     1, 0, 0, 0, 0, false, false, shiftKey, false, 0, null);
+  //Use a try block here so that if the AJAX fails and it is a link,
+  //it can still fall through and retry by setting the document.location.
+  try{
+    targetNode.dispatchEvent(evt);
+  } catch(e){}
+  //Send a click
+  evt = activeDoc.createEvent('MouseEvents');
+  evt.initMouseEvent('click', true, true, activeDoc.defaultView,
                      1, 0, 0, 0, 0, false, false, shiftKey, false, 0, null);
   //Use a try block here so that if the AJAX fails and it is a link,
   //it can still fall through and retry by setting the document.location.
@@ -314,8 +324,7 @@ AxsJAX.prototype.clickElem = function(targetNode, shiftKey){
   //Clicking on a link does not cause traversal because of script
   //privilege limitations. The traversal has to be done by setting
   //document.location.
-  if (!targetNode.onclick &&
-      (targetNode.tagName == 'A') &&
+  if ((targetNode.tagName == 'A') &&
       targetNode.href &&
       ((targetNode.href.indexOf('http') === 0) ||
        (targetNode.href.indexOf('javascript:') === 0))){
@@ -326,7 +335,6 @@ AxsJAX.prototype.clickElem = function(targetNode, shiftKey){
     }
   }
 };
-
 
 /**
  * Dispatches a key event on the element that is the targetNode.
