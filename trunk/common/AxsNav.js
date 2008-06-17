@@ -129,14 +129,7 @@ AxsNav.prototype.nextList = function(){
     	break;
     }
   }
-  var currentList = this.navArray[this.navListIdx]; 
-  if (currentList.entryTarget !== null){
-    this.actOnTarget(currentList.entryTarget);
-  }
-  if (this.snd_ !== null){
-    this.snd_.play(this.LIST_SND_URL);
-  }
-  return currentList;
+  return this.currentList();
 };
 
 /**
@@ -157,14 +150,7 @@ AxsNav.prototype.prevList = function(){
       break;
     }
   }
-  var currentList = this.navArray[this.navListIdx];
-  if (currentList.entryTarget !== null){
-    this.actOnTarget(currentList.entryTarget);
-  }
-  if (this.snd_ !== null){
-    this.snd_.play(this.LIST_SND_URL);
-  }
-  return currentList;
+  return this.currentList();
 };
 
 /**
@@ -328,6 +314,24 @@ AxsNav.prototype.currentItem = function(){
 };
 
 /**
+ * Returns the callback function if the action is a valid callback;
+ * returns null otherwise.
+ * @param {String} actionString The action string for an item or target
+ * @return {Function?} The callback function if there is a valid one.
+ */
+AxsNav.prototype.getCallbackFunction = function(actionString){
+  var callbackFunc = null;
+  if ((actionString !== null) &&
+      (actionString.indexOf('CALL:') === 0) &&
+      (actionString.indexOf('(') === -1)){
+    try{
+      callbackFunc = eval(actionString.substring(5));
+    } catch(e) { }
+  }
+  return callbackFunc;
+};
+
+/**
  * This function will act on the item based on what action was specified
  * in the Content Navigation Listing.
  *
@@ -339,10 +343,8 @@ AxsNav.prototype.actOnItem = function(item){
     var self = this;
 	
     var doAction = function(){
-        if ((item.action !== null) &&
-            (item.action.indexOf('CALL:') === 0) &&
-            (item.action.indexOf('(') === -1)){
-	      var func = eval(item.action.substring(5));
+	    var func = self.getCallbackFunction(item.action);
+        if (func){
 	      func(item);
         } else {
           if (self.lens_ !== null){
@@ -573,13 +575,12 @@ AxsNav.prototype.actOnTarget = function(target){
   if (elems.length < 1){
     this.axs_.speakTextViaNode(target.emptyMsg);
   } else {	
-    if (target.action.indexOf('CALL:') === 0  
-          && target.action.indexOf('(') === -1) {
-      var func = eval(target.action.substring(5));     
-      var item = new Object();
-      item.action = target.action;
-      item.elem = elems[0];
-      func(item);
+      var func = this.getCallbackFunction(target.action);
+      if (func){
+        var item = new Object();
+        item.action = target.action;
+        item.elem = elems[0];
+        func(item);
     } else {
       this.axs_.clickElem(elems[0], false);
       elems[0].scrollIntoView(true);
@@ -622,7 +623,14 @@ AxsNav.prototype.setUpNavKeys = function(cnrDOM, emptyLists){
                           this.topKeyCodeMap,
                           function(){
                             self.nextList();
+							var currentList = self.currentList();
+							if (currentList.entryTarget !== null){
+                              self.actOnTarget(currentList.entryTarget);
+                            }
                             self.announceCurrentList();
+							if (self.snd_ !== null){
+                              self.snd_.play(self.LIST_SND_URL);
+                            }
                           });
 
   keys = new Array();
@@ -635,7 +643,14 @@ AxsNav.prototype.setUpNavKeys = function(cnrDOM, emptyLists){
                           this.topKeyCodeMap,
                           function(){
                             self.prevList();
+							var currentList = self.currentList();
+							if (currentList.entryTarget !== null){
+                              self.actOnTarget(currentList.entryTarget);
+                            }
                             self.announceCurrentList();
+							if (self.snd_ !== null){
+                              self.snd_.play(self.LIST_SND_URL);
+                            }
                           });
 
 
