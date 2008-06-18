@@ -49,6 +49,13 @@ var AxsLens = function(axsJAXObj){
 };
 
 AxsLens.prototype.view = function(targetNode){
+  while (this.lens.firstChild){
+    this.lens.removeChild(this.lens.firstChild);
+  } 
+  if (targetNode === null) {
+    this.lens.style.display = 'none';
+  	return;
+  }
   var left = 0;
   var top = 0;
   var obj = targetNode;
@@ -62,11 +69,6 @@ AxsLens.prototype.view = function(targetNode){
       obj = obj.offsetParent;
     }
 	}
-
-  while (this.lens.firstChild){
-    this.lens.removeChild(this.lens.firstChild);
-  }
-
   this.lens.appendChild(targetNode.cloneNode(true));
 
   this.magnifyText();
