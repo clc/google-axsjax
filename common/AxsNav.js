@@ -419,6 +419,8 @@ AxsNav.prototype.assignKeysToMethod = function(keyArray,
       keyMap[34] = method;
     } else if (key == 'ENTER'){
       keyMap[13] = method;
+    } else if (key == 'DEL'){
+      keyMap[46] = method;
     } else {
       charMap[key.charCodeAt(0)] = method;
     }
