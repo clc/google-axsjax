@@ -38,29 +38,31 @@ var AxsJAX = function(useTabKeyFix){
   //Monitor focus and blur
   //These return "true" so that any page actions based on
   //focus and blur will still occur.
-  document.addEventListener('focus',
-                            function(evt){
-                              self.lastFocusedNode = evt.target;
-                              if ((evt.target.tagName == 'INPUT') ||
-							      (evt.target.tagName == 'SELECT') ||
-                                  (evt.target.tagName == 'TEXTAREA')){
-                                self.inputFocused = true;
-                              }
-                              return true;
-                            }, true);
-  document.addEventListener('blur',
-                            function(evt){
-							  if (self.lastFocusedNode){
-						        self.removeAttributeOf(self.lastFocusedNode, 'aria-activedescendant');
-							  }
-                              self.lastFocusedNode = null;
-                              if ((evt.target.tagName == 'INPUT') ||
-							      (evt.target.tagName == 'SELECT') ||
-                                  (evt.target.tagName == 'TEXTAREA')){
-                                self.inputFocused = false;
-                              }
-                              return true;
-                            }, true);
+  var focusHandler = function(evt){
+                       self.lastFocusedNode = evt.target;
+                       if ((evt.target.tagName == 'INPUT') ||
+                           (evt.target.tagName == 'SELECT') ||
+                           (evt.target.tagName == 'TEXTAREA')){
+                         self.inputFocused = true;
+                       }
+                       return true;
+                     };
+  document.addEventListener('focus', focusHandler, true);
+
+  var blurHandler = function(evt){
+                      if (self.lastFocusedNode){
+                        self.removeAttributeOf(self.lastFocusedNode,
+                                               'aria-activedescendant');
+                      }
+                      self.lastFocusedNode = null;
+                      if ((evt.target.tagName == 'INPUT') ||
+                          (evt.target.tagName == 'SELECT') ||
+                          (evt.target.tagName == 'TEXTAREA')){
+                        self.inputFocused = false;
+                      }
+                      return true;
+                    };
+  document.addEventListener('blur', blurHandler, true);
 
   //Activate the tab key fix if needed
   if (useTabKeyFix){
@@ -438,7 +440,10 @@ AxsJAX.prototype.markPosition = function(targetNode){
  * @return {Boolean} Always returns true to pass the tab key along.
  */
 AxsJAX.prototype.tabKeyHandler = function(evt, selfRef){
-  if ((evt.keyCode == 9) && (this.tabbingStartPosNode)){
+  if (selfRef.tabKeyFixOn){
+    return true;
+  }
+  if ((evt.keyCode == 9) && (selfRef.tabbingStartPosNode)){
     selfRef.tabbingStartPosNode.focus();
     selfRef.tabbingStartPosNode = null;
   }
