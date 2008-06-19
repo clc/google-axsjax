@@ -335,6 +335,7 @@ AxsNav.prototype.currentItem = function(){
 AxsNav.prototype.getCallbackFunction = function(actionString){
   var callbackFunc = null;
   if ((actionString !== null) &&
+      actionString.indexOf &&
       (actionString.indexOf('CALL:') === 0) &&
       (actionString.indexOf('(') === -1)){
     try{
