@@ -440,7 +440,7 @@ AxsJAX.prototype.markPosition = function(targetNode){
  * @return {Boolean} Always returns true to pass the tab key along.
  */
 AxsJAX.prototype.tabKeyHandler = function(evt, selfRef){
-  if (selfRef.tabKeyFixOn){
+  if (!selfRef.tabKeyFixOn){
     return true;
   }
   if ((evt.keyCode == 9) && (selfRef.tabbingStartPosNode)){
