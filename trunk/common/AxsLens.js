@@ -45,23 +45,30 @@ var AxsLens = function(axsJAXObj){
   // and more precise. Use sniffing code from example at:
   // http://www.mozilla.org/docs/web-developer/sniffer/browser_type.html
   var agt = navigator.userAgent.toLowerCase();
-  this.is_win = ((agt.indexOf('win') != -1) || (agt.indexOf('16bit') != -1));
+  this.is_win   = ( (agt.indexOf("win")!=-1) || (agt.indexOf("16bit")!=-1) );
 };
 
 AxsLens.prototype.view = function(targetNode){
+  while (this.lens.firstChild){
+    this.lens.removeChild(this.lens.firstChild);
+  } 
+  if (targetNode === null) {
+    this.lens.style.display = 'none';
+  	return;
+  }
   var left = 0;
   var top = 0;
   var obj = targetNode;
   if (obj.offsetParent) {
-    left = obj.offsetLeft;
-    top = obj.offsetTop;
+		left = obj.offsetLeft;
+		top = obj.offsetTop;
     obj = obj.offsetParent;
     while (obj !== null) {
-      left += obj.offsetLeft;
-      top += obj.offsetTop;
+			left += obj.offsetLeft;
+			top += obj.offsetTop;
       obj = obj.offsetParent;
     }
-  }
+	}
 
   while (this.lens.firstChild){
     this.lens.removeChild(this.lens.firstChild);
@@ -75,7 +82,7 @@ AxsLens.prototype.view = function(targetNode){
   this.lens.style.top = top + 'px';
   this.lens.style.left = left + 'px';
   this.lens.style.zIndex = 999;
-  this.lens.style.display = 'block';
+  this.lens.style.display = 'block';  
 };
 
 
@@ -87,7 +94,7 @@ AxsLens.prototype.setMagnification = function(multiplier){
 
 AxsLens.prototype.enlargeImages = function(){
   var images = this.lens.getElementsByTagName('img');
-  for (var i = 0, image; image = images[i]; i++){
+  for (var i=0,image; image = images[i]; i++){
     if (!image.hasAttribute('Axs_OrigHeight')){
       image.setAttribute('Axs_OrigHeight', image.height);
       image.setAttribute('Axs_OrigWidth', image.width);
@@ -105,16 +112,16 @@ AxsLens.prototype.magnifyText = function(){
     this.lens.style.fontSizeAdjust = fontSizeAdjust;
   } else if (this.lens.firstChild){
     var descendants = this.lens.firstChild.getElementsByTagName('*');
-    for (var i = 0, child; child = descendants[i]; i++){
+    for (var i=0, child; child=descendants[i]; i++){
       if (!child.Axs_OrigFontSize){
         var style = window.getComputedStyle(child, null);
         var sizeStr = style.fontSize;
-        child.Axs_OrigFontSize = sizeStr.substring(0, sizeStr.length - 2);
+        child.Axs_OrigFontSize = sizeStr.substring(0,sizeStr.length-2);
       }
     }
-    for (i = 0, child; child = descendants[i]; i++){
-      child.style.fontSize = (child.Axs_OrigFontSize * this.multiplier) +
-                             'px !important';
+    for (i=0, child; child=descendants[i]; i++){
+      child.style.fontSize = (child.Axs_OrigFontSize * this.multiplier)
+                             + 'px !important';
     }
   }
 };
