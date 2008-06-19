@@ -907,7 +907,22 @@ AxsNav.prototype.setSound = function(snd){
   this.snd_ = snd;
 };
 
-
-
-
-
+/**
+ * Refreshes the dynamic list with the specified title.
+ * @return {boolean} True if the list was successfully refreshed.
+ */
+AxsNav.prototype.refreshList = function(listTitle){ 
+  if (listTitle === null) {
+    return false;
+  }
+  var reloaded = false;
+  for (var i = 0, navList; navList = this.navArray[i]; i++) {
+    if (navList.title == listTitle) {
+      navList.items = new Array();
+      navList.targets = new Array();
+      reloaded = this.validateList(navList);
+      break;
+    }
+  }
+  return reloaded;
+};
