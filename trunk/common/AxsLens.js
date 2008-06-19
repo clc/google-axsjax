@@ -68,12 +68,7 @@ AxsLens.prototype.view = function(targetNode){
 			top += obj.offsetTop;
       obj = obj.offsetParent;
     }
-	}
-
-  while (this.lens.firstChild){
-    this.lens.removeChild(this.lens.firstChild);
   }
-
   this.lens.appendChild(targetNode.cloneNode(true));
 
   this.magnifyText();
