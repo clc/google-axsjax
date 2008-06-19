@@ -103,8 +103,8 @@ AxsNav.prototype.validateList = function(navList) {
   //Reload dynamic lists  
   if ((navList.type == 'dynamic') && (navList.items.length === 0)){
     //Clear the lens to avoid its contents interfering with the xpath
-    if (self.lens_ !== null){
-      self.lens_.view(null);
+    if (this.lens_ !== null){
+      this.lens_.view(null);
     }
     navList.items = this.makeItemsArray(navList.cnrNode);
     navList.targets = this.makeTargetsArray(navList.cnrNode);
@@ -203,8 +203,8 @@ AxsNav.prototype.nextItem = function(){
   // Perform a validity check to determine if the xpaths should be re-evaluated
   if (items[itemIndex].elem.parentNode === null){
     //Clear the lens to avoid its contents interfering with the xpath
-    if (self.lens_ !== null){
-      self.lens_.view(null);
+    if (this.lens_ !== null){
+      this.lens_.view(null);
     }
     currentList.items = this.makeItemsArray(currentList.cnrNode);
     this.navItemIdxs[this.navListIdx] = 0;
@@ -269,8 +269,8 @@ AxsNav.prototype.prevItem = function(){
   // Perform a validity check to determine if the xpaths should be re-evaluated
   if (items[itemIndex].elem.parentNode === null){
     //Clear the lens to avoid its contents interfering with the xpath
-    if (self.lens_ !== null){
-      self.lens_.view(null);
+    if (this.lens_ !== null){
+      this.lens_.view(null);
     }
     currentList.items = this.makeItemsArray(currentList.cnrNode);
     this.navItemIdxs[this.navListIdx] = currentList.items.length;
@@ -638,13 +638,17 @@ AxsNav.prototype.setUpNavKeys = function(cnrDOM, emptyLists){
                           function(){
                             self.nextList();
                             var currentList = self.currentList();
-                            if (currentList.entryTarget !== null){
-                              self.actOnTarget(currentList.entryTarget);
+							var target = currentList.entryTarget;
+                            if (target !== null){
+                              self.actOnTarget(target);
                             }
-                            self.announceCurrentList();
-                            if (self.snd_ !== null){
-                              self.snd_.play(self.LIST_SND_URL);
-                            }
+							var func = self.getCallbackFunction(target);
+                            if (func === null){
+                              self.announceCurrentList();
+                              if (self.snd_ !== null){
+                                self.snd_.play(self.LIST_SND_URL);
+                              }
+							}  
                           });
 
   keys = new Array();
@@ -658,13 +662,17 @@ AxsNav.prototype.setUpNavKeys = function(cnrDOM, emptyLists){
                           function(){
                             self.prevList();
                             var currentList = self.currentList();
-                            if (currentList.entryTarget !== null){
-                              self.actOnTarget(currentList.entryTarget);
+							var target = currentList.entryTarget;
+                            if (target !== null){
+                              self.actOnTarget(target);
                             }
-                            self.announceCurrentList();
-                            if (self.snd_ !== null){
-                              self.snd_.play(self.LIST_SND_URL);
-                            }
+							var func = self.getCallbackFunction(target);
+                            if (func === null){
+                              self.announceCurrentList();
+                              if (self.snd_ !== null){
+                                self.snd_.play(self.LIST_SND_URL);
+                              }
+							}  
                           });
 
 
