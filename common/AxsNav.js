@@ -38,9 +38,10 @@ var AxsNav = function(axsJAXObj){
   this.axs_ = axsJAXObj;
   this.lens_ = null;
   this.snd_ = null;
-  this.LIST_SND_URL = 'http://google-axsjax.googlecode.com/svn/trunk/common/earcons/list.mp3';
-  this.ITEM_SND_URL = 'http://google-axsjax.googlecode.com/svn/trunk/common/earcons/item.mp3';
-  this.LOOP_SND_URL = 'http://google-axsjax.googlecode.com/svn/trunk/common/earcons/loop.mp3';
+  var baseURL = 'http://google-axsjax.googlecode.com/svn/trunk/';
+  this.LIST_SND_URL = baseURL + 'common/earcons/list.mp3';
+  this.ITEM_SND_URL = baseURL + 'common/earcons/item.mp3';
+  this.LOOP_SND_URL = baseURL + 'common/earcons/loop.mp3';
   this.keyHandler = null;
 };
 
@@ -101,13 +102,17 @@ AxsNav.prototype.validateList = function(navList) {
   var valid = true;
   //Reload dynamic lists  
   if ((navList.type == 'dynamic') && (navList.items.length === 0)){
-    navList.items = this.makeItemsArray(navList.cnrNode);;
+    //Clear the lens to avoid its contents interfering with the xpath
+    if (self.lens_ !== null){
+      self.lens_.view(null);
+    }
+    navList.items = this.makeItemsArray(navList.cnrNode);
     navList.targets = this.makeTargetsArray(navList.cnrNode);
     this.navItemIdxs[this.navListIdx] = -1;
   }
   if (navList.items.length === 0) {
     valid = false;
-  } 
+  }
   return valid;
 };
 
@@ -115,7 +120,7 @@ AxsNav.prototype.validateList = function(navList) {
  * Goes to the next navigation list and returns it
  * @return {Object?} The next navigation list.
  */
-AxsNav.prototype.nextList = function(){ 
+AxsNav.prototype.nextList = function(){
   if (this.navArray.length < 1){
     return null;
   }
@@ -123,10 +128,10 @@ AxsNav.prototype.nextList = function(){
   for (var i = 0, list; list = this.navArray[i]; i++) {
     this.navListIdx++;
     if (this.navListIdx >= this.navArray.length){
-      this.navListIdx = 0; 
-    }      
+      this.navListIdx = 0;
+    }
     if (this.validateList(this.navArray[this.navListIdx])) {
-    	break;
+      break;
     }
   }
   return this.currentList();
@@ -194,20 +199,24 @@ AxsNav.prototype.nextItem = function(){
     this.navItemIdxs[this.navListIdx] = 0;
     looped = true;
   }
-  var itemIndex = this.navItemIdxs[this.navListIdx];   
+  var itemIndex = this.navItemIdxs[this.navListIdx];
   // Perform a validity check to determine if the xpaths should be re-evaluated
   if (items[itemIndex].elem.parentNode === null){
-	currentList.items = this.makeItemsArray(currentList.cnrNode);
-	this.navItemIdxs[this.navListIdx] = 0;
-	itemIndex = this.navItemIdxs[this.navListIdx];
-  }  
+    //Clear the lens to avoid its contents interfering with the xpath
+    if (self.lens_ !== null){
+      self.lens_.view(null);
+    }
+    currentList.items = this.makeItemsArray(currentList.cnrNode);
+    this.navItemIdxs[this.navListIdx] = 0;
+    itemIndex = this.navItemIdxs[this.navListIdx];
+  }
   this.lastItem = items[itemIndex];
   if (this.snd_ !== null){
     if (looped){
-	  this.snd_.play(this.LOOP_SND_URL);
-	} else {
+      this.snd_.play(this.LOOP_SND_URL);
+    } else {
       this.snd_.play(this.ITEM_SND_URL);
-	}
+    }
   }
   return this.lastItem;
 };
@@ -256,20 +265,24 @@ AxsNav.prototype.prevItem = function(){
     this.navItemIdxs[this.navListIdx] = items.length - 1;
     looped = true;
   }
-  var itemIndex = this.navItemIdxs[this.navListIdx];   
+  var itemIndex = this.navItemIdxs[this.navListIdx];
   // Perform a validity check to determine if the xpaths should be re-evaluated
   if (items[itemIndex].elem.parentNode === null){
-	currentList.items = this.makeItemsArray(currentList.cnrNode);
-	this.navItemIdxs[this.navListIdx] = currentList.items.length;
-	itemIndex = this.navItemIdxs[this.navListIdx];
-  }  
+    //Clear the lens to avoid its contents interfering with the xpath
+    if (self.lens_ !== null){
+      self.lens_.view(null);
+    }
+    currentList.items = this.makeItemsArray(currentList.cnrNode);
+    this.navItemIdxs[this.navListIdx] = currentList.items.length;
+    itemIndex = this.navItemIdxs[this.navListIdx];
+  }
   this.lastItem = items[itemIndex];
   if (this.snd_ !== null){
     if (looped){
-	  this.snd_.play(this.LOOP_SND_URL);
-	} else {
-      this.snd_.play(this.ITEM_SND_URL);
-	}
+     this.snd_.play(this.LOOP_SND_URL);
+    } else {
+     this.snd_.play(this.ITEM_SND_URL);
+    }
   }
   return this.lastItem;
 };
@@ -316,7 +329,7 @@ AxsNav.prototype.currentItem = function(){
 /**
  * Returns the callback function if the action is a valid callback;
  * returns null otherwise.
- * @param {String} actionString The action string for an item or target
+ * @param {String?} actionString The action string for an item or target
  * @return {Function?} The callback function if there is a valid one.
  */
 AxsNav.prototype.getCallbackFunction = function(actionString){
@@ -341,48 +354,44 @@ AxsNav.prototype.getCallbackFunction = function(actionString){
 AxsNav.prototype.actOnItem = function(item){
   if (item !== null){
     var self = this;
-	
     var doAction = function(){
-	    var func = self.getCallbackFunction(item.action);
+        var func = self.getCallbackFunction(item.action);
         if (func){
-	      func(item);
+          func(item);
         } else {
           if (self.lens_ !== null){
             self.lens_.view(item.elem);
           }
           self.axs_.goTo(item.elem);
-	    }
-	  };  
-	  	  
-    // If there is a node that was focused, unfocus it so that
-	// any keys the user presses after using the nav system will not
-	// be sent to the wrong place.
-	if (this.axs_.lastFocusedNode && this.axs_.lastFocusedNode.blur){
-	  var oldNode = this.axs_.lastFocusedNode;
-	  // Set the lastFocusedNode to null to prevent AxsJAX's blur handler 
-	  // from kicking in as that blur handler will conflict with the 
-	  // temporary blur handler which results in screen readers not
-	  // speaking properly due to how the eventing system works.
-	  // Because we are not allowing the regular blur handler to work,
-	  // we need to make sure that we do the same work of cleaning up.
-	  this.axs_.lastFocusedNode = null; 
-	  if (oldNode.removeAttribute){
-        this.axs_.removeAttributeOf(oldNode, 'aria-activedescendant');
-	  }
-	  // The action needs to be done inside a temporary blur handler
-	  // because otherwise, there is a timing issue of when the events
-	  // get sent and screen readers won't speak.
-	  var tempBlurHandler = function(evt){	  
-	    evt.target.removeEventListener('blur',tempBlurHandler,true);
-		doAction();
-      };
-	  oldNode.addEventListener('blur',tempBlurHandler,true);
-	  oldNode.blur();
-	} else {
-	  doAction();
-	}
-
-	
+        }
+        };
+        // If there is a node that was focused, unfocus it so that
+        // any keys the user presses after using the nav system will not
+        // be sent to the wrong place.
+        if (this.axs_.lastFocusedNode && this.axs_.lastFocusedNode.blur){
+          var oldNode = this.axs_.lastFocusedNode;
+          // Set the lastFocusedNode to null to prevent AxsJAX's blur handler 
+          // from kicking in as that blur handler will conflict with the 
+          // temporary blur handler which results in screen readers not
+          // speaking properly due to how the eventing system works.
+          // Because we are not allowing the regular blur handler to work,
+          // we need to make sure that we do the same work of cleaning up.
+          this.axs_.lastFocusedNode = null;
+          if (oldNode.removeAttribute){
+            this.axs_.removeAttributeOf(oldNode, 'aria-activedescendant');
+          }
+          // The action needs to be done inside a temporary blur handler
+          // because otherwise, there is a timing issue of when the events
+          // get sent and screen readers won't speak.
+          var tempBlurHandler = function(evt){
+            evt.target.removeEventListener('blur', tempBlurHandler, true);
+            doAction();
+          };
+          oldNode.addEventListener('blur', tempBlurHandler, true);
+          oldNode.blur();
+        } else {
+          doAction();
+        };
   }
 };
 
@@ -489,6 +498,9 @@ AxsNav.prototype.assignItemKeys = function(keyStr, navListIdx, navTaskStr){
  *
  * @param {number} navListIdx  Index of the list that these keypresses are
  *                             associated with.
+ *
+ * @param {string} emptyMsg  String to speak to the user if the list is
+ *                           empty.
  */
 AxsNav.prototype.assignHotKeys = function(keyStr, navListIdx, emptyMsg){
   var keys = new Array();
@@ -501,10 +513,10 @@ AxsNav.prototype.assignHotKeys = function(keyStr, navListIdx, emptyMsg){
                           this.topCharCodeMap,
                           this.topKeyCodeMap,
                           function(){
-                          	if (!self.validateList(self.navArray[navListIdx])){
-                          		self.axs_.speakTextViaNode(emptyMsg);
-                          		return;
-                          	}
+                            if (!self.validateList(self.navArray[navListIdx])){
+                              self.axs_.speakTextViaNode(emptyMsg);
+                              return;
+                            }
                             self.navListIdx = navListIdx;
                             self.actOnItem(self.nextItem());
                           });
@@ -573,10 +585,10 @@ AxsNav.prototype.actOnTarget = function(target){
   if (xpath.indexOf('.') === 0){
     rootNode = this.currentItem().elem;
   }
-  var elems = this.axs_.evalXPath(xpath,rootNode); 
+  var elems = this.axs_.evalXPath(xpath, rootNode);
   if (elems.length < 1){
     this.axs_.speakTextViaNode(target.emptyMsg);
-  } else {	
+  } else {
       var func = this.getCallbackFunction(target.action);
       if (func){
         var item = new Object();
@@ -625,12 +637,12 @@ AxsNav.prototype.setUpNavKeys = function(cnrDOM, emptyLists){
                           this.topKeyCodeMap,
                           function(){
                             self.nextList();
-							var currentList = self.currentList();
-							if (currentList.entryTarget !== null){
+                            var currentList = self.currentList();
+                            if (currentList.entryTarget !== null){
                               self.actOnTarget(currentList.entryTarget);
                             }
                             self.announceCurrentList();
-							if (self.snd_ !== null){
+                            if (self.snd_ !== null){
                               self.snd_.play(self.LIST_SND_URL);
                             }
                           });
@@ -645,12 +657,12 @@ AxsNav.prototype.setUpNavKeys = function(cnrDOM, emptyLists){
                           this.topKeyCodeMap,
                           function(){
                             self.prevList();
-							var currentList = self.currentList();
-							if (currentList.entryTarget !== null){
+                            var currentList = self.currentList();
+                            if (currentList.entryTarget !== null){
                               self.actOnTarget(currentList.entryTarget);
                             }
                             self.announceCurrentList();
-							if (self.snd_ !== null){
+                            if (self.snd_ !== null){
                               self.snd_.play(self.LIST_SND_URL);
                             }
                           });
@@ -746,7 +758,7 @@ AxsNav.prototype.navInit = function(cnrString, opt_customNavMethod){
   var currentList;
   for (i = 0, currentList; currentList = lists[i]; i++){
     var navList = new Object();
-	  navList.cnrNode = currentList;
+    navList.cnrNode = currentList;
     navList.title = currentList.getAttribute('title') || '';
     navList.hotKeys = currentList.getAttribute('hotkey') || '';
     navList.nextKeys = currentList.getAttribute('next') || '';
@@ -757,7 +769,7 @@ AxsNav.prototype.navInit = function(cnrString, opt_customNavMethod){
     navList.type = currentList.getAttribute('type') || '';
     navList.tailTarget = null;
     navList.headTarget = null;
-	  navList.entryTarget = null;
+    navList.entryTarget = null;
     navList.items = this.makeItemsArray(currentList);
     navList.targets = this.makeTargetsArray(currentList);
     for (var j = 0, listTarget; listTarget = navList.targets[j]; j++){
