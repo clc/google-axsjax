@@ -87,13 +87,13 @@ axsCal.init = function(){
 
 axsCal.switchToDayMode = function(){
   var dayModeTab = document.getElementById('mode-day');
-  axsCal.axsJAXObj.clickElem(dayModeTab);
+  axsCal.axsJAXObj.clickElem(dayModeTab, false);
 };
 
 /**
  * DOM nodes are inserted when a day is loaded, when an alert message is shown,
  * and when the infowindow is shown.
- * @param event {event} A DOM Node Insertion event
+ * @param evt {event} A DOM Node Insertion event
  */
 axsCal.domInsertionHandler = function(evt){
   var target = evt.target;
