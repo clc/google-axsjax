@@ -643,7 +643,7 @@ AxsNav.prototype.setUpNavKeys = function(cnrDOM, emptyLists){
                             if (target !== null){
                               self.actOnTarget(target);
                             }
-							var func = self.getCallbackFunction(target);
+							var func = self.getCallbackFunction(target.action);
                             if (func === null){
                               self.announceCurrentList();
                               if (self.snd_ !== null){
@@ -667,7 +667,7 @@ AxsNav.prototype.setUpNavKeys = function(cnrDOM, emptyLists){
                             if (target !== null){
                               self.actOnTarget(target);
                             }
-							var func = self.getCallbackFunction(target);
+							var func = self.getCallbackFunction(target.action);
                             if (func === null){
                               self.announceCurrentList();
                               if (self.snd_ !== null){
