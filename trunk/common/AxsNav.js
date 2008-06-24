@@ -356,15 +356,15 @@ AxsNav.prototype.actOnItem = function(item){
   if (item !== null){
     var self = this;
     var doAction = function(){
-        var func = self.getCallbackFunction(item.action);
-        if (func){
-          func(item);
-        } else {
-          if (self.lens_ !== null){
-            self.lens_.view(item.elem);
+          var func = self.getCallbackFunction(item.action);
+          if (func){
+            func(item);
+          } else {
+            if (self.lens_ !== null){
+              self.lens_.view(item.elem);
+            }
+            self.axs_.goTo(item.elem);
           }
-          self.axs_.goTo(item.elem);
-        }
         };
         // If there is a node that was focused, unfocus it so that
         // any keys the user presses after using the nav system will not
@@ -392,7 +392,7 @@ AxsNav.prototype.actOnItem = function(item){
           oldNode.blur();
         } else {
           doAction();
-        };
+        }
   }
 };
 

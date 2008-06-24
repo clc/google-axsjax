@@ -156,7 +156,6 @@ AxsJAX.prototype.speakNode = function(targetNode, opt_noFocusChange){
   } else {
     var oldRole = this.getAttributeOf(targetNode, 'role');
     this.setAttributeOf(targetNode, 'role', 'row');
-
     var currentFocusedNode = this.lastFocusedNode;
     // Use the body if there is no last focused node or
     // if the last focused node is the entire document.
