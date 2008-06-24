@@ -36,9 +36,10 @@ axsCal.HELP_STRING = 'The following shortcut keys are available. ' +
     'I, information about the current event. ' +
     'Q, quickly add an event. ' +
     'C, create event. ' +
-    'F, add a friends calendar. ' +
+    'G, get a friends calendar. ' +
     'L, next calendar. ' +
-    'Semi-colon, previous calendar. ' +
+    'H, previous calendar. ' +
+    'F, filter calendars. ' +
     'Space, toggle calendar selection. ';
 
 axsCal.TODAY_STRING = 'Today. ';
@@ -61,6 +62,8 @@ axsCal.currentArea = axsCal.AREAS.MAIN_CALENDAR;
  */
 axsCal.axsJAXObj = null;
 
+axsCal.pkObj = null;
+
 axsCal.eventsIndex = -1;
 axsCal.eventsArray = new Array();
 
@@ -80,6 +83,19 @@ axsCal.init = function(){
   window.addEventListener('DOMNodeInserted', axsCal.domInsertionHandler,
                           true);
 
+  //Initialize PowerKey						  
+  axsCal.pkObj = new PowerKey('calendarList', axsCal.axsJAXObj);
+  var body = axsCal.axsJAXObj.getActiveDocument().body;
+  var pkCalListHandler = function(cmd, index, id, args){
+        axsCal.pkObj.updateCommandField('hidden', true, 40, 20);
+		axsCal.axsJAXObj.lastFocusedNode.blur();
+        axsCal.calendarsIndex = index - 1;
+        axsCal.goToNextCalendar();
+      };
+  axsCal.pkObj.createCommandField(body, 30, pkCalListHandler, null, null, false);
+  axsCal.pkObj.setAutoHideCommandField(true);
+  PowerKey.setDefaultCSSStyle();
+  
   // Switch to the Day view
   // Use a set time out just in case the browser is not entirely ready yet.
   window.setTimeout(axsCal.switchToDayMode,100);
@@ -295,6 +311,18 @@ axsCal.deleteEventInfowindow = function(){
   axsCal.axsJAXObj.clickElem(deleteLink,false);  
 };
 
+axsCal.goToCalendarList = function(){  
+  axsCal.currentArea = axsCal.AREAS.CALENDAR_LIST;
+  if (axsCal.calendarsArray.length === 0){
+    axsCal.getCalendars();
+  }
+  var calendarNames = new Array();
+  for (var i=0,cal; cal = axsCal.calendarsArray[i]; i++){
+    calendarNames.push(cal.textContent);
+  }
+  axsCal.pkObj.setCommandList(calendarNames);
+  axsCal.pkObj.updateCommandField('visible', true, 40, 20);
+};
 
 
 /*
@@ -344,10 +372,11 @@ axsCal.keyCodeMap = {
 
 axsCal.charCodeMap = {
    63 : function () {axsCal.axsJAXObj.speakTextViaNode(axsCal.HELP_STRING); return false;}, // ?
-  102 : axsCal.openAddFriendCalendar,  // f
+  103 : axsCal.openAddFriendCalendar,  // g
   105 : axsCal.activateInfowindow,  // i
+  102 : axsCal.goToCalendarList,  // f
   108 : axsCal.goToNextCalendar,  // l
-   59 : axsCal.goToPrevCalendar // ;
+  104 : axsCal.goToPrevCalendar // h
 };
 
 window.setTimeout(axsCal.init,100);
