@@ -639,11 +639,12 @@ AxsNav.prototype.setUpNavKeys = function(cnrDOM, emptyLists){
                           function(){
                             self.nextList();
                             var currentList = self.currentList();
-							var target = currentList.entryTarget;
+							var target = currentList.entryTarget;		
+							var func = null;
                             if (target !== null){
                               self.actOnTarget(target);
+							  func = self.getCallbackFunction(target.action);
                             }
-							var func = self.getCallbackFunction(target.action);
                             if (func === null){
                               self.announceCurrentList();
                               if (self.snd_ !== null){
@@ -664,10 +665,11 @@ AxsNav.prototype.setUpNavKeys = function(cnrDOM, emptyLists){
                             self.prevList();
                             var currentList = self.currentList();
 							var target = currentList.entryTarget;
+							var func = null;
                             if (target !== null){
                               self.actOnTarget(target);
+							  func = self.getCallbackFunction(target.action);
                             }
-							var func = self.getCallbackFunction(target.action);
                             if (func === null){
                               self.announceCurrentList();
                               if (self.snd_ !== null){
