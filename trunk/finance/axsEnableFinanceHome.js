@@ -151,6 +151,7 @@ axsFinance.init = function(){
 
   //Add event listeners
   document.addEventListener('keypress', axsFinance.keyHandler, true);
+  document.addEventListener('DOMSubtreeModified', axsFinance.DOMSubtreeModifiedHandler, true);
 
   //Handle the focus in the search box performed by the page script during init
   var searchBox = document.getElementById('searchbox');
@@ -348,6 +349,28 @@ axsFinance.init = function(){
   axsFinance.axsNavObj.setLens(axsFinance.axsLensObj);
   axsFinance.axsLensObj.setMagnification(axsFinance.magSize);
 };
+
+/**
+ * Handles the DOMSubtreeModified event. 
+ * This event happens when the selected node for the 
+ * auto-complete search box changes.
+ * @param {Event} evt The DOMSubtreeModified event
+ */
+axsFinance.DOMSubtreeModifiedHandler = function(evt){
+  var attrib = evt.attrName;
+  var newVal = evt.newValue;
+  var oldVal = evt.prevValue;
+  var target = evt.target;
+  if (target.id == 'ac-list'){
+    for (var i=0,child; child = target.childNodes[i]; i++){
+	  if (child.className == 'selected'){
+	    axsFinance.axsJAXObj.speakNode(child);
+		return;
+	  }
+	}
+  }
+};
+
 
 /**
  * Reads the market summary description.
