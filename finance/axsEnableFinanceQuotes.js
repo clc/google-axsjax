@@ -200,6 +200,7 @@ axsQuotes.init = function(){
 
   //Add event listeners
   document.addEventListener('keypress', axsQuotes.keyHandler, true);
+  document.addEventListener('DOMSubtreeModified', axsFinance.DOMSubtreeModifiedHandler, true);
 
   //Content navigation rule is hardcoded for efficiency
   var cnrString = "<cnr next='RIGHT l' prev='LEFT h'>" +
@@ -424,6 +425,27 @@ axsQuotes.init = function(){
 
   //read the current quote
   window.setTimeout(axsQuotes.speakIntroduction, 200);
+};
+
+/**
+ * Handles the DOMSubtreeModified event. 
+ * This event happens when the selected node for the 
+ * auto-complete search box changes.
+ * @param {Event} evt The DOMSubtreeModified event
+ */
+axsFinance.DOMSubtreeModifiedHandler = function(evt){
+  var attrib = evt.attrName;
+  var newVal = evt.newValue;
+  var oldVal = evt.prevValue;
+  var target = evt.target;
+  if (target.id == 'ac-list'){
+    for (var i=0,child; child = target.childNodes[i]; i++){
+	  if (child.className == 'selected'){
+	    axsFinance.axsJAXObj.speakNode(child);
+		return;
+	  }
+	}
+  }
 };
 
 /**
