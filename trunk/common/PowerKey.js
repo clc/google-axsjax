@@ -23,16 +23,16 @@ var PowerKey = function(context, axsJAX) {
   this.context = context;
 
   /**
-   * The div element holding the command text field.
+   * The div element holding the completion text field.
    * @type {Element?}
    */
-  this.cmdFloatElement = null;
+  this.cmpFloatElement = null;
 
   /**
-   * The command text field element.
+   * The completion text field element.
    * @type {Element?}
    */
-  this.cmdTextElement = null;
+  this.cmpTextElement = null;
 
   /**
    * Element showing the PowerKey message/status string.
@@ -41,19 +41,19 @@ var PowerKey = function(context, axsJAX) {
   this.statusElement = null;
 
   /**
-   * Variable to hold the command mode prompt string.
+   * Variable to hold the completion mode prompt string.
    * @type {string}
    * @private
    */
-  this.commandPromptStr_ = 'Enter Command';
+  this.completionPromptStr_ = 'Enter Completion';
 
   /**
-   * Variable to hold the command mode prompt string when the command
+   * Variable to hold the completion mode prompt string when the completion
    * list is empty.
    * @type {string}
    * @private
    */
-  this.noCommandStr_ = 'Command not found';
+  this.noCompletionStr_ = 'No completions found';
 
   /**
    * AxsJAX object
@@ -70,18 +70,18 @@ var PowerKey = function(context, axsJAX) {
   this.listElement_ = null;
 
   /**
-   * The div element inside the command div, holding the selected list item.
+   * The div element inside the completion div, holding the selected list item.
    * @type {Element?}
    * @private
    */
-  this.cmdDivElement_ = null;
+  this.cmpDivElement_ = null;
 
   /**
-   * The list of commands to select from.
+   * The list of completions to select from.
    * @type {Array}
    * @private
    */
-  this.cmdList_ = [];
+  this.cmpList_ = [];
 
   /**
    * The navigation position in the list.
@@ -92,15 +92,15 @@ var PowerKey = function(context, axsJAX) {
 
 
   /**
-   * Whether to hide command field on blur.
+   * Whether to hide completion field on blur.
    * @type {boolean}
    * @private
    */
   this.hideCmdFieldOnBlur_ = false;
 
 
-  this.cmdIdMap = {};
-  this.cmdIndexList_ = {};
+  this.cmpIdMap = {};
+  this.cmpIndexList_ = {};
   if (axsJAX && PowerKey.isGecko) {
     this.axsJAX_ = axsJAX;
   }
@@ -108,7 +108,7 @@ var PowerKey = function(context, axsJAX) {
 
 
 /**
- * The reg exp indicating the pattern of the parameter to a command. It should
+ * The reg exp indicating the pattern of the parameter to a completion. It should
  * start with '<', end wit '>' and contain only characters and numbers.
  * @type {RegExp}
  */
@@ -183,40 +183,40 @@ PowerKey.prototype.detachHandler = function(target, event, handler) {
 
 
 /**
- * Creates a floating element for holding the command shell's text field.
+ * Creates a floating element for holding the completion shell's text field.
  * @param {Element} parent The element whose child this element will be.
- * @param {number} size The size of the command text field in # of characters.
- * @param {Function?} handler The command handler.
- *     handler = function(command, index, elementId, args) {}
- * @param {Object?} commandMap The object consisting of command strings as
+ * @param {number} size The size of the completion text field in # of characters.
+ * @param {Function?} handler The completion handler.
+ *     handler = function(completion, index, elementId, args) {}
+ * @param {Object?} completionMap The object consisting of completion strings as
  *     keys and functions as values.
- * @param {Array?} commandList The array of commands.
- * @param {boolean} browseOnly Whether the command list is browse-only.
+ * @param {Array?} completionList The array of completions.
+ * @param {boolean} browseOnly Whether the completion list is browse-only.
  */
-PowerKey.prototype.createCommandField = function(parent,
+PowerKey.prototype.createCompletionField = function(parent,
                                                  size,
                                                  handler,
-                                                 commandMap,
-                                                 commandList,
+                                                 completionMap,
+                                                 completionList,
                                                  browseOnly) {
   var self = this;
   var floatId, fieldId, oldCmdNode, divId;
-  // If the command field already exists, remove it and create a new one.
-  if (this.cmdFloatElement) {
-    // TODO: remove the handlers attached to cmdTextElement before removing
-    // the command field. The inline handler needs to be moved outside.
-    this.cmdFloatElement.parentNode.removeChild(this.cmdFloatElement);
+  // If the completion field already exists, remove it and create a new one.
+  if (this.cmpFloatElement) {
+    // TODO: remove the handlers attached to cmpTextElement before removing
+    // the completion field. The inline handler needs to be moved outside.
+    this.cmpFloatElement.parentNode.removeChild(this.cmpFloatElement);
   }
   do {
-    floatId = 'commandField_' + Math.floor(Math.random() * 1001);
+    floatId = 'completionField_' + Math.floor(Math.random() * 1001);
     fieldId = 'txt_' + floatId;
     divId = 'div_' + floatId;
     oldCmdNode = document.getElementById(floatId);
   } while (oldCmdNode);
 
-  var cmdNode = document.createElement('div');
-  cmdNode.id = floatId;
-  cmdNode.style.position = 'absolute';
+  var cmpNode = document.createElement('div');
+  cmpNode.id = floatId;
+  cmpNode.style.position = 'absolute';
 
   var txtNode = document.createElement('input');
 
@@ -224,7 +224,7 @@ PowerKey.prototype.createCommandField = function(parent,
   txtNode.id = fieldId;
   txtNode.size = size;
   txtNode.value = '';
-  txtNode.setAttribute('onkeypress', 
+  txtNode.setAttribute('onkeypress',
       'if (event.keyCode == PowerKey.keyCodes.TAB){return false;}');
   txtNode.readOnly = browseOnly;
 
@@ -237,41 +237,41 @@ PowerKey.prototype.createCommandField = function(parent,
   divNode.setAttribute('tabindex', 0);
   divNode.setAttribute('role', 'row');
 
-  cmdNode.appendChild(divNode);
-  cmdNode.appendChild(txtNode);
-  parent.appendChild(cmdNode);
+  cmpNode.appendChild(divNode);
+  cmpNode.appendChild(txtNode);
+  parent.appendChild(cmpNode);
 
-  this.cmdFloatElement = cmdNode;
-  this.cmdTextElement = txtNode;
-  this.cmdDivElement_ = divNode;
+  this.cmpFloatElement = cmpNode;
+  this.cmpTextElement = txtNode;
+  this.cmpDivElement_ = divNode;
 
-  this.cmdFloatElement.className = 'pkHiddenStatus';
-  this.cmdTextElement.className = 'pkOpaqueCommandText';
+  this.cmpFloatElement.className = 'pkHiddenStatus';
+  this.cmpTextElement.className = 'pkOpaqueCompletionText';
 
-  if (commandList) {
-    this.cmdList_ = commandList;
-    this.filterList_ = this.cmdList_;
-    for (var i = 0, cmd; cmd = this.cmdList_[i]; i++) {
-      this.cmdIndexList_[cmd.toLowerCase()] = i;
+  if (completionList) {
+    this.cmpList_ = completionList;
+    this.filterList_ = this.cmpList_;
+    for (var i = 0, cmp; cmp = this.cmpList_[i]; i++) {
+      this.cmpIndexList_[cmp.toLowerCase()] = i;
     }
     this.listPos_ = -1;
   }
 
-  // filter the command list on keyup if it is not UP or DOWN arrow.
-  this.attachHandlerAndListen(this.cmdTextElement, PowerKey.Event.KEYUP,
+  // filter the completion list on keyup if it is not UP or DOWN arrow.
+  this.attachHandlerAndListen(this.cmpTextElement, PowerKey.Event.KEYUP,
       function(evt) {
-        self.handleCommandKeyUp_.call(self, evt, commandMap, handler);
+        self.handleCompletionKeyUp_.call(self, evt, completionMap, handler);
       }, null);
 
-  this.attachHandlerAndListen(this.cmdTextElement, PowerKey.Event.KEYDOWN,
+  this.attachHandlerAndListen(this.cmpTextElement, PowerKey.Event.KEYDOWN,
       function(evt) {
-        self.handleCommandKeyDown_.call(self, evt);
+        self.handleCompletionKeyDown_.call(self, evt);
       }, null);
 
-  this.attachHandlerAndListen(this.cmdTextElement, 'blur',
+  this.attachHandlerAndListen(this.cmpTextElement, 'blur',
       function(evt) {
         if (self.hideCmdFieldOnBlur_) {
-          self.updateCommandField('hidden');
+          self.updateCompletionField('hidden');
         }
       }, null);
 };
@@ -279,72 +279,78 @@ PowerKey.prototype.createCommandField = function(parent,
 
 /**
  * Handle keyup events. If the key is not an arrow key, filter the list by the
- * contents of the command text field.
+ * contents of the completion text field.
  * @param {Object} evt The key event object.
- * @param {Object} commandMap The object consisting of command strings as
+ * @param {Object} completionMap The object consisting of completion strings as
  *     keys and functions as values.
- * @param {Function?} handler The command handler.
- *     handler = function(command, index, elementId, args) {}
+ * @param {Function?} handler The completion handler.
+ *     handler = function(completion, index, elementId, args) {}
  * @private
  */
-PowerKey.prototype.handleCommandKeyUp_ = function(evt, commandMap, handler) {
-  if (this.cmdTextElement.value.length === 0) {
-    this.filterList_ = this.cmdList_;
+PowerKey.prototype.handleCompletionKeyUp_ = function(evt, completionMap, handler) {
+  if (this.cmpTextElement.value.length === 0) {
+    this.filterList_ = this.cmpList_;
   }
   if (evt.keyCode != PowerKey.keyCodes.KEYUP &&
       evt.keyCode != PowerKey.keyCodes.KEYDOWN &&
       evt.keyCode != PowerKey.keyCodes.ENTER &&
       evt.keyCode != PowerKey.keyCodes.TAB) {
 
-    if (this.cmdTextElement.value.length) {
-      this.filterList_ = this.getWordFilterMatches_(this.cmdList_,
-          this.cmdTextElement.value, 50);
+    if (this.cmpTextElement.value.length) {
+      this.filterList_ = this.getWordFilterMatches_(this.cmpList_,
+          this.cmpTextElement.value, 50);
       this.listPos_ = -1;
       if (this.filterList_.length > 0) {
         this.setListElement_(this.filterList_[0]);
         this.listPos_ = 0;
       } else {
-        this.setListElement_(this.noCommandStr_);
+        this.setListElement_(this.noCompletionStr_);
       }
     }
     else {
-      this.setListElement_(this.commandPromptStr_);
+      this.setListElement_(this.completionPromptStr_);
     }
   }
-  // Handle ENTER key pressed in the command field.
+  // Handle ENTER key pressed in the completion field.
   if (evt.keyCode == PowerKey.keyCodes.ENTER) {
     // Select current filtered list item.
     if (this.filterList_ &&
         this.filterList_.length > 0 &&
-        this.cmdTextElement.value != this.filterList_[this.listPos_] &&
-        // Not a parametric command, or an incomplete parametric command.
+        this.cmpTextElement.value != this.filterList_[this.listPos_] &&
+        // Not a parametric completion, or an incomplete parametric completion.
         (this.filterList_[this.listPos_].indexOf('<') < 0 ||
             (this.filterList_[this.listPos_].indexOf('<') >= 0 &&
-             this.filterList_[this.listPos_].split(' ').length !=
-                this.cmdTextElement.value.split(' ').length))) {
+             this.filterList_[this.listPos_].split(',').length !=
+                this.cmpTextElement.value.split(',').length))) {
       this.selectCurrentListItem_();
       return;
     }
-    var cmd = this.cmdTextElement.value;
-    var pos = cmd.indexOf('<');
+    var cmp = this.cmpTextElement.value;
+    var originalCmd = (PowerKey.isIE ? this.listElement_.innerText :
+          this.listElement_.textContent).toLowerCase();
+    // Change only the basic portion (non-argument) of the completion to lower
+    // case. For ex: In 'Watch Video funnySeries', only 'Watch Video' is 
+    // changed to lower case.
+    var pos = originalCmd.indexOf('<');
+    var baseCmd;
     if (pos >= 0) {
-      cmd = cmd.substr(0, pos).toLowerCase() + cmd.substr(pos);
+      baseCmd = cmp.substr(0, pos - 1).toLowerCase();
+      cmp = baseCmd + ' ' + cmp.substr(pos);
     } else {
-      cmd = cmd.toLowerCase();
+      cmp = cmp.toLowerCase();
+      baseCmd = cmp;
     }
-    var originalCmd = PowerKey.isIE ? this.listElement_.innerText :
-          this.listElement_.textContent;
     var handled = false;
-    if (commandMap) {
-      handled = this.commandHandler_.call(this, cmd,
-          originalCmd, commandMap);
+    if (completionMap) {
+      handled = this.completionHandler_.call(this, cmp,
+          originalCmd, completionMap);
     }
     if (handler && !handled) {
-      var args = this.getCommandArgs_(cmd, originalCmd);
-      handler(cmd, this.cmdIndexList_[originalCmd.toLowerCase()],
-          this.cmdIdMap[originalCmd.toLowerCase()], args);
+      var args = this.getCompletionArgs_(cmp, originalCmd);
+      handler(baseCmd, this.cmpIndexList_[originalCmd],
+          this.cmpIdMap[originalCmd], args);
     }
-    this.cmdTextElement.value = '';
+    this.cmpTextElement.value = '';
   }
 };
 
@@ -355,7 +361,7 @@ PowerKey.prototype.handleCommandKeyUp_ = function(evt, commandMap, handler) {
  * @param {Object} evt The key event object.
  * @private
  */
-PowerKey.prototype.handleCommandKeyDown_ = function(evt) {
+PowerKey.prototype.handleCompletionKeyDown_ = function(evt) {
   // Handle UP arrow key
   if (evt.keyCode == PowerKey.keyCodes.KEYUP &&
            this.filterList_ &&
@@ -368,7 +374,7 @@ PowerKey.prototype.handleCommandKeyDown_ = function(evt) {
            this.filterList_.length > 0) {
     this.nextListItem_();
   }
-  // On TAB, keep the focus in the command field.
+  // On TAB, keep the focus in the completion field.
   else if (evt.keyCode == PowerKey.keyCodes.TAB) {
     if (this.filterList_ && this.filterList_.length > 0) {
       this.selectCurrentListItem_();
@@ -377,41 +383,45 @@ PowerKey.prototype.handleCommandKeyDown_ = function(evt) {
 };
 
 
-PowerKey.prototype.setAutoHideCommandField = function(hide) {
+/**
+ * Tells whether to hide the completion field when focus is lost.
+ * @param {boolean} hide If true, hide the completion field on blur.
+ */
+PowerKey.prototype.setAutoHideCompletionField = function(hide) {
   this.hideCmdFieldOnBlur_ = hide;
 };
 
 
 /**
  * Sets the label to be displayed and spoken, when the
- * command field is made visible.
+ * completion field is made visible.
  * @param {string} str The string to display.
  */
-PowerKey.prototype.setCommandPromptStr = function(str) {
-  this.commandPromptStr_ = str;
+PowerKey.prototype.setCompletionPromptStr = function(str) {
+  this.completionPromptStr_ = str;
 };
 
 
 /**
- * Sets the label to be displayed and spoken, when there are no commands
- * in the command list.
+ * Sets the label to be displayed and spoken, when there are no completions
+ * in the completion list.
  * @param {string} str The string to display.
  */
-PowerKey.prototype.setNoCommandStr = function(str) {
-  this.noCommandStr_ = str;
+PowerKey.prototype.setNoCompletionStr = function(str) {
+  this.noCompletionStr_ = str;
 };
 
 
 /**
- * Sets the command list.
- * @param {Array} list The array to be used as the command list.
+ * Sets the completion list.
+ * @param {Array} list The array to be used as the completion list.
  */
-PowerKey.prototype.setCommandList = function(list) {
-  this.cmdList_ = list;
-  this.filterList_ = this.cmdList_;
-  this.cmdIndexList_ = {};
-  for (var i = 0, cmd; cmd = this.cmdList_[i]; i++) {
-    this.cmdIndexList_[cmd.toLowerCase()] = i;
+PowerKey.prototype.setCompletionList = function(list) {
+  this.cmpList_ = list;
+  this.filterList_ = this.cmpList_;
+  this.cmpIndexList_ = {};
+  for (var i = 0, cmp; cmp = this.cmpList_[i]; i++) {
+    this.cmpIndexList_[cmp.toLowerCase()] = i;
   }
   this.listPos_ = -1;
 };
@@ -461,9 +471,9 @@ PowerKey.prototype.createStatusElement = function(parent) {
 
 
 /**
- * Updates the command field element with the new visibility status
+ * Updates the completion field element with the new visibility status
  * and location parameters.
- * @param {string} status Indicates whether the command field should be
+ * @param {string} status Indicates whether the completion field should be
  *     made 'visible' or 'hidden'.
  * @param {boolean} opt_resize Indicates whether resizing is necessary.
  * @param {number} opt_top The y-coordinate pixel location of the top
@@ -471,18 +481,18 @@ PowerKey.prototype.createStatusElement = function(parent) {
  * @param {number} opt_left The x-coordinate pixel location of the left
  *     border of the element.
  */
-PowerKey.prototype.updateCommandField = function(status,
+PowerKey.prototype.updateCompletionField = function(status,
                                                  opt_resize,
                                                  opt_top,
                                                  opt_left) {
   if (status == 'visible') {
-    if (this.cmdFloatElement.className == 'pkHiddenStatus') {
-      this.setListElement_(this.commandPromptStr_);
+    if (this.cmpFloatElement.className == 'pkHiddenStatus') {
+      this.setListElement_(this.completionPromptStr_);
     }
-    this.cmdFloatElement.className = 'pkVisibleStatus';
+    this.cmpFloatElement.className = 'pkVisibleStatus';
     // Need to do this for IE. Setting focus immediately after making it
     // visible generates an error. Hence have to set the timeout.
-    var elem = this.cmdTextElement;
+    var elem = this.cmpTextElement;
     window.setTimeout(function() {elem.focus();}, 0);
   }
   else if (status == 'hidden') {
@@ -492,19 +502,19 @@ PowerKey.prototype.updateCommandField = function(status,
     else if (this.listElement_) {
       this.listElement_.textContent = '';
     }
-    this.cmdFloatElement.className = 'pkHiddenStatus';
-    this.cmdTextElement.value = '';
+    this.cmpFloatElement.className = 'pkHiddenStatus';
+    this.cmpTextElement.value = '';
   }
   if (opt_resize) {
     var viewportSz = PowerKey.getViewportSize();
     if (!opt_top) {
-      opt_top = viewportSz.height - this.cmdFloatElement.offsetHeight;
+      opt_top = viewportSz.height - this.cmpFloatElement.offsetHeight;
     }
     if (!opt_left) {
       opt_left = 0;
     }
-    this.cmdFloatElement.style.top = opt_top;
-    this.cmdFloatElement.style.left = opt_left;
+    this.cmpFloatElement.style.top = opt_top;
+    this.cmpFloatElement.style.left = opt_left;
   }
 };
 
@@ -560,21 +570,21 @@ PowerKey.prototype.updateStatusElement = function(text,
 
 
 /**
- * Creates the list of commands from the text content of the elements
+ * Creates the list of completions from the text content of the elements
  * obtained from the xpath which satisfy the function func.
  * @param {string} tags The tags to be selected.
  * @param {Function} func Only those elements are considered for which
  *     this function returns true.
- * @param {boolean} newList If this is true, all entries in cmdIdMap
- *     are erased, and a new mapping of commands and IDs is created.
- * @return {Array} The array of command strings.
+ * @param {boolean} newList If this is true, all entries in cmpIdMap
+ *     are erased, and a new mapping of completions and IDs is created.
+ * @return {Array} The array of completion strings.
  */
-PowerKey.prototype.createCommandList = function(tags, func, newList) {
-  var cmdList = new Array();
+PowerKey.prototype.createCompletionList = function(tags, func, newList) {
+  var cmpList = new Array();
   var tagArray = tags.split(/\s+/);
   if (newList) {
-    delete this.cmdIdMap;
-    this.cmdIdMap = new Object();
+    delete this.cmpIdMap;
+    this.cmpIdMap = new Object();
   }
   for (var j = 0, tag; tag = tagArray[j]; j++) {
     var nodeArray = document.getElementsByTagName(tag);
@@ -588,21 +598,21 @@ PowerKey.prototype.createCommandList = function(tags, func, newList) {
           if (label.toLowerCase().indexOf('ctrl+') === 0) {
             label = label.substring(6);
           }
-          cmdList.push(label);
-          if (String(this.cmdIdMap[label.toLowerCase()]) == 'undefined') {
-            this.cmdIdMap[label.toLowerCase()] = node.id;
+          cmpList.push(label);
+          if (String(this.cmpIdMap[label.toLowerCase()]) == 'undefined') {
+            this.cmpIdMap[label.toLowerCase()] = node.id;
           }
         }
       }
     }
   }
-  return cmdList;
+  return cmpList;
 };
 
 
 /**
  * Splits token into words and filters the rows by these words.
- * @param {Array} list An array of all commands.
+ * @param {Array} list An array of all completions.
  * @param {string} token Token to match.
  * @param {number} maxMatches Max number of matches to return.
  * @return {Array} matches Returns the array of matching rows.
@@ -628,16 +638,16 @@ PowerKey.prototype.getWordFilterMatches_ = function(list, token, maxMatches) {
   rows = list;
   for (j = 0; row = rows[j]; j++) {
     var parts = row.split(' ');
-    var cmdArray = [];
+    var cmpArray = [];
     var part;
     for (i = 0; part = parts[i]; i++) {
       if (part.charAt(0) == '<') {
         break;
       }
-      cmdArray.push(part);
+      cmpArray.push(part);
     }
-    var cmd = cmdArray.join(' ');
-    if (token.indexOf(cmd) === 0) {
+    var cmp = cmpArray.join(' ');
+    if (token.indexOf(cmp) === 0) {
       matches.push(row);
     }
   }
@@ -649,25 +659,33 @@ PowerKey.prototype.getWordFilterMatches_ = function(list, token, maxMatches) {
 
 
 /**
- * Compares the original and user-entered command and returns the array
+ * Compares the original and user-entered completion and returns the array
  * of arguments if any, otherwise returns null.
- * @param {String} cmd The user-entered command.
- * @param {String} originalCmd The original command.
- * @return {Array} Returns an array of command arguments.
+ * @param {String} cmp The user-entered completion.
+ * @param {String} originalCmd The original completion.
+ * @return {Array} Returns an array of completion arguments.
  * @private
  */
-PowerKey.prototype.getCommandArgs_ = function(cmd, originalCmd) {
-  cmd = cmd.replace(/\s+/g, ' ');
+PowerKey.prototype.getCompletionArgs_ = function(cmp, originalCmd) {
+  cmp = cmp.replace(/\s+/g, ' ');
   originalCmd = originalCmd.replace(/\s+/g, ' ');
-  var cmdTokens = cmd.split(' ');
-  var ocmdTokens = originalCmd.split(' ');
-  if (cmdTokens.length != ocmdTokens.length) {
+  var pos = originalCmd.indexOf('<');
+  if (pos < 0) {
+    return [];
+  }
+  originalCmd = originalCmd.substr(pos);
+  cmp = cmp.substr(pos);
+  var cmpTokens = cmp.split(',');
+  var ocmpTokens = originalCmd.split(',');
+  if (cmpTokens.length != ocmpTokens.length) {
     return [];
   }
   var args = [];
   for (var i = 0, j = 0, token1, token2;
-       (token1 = cmdTokens[i]) && (token2 = ocmdTokens[i]);
+       (token1 = cmpTokens[i]) && (token2 = ocmpTokens[i]);
        i++) {
+    token1 = PowerKey.leftTrim(PowerKey.rightTrim(token1));
+    token2 = PowerKey.leftTrim(PowerKey.rightTrim(token2));
     if (token2.match(PowerKey.CMD_PARAM)) {
       args.push(token1);
     }
@@ -677,21 +695,21 @@ PowerKey.prototype.getCommandArgs_ = function(cmd, originalCmd) {
 
 
 /**
- * The default command handler: executes the appropriate functions
- * by looking at the command map.
- * @param {string} cmd The command to be handled/executed.
- * @param {string} originalCmd The original format of the command without
+ * The default completion handler: executes the appropriate functions
+ * by looking at the completion map.
+ * @param {string} cmp The completion to be handled/executed.
+ * @param {string} originalCmd The original format of the completion without
  *     the final parameter values.
- * @param {Object} commandMap The HashMap consisting of command strings
+ * @param {Object} completionMap The HashMap consisting of completion strings
  *     as keys and functions as values.
- * @return {boolean} Whether the command was successfully handled.
+ * @return {boolean} Whether the completion was successfully handled.
  * @private
  */
-PowerKey.prototype.commandHandler_ = function(cmd,
+PowerKey.prototype.completionHandler_ = function(cmp,
                                               originalCmd,
-                                              commandMap) {
-  var args = this.getCommandArgs_(cmd, originalCmd);
-  var actionObj = commandMap[originalCmd];
+                                              completionMap) {
+  var args = this.getCompletionArgs_(cmp, originalCmd);
+  var actionObj = completionMap[originalCmd];
   if (actionObj && actionObj[this.context]) {
     var func = actionObj[this.context] + '(args);';
     window.setTimeout(func, 0);
@@ -731,17 +749,17 @@ PowerKey.prototype.nextListItem_ = function() {
 
 
 /**
- * Selects the current command from the list, displays it in the command
+ * Selects the current completion from the list, displays it in the completion
  * text field and speaks it.
  * @private
  */
 PowerKey.prototype.selectCurrentListItem_ = function() {
-  this.cmdTextElement.value =
+  this.cmpTextElement.value =
       this.filterList_[this.listPos_ >= 0 ? this.listPos_ : 0];
-  this.filterList_ = this.getWordFilterMatches_(this.cmdList_,
-      this.cmdTextElement.value, 50);
+  this.filterList_ = this.getWordFilterMatches_(this.cmpList_,
+      this.cmpTextElement.value, 50);
   if (this.axsJAX_ && PowerKey.isGecko) {
-    this.axsJAX_.speakTextViaNode(this.cmdTextElement.value);
+    this.axsJAX_.speakTextViaNode(this.cmpTextElement.value);
   }
   this.listPos_ = 0;
 };
@@ -749,7 +767,7 @@ PowerKey.prototype.selectCurrentListItem_ = function() {
 
 /**
  * Speaks the element of the filtered list which is currently selected.
- * @param {string} text The text to be displayed as the command field's
+ * @param {string} text The text to be displayed as the completion field's
  *     label (usually the selected list element itself).
  * @private
  */
@@ -757,7 +775,7 @@ PowerKey.prototype.setListElement_ = function(text) {
   if (!this.listElement_) {
     this.listElement_ = document.createElement('div');
     this.listElement_.id = 'listElem_' + Math.floor(Math.random() * 1001);
-    this.cmdDivElement_.appendChild(this.listElement_);
+    this.cmpDivElement_.appendChild(this.listElement_);
   }
   if (PowerKey.isIE) {
     this.listElement_.innerText = text;
@@ -962,7 +980,7 @@ PowerKey.cssStr =
 '.pkOpaqueStatusText { background-color: transparent; ' +
   'font-family: Arial, Helvetica, sans-serif; font-size: 30px; ' +
   'font-weight: bold; color: #fff;}' +
-'.pkOpaqueCommandText {border-style: none; background-color: transparent; ' +
+'.pkOpaqueCompletionText {border-style: none; background-color: transparent; ' +
   'font-family: Arial, Helvetica, sans-serif; font-size: 35px; ' +
   'font-weight: bold; color: #fff; width: 1000px; height: 50px;}';
 

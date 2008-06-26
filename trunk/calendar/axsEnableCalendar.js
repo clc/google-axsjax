@@ -48,6 +48,9 @@ axsCal.NOEVENTS_STRING = 'No events.';
 axsCal.NOTSELECTED_STRING = 'Not selected. ';
 axsCal.SELECTED_STRING = 'Selected. ';
 
+axsCal.PKPROMPT_STRING = 'Enter calendar name.';
+axsCal.PKNOCAL_STRING = 'No calendars found.';
+
 // Areas of the calendar
 axsCal.AREAS = {
   CALENDAR_LIST : 0,
@@ -87,13 +90,15 @@ axsCal.init = function(){
   axsCal.pkObj = new PowerKey('calendarList', axsCal.axsJAXObj);
   var body = axsCal.axsJAXObj.getActiveDocument().body;
   var pkCalListHandler = function(cmd, index, id, args){
-        axsCal.pkObj.updateCommandField('hidden', true, 40, 20);
+        axsCal.pkObj.updateCompletionField('hidden', true, 40, 20);
 		axsCal.axsJAXObj.lastFocusedNode.blur();
         axsCal.calendarsIndex = index - 1;
         axsCal.goToNextCalendar();
       };
-  axsCal.pkObj.createCommandField(body, 30, pkCalListHandler, null, null, false);
-  axsCal.pkObj.setAutoHideCommandField(true);
+  axsCal.pkObj.setCompletionPromptStr(axsCal.PKPROMPT_STRING);
+  axsCal.pkObj.setNoCompletionStr(axsCal.PKNOCAL_STRING);
+  axsCal.pkObj.createCompletionField(body, 30, pkCalListHandler, null, null, false);
+  axsCal.pkObj.setAutoHideCompletionField(true);
   PowerKey.setDefaultCSSStyle();
   
   // Switch to the Day view
@@ -320,8 +325,8 @@ axsCal.goToCalendarList = function(){
   for (var i=0,cal; cal = axsCal.calendarsArray[i]; i++){
     calendarNames.push(cal.textContent);
   }
-  axsCal.pkObj.setCommandList(calendarNames);
-  axsCal.pkObj.updateCommandField('visible', true, 40, 20);
+  axsCal.pkObj.setCompletionList(calendarNames);
+  axsCal.pkObj.updateCompletionField('visible', true, 40, 20);
 };
 
 
