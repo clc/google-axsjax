@@ -628,7 +628,7 @@ axsStock.pkSameColumnSearchHandler = function(command, index, id, args) {
   var item = axsStock.axsNavObj.currentItem();
   axsStock.axsNavObj.actOnItem(item);
 
-  axsStock.pkObj.updateCommandField('hidden', true, 40, 20);
+  axsStock.pkObj.updateCompletionField('hidden', true, 40, 20);
 };
 
 /**
@@ -637,13 +637,13 @@ axsStock.pkSameColumnSearchHandler = function(command, index, id, args) {
 axsStock.goToCompanyRow = function() {
 	axsStock.pkObj = new PowerKey('resultsList', axsStock.axsJAXObj);
   var body = axsStock.axsJAXObj.getActiveDocument().body;
-  axsStock.pkObj.createCommandField(body,
+  axsStock.pkObj.createCompletionField(body,
                                     30,
                                     axsStock.pkSameColumnSearchHandler,
                                     null,
                                     null,
                                     false);
-  axsStock.pkObj.setAutoHideCommandField(true);
+  axsStock.pkObj.setAutoHideCompletionField(true);
   PowerKey.setDefaultCSSStyle();
 	
   var companyNameLinks = axsStock.axsJAXObj.evalXPath(axsStock.COMPANIES_XPATH,
@@ -652,8 +652,8 @@ axsStock.goToCompanyRow = function() {
   for (var i = 0, companyName; companyName = companyNameLinks[i]; i++) {
     companyNames.push(companyName.textContent);
   }
-  axsStock.pkObj.setCommandList(companyNames);
-  axsStock.pkObj.updateCommandField('visible', true, 40, 20);
+  axsStock.pkObj.setCompletionList(companyNames);
+  axsStock.pkObj.updateCompletionField('visible', true, 40, 20);
 };
 
 /**
