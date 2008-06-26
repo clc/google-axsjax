@@ -65,6 +65,7 @@ function pickScript(){
   else if(urlIsGoogle()){  
     var path = document.location.pathname;
     var prefix = document.location.host;
+	var search = document.location.search;
     prefix = prefix.substring(0,prefix.indexOf('.'));
     if ((prefix == 'www') && (path.indexOf('/ig') === 0)){
       theScript.src = baseURL + 'igoogle/axsEnableIGoogle.js';
@@ -103,6 +104,19 @@ function pickScript(){
       theScript.src = baseURL + 'productsearch/axsEnableProductSearch.js';
       scriptsArray.push(navLib);
       scriptsArray.push(lensLib);
+      shouldInsertScripts = true;
+    }
+    else if ((prefix == 'finance') && (path.indexOf('/finance') === 0 )){
+      if (path.indexOf('stockscreener') > 0) {
+        theScript.src = baseURL + 'finance/axsEnableFinanceStockScreener.js';
+	  } else if (search.indexOf('?') === 0) {
+        theScript.src = baseURL + 'finance/axsEnableFinanceQuotes.js';
+      } else {
+        theScript.src = baseURL + 'finance/axsEnableFinanceHome.js';
+      }
+      scriptsArray.push(navLib);
+      scriptsArray.push(lensLib);
+      scriptsArray.push(pkLib);
       shouldInsertScripts = true;
     }	
     else if ((prefix == 'www')
