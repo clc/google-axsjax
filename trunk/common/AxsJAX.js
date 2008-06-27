@@ -50,10 +50,8 @@ var AxsJAX = function(useTabKeyFix){
   document.addEventListener('focus', focusHandler, true);
 
   var blurHandler = function(evt){
-                      if (self.lastFocusedNode){
-                        self.removeAttributeOf(self.lastFocusedNode,
-                                               'aria-activedescendant');
-                      }
+                      self.removeAttributeOf(self.lastFocusedNode,
+                                             'aria-activedescendant');
                       self.lastFocusedNode = null;
                       if ((evt.target.tagName == 'INPUT') ||
                           (evt.target.tagName == 'SELECT') ||
@@ -471,6 +469,9 @@ AxsJAX.prototype.goTo = function(targetNode){
  * @param {string} value The value the attribute should be set to.
  */
 AxsJAX.prototype.setAttributeOf = function(targetNode, attribute, value){
+  if (!targetNode){
+    return;
+  }
   //Add the aria- to attributes
   attribute = attribute.toLowerCase();
   switch (attribute){
@@ -509,7 +510,9 @@ AxsJAX.prototype.getAttributeOf = function(targetNode, attribute){
  * @param {string} attribute The attribute to be removed
  */
 AxsJAX.prototype.removeAttributeOf = function(targetNode, attribute){
-  targetNode.removeAttribute(attribute);
+  if (targetNode && targetNode.removeAttribute){
+    targetNode.removeAttribute(attribute);
+  }
 };
 
 /**
