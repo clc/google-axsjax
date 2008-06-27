@@ -22,143 +22,154 @@
 // create namespace
 var axsQuotes = {};
 
-//Strings for enhancing the presentation
-axsQuotes.BIO_STRING = 'Bio';
-axsQuotes.GT_STRING = '>';
-axsQuotes.OR_STRING = ' or ';
-axsQuotes.EMPTY_STRING = '';
-axsQuotes.STATUS_STRING = '. Status';
-axsQuotes.PRICE_STRING = ' Price ';
-axsQuotes.DATE_STRING = ' Date ';
-axsQuotes.UP_STRING = ' up by ';
-axsQuotes.UP_ABR_STRING = '+';
-axsQuotes.DOWN_STRING = ' down by ';
-axsQuotes.DOWN_ABR_STRING = '-';
-axsQuotes.PRCNT_STRING = ' percent';
-axsQuotes.PRCNT_ABR_STRING = '%';
-axsQuotes.MLN_STRING = ' million';
-axsQuotes.MLN_ABR_STRING = 'M';
-axsQuotes.BLN_STRING = ' billion';
-axsQuotes.BLN_ABR_STRING  = 'B';
-axsQuotes.EXCHANGE_STRING = '. Traded on ';
-axsQuotes.SYMBOL_STRING = '. Symbol ';
-axsQuotes.LAST_TRADE_STRING = '.  Last trade ';
-axsQuotes.CHANGE_STRING = ' Change ';
-axsQuotes.MKT_CAP_STRING = '. Market cap ';
-axsQuotes.DELAY_STRING = ' Note that the last trade is delayed ' +
-    'up to 20 minutes. ';
-axsQuotes.USD_STRING = ' US dollars. ';
-axsQuotes.TTM_STRING = 'TTM';
-axsQuotes.TTM_SPACES_STRING = 'T T M';
+/**
+ * Help string to be spoken to the user
+ * @type string
+ */
+axsQuotes.HELP = 'The following shortcut keys are available. ';
+
+/**
+ * Strings for enhancing the presentation
+ */
+axsQuotes.str = {
+  BIO : 'Bio',
+  GT : '>',
+  OR : ' or ',
+  STATUS : '. Status',
+  PRICE : ' Price ',
+  DATE : ' Date ',
+  UP : ' up by ',
+  UP_ABBR : '+',
+  DOWN : ' down by ',
+  DOWN_ABBR : '-',
+  PRCNT : ' percent',
+  PRCNT_ABBR : '%',
+  MLN : ' million',
+  MLN_ABBR : 'M',
+  BLN : ' billion',
+  BLN_ABBR : 'B',
+  EXCHANGE : '. Traded on ',
+  SYMBOL : '. Symbol ',
+  LAST_TRADE : '.  Last trade ',
+  CHANGE : ' Change ',
+  MKT_CAP : '. Market cap ',
+  DELAY : ' Note that the last trade is delayed ' +
+    'up to 20 minutes. ',
+  USD : ' US dollars. ',
+  TTM : 'TTM',
+  TTM_SPACES : 'T T M',
 
 //Strings for stock excahnges
-axsQuotes.NYSE_STRING = 'New York Stock Exchange';
-axsQuotes.NYSE_ABR_STRING = 'NYSE';
-axsQuotes.NASDAQ_STRING = 'NASDAQ Stock Market';
-axsQuotes.NASDAQ_ABR_STRING = 'NASDAQ';
-axsQuotes.LON_STRING = 'London Stock Exchange';
-axsQuotes.LON_ABR_STRING = 'LON';
-axsQuotes.OTC_STRING = 'Over the counter';
-axsQuotes.OTC_ABR_STRING = 'OTC';
-axsQuotes.AMEX_STRING = 'American Stock Exchange';
-axsQuotes.AMEX_ABR_STRING = 'AMEX';
-axsQuotes.EPA_STRING = 'Euronext Paris Stock Exchange';
-axsQuotes.EPA_ABR_STRING = 'EPA';
-axsQuotes.ASX_STRING = 'Australian Securities Exchange';
-axsQuotes.ASX_ABR_STRING = 'ASX';
+  NYSE : 'New York Stock Exchange',
+  NYSE_ABBR : 'NYSE',
+  NASDAQ : 'NASDAQ Stock Market',
+  NASDAQ_ABBR : 'NASDAQ',
+  LON : 'London Stock Exchange',
+  LON_ABBR : 'LON',
+  OTC : 'Over the counter',
+  OTC_ABBR : 'OTC',
+  AMEX : 'American Stock Exchange',
+  AMEX_ABBR : 'AMEX',
+  EPA : 'Euronext Paris Stock Exchange',
+  EPA_ABBR : 'EPA',
+  ASX : 'Australian Securities Exchange',
+  ASX_ABBR : 'ASX',
 
 //Strings for market data
-axsQuotes.MKT_CAP_STRING = 'Market cap';
-axsQuotes.MKT_ABR_CAP_STRING = 'Mkt Cap:';
-axsQuotes.P_E_STRING = 'Price earnings ratio';
-axsQuotes.P_E_ABR_STRING = 'P/E:';
-axsQuotes.F_P_E_STRING = 'Forward price to earnings ratio';
-axsQuotes.F_P_E_ABR_STRING = 'F P/E:';
-axsQuotes.VOL_STRING = 'Volume';
-axsQuotes.VOL_ABR_STRING = 'Vol:';
-axsQuotes.WEEKS_STRING = 'Fifty two week';
-axsQuotes.WEEKS_ABR_STRING = '52Wk';
-axsQuotes.AVG_VOL_STRING = 'Average volume';
-axsQuotes.AVG_ABR_VOL_STRING = 'Avg Vol:';
-axsQuotes.NA_ABR_STRING  = '-';
-axsQuotes.NA_STRING = 'Not available';
-axsQuotes.INST_OWN_STRING = 'Institutional Ownership';
-axsQuotes.INST_OWN_ABR_STRING = 'Inst. Own:';
-axsQuotes.EPS_STRING = 'E P S';
-axsQuotes.EPS_ABR_STRING = 'EPS:';
-
-//XPath expressions
-axsQuotes.NEWS_XPATH_STRING = './/td[@class="title" or @class="source"]';
-axsQuotes.FIN_XPATH_STRING = 'id("fd")//tr[1]';
-axsQuotes.R_AND_S_XPATH_STRING = 'id("keyratios")//tr[1]';
-axsQuotes.M_DAT_XPATH_STRING = './td[@class="key" or @class="val"]';
-axsQuotes.QUOTE_XPATH_STRING = 'id("md")//tr[1]/td[1]';
-axsQuotes.HOURS_XPATH_STRING = './/nobr';
-axsQuotes.COMP_XPATH_STRING = 'id("companyheader")//h1';
+  MKT_CAP : 'Market cap',
+  MKT_CAP_ABBR : 'Mkt Cap:',
+  P_E : 'Price earnings ratio',
+  P_E_ABBR : 'P/E:',
+  F_P_E : 'Forward price to earnings ratio',
+  F_P_E_ABBR : 'F P/E:',
+  VOL : 'Volume',
+  VOL_ABBR : 'Vol:',
+  WEEKS : 'Fifty two week',
+  WEEKS_ABBR : '52Wk',
+  AVG_VOL : 'Average volume',
+  AVG_ABR_VOL : 'Avg Vol:',
+  NA_ABBR : '-',
+  NA : 'Not available',
+  INST_OWN : 'Institutional Ownership',
+  INST_OWN_ABBR : 'Inst. Own:',
+  EPS : 'E P S',
+  EPS_ABBR : 'EPS:'
+};
 
 /**
- * {Array} for building a sentence for the Data description section
+ * XPath for retrieving the current quote
+ * @type string
  */
-axsQuotes.marketDataDescArray = new Array(axsQuotes.PRICE_STRING,
-                                          axsQuotes.CHANGE_STRING,
-                                          axsQuotes.OR_STRING,
-                                          axsQuotes.DATE_STRING);
-/**
- * {Array} for building a sentence for the Related companies section  
- */
-axsQuotes.relatedCompaniesDescArray = new Array(axsQuotes.EMPTY_STRING,
-                                                axsQuotes.EXCHANGE_STRING,
-                                                axsQuotes.SYMBOL_STRING,
-                                                axsQuotes.LAST_TRADE_STRING,
-                                                axsQuotes.CHANGE_STRING,
-                                                axsQuotes.OR_STRING,
-                                                axsQuotes.MKT_CAP_STRING,
-                                                axsQuotes.USD_STRING);
-/**
- * {Array} for building a sentence for the Financials section
- */
-axsQuotes.financialsDescArray = null;
-axsQuotes.ratAndStatDescArray = null;
+axsQuotes.QUOTE_XPATH = "id('md')//span[@class='pr']/..";
 
 /**
- * {Map} from abbreviated phrases to expanded phrases
+ * Array for building a sentence for the Data description section
+ * @type Array
+ */
+axsQuotes.marketDataDescArray = new Array(axsQuotes.str.PRICE,
+                                          axsQuotes.str.CHANGE,
+                                          axsQuotes.str.OR,
+                                          axsQuotes.str.DATE);
+/**
+ * Array for building a sentence for the Related companies section  
+ * @type Array
+ */
+axsQuotes.relatedCompaniesDescArray = new Array('',
+                                                axsQuotes.str.EXCHANGE,
+                                                axsQuotes.str.SYMBOL,
+                                                axsQuotes.str.LAST_TRADE,
+                                                axsQuotes.str.CHANGE,
+                                                axsQuotes.str.OR,
+                                                axsQuotes.str.MKT_CAP,
+                                                axsQuotes.str.USD);
+/**
+ * Array for building a sentence for the Financials section
+ * @type Array
+ */
+axsQuotes.financialsDescArray = new Array();
+
+/**
+ * Array for building a sentence for the Ratios and Stats section
+ * @type Array
+ */
+axsQuotes.ratAndStatDescArray = new Array();
+
+/**
+ * Map from abbreviated phrases to expanded phrases
  */
 axsQuotes.phrasesMap = new Object();
-axsQuotes.phrasesMap[axsQuotes.TTM_STRING] = axsQuotes.WEEKS_STRING;
-axsQuotes.phrasesMap[axsQuotes.NYSE_ABR_STRING] = axsQuotes.NYSE_STRING;
-axsQuotes.phrasesMap[axsQuotes.NASDAQ_ABR_STRING] = axsQuotes.NASDAQ_STRING;
-axsQuotes.phrasesMap[axsQuotes.LON_ABR_STRING] = axsQuotes.LON_STRING;
-axsQuotes.phrasesMap[axsQuotes.OTC_ABR_STRING] = axsQuotes.OTC_STRING;
-axsQuotes.phrasesMap[axsQuotes.AMEX_ABR_STRING] = axsQuotes.AMEX_STRING;
-axsQuotes.phrasesMap[axsQuotes.EPA_ABR_STRING] = axsQuotes.EPA_STRING;
-axsQuotes.phrasesMap[axsQuotes.ASX_ABR_STRING] = axsQuotes.ASX_STRING;
-axsQuotes.phrasesMap[axsQuotes.MKT_ABR_CAP_STRING] = axsQuotes.MKT_CAP_STRING;
-axsQuotes.phrasesMap[axsQuotes.WEEKS_ABR_STRING] = axsQuotes.WEEKS_STRING;
-axsQuotes.phrasesMap[axsQuotes.NA_ABR_STRING] = axsQuotes.NA_STRING;
-axsQuotes.phrasesMap[axsQuotes.P_E_ABR_STRING] = axsQuotes.P_E_STRING;
-axsQuotes.phrasesMap[axsQuotes.F_P_E_ABR_STRING] = axsQuotes.F_P_E_STRING;
-axsQuotes.phrasesMap[axsQuotes.VOL_ABR_STRING] = axsQuotes.VOL_STRING;
-axsQuotes.phrasesMap[axsQuotes.AVG_ABR_VOL_STRING] = axsQuotes.AVG_VOL_STRING;
-axsQuotes.phrasesMap[axsQuotes.INST_OWN_ABR_STRING] = axsQuotes.INST_OWN_STRING;
-axsQuotes.phrasesMap[axsQuotes.EPS_ABR_STRING] = axsQuotes.EPS_STRING;
+axsQuotes.phrasesMap[axsQuotes.str.TTM] = axsQuotes.str.WEEKS;
+axsQuotes.phrasesMap[axsQuotes.str.NYSE_ABBR] = axsQuotes.str.NYSE;
+axsQuotes.phrasesMap[axsQuotes.str.NASDAQ_ABBR] = axsQuotes.str.NASDAQ;
+axsQuotes.phrasesMap[axsQuotes.str.LON_ABBR] = axsQuotes.str.LON;
+axsQuotes.phrasesMap[axsQuotes.str.OTC_ABBR] = axsQuotes.str.OTC;
+axsQuotes.phrasesMap[axsQuotes.str.AMEX_ABBR] = axsQuotes.str.AMEX;
+axsQuotes.phrasesMap[axsQuotes.str.EPA_ABBR] = axsQuotes.str.EPA;
+axsQuotes.phrasesMap[axsQuotes.str.ASX_ABBR] = axsQuotes.str.ASX;
+axsQuotes.phrasesMap[axsQuotes.str.MKT_CAP_ABBR] = axsQuotes.str.MKT_CAP;
+axsQuotes.phrasesMap[axsQuotes.str.WEEKS_ABBR] = axsQuotes.str.WEEKS;
+axsQuotes.phrasesMap[axsQuotes.str.NA_ABBR] = axsQuotes.str.NA;
+axsQuotes.phrasesMap[axsQuotes.str.P_E_ABBR] = axsQuotes.str.P_E;
+axsQuotes.phrasesMap[axsQuotes.str.F_P_E_ABBR] = axsQuotes.str.F_P_E;
+axsQuotes.phrasesMap[axsQuotes.str.VOL_ABBR] = axsQuotes.str.VOL;
+axsQuotes.phrasesMap[axsQuotes.str.AVG_VOL_ABBR] = axsQuotes.str.AVG_VOL;
+axsQuotes.phrasesMap[axsQuotes.str.INST_OWN_ABBR] = axsQuotes.INST_OWN;
+axsQuotes.phrasesMap[axsQuotes.str.EPS_ABBR] = axsQuotes.str.EPS;
 
 /**
  * Map from prefix characters to strings 
  */
 axsQuotes.charPrefixMap = new Object();
-axsQuotes.charPrefixMap[axsQuotes.DOWN_ABR_STRING] = axsQuotes.DOWN_STRING;
-axsQuotes.charPrefixMap[axsQuotes.UP_ABR_STRING] = axsQuotes.UP_STRING;
+axsQuotes.charPrefixMap[axsQuotes.str.DOWN_ABBR] = axsQuotes.str.DOWN;
+axsQuotes.charPrefixMap[axsQuotes.str.UP_ABBR] = axsQuotes.str.UP;
 
 /**
  * Map from suffix characters to strings 
  */
 axsQuotes.charSuffixMap = new Object();
-axsQuotes.charSuffixMap[axsQuotes.BLN_ABR_STRING] = axsQuotes.BLN_STRING;
-axsQuotes.charSuffixMap[axsQuotes.MLN_ABR_STRING] = axsQuotes.MLN_STRING;
-axsQuotes.charSuffixMap[axsQuotes.PRCNT_ABR_STRING] = axsQuotes.PRCNT_STRING;
-
-//These are strings to be spoken to the user
-axsQuotes.HELP = 'The following shortcut keys are available. ';
+axsQuotes.charSuffixMap[axsQuotes.str.BLN_ABBR] = axsQuotes.str.BLN;
+axsQuotes.charSuffixMap[axsQuotes.str.MLN_ABBR] = axsQuotes.str.MLN;
+axsQuotes.charSuffixMap[axsQuotes.str.PRCNT_ABBR] = axsQuotes.str.PRCNT;
 
 /**
  * The AxsJAX object that will do the tickling and speaking.
@@ -200,7 +211,9 @@ axsQuotes.init = function(){
 
   //Add event listeners
   document.addEventListener('keypress', axsQuotes.keyHandler, true);
-  document.addEventListener('DOMSubtreeModified', axsFinance.DOMSubtreeModifiedHandler, true);
+  document.addEventListener('DOMSubtreeModified',
+                            axsQuotes.DOMSubtreeModifiedHandler,
+                            true);
 
   //Content navigation rule is hardcoded for efficiency
   var cnrString = "<cnr next='RIGHT l' prev='LEFT h'>" +
@@ -319,7 +332,7 @@ axsQuotes.init = function(){
       "id('fd')//tr[position() &gt; 1 and position() &lt; 6]" +
     "</item>" +
     "<target title='Income statement section' trigger='listEntry'>" +
-      "id('fd')//tr[1]//td[1]axsQuotes.BIO_STRING" +
+      "id('fd')//tr[1]//td[1]axsQuotes.str.BIO" +
     "</target>" +
     "<target title='Go to link' hotkey='ENTER'>" +
       "./../tr[1]//a" +
@@ -433,18 +446,18 @@ axsQuotes.init = function(){
  * auto-complete search box changes.
  * @param {Event} evt The DOMSubtreeModified event
  */
-axsFinance.DOMSubtreeModifiedHandler = function(evt){
+axsQuotes.DOMSubtreeModifiedHandler = function(evt){
   var attrib = evt.attrName;
   var newVal = evt.newValue;
   var oldVal = evt.prevValue;
   var target = evt.target;
   if (target.id == 'ac-list'){
-    for (var i=0,child; child = target.childNodes[i]; i++){
-	  if (child.className == 'selected'){
-	    axsFinance.axsJAXObj.speakNode(child);
-		return;
-	  }
-	}
+    for (var i = 0, child; child = target.childNodes[i]; i++){
+      if (child.className == 'selected'){
+        axsFinance.axsJAXObj.speakNode(child);
+        return;
+      }
+    }
   }
 };
 
@@ -465,9 +478,9 @@ axsQuotes.searchBoxKeyHandler = function(evt) {
  */
 axsQuotes.speakIntroduction = function() {
     var text = '';
-    var headerElems = axsQuotes.axsJAXObj.evalXPath(axsQuotes.COMP_XPATH_STRING,
-        document.body);
-    var quoteElems = axsQuotes.axsJAXObj.evalXPath(axsQuotes.QUOTE_XPATH_STRING,
+    var xpath = 'id("companyheader")//h1';
+    var headerElems = axsQuotes.axsJAXObj.evalXPath(xpath, document.body);
+    var quoteElems = axsQuotes.axsJAXObj.evalXPath(axsQuotes.QUOTE_XPATH,
         document.body);
 
     text = headerElems[0].textContent + ' ';
@@ -484,15 +497,15 @@ axsQuotes.speakIntroduction = function() {
  * table vary over time.
  */
 axsQuotes.populateFinancialsDescArray = function() {
-  var elements = axsQuotes.axsJAXObj.evalXPath(axsQuotes.FIN_XPATH_STRING, 
-                                               document.body);
+  var xpath = 'id("fd")//tr[1]';
+  var elements = axsQuotes.axsJAXObj.evalXPath(xpath, document.body);
   var tableRow = elements[0];
   var currentCaption = tableRow.childNodes[3].textContent;
   currentCaption = currentCaption.replace('(', ' ').replace(')', ' ');
   currentCaption = axsQuotes.normalizeString(currentCaption) + ', ';
   var oneYearOldCaption = tableRow.childNodes[5].textContent;
   oneYearOldCaption = oneYearOldCaption.replace('(', ' ').replace(')', ' ');
-  oneYearOldCaption = axsQuotes.normalizeString(oneYearOldCaption)  + ', ';
+  oneYearOldCaption = axsQuotes.normalizeString(oneYearOldCaption) + ', ';
   var twoYearsOldCaption = tableRow.childNodes[7].textContent;
   twoYearsOldCaption = twoYearsOldCaption.replace('(', ' ').replace(')', ' ');
   twoYearsOldCaption = axsQuotes.normalizeString(twoYearsOldCaption) + ', ';
@@ -510,8 +523,8 @@ axsQuotes.populateFinancialsDescArray = function() {
  * Ratios' table vary over time.
  */
 axsQuotes.populateRatAndStatDescArray = function() {
-  var elements = axsQuotes.axsJAXObj.evalXPath(axsQuotes.R_AND_S_XPATH_STRING,
-                                               document.body);
+  var xpath = 'id("keyratios")//tr[1]';
+  var elements = axsQuotes.axsJAXObj.evalXPath(xpath, document.body);
   var tableRow = elements[0];
   var currentCaption = tableRow.childNodes[3].textContent;
   currentCaption = currentCaption.replace('(', ' ').replace(')', ' ');
@@ -522,9 +535,9 @@ axsQuotes.populateRatAndStatDescArray = function() {
   var twoYearsCaption = tableRow.childNodes[7].textContent;
   twoYearsCaption = twoYearsCaption.replace('(', ' ').replace(')', ' ');
   twoYearsCaption = axsQuotes.normalizeString(twoYearsCaption) + ', ';
-  if (twoYearsCaption.indexOf(axsQuotes.TTM_STRING) != -1) {
-    twoYearsCaption = twoYearsCaption.replace(axsQuotes.TTM_STRING,
-                                              axsQuotes.TTM_SPACES_STRING);
+  if (twoYearsCaption.indexOf(axsQuotes.str.TTM) != -1) {
+    twoYearsCaption = twoYearsCaption.replace(axsQuotes.str.TTM,
+                                              axsQuotes.str.TTM_SPACES);
   }
   axsQuotes.ratAndStatDescArray = new Array('',
                                             currentCaption,
@@ -542,13 +555,15 @@ axsQuotes.readMarketDataDesc = function(item) {
   if (element.tagName == 'TD') {
     text = axsQuotes.parseCurrentQuote(element);
   } else {
-    var columns = axsQuotes.axsJAXObj.evalXPath(axsQuotes.M_DAT_XPATH_STRING,
-                                                  element);
+    var xpath = './td[@class="key" or @class="val"]';
+    var columns = axsQuotes.axsJAXObj.evalXPath(xpath, element);
     var firstPhrase = '';
     var secondPhrase = '';
     for (var i = 0; i < columns.length; i = i + 2) {
-      firstPhrase = axsQuotes.parseSpecChrsAndTkns(columns[i].textContent);
-      secondPhrase = axsQuotes.parseSpecChrsAndTkns(columns[i + 1].textContent);
+      firstPhrase = columns[i].textContent;
+      firstPhrase = axsQuotes.parseSpecChrsAndTkns(firstPhrase);
+      secondPhrase = columns[i + 1].textContent;
+      secondPhrase = axsQuotes.parseSpecChrsAndTkns(secondPhrase);
       text = text + firstPhrase + ' ' + secondPhrase + '. ';
     }
   }
@@ -564,7 +579,7 @@ axsQuotes.readAfterHours = function(item) {
   var element = item.elem;
   var afterHours = element.childNodes[0].textContent;
   afterHours = axsQuotes.parseSpecChrsAndTkns(afterHours);
-  afterHours = afterHours + ' ' + axsQuotes.OR_STRING + ' ';
+  afterHours = afterHours + ' ' + axsQuotes.str.OR + ' ';
   var percent = element.childNodes[2].textContent;
   percent = axsQuotes.parseSpecChrsAndTkns(percent);
   percent = percent + ', ';
@@ -579,7 +594,7 @@ axsQuotes.readAfterHours = function(item) {
  * Market data list.
  */
 axsQuotes.readCurrentQuote = function() {
-  var elements = axsQuotes.axsJAXObj.evalXPath(axsQuotes.QUOTE_XPATH_STRING,
+  var elements = axsQuotes.axsJAXObj.evalXPath(axsQuotes.QUOTE_XPATH,
       document.body);
   var text = axsQuotes.parseCurrentQuote(elements[0]);
   axsQuotes.speakAndGo(elements[0], text);
@@ -604,7 +619,7 @@ axsQuotes.parseCurrentQuote = function(element) {
   percent = axsQuotes.parseSpecChrsAndTkns(percent) + ', ';
 
   var dateAndStatus = element.childNodes[8].textContent;
-  dateAndStatus = dateAndStatus.replace(' -', axsQuotes.STATUS_STRING);
+  dateAndStatus = dateAndStatus.replace(' -', axsQuotes.str.STATUS);
   dateAndStatus = axsQuotes.parseSpecChrsAndTkns(dateAndStatus) + ', ';
 
   var time = '';
@@ -625,8 +640,8 @@ axsQuotes.parseCurrentQuote = function(element) {
 axsQuotes.readNewsDesc = function(item) {
   var element = item.elem;
   var text = '';
-  var contents = axsQuotes.axsJAXObj.evalXPath(axsQuotes.NEWS_XPATH_STRING,
-                                               element);
+  var xpath = './/td[@class="title" or @class="source"]';
+  var contents = axsQuotes.axsJAXObj.evalXPath(xpath, element);
   text = contents[0].textContent + '. ';
   text = text + contents[1].childNodes[0].textContent;
   text = text + contents[1].childNodes[1].textContent;
@@ -651,7 +666,7 @@ axsQuotes.readRelCompDesc = function(item) {
   var lastTrade = axsQuotes.normalizeString(rowColumns[9].textContent);
   var note = '';
   if (rowColumns[11].textContent.indexOf('*') != -1) {
-    note = axsQuotes.DELAY_STRING;
+    note = axsQuotes.str.DELAY;
   }
   var index = rowColumns[13].textContent.indexOf('(');
   var absoluteChange = rowColumns[13].textContent.substring(0, index);
@@ -673,9 +688,9 @@ axsQuotes.readRelCompDesc = function(item) {
 };
 
 /**
- * Reads and speaks the item elements in the 'Income statement in millions of 
- * US dollars', 'Balance sheet in millions of US dollars', Cash flow in millions
- * of US dollars' lists.
+ * Callback handler for reading the 'Income statement in millions of
+ * US dollars', 'Balance sheet in millions of US dollars', Cash flow in
+ * millions of US dollars' lists.
  * @param {Object?} item A wrapper for the current DOM node.
  */
 axsQuotes.readFinancialCompDesc = function(item) {
@@ -699,12 +714,12 @@ axsQuotes.readFinancialCompDesc = function(item) {
                               twoYearsValue);
 
   var rowText = axsQuotes.buildTableRowText(columnsText,
-                                         axsQuotes.financialsDescArray);
+                                            axsQuotes.financialsDescArray);
   axsQuotes.speakAndGo(element, rowText);
 };
 
 /**
- * Reads and speaks the item elements in the 'Key statistics and ratios' list.
+ * Callback handler for reading the 'Key ratios and stats' list.
  * @param {Object?} item A wrapper for the current DOM node.
  */
 axsQuotes.readRatAndStatsCompDesc = function(item) {
@@ -730,16 +745,17 @@ axsQuotes.readRatAndStatsCompDesc = function(item) {
 };
 
 /**
- * Reads and speaks the item elements in the 'Officers and directors' list.
+ * Callback handler for reading the names and information of the people
+ * in the 'Officers and directors' list.
  * @param {Object?} item A wrapper for the current DOM node.
  */
 axsQuotes.readManagementDescription = function(item) {
   var element = item.elem;
   var personName = element.childNodes[1].textContent;
-  personName = personName.replace(axsQuotes.GT_STRING, axsQuotes.EMPTY_STRING);
+  personName = personName.replace(axsQuotes.str.GT, '');
   var position = element.childNodes[3].textContent;
   var info = element.nextSibling.nextSibling.textContent;
-  var index = info.indexOf(axsQuotes.BIO_STRING);
+  var index = info.indexOf(axsQuotes.str.BIO);
   info = info.substring(0, index);
   info = axsQuotes.normalizeString(info);
   var columnsText = new Array(personName, position, info);
@@ -748,7 +764,7 @@ axsQuotes.readManagementDescription = function(item) {
 };
 
 /**
- * Reads and speaks the item elements in the 'Events' list.
+ * Callback handler for reading the events in the 'Events' list.
  * @param {Object?} item A wrapper for the current DOM node.
  */
 axsQuotes.readEventsDesc = function(item) {
@@ -763,7 +779,8 @@ axsQuotes.readEventsDesc = function(item) {
 };
 
 /**
- * Reads and speaks the third item elements in the 'Summary' list.
+ * Callback handler for reading the company website links in the 'Summary' 
+ * list.
  * @param {Object?} item A wrapper for the current DOM node.
  */
 axsQuotes.readSummarylinksCompDesc = function(item) {
@@ -773,7 +790,7 @@ axsQuotes.readSummarylinksCompDesc = function(item) {
 };
 
 /**
- * Reads and speaks the first and second item elements in the 'Summary' list.
+ * Callback handler for reading the company description in the 'Summary' list.
  * @param {Object?} item A wrapper for the current DOM node.
  */
 axsQuotes.readSummaryTextCompDesc = function(item) {
@@ -861,16 +878,15 @@ axsQuotes.parseSpecChrsAndTkns = function(text) {
   }
   //process every word separately
   var tokens = text.split(' ');
-  for (var i = 0, t; t = tokens[i]; i++) {
-    var token = tokens[i];
+  for (var i = 0, token; token = tokens[i]; i++) {
     //check for whole word mapping
     var tokenMapping = axsQuotes.phrasesMap[token];
     if (tokenMapping != undefined) {
       token = tokenMapping;
     } else {
-      //remove brackets
+      //remove parentheses
       if (token.length > 0 && token.charAt(0) === '(') {
-          token = token.substring(1);
+        token = token.substring(1);
       }
       if (token.length > 1 && token.charAt(token.length - 1) === ')') {
         token = token.substring(0, token.length - 1);
