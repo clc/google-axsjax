@@ -223,10 +223,10 @@ axsQuotes.init = function(){
   "</target>" +
 
   "<list title='Market data' next='DOWN j' prev='UP k' fwd='n' back='p'>" +
-    "<item action='CALL:axsQuotes.readMarketDataDesc'>" +
+    "<item action='CALL:axsQuotes.readCurrentQuote'>" +
       "id('md')//tr[1]/td[1]" +
     "</item>" +
-    "<item action='CALL:axsQuotes.readMarketDataDesc'>" +
+    "<item action='CALL:axsQuotes.readMarketDataRow'>" +
       "id('md')//tr" +
     "</item>" +
     "<item action='CALL:axsQuotes.readAfterHours'>" +
@@ -546,33 +546,30 @@ axsQuotes.populateRatAndStatDescArray = function() {
 };
 
 /**
- * Reads and speaks the first two item elements in the 'Market data' list.
+ * Callback handler for reading rows of data in the 'Market data' list.
  * @param {Object?} item A wrapper for the current DOM node.
  */
-axsQuotes.readMarketDataDesc = function(item) {
+axsQuotes.readMarketDataRow = function(item) {
   var element = item.elem;
   var text = '';
-  if (element.tagName == 'TD') {
-    text = axsQuotes.parseCurrentQuote(element);
-  } else {
-    var xpath = './td[@class="key" or @class="val"]';
-    var columns = axsQuotes.axsJAXObj.evalXPath(xpath, element);
-    var firstPhrase = '';
-    var secondPhrase = '';
-    for (var i = 0; i < columns.length; i = i + 2) {
-      firstPhrase = columns[i].textContent;
-      firstPhrase = axsQuotes.parseSpecChrsAndTkns(firstPhrase);
-      secondPhrase = columns[i + 1].textContent;
-      secondPhrase = axsQuotes.parseSpecChrsAndTkns(secondPhrase);
-      text = text + firstPhrase + ' ' + secondPhrase + '. ';
-    }
+  var xpath = './td[@class="key" or @class="val"]';
+  var columns = axsQuotes.axsJAXObj.evalXPath(xpath, element);
+  var firstPhrase = '';
+  var secondPhrase = '';
+  for (var i = 0; i < columns.length; i = i + 2) {
+    firstPhrase = columns[i].textContent;
+    firstPhrase = axsQuotes.parseSpecChrsAndTkns(firstPhrase);
+    secondPhrase = columns[i + 1].textContent;
+    secondPhrase = axsQuotes.parseSpecChrsAndTkns(secondPhrase);
+    text = text + firstPhrase + ' ' + secondPhrase + '. ';
   }
   axsQuotes.speakAndGo(element, text);
 };
 
 /**
- * Reads and speaks the third item elements in the 'Market data' list.
- * @param {Object?} item A wrapper for the current DOM node.
+ * Callback handler for reading the after hours information in 
+ * the 'Market data' list.
+ * @param {Object} item A wrapper for the current DOM node.
  */
 axsQuotes.readAfterHours = function(item) {
   var text = '';
@@ -590,8 +587,7 @@ axsQuotes.readAfterHours = function(item) {
 };
 
 /**
- * Reads and speaks the first element in the first and second items in the 
- * Market data list.
+ * Reads the current quote.
  */
 axsQuotes.readCurrentQuote = function() {
   var elements = axsQuotes.axsJAXObj.evalXPath(axsQuotes.QUOTE_XPATH,
@@ -629,13 +625,14 @@ axsQuotes.parseCurrentQuote = function(element) {
 
   var docTextPhrases = new Array(rate, change, percent, dateAndStatus, time);
   text = axsQuotes.buildTableRowText(docTextPhrases,
-                                  axsQuotes.marketDataDescArray);
+      axsQuotes.marketDataDescArray);
+
   return text;
 };
 
 /**
- * Reads and speaks the item elements in the 'News' list.
- * @param {Object?} item A wrapper for the current DOM node.
+ * Callback handler for reading the 'News' list.
+ * @param {Object} item A wrapper for the current DOM node.
  */
 axsQuotes.readNewsDesc = function(item) {
   var element = item.elem;
@@ -649,8 +646,8 @@ axsQuotes.readNewsDesc = function(item) {
 };
 
 /**
- * Reads and speaks the item elements in the 'Related companies' list.
- * @param {Object?} item A wrapper for the current DOM node.
+ * Callback handler for reading the 'Related companies' list.
+ * @param {Object} item A wrapper for the current DOM node.
  */
 axsQuotes.readRelCompDesc = function(item) {
   var element = item.elem;
@@ -691,7 +688,7 @@ axsQuotes.readRelCompDesc = function(item) {
  * Callback handler for reading the 'Income statement in millions of
  * US dollars', 'Balance sheet in millions of US dollars', Cash flow in
  * millions of US dollars' lists.
- * @param {Object?} item A wrapper for the current DOM node.
+ * @param {Object} item A wrapper for the current DOM node.
  */
 axsQuotes.readFinancialCompDesc = function(item) {
   var element = item.elem;
@@ -714,13 +711,14 @@ axsQuotes.readFinancialCompDesc = function(item) {
                               twoYearsValue);
 
   var rowText = axsQuotes.buildTableRowText(columnsText,
-                                            axsQuotes.financialsDescArray);
+      axsQuotes.financialsDescArray);
+
   axsQuotes.speakAndGo(element, rowText);
 };
 
 /**
  * Callback handler for reading the 'Key ratios and stats' list.
- * @param {Object?} item A wrapper for the current DOM node.
+ * @param {Object} item A wrapper for the current DOM node.
  */
 axsQuotes.readRatAndStatsCompDesc = function(item) {
   var element = item.elem;
@@ -747,7 +745,7 @@ axsQuotes.readRatAndStatsCompDesc = function(item) {
 /**
  * Callback handler for reading the names and information of the people
  * in the 'Officers and directors' list.
- * @param {Object?} item A wrapper for the current DOM node.
+ * @param {Object} item A wrapper for the current DOM node.
  */
 axsQuotes.readManagementDescription = function(item) {
   var element = item.elem;
@@ -765,7 +763,7 @@ axsQuotes.readManagementDescription = function(item) {
 
 /**
  * Callback handler for reading the events in the 'Events' list.
- * @param {Object?} item A wrapper for the current DOM node.
+ * @param {Object} item A wrapper for the current DOM node.
  */
 axsQuotes.readEventsDesc = function(item) {
   var element = item.elem;
@@ -781,7 +779,7 @@ axsQuotes.readEventsDesc = function(item) {
 /**
  * Callback handler for reading the company website links in the 'Summary' 
  * list.
- * @param {Object?} item A wrapper for the current DOM node.
+ * @param {Object} item A wrapper for the current DOM node.
  */
 axsQuotes.readSummarylinksCompDesc = function(item) {
   var element = item.elem;
@@ -791,7 +789,7 @@ axsQuotes.readSummarylinksCompDesc = function(item) {
 
 /**
  * Callback handler for reading the company description in the 'Summary' list.
- * @param {Object?} item A wrapper for the current DOM node.
+ * @param {Object} item A wrapper for the current DOM node.
  */
 axsQuotes.readSummaryTextCompDesc = function(item) {
   var element = item.elem;
