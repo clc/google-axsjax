@@ -21,7 +21,9 @@
 // create namespace
 var axsFinance = {};
 
-//These are strings to be spoken to the user
+/**
+ * Strings to be spoken to the user
+ */
 axsFinance.str = {
   HELP : 'The following shortcut keys are available. ',
   EMPTY : '',
@@ -42,7 +44,7 @@ axsFinance.str = {
   MINUS_ABBR : '-',
   PRCNT_ABBR : '%',
   MLN_ABBR : 'M',
-  BLN_ABBR : 'B',
+  BLN_ABBR : 'B'
 };
 
 /**
@@ -151,9 +153,9 @@ axsFinance.init = function(){
 
   //Add event listeners
   document.addEventListener('keypress', axsFinance.keyHandler, true);
-  document.addEventListener('DOMSubtreeModified', 
-                            axsFinance.DOMSubtreeModifiedHandler, 
-              true);
+  document.addEventListener('DOMSubtreeModified',
+                            axsFinance.DOMSubtreeModifiedHandler,
+                            true);
 
   //Handle the focus in the search box performed by the page script during init
   var searchBox = document.getElementById('searchbox');
