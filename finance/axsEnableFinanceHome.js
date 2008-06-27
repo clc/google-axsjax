@@ -22,89 +22,89 @@
 var axsFinance = {};
 
 //These are strings to be spoken to the user
-axsFinance.HELP = 'The following shortcut keys are available. ';
-
-axsFinance.EMPTY_STRING = '';
-axsFinance.SPACE_STRING = ' ';
-axsFinance.COMPANY_STRING = 'Company ';
-axsFinance.OR = ' or ';
-axsFinance.MKT_CAP_STRING = ' market cap ';
-axsFinance.USD_STRING = ' US dollars ';
-axsFinance.VOLUME_STRING = ' volume ';
-axsFinance.UP_STRING = ' up by ';
-axsFinance.DOWN_STRING = ' down by ';
-axsFinance.PRCNT_STRING = ' percent';
-axsFinance.MLN_STRING = ' million ';
-axsFinance.BLN_STRING = ' billion ';
-axsFinance.CONSUMERS_STRING = 'Consumer ';
-axsFinance.STD_AND_POOR_STRING = "Standard and Poor's 500";
-
-axsFinance.UP_ABR_STRING = '+';
-axsFinance.MINUS_ABR_STRING = '-';
-axsFinance.PRCNT_ABR_STRING = '%';
-axsFinance.MLN_ABR_STRING = 'M';
-axsFinance.BLN_ABR_STRING = 'B';
+axsFinance.str = {
+  HELP : 'The following shortcut keys are available. ',
+  EMPTY : '',
+  SPACE : ' ',
+  COMPANY : 'Company ',
+  OR : ' or ',
+  MKT_CAP : ' market cap ',
+  USD : ' US dollars ',
+  VOLUME : ' volume ',
+  UP : ' up by ',
+  DOWN : ' down by ',
+  PRCNT : ' percent',
+  MLN : ' million ',
+  BLN : ' billion ',
+  CONSUMERS : 'Consumer ',
+  STD_AND_POOR : "Standard and Poor's 500",
+  UP_ABBR : '+',
+  MINUS_ABBR : '-',
+  PRCNT_ABBR : '%',
+  MLN_ABBR : 'M',
+  BLN_ABBR : 'B',
+};
 
 /**
  * Map from prefix characters to strings
  */
 axsFinance.charPrefixMap = new Object();
-axsFinance.charPrefixMap[axsFinance.MINUS_ABR_STRING] = axsFinance.DOWN_STRING;
-axsFinance.charPrefixMap[axsFinance.UP_ABR_STRING] = axsFinance.UP_STRING;
+axsFinance.charPrefixMap[axsFinance.str.MINUS_ABBR] = axsFinance.str.DOWN;
+axsFinance.charPrefixMap[axsFinance.str.UP_ABBR] = axsFinance.str.UP;
 
 /**
  * Map from suffix characters to strings
  */
 axsFinance.charSuffixMap = new Object();
-axsFinance.charSuffixMap[axsFinance.BLN_ABR_STRING] = axsFinance.BLN_STRING;
-axsFinance.charSuffixMap[axsFinance.MLN_ABR_STRING] = axsFinance.MLN_STRING;
-axsFinance.charSuffixMap[axsFinance.PRCNT_ABR_STRING] = axsFinance.PRCNT_STRING;
+axsFinance.charSuffixMap[axsFinance.str.BLN_ABBR] = axsFinance.str.BLN;
+axsFinance.charSuffixMap[axsFinance.str.MLN_ABBR] = axsFinance.str.MLN;
+axsFinance.charSuffixMap[axsFinance.str.PRCNT_ABBR] = axsFinance.str.PRCNT;
 
 
 /**
  * Phrase array for building the trends without the volume section.
  * @type{Array}
  */
-axsFinance.noVolDescArray = new Array(axsFinance.COMPANY_STRING,
-                                      axsFinance.SPACE_STRING,
-                                      axsFinance.MKT_CAP_STRING,
-                                      axsFinance.USD_STRING);
+axsFinance.noVolDescArray = new Array(axsFinance.str.COMPANY,
+                                      axsFinance.str.SPACE,
+                                      axsFinance.str.MKT_CAP,
+                                      axsFinance.str.USD);
 
 /**
  * Phrase array for building the volume of the trends section.
  * @type{Array}
  */
-axsFinance.volDescArray = new Array(axsFinance.COMPANY_STRING,
-                                    axsFinance.VOLUME_STRING,
-                                    axsFinance.USD_STRING +
-                                    ' ' + axsFinance.MKT_CAP_STRING,
-                                    axsFinance.USD_STRING);
+axsFinance.volDescArray = new Array(axsFinance.str.COMPANY,
+                                    axsFinance.str.VOLUME,
+                                    axsFinance.str.USD +
+                                    ' ' + axsFinance.str.MKT_CAP,
+                                    axsFinance.str.USD);
 
 /**
  * Phrase array for building the indecies and currencies section.
  * @type{Array}
  */
-axsFinance.IndAndCurDescArray = new Array(axsFinance.EMPTY_STRING,
-                                          axsFinance.SPACE_STRING,
-                                          axsFinance.EMPTY_STRING,
-                                          axsFinance.OR,
-                                          axsFinance.EMPTY_STRING);
+axsFinance.IndAndCurDescArray = new Array(axsFinance.str.EMPTY,
+                                          axsFinance.str.SPACE,
+                                          axsFinance.str.EMPTY,
+                                          axsFinance.str.OR,
+                                          axsFinance.str.EMPTY);
 /**
  * Phrase array for building the recent quotes section.
  * @type{Array}
  */
-axsFinance.recQuotesDescArray = new Array(axsFinance.EMPTY_STRING,
-                                          axsFinance.SPACE_STRING,
-                                          axsFinance.EMPTY_STRING,
-                                          axsFinance.OR,
-                                          axsFinance.MKT_CAP_STRING,
-                                          axsFinance.USD_STRING);
+axsFinance.recQuotesDescArray = new Array(axsFinance.str.EMPTY,
+                                          axsFinance.str.SPACE,
+                                          axsFinance.str.EMPTY,
+                                          axsFinance.str.OR,
+                                          axsFinance.str.MKT_CAP,
+                                          axsFinance.str.USD);
 
 /**
  * Template for presenting the sector status bar of the market summary section.
  * @type {string}
  */
-axsFinance.SECT_SUM_TMPL_STRING = '. {0} percent of this sector is ' +
+axsFinance.SECT_SUM_TMPL = '. {0} percent of this sector is ' +
     'down. {1} percent of all the companies are down by more than {2} ' +
     'percent. {3} percent of this sector is up. {4} percent  of all the ' +
     'companies are up by more than {5} percent.';
@@ -392,7 +392,7 @@ axsFinance.handleMarketSummaryDescription = function(item) {
 
   var text = headlineNode.textContent + '. ' +
              bylineNode.textContent + '. ' +
-       snippetNode.textContent + '. ';
+             snippetNode.textContent + '. ';
 
   axsFinance.speakAndGo(item.elem, text);
 };
@@ -420,7 +420,7 @@ axsFinance.readTableRowIndicesAndCurrencies = function(item) {
   var columns = item.elem.childNodes;
   textContents[0] = columns[1].textContent;
   if (textContents[0].indexOf('S&P') != -1) {
-    textContents[0] = axsFinance.STD_AND_POOR_STRING;
+    textContents[0] = axsFinance.str.STD_AND_POOR;
   }
   textContents[1] = axsFinance.parseSpecialChars(columns[2].textContent);
   textContents[2] = axsFinance.parseSpecialChars(columns[3].textContent);
@@ -546,7 +546,7 @@ axsFinance.readTableRowSectorSummaryDesc = function(item) {
   textContents[0] = columns[1].textContent;
   var index = textContents[0].indexOf('Cons.');
   if (index != -1) {
-    textContents[0] = axsFinance.CONSUMERS_STRING +
+    textContents[0] = axsFinance.str.CONSUMERS +
                       textContents[0].substring(index + 5);
   }
   textContents[1] = axsFinance.parseSpecialChars(columns[3].textContent);
@@ -580,7 +580,7 @@ axsFinance.readTableRowSectorSummaryDesc = function(item) {
   numericValues[5] = treshold;
 
   //template used due to specific represenation
-  textContents[2] = axsFinance.populateTemplate(axsFinance.SECT_SUM_TMPL_STRING,
+  textContents[2] = axsFinance.populateTemplate(axsFinance.SECT_SUM_TMPL,
                                                 numericValues);
 
   var rowText = axsFinance.buildTableRowText(textContents, null);
@@ -772,7 +772,7 @@ axsFinance.charCodeMap = {
      },
   // ? (question mark)       
   63 : function() {
-       var helpStr = axsFinance.HELP +
+       var helpStr = axsFinance.str.HELP +
                      axsFinance.axsNavObj.localHelpString() +
                      axsFinance.axsNavObj.globalHelpString();
        axsFinance.axsJAXObj.speakTextViaNode(helpStr);
