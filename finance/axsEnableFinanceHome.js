@@ -45,7 +45,7 @@ axsFinance.PRCNT_ABR_STRING = '%';
 axsFinance.MLN_ABR_STRING = 'M';
 axsFinance.BLN_ABR_STRING = 'B';
 
-/*
+/**
  * Map from prefix characters to strings
  */
 axsFinance.charPrefixMap = new Object();
@@ -63,7 +63,7 @@ axsFinance.charSuffixMap[axsFinance.PRCNT_ABR_STRING] = axsFinance.PRCNT_STRING;
 
 /**
  * Phrase array for building the trends without the volume section.
- * @type{Array?}
+ * @type{Array}
  */
 axsFinance.noVolDescArray = new Array(axsFinance.COMPANY_STRING,
                                       axsFinance.SPACE_STRING,
@@ -72,7 +72,7 @@ axsFinance.noVolDescArray = new Array(axsFinance.COMPANY_STRING,
 
 /**
  * Phrase array for building the volume of the trends section.
- * @type{Array?}
+ * @type{Array}
  */
 axsFinance.volDescArray = new Array(axsFinance.COMPANY_STRING,
                                     axsFinance.VOLUME_STRING,
@@ -82,7 +82,7 @@ axsFinance.volDescArray = new Array(axsFinance.COMPANY_STRING,
 
 /**
  * Phrase array for building the indecies and currencies section.
- * @type{Array?}
+ * @type{Array}
  */
 axsFinance.IndAndCurDescArray = new Array(axsFinance.EMPTY_STRING,
                                           axsFinance.SPACE_STRING,
@@ -91,7 +91,7 @@ axsFinance.IndAndCurDescArray = new Array(axsFinance.EMPTY_STRING,
                                           axsFinance.EMPTY_STRING);
 /**
  * Phrase array for building the recent quotes section.
- * @type{Array?}
+ * @type{Array}
  */
 axsFinance.recQuotesDescArray = new Array(axsFinance.EMPTY_STRING,
                                           axsFinance.SPACE_STRING,
@@ -102,7 +102,7 @@ axsFinance.recQuotesDescArray = new Array(axsFinance.EMPTY_STRING,
 
 /**
  * Template for presenting the sector status bar of the market summary section.
- * @type {string?}
+ * @type {string}
  */
 axsFinance.SECT_SUM_TMPL_STRING = '. {0} percent of this sector is ' +
     'down. {1} percent of all the companies are down by more than {2} ' +
@@ -151,7 +151,9 @@ axsFinance.init = function(){
 
   //Add event listeners
   document.addEventListener('keypress', axsFinance.keyHandler, true);
-  document.addEventListener('DOMSubtreeModified', axsFinance.DOMSubtreeModifiedHandler, true);
+  document.addEventListener('DOMSubtreeModified', 
+                            axsFinance.DOMSubtreeModifiedHandler, 
+              true);
 
   //Handle the focus in the search box performed by the page script during init
   var searchBox = document.getElementById('searchbox');
@@ -171,13 +173,13 @@ axsFinance.init = function(){
 
     "<item index='0' count='1' " +
                   "action='CALL:axsFinance.handleMarketSummaryDescription'>" +
-      "id('home-main')/div[3]/table/tbody/tr/td[1]/descendant::a[not(img) " +
-      "and not(@class='more-rel')] " +
+      "id('home-main')//div[contains(@class, 'news major')]//a[not(img) " +
+      "and not(@class='more-rel')]" +
     "</item>" +
 
     "<item index='1'>" +
-      "id('home-main')/div[3]/table/tbody/tr/td[1]/descendant::a[not(img) " +
-      "and not(@class='more-rel')] " +
+      "id('home-main')//div[contains(@class, 'news major')]//a[not(img) " +
+      "and not(@class='more-rel')]" +
     "</item>" +
 
     "<target title='Related articles'  hotkey='r' onEmpty='No related " +
@@ -362,31 +364,37 @@ axsFinance.DOMSubtreeModifiedHandler = function(evt){
   var oldVal = evt.prevValue;
   var target = evt.target;
   if (target.id == 'ac-list'){
-    for (var i=0,child; child = target.childNodes[i]; i++){
-	  if (child.className == 'selected'){
-	    axsFinance.axsJAXObj.speakNode(child);
-		return;
-	  }
-	}
+    for (var i = 0, child; child = target.childNodes[i]; i++){
+    if (child.className == 'selected'){
+      axsFinance.axsJAXObj.speakNode(child);
+    return;
+    }
+  }
   }
 };
 
 
 /**
- * Reads the market summary description.
- * @param {Object?} item A wrapper for the current DOM node.
+ * Reads the market summary description. This is only invoked
+ * when the top major news story is accessed.
+ * @param {Object} item A wrapper for the current DOM node.
  */
 axsFinance.handleMarketSummaryDescription = function(item) {
-  var element = item.elem;
-  var textContent = element.textContent + '. ';
-  var currentNode = element.parentNode.nextSibling;
-  currentNode = currentNode.nextSibling.nextSibling.nextSibling;
+  var rootNode = document.getElementById('home-main');
+  var xpath = "//div[contains(@class, 'news major')]";
+  var newsSectionNode = axsFinance.axsJAXObj.evalXPath(xpath, rootNode)[0];
+  xpath = "//span[contains(@class, 'name')]";
+  var headlineNode = axsFinance.axsJAXObj.evalXPath(xpath, newsSectionNode)[0];
+  xpath = "//div[contains(@class, 'byline')]";
+  var bylineNode = axsFinance.axsJAXObj.evalXPath(xpath, newsSectionNode)[0];
+  xpath = "//div[contains(@class, 'snippet')]";
+  var snippetNode = axsFinance.axsJAXObj.evalXPath(xpath, newsSectionNode)[0];
 
-  textContent = textContent + axsFinance.normalizeString(currentNode.textContent) + '. ';
-  currentNode = currentNode.nextSibling.nextSibling;
-  textContent = textContent + currentNode.textContent;
+  var text = headlineNode.textContent + '. ' +
+             bylineNode.textContent + '. ' +
+       snippetNode.textContent + '. ';
 
-  axsFinance.speakAndGo(element, textContent);
+  axsFinance.speakAndGo(item.elem, text);
 };
 
 /**
@@ -404,10 +412,10 @@ axsFinance.speakAndGo = function(element, text) {
 
 /**
  * Reads rows from the indices and currencies table.
- * @param {Object?} item A wrapper for the current DOM node.
+ * @param {Object} item A wrapper for the current DOM node.
  */
 axsFinance.readTableRowIndicesAndCurrencies = function(item) {
-  //handle special chracters and order columns
+  //handle special characters and order columns
   var textContents = new Array();
   var columns = item.elem.childNodes;
   textContents[0] = columns[1].textContent;
@@ -443,7 +451,7 @@ axsFinance.searchBoxKeyHandler = function(evt) {
 
 /**
  * Reads rows from the market and portfolio top stories.
- * @param {Object?} item A wrapper for the current DOM node.
+ * @param {Object} item A wrapper for the current DOM node.
  */
 axsFinance.readMktTopStAndPortfRelTopStDesc = function(item) {
   var element = item.elem;
@@ -469,7 +477,7 @@ axsFinance.readMktTopStAndPortfRelTopStDesc = function(item) {
 
 /**
  * Reads rows from the video top stories section.
- * @param {Object?} item A wrapper for the current DOM node.
+ * @param {Object} item A wrapper for the current DOM node.
  */
 axsFinance.readVideoDesc = function(item) {
   var element = item.elem;
@@ -500,7 +508,7 @@ axsFinance.readVideoDesc = function(item) {
 
 /**
  * Reads rows from the video top stories section.
- * @param {Object?} item A wrapper for the current DOM node.
+ * @param {Object} item A wrapper for the current DOM node.
  */
 axsFinance.readTableRowRecentQuotesDesc = function(item) {
   //handle special chracters and order columns
@@ -526,7 +534,7 @@ axsFinance.readTableRowRecentQuotesDesc = function(item) {
 
 /**
  * Reads rows from the sector summary section.
- * @param {Object?} item A wrapper for the current DOM node.
+ * @param {Object} item A wrapper for the current DOM node.
  */
 axsFinance.readTableRowSectorSummaryDesc = function(item) {
   //handle special chracters and order columns
@@ -596,7 +604,7 @@ axsFinance.populateTemplate = function(template, values) {
 
 /**
  * Reads rows from the trends section except the volume subsection.
- * @param {Object?} item A wrapper for the current DOM node.
+ * @param {Object} item A wrapper for the current DOM node.
  */
 axsFinance.readTableRowTrendsNoVolumeDesc = function(item) {
   //handle special chracters and order columns
@@ -608,7 +616,7 @@ axsFinance.readTableRowTrendsNoVolumeDesc = function(item) {
 
 /**
  * Reads rows from the volume subsection of the trends section.
- * @param {Object?} item A wrapper for the current DOM node.
+ * @param {Object} item A wrapper for the current DOM node.
  */
 axsFinance.readTableRowTrendsVolumeDesc = function(item) {
   //handle special chracters and order columns
@@ -620,7 +628,7 @@ axsFinance.readTableRowTrendsVolumeDesc = function(item) {
 
 /**
  * Returns the formatted content of a table row for all subsections of trends.
- * @param {Object?} item A wrapper for the current DOM node.
+ * @param {Object} item A wrapper for the current DOM node.
  * @return {Array} The formatted content.
  */
 axsFinance.getTableRowContentArray = function(item) {
@@ -644,11 +652,11 @@ axsFinance.getTableRowContentArray = function(item) {
  * Builds a sentence for presenting (speaking) a table row. The sentence is
  * built by alternating a phrase and a column content. 
  * @param {Array?} textContents Array with the contents of table columns. 
- * @param {Array?} columnDesriptors Array of phrases to be added between the
+ * @param {Array?} columnDescriptors Array of phrases to be added between the
  * column values.
  * @return {string} The assembled sentence.
  */
-axsFinance.buildTableRowText = function(textContents, columnDesriptors) {
+axsFinance.buildTableRowText = function(textContents, columnDescriptors) {
   //check inputs
   if (textContents === null) {
     return '';
@@ -656,13 +664,13 @@ axsFinance.buildTableRowText = function(textContents, columnDesriptors) {
   //assemble text
   var rowText = '';
   for (var i = 0, textContent; textContent = textContents[i]; i++) {
-    if (columnDesriptors !== null && i < columnDesriptors.length) {
-      rowText = rowText + columnDesriptors[i];
+    if (columnDescriptors !== null && i < columnDescriptors.length) {
+      rowText = rowText + columnDescriptors[i];
     }
     rowText = rowText + textContents[i];
   }
-  if (columnDesriptors !== null && i < columnDesriptors.length) {
-    rowText = rowText + columnDesriptors[i];
+  if (columnDescriptors !== null && i < columnDescriptors.length) {
+    rowText = rowText + columnDescriptors[i];
   }
   return rowText;
 };
@@ -670,7 +678,6 @@ axsFinance.buildTableRowText = function(textContents, columnDesriptors) {
 /**
  * Replaces phrases (i.e. the entire text), tokens (i.e. words), and symbols
  * (i.e. characters) of the processed text with predefined values (mappings).
- * built by alternating a phrase and a column content. 
  * @param {string} text The text to be processed  
  * @return {string} The text with replaced phrases/tokens/symbols.
  */
