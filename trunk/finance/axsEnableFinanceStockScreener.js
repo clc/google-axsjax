@@ -1263,7 +1263,7 @@ axsStock.buildAndLoadResultTableCNR = function(opt_readFirstResult) {
       var values = new Array(column.textContent, i + 1);
       var filledTmpl;
       filledTmpl = axsStock.populateTemplate(axsStock.CNR_RES_STRING, values);
-      cnrString = cnrString + filledTempl;
+      cnrString = cnrString + filledTmpl;
      }
   }
 
