@@ -454,7 +454,7 @@ axsQuotes.DOMSubtreeModifiedHandler = function(evt){
   if (target.id == 'ac-list'){
     for (var i = 0, child; child = target.childNodes[i]; i++){
       if (child.className == 'selected'){
-        axsFinance.axsJAXObj.speakNode(child);
+        axsQuotes.axsJAXObj.speakNode(child);
         return;
       }
     }

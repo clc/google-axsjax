@@ -22,114 +22,120 @@
 // create namespace
 var axsStock = {};
 
-//String literals
-axsStock.EMPTY_STRING = '';
-axsStock.SYMBOL_STRING = 'Symbol,';
-axsStock.MKT_CAP_STRING = 'Market cap,';
-axsStock.P_E_STRING = 'Price earnings ratio,';
-axsStock.DIVID_STRING = 'Divident yield,';
-axsStock.WEEK_P_STRING = 'percent; 52 week price change,';
-axsStock.PERCENT_STRING = 'percent';
-axsStock.MIN_STRING = 'Min,';
-axsStock.MAX_STRING = 'Max,';
-axsStock.COMPANIES_FOUND_STRING = 'companies found';
-axsStock.WIZ_OP_MSG_STRING = 'Criteria wizard opened';
-axsStock.WIZ_CL_MSG_STRING = 'Criteria wizard closed';
-axsStock.DESCENDING_STRING = 'descending';
-axsStock.ASCENDING_STRING = 'ascending';
-axsStock.RESULTS_FROM_STRING = 'results from';
-axsStock.TO_STRING = 'to';
-axsStock.STOCK_SCR_STRING = 'Stock screener';
-axsStock.RESULTS_STRING = 'Results';
-axsStock.CRIT_ALREADY_STRING = 'Criteria already added';
-axsStock.CRIT_ADDED_STRING = 'Criteria added';
-axsStock.NOT_ADDED_STRING = 'Not added';
-axsStock.STATUS_STRING = 'Status';
-axsStock.DEFINITION_STRING = 'Definition';
+/**
+ * Object that contains all string literal used for enhancing the presentation
+ * @type {Object}
+ */
+axsStock.str = {
+  EMPTY : '',
+  MIN : 'Min,',
+  MAX : 'Max,',
+  COMPANIES_FOUND : 'companies found',
+  WIZ_OP_MSG : 'Criteria wizard opened',
+  WIZ_CL_MSG : 'Criteria wizard closed',
+  DESCENDING : 'descending',
+  ASCENDING : 'ascending',
+  RESULTS_FROM : 'results from',
+  TO : 'to',
+  STOCK_SCR : 'Stock screener',
+  RESULTS : 'Results',
+  CRIT_ALREADY : 'Criteria already added',
+  CRIT_ADDED : 'Criteria added',
+  NOT_ADDED : 'Not added',
+  STATUS : 'Status',
+  DEFINITION : 'Definition',
+  UP : ' up by ',
+  UP_ABR : '+',
+  MINUS : ' minus ',
+  MINUS_ABR : '-',
+  PERCENT_ABR : '%',
+  PERCENT : 'percent',
+  MILION : ' million',
+  MILLION_ABR : 'M',
+  BILLION : ' billion',
+  BILLION_ABR : 'B',
+  EPS : 'E P S',
+  EPS_ABR : 'EPS',
+  WEEK_HIGH : 'Fifty two week high',
+  WEEK_HIGH_ABR : '52w High',
+  WEEK_QC : 'Quote change percent',
+  WEEK_QC_ABR : 'Quote Change (%)',
+  WEEK_LOW : 'Fifty two week low',
+  WEEK_LOW_ABR : '52w Low',
+  WEEK_PC : 'Fifty two week price change percent',
+  WEEK_PC_ABR : '52w Price Change (%)',
+  PE : 'P E ratio',
+  PE_ABR : 'P/E Ratio',
+  FWD_PE_ABR : '1y Fwd P/E',
+  FWD_PE : 'One year forward P E',
+  FIVE_YEAR_PE_ABR : '5y',
+  FIVE_YEAR_PE : '5 year',
+  TEN_YEAR_PE_ABR : '10y',
+  TEN_YEAR_PE : '10 year',
+  APP_NAME : 'Stock screener, ',
+  CRITERIA : 'Criteria',
+  DELETED : 'deleted',
+  ST_SCR_CNR : 'Screener',
+  RES_CNR : 'Results'
+};
 
-axsStock.UP_STRING = ' up by ';
-axsStock.UP_ABR_STRING = '+';
-axsStock.MINUS_STRING = ' minus ';
-axsStock.MINUS_ABR_STRING  = '-';
-axsStock.PRCNT_STRING = ' percent';
-axsStock.PRCNT_ABR_STRING = '%';
-axsStock.MLN_STRING = ' million';
-axsStock.MLN_ABR_STRING = 'M';
-axsStock.BLN_STRING = ' billion';
-axsStock.BLN_ABR_STRING  = 'B';
-axsStock.INC_STRING = 'Incorporated';
-axsStock.INC_ABR_STRING = 'Inc.';
-axsStock.CO_STRING = 'Company';
-axsStock.CO_ABR_STRING = 'Co.';
-axsStock.LTD_STRING = 'Limited';
-axsStock.LTD_ABR_STRING = 'Ltd';
-axsStock.EPS_STRING = 'E P S'; 
-axsStock.EPS_ABR_STRING = 'EPS'; 
-axsStock.WEEK_HIGH_STRING = 'Fifty two week high';
-axsStock.WEEK_HIGH_ABR_STRING = '52w High';
-axsStock.WEEK_QC_STRING = 'Quote change percent';
-axsStock.WEEK_QC_ABR_STRING = 'Quote Change (%)';
-axsStock.WEEK_LOW_STRING = 'Fifty two week low';
-axsStock.WEEK_LOW_ABR_STRING = '52w Low';
-axsStock.WEEK_PC_STRING = 'Fifty two week price change percent';
-axsStock.WEEK_PC_ABR_STRING = '52w Price Change (%)';
-axsStock.PE_STRING = 'P E ratio';
-axsStock.PE_ABR_STRING = 'P/E Ratio';
-axsStock.FWD_PE_ABR_STRING = '1y Fwd P/E';
-axsStock.FWD_PE_STRING = 'One year forward P E';
-axsStock.FY_PE_ABR_STRING = '5y';
-axsStock.FY_PE_STRING = '5 year';
-axsStock.TY_PE_ABR_STRING = '10y';
-axsStock.TY_PE_STRING = '10 year';
-axsStock.APP_NAME_STRING = 'Stock screener, ';
-axsStock.CRITERIA_STRING = 'Criteria';
-axsStock.DELETED_STRING = 'deleted';
-axsStock.ST_SCR_CNR_STRING = 'Screener';
-axsStock.RES_CNR_STRING = 'Results';
-
-//XPath strings
-axsStock.R_TBL_XPATH = 'id("searchresults")/table/tbody';
-axsStock.SS_TBL_XPATH = 'id("criteria_rows_tbody")';
-axsStock.WIZ_OP_LINK_XPATH = 'id("action_links")/a[@class="activelink"]';
-axsStock.WIZ_CL_LINK_XPATH = 'id("add_criteria_wizard")/div/a[1]';
-axsStock.WIZ_CL_SECTION_XPATH = 'id("action_links")';
-axsStock.WIZ_EXPL_XPATH = 'id("add_criteria_wizard")//td[3]';
-axsStock.SUMMARY_XPATH = 'id("searchresultssummary")';
-axsStock.STOCK_SCR_XPATH = 'id("criteria_rows_tbody")/tr[1]/td[1]';
-axsStock.EXPL_NODES_XPATH = '//div[@class="definition_title"]';
-axsStock.CRTITERIA_MAX_XPATH = './..//following-sibling::*/input';
-axsStock.COMPANIES_XPATH = 'id("searchresults")//td[1]/a';
-
-//String templates
+/**
+ * String template
+ * @type {string}
+ */
 axsStock.SORT_ORDER_STRING = 'Column {0} sorted in {1} order.';
 
-//Top section of the Results CNR which is dynamically generated
+/**
+ * Top section of the Results CNR which is dynamically generated
+ * @type {string}
+ */
 axsStock.CNR_RES_TOP_STRING = "<cnr next='RIGHT l' prev='LEFT h'>" + '\n' +
-    
+
     "<target title='Go to the stock screener section' hotkey='s' " +
-        "action='CALL:axsStock.loadStockScreenerCNRAndScroll'>" +
+        "action='CALL:axsStock.loadStockScreenerCNRAndPosition'>" +
       "/html" +
     "</target>" +
-    
+
     "<target title='Search company' hotkey='f' " +
-        "action='CALL:axsStock.goToCompanyRow'>" +
+        "action='CALL:axsStock.goToRow'>" +
+      "/html" +
+    "</target>" +
+
+    "<target title='Search criteria' hotkey='c' " +
+        "action='CALL:axsStock.goToColumn'>" +
+      "/html" +
+    "</target>" +
+
+    "<target title='Search column value' hotkey='v' " +
+        "action='CALL:axsStock.goToValueInColumn'>" +
+      "/html" +
+    "</target>" +
+
+    "<target title='Search row value' hotkey='z' " +
+        "action='CALL:axsStock.goToValueInRow'>" +
       "/html" +
     "</target>";
-    
-//Bottom section of the Results CNR which is dynamically generated
+
+/**
+ * Bottom section of the Results CNR which is dynamically generated
+ * @type {string}
+ */
 axsStock.CNR_RES_BTM_STRING = "</cnr>";
 
-//Body section of the Results CNR which is a template applied for each column
+/**
+ * Body section of the Results CNR which is a template applied for each column
+ * @type {string}
+ */
 axsStock.CNR_RES_STRING = "<list title='{0}' fwd='DOWN j n' back='UP k p' " +
-		    "type='dynamic'>" +
+        "type='dynamic'>" +
 
-    "<item action='CALL:axsStock.readCriteriaValue'>" +
+    "<item action='CALL:axsStock.readResultCellValue'>" +
       "id('searchresults')/table[@class='results innermargin']//tr/td[{1}]" +
       "[not(@class='top_row') and not(@class='bottom_row')]" +
     "</item>" +
 
     "<target title='Go to section' trigger='listEntry' " +
-        "action='CALL:axsStock.focusOnCurrentTableCell'>" +
+        "action='CALL:axsStock.readResultCellValueListEntry'>" +
       "id('criteria_rows')" +
     "</target>" +
 
@@ -150,12 +156,16 @@ axsStock.CNR_RES_STRING = "<list title='{0}' fwd='DOWN j n' back='UP k p' " +
     "</target>" +
 
     "<target title='Reverse sorting order' hotkey='r' onEmpty='This column is" +
-        "not sortable' action='CALL:axsStock.gotToTopOfListAndClickLink'>" +
+        "not sortable' action='CALL:axsStock.clickSortLinkAndGoTop'>" +
       "id('searchresults')//td[{1}]/a[@class='activelink']" +
     "</target>" +
 
   "</list>";
 
+/**
+ * CNR String for the stock screener controls section
+ * @type {string}
+ */
 axsStock.CNR_ST_SCR_STRING = "<cnr next='RIGHT l' prev='LEFT h'>" +
 
     "<target title='Go to the results section' hotkey='s' " +
@@ -171,9 +181,24 @@ axsStock.CNR_ST_SCR_STRING = "<cnr next='RIGHT l' prev='LEFT h'>" +
     "<target title='Reset to default criteria' hotkey='d'>" +
       "id('action_links')//a[not(@class)]" +
     "</target>" +
-    
+
     "<target title='Search company' hotkey='f' " +
-        "action='CALL:axsStock.goToCompanyRow'>" +
+        "action='CALL:axsStock.goToRow'>" +
+      "/html" +
+    "</target>" +
+
+    "<target title='Search criteria' hotkey='c' " +
+        "action='CALL:axsStock.goToColumn'>" +
+      "/html" +
+    "</target>" +
+
+    "<target title='Search column value' hotkey='v' " +
+        "action='CALL:axsStock.goToValueInColumn'>" +
+      "/html" +
+    "</target>" +
+
+    "<target title='Search row value' hotkey='z' " +
+        "action='CALL:axsStock.goToValueInRow'>" +
       "/html" +
     "</target>" +
 
@@ -237,7 +262,7 @@ axsStock.CNR_ST_SCR_STRING = "<cnr next='RIGHT l' prev='LEFT h'>" +
     "<list title='Criteria list' next='DOWN j' prev='UP k' fwd='n' back='p' " +
         "type='dynamic'>" +
 
-      "<item action='CALL:axsStock.readStockScreenrDesc'>" +
+      "<item action='CALL:axsStock.readCriteriaDesc'>" +
         "id('criteria_rows_tbody')/tr[not(.//b)]" +
       "</item>" +
 
@@ -247,7 +272,7 @@ axsStock.CNR_ST_SCR_STRING = "<cnr next='RIGHT l' prev='LEFT h'>" +
       "</target>" +
 
       "<target title='Delete criteria' hotkey='DEL' onEmpty='This element is " +
-          "not a criteria' action='CALL:axsStock.deleteCriteria'>" +
+          "not a criteria' action='CALL:axsStock.removeCriteria'>" +
         ".//img[not(@id) and @class='activelink']" +
       "</target>" +
 
@@ -255,10 +280,10 @@ axsStock.CNR_ST_SCR_STRING = "<cnr next='RIGHT l' prev='LEFT h'>" +
           "not a criteria' action='CALL:axsStock.focusOnCriteriaRangeInput'>" +
         "/html" +
       "</target>" +
- 
+
       "<target title='Explain criteria' hotkey='e' onEmpty='This element is " +
           "not a criteria and has no explanation' " +
-          "action='CALL:axsStock.readHelpDesc'>" +
+          "action='CALL:axsStock.readCriteriaHelp'>" +
         ".//img[@id and @class='activelink']/.." +
       "</target>" +
 
@@ -277,7 +302,7 @@ axsStock.CNR_ST_SCR_STRING = "<cnr next='RIGHT l' prev='LEFT h'>" +
       "</target>" +
 
       "<target title='Add selected criteria' hotkey='ENTER' " +
-          "action='CALL:axsStock.addSelectedCriteria'>" +
+          "action='CALL:axsStock.addCriteria'>" +
         "id('criteria_button')/button" +
       "</target>" +
 
@@ -296,7 +321,7 @@ axsStock.CNR_ST_SCR_STRING = "<cnr next='RIGHT l' prev='LEFT h'>" +
       "</target>" +
 
       "<target title='Add selected criteria' hotkey='ENTER' " +
-          "action='CALL:axsStock.addSelectedCriteria'>" +
+          "action='CALL:axsStock.addCriteria'>" +
         "id('criteria_button')/button" +
       "</target>" +
 
@@ -315,7 +340,7 @@ axsStock.CNR_ST_SCR_STRING = "<cnr next='RIGHT l' prev='LEFT h'>" +
       "</target>" +
 
       "<target title='Add selected criteria' hotkey='ENTER' " +
-          "action='CALL:axsStock.addSelectedCriteria'>" +
+          "action='CALL:axsStock.addCriteria'>" +
         "id('criteria_button')/button" +
       "</target>" +
 
@@ -334,7 +359,7 @@ axsStock.CNR_ST_SCR_STRING = "<cnr next='RIGHT l' prev='LEFT h'>" +
       "</target>" +
 
       "<target title='Add selected criteria' hotkey='ENTER' " +
-          "action='CALL:axsStock.addSelectedCriteria'>" +
+          "action='CALL:axsStock.addCriteria'>" +
         "id('criteria_button')/button" +
       "</target>" +
 
@@ -353,7 +378,7 @@ axsStock.CNR_ST_SCR_STRING = "<cnr next='RIGHT l' prev='LEFT h'>" +
       "</target>" +
 
       "<target title='Add selected criteria' hotkey='ENTER' " +
-          "action='CALL:axsStock.addSelectedCriteria'>" +
+          "action='CALL:axsStock.addCriteria'>" +
         "id('criteria_button')/button" +
       "</target>" +
 
@@ -372,7 +397,7 @@ axsStock.CNR_ST_SCR_STRING = "<cnr next='RIGHT l' prev='LEFT h'>" +
       "</target>" +
 
       "<target title='Add selected criteria' hotkey='ENTER' " +
-          "action='CALL:axsStock.addSelectedCriteria'>" +
+          "action='CALL:axsStock.addCriteria'>" +
         "id('criteria_button')/button" +
       "</target>" +
 
@@ -391,7 +416,7 @@ axsStock.CNR_ST_SCR_STRING = "<cnr next='RIGHT l' prev='LEFT h'>" +
       "</target>" +
 
       "<target title='Add selected criteria' hotkey='ENTER' " +
-          "action='CALL:axsStock.addSelectedCriteria'>" +
+          "action='CALL:axsStock.addCriteria'>" +
         "id('criteria_button')/button" +
       "</target>" +
 
@@ -410,7 +435,7 @@ axsStock.CNR_ST_SCR_STRING = "<cnr next='RIGHT l' prev='LEFT h'>" +
       "</target>" +
 
       "<target title='Add selected criteria' hotkey='ENTER' " +
-          "action='CALL:axsStock.addSelectedCriteria'>" +
+          "action='CALL:axsStock.addCriteria'>" +
         "id('criteria_button')/button" +
       "</target>" +
 
@@ -429,7 +454,7 @@ axsStock.CNR_ST_SCR_STRING = "<cnr next='RIGHT l' prev='LEFT h'>" +
       "</target>" +
 
       "<target title='Add selected criteria' hotkey='ENTER' " +
-          "action='CALL:axsStock.addSelectedCriteria'>" +
+          "action='CALL:axsStock.addCriteria'>" +
         "id('criteria_button')/button" +
       "</target>" +
 
@@ -440,6 +465,7 @@ axsStock.CNR_ST_SCR_STRING = "<cnr next='RIGHT l' prev='LEFT h'>" +
 /**
  * Stores the last position in the stock screener section to which 
  * the focus should return after leaving the results section.
+ * @type {Object?}
  */
 axsStock.lastStockScreenerPosition = null;
 
@@ -453,28 +479,33 @@ axsStock.previousIdx = -1;
 /**
  * Stores the last visited criteria row. Needed for reseting the row to its
  * default visual representation upon leaving the criteria list.
+ * @type {Object?}
  */
 axsStock.lastCriteriaRow = null;
 
 /**
  * Buffer for queuing TTS messages 
+ * @type {string} 
  */
 axsStock.searchSummary = '';
 
 /**
  * Array for presenting the stock screener description
+ * @type {Array}
  */
-axsStock.stockScreenerDescArray = new Array(axsStock.EMPTY_STRING,
-                                            axsStock.MIN_STRING,
-                                            axsStock.MAX_STRING);
-                                            
+axsStock.stockScreenerDescArray = new Array(axsStock.str.EMPTY,
+                                            axsStock.str.MIN,
+                                            axsStock.str.MAX);
+
 /**
  * Flag indicating completion of the initial loading of the page
+ * @type {boolean} 
  */
 axsStock.initialLoadComplete = false;
 
 /**
- * Indicates which CNR file is currently loaded (criteria or results)
+ * Indicates which CNR file is currently loaded (criteria or results) 
+ * @type {string}
  */
 axsStock.currentCNRfile = '';
 
@@ -482,34 +513,32 @@ axsStock.currentCNRfile = '';
  * Map from phrases to phrases
  */
 axsStock.phrasesMap = new Object();
-axsStock.phrasesMap[axsStock.INC_ABR_STRING] = axsStock.INC_STRING;
-axsStock.phrasesMap[axsStock.CO_ABR_STRING] = axsStock.CO_STRING;
-axsStock.phrasesMap[axsStock.LTD_ABR_STRING] = axsStock.LTD_STRING;
-axsStock.phrasesMap[axsStock.PE_ABR_STRING] = axsStock.PE_STRING;
-axsStock.phrasesMap[axsStock.FWD_PE_ABR_STRING] = axsStock.FWD_PE_STRING;
-axsStock.phrasesMap[axsStock.EPS_ABR_STRING] = axsStock.EPS_STRING;
-axsStock.phrasesMap[axsStock.WEEK_HIGH_ABR_STRING] = axsStock.WEEK_HIGH_STRING;
-axsStock.phrasesMap[axsStock.WEEK_QC_ABR_STRING] = axsStock.WEEK_QC_STRING;
-axsStock.phrasesMap[axsStock.WEEK_LOW_ABR_STRING] = axsStock.WEEK_LOW_STRING;
-axsStock.phrasesMap[axsStock.WEEK_PC_ABR_STRING] = axsStock.WEEK_PC_STRING;
-axsStock.phrasesMap[axsStock.PE_ABR_STRING] = axsStock.PE_STRING;
-axsStock.phrasesMap[axsStock.FY_PE_ABR_STRING] = axsStock.FY_PE_STRING;
-axsStock.phrasesMap[axsStock.TY_PE_ABR_STRING] = axsStock.TY_PE_STRING;
+axsStock.phrasesMap[axsStock.str.PE_ABR] = axsStock.str.PE;
+axsStock.phrasesMap[axsStock.str.FWD_PE_ABR] = axsStock.str.FWD_PE;
+axsStock.phrasesMap[axsStock.str.EPS_ABR] = axsStock.str.EPS;
+axsStock.phrasesMap[axsStock.str.WEEK_HIGH_ABR] = axsStock.str.WEEK_HIGH;
+axsStock.phrasesMap[axsStock.str.WEEK_QC_ABR] = axsStock.str.WEEK_QC;
+axsStock.phrasesMap[axsStock.str.WEEK_LOW_ABR] = axsStock.str.WEEK_LOW;
+axsStock.phrasesMap[axsStock.str.WEEK_PC_ABR] = axsStock.str.WEEK_PC;
+axsStock.phrasesMap[axsStock.str.FIVE_YEAR_PE_ABR] = axsStock.str.FIVE_YEAR_PE;
+axsStock.phrasesMap[axsStock.str.TEN_YEAR_PE_ABR] = axsStock.str.TEN_YEAR_PE;
 
-/*
+/**
  * Map from prefix characters to strings
+ * @type {Object}
  */
 axsStock.charPrefixMap = new Object();
-axsStock.charPrefixMap[axsStock.MINUS_ABR_STRING] = axsStock.MINUS_STRING;
-axsStock.charPrefixMap[axsStock.UP_ABR_STRING] = axsStock.UP_STRING;
+axsStock.charPrefixMap[axsStock.str.MINUS_ABR] = axsStock.str.MINUS;
+axsStock.charPrefixMap[axsStock.str.UP_ABR] = axsStock.str.UP;
 
 /**
  * Map from suffix characters to strings
+ * @type {Object}
  */
 axsStock.charSuffixMap = new Object();
-axsStock.charSuffixMap[axsStock.BLN_ABR_STRING] = axsStock.BLN_STRING;
-axsStock.charSuffixMap[axsStock.MLN_ABR_STRING] = axsStock.MLN_STRING;
-axsStock.charSuffixMap[axsStock.PRCNT_ABR_STRING] = axsStock.PRCNT_STRING;
+axsStock.charSuffixMap[axsStock.str.BILLION_ABR] = axsStock.str.BILLION;
+axsStock.charSuffixMap[axsStock.str.MILLION_ABR] = axsStock.str.MILION;
+axsStock.charSuffixMap[axsStock.str.PERCENT_ABR] = axsStock.str.PERCENT;
 
 /**
  * Map from watched nodes to methods
@@ -520,7 +549,7 @@ axsStock.watchedNodeToFuncMap = new Object();
  * Map for flags idicating if a handler for an event has been triggered
  */
 axsStock.watchedNodeFuncEnabledMap = new Object();
-   
+
 /**
  * These are strings to be spoken to the user
  */
@@ -530,6 +559,11 @@ axsStock.HELP = 'The following shortcut keys are available. ';
  * Time out for processing events accepted by watched nodes
  */
 axsStock.EVT_HANDL_TIMEOUT_INT = 100;
+
+/**
+ * Interval for polling if the results have been loaded
+ */
+axsStock.WAIT_RESULTS_RETRY_INTERVAL_INT = 200;
 
 /**
  * The AxsJAX object that will do the tickling and speaking.
@@ -572,7 +606,7 @@ axsStock.initialResultsTimeout = 4000;
  * Used to determine the direction of CNR inter list traversal. Since
  * AxsJAX still does not provide a mechanism for removing and adding lists,
  * the lists unrelated to the current section are skipped iteratively. 
- * @type string
+ * @type string?
  */
 axsStock.lastListNavigationKey = null;
 
@@ -584,10 +618,29 @@ axsStock.lastListNavigationKey = null;
 axsStock.wizardOpened = false;
 
 /**
+ * Node observed for mutation event that occurs when the results are loaded
+ * @type {Object} 
+ */
+axsStock.watchedNodeResults = new Object();
+
+/**
+ * Node observed for mutation event that occurs when the criteria 
+ * list is loaded 
+ * @type {Object}
+ */
+axsStock.watchedNodeCritList = new Object();
+
+/**
+ * Max timeout in wiating for data loading (obtained via AJAX call)
+ * @type number
+ */
+axsStock.waitMaxTimeout = 2000;
+
+/**
  * Initializes the AxsJAX script for Google finance - quotes page.
  */
 axsStock.init = function() {
-	//Initialie the AxsJAX framework utilities
+  //Initialie the AxsJAX framework utilities
   axsStock.axsJAXObj = new AxsJAX(true);
   axsStock.axsNavObj = new AxsNav(axsStock.axsJAXObj);
   axsStock.axsLensObj = new AxsLens(axsStock.axsJAXObj);
@@ -602,58 +655,122 @@ axsStock.init = function() {
   document.addEventListener('DOMNodeInserted',
                             axsStock.nodeInsertedOrRemovedHandler,
                             true);
-  
+  document.addEventListener('DOMSubtreeModified',
+                            axsStock.DOMSubtreeModifiedHandler,
+                            true);
+
   axsStock.loadStockScreenerCNR();
 
   //Some nodes in the page are watched for specific events
   axsStock.loadWatchedNodes();
-  
+
   //Some stylesheets are modified for improving presentantion
   axsStock.customizeStyleSheets();
 };
 
 /**
- * Positions the user in the result table row that corresponds to
- * the company found during the power key search.
+ * Handler for added and removed nodes in the document. If the node,
+ * source of the event, is mapped to a function, the function is
+ * executed. Otherwise, no action is taken.
+ * @param {Event} evt DOMNodeRemoved or DOMNodeInserted event
  */
-axsStock.pkSameColumnSearchHandler = function(command, index, id, args) {
-  if (axsStock.currentCNRfile == axsStock.ST_SCR_CNR_STRING) {
-    axsStock.buildAndLoadResultTableCNR(); 
-    axsStock.axsNavObj.navListIdx = 0;
-  }
-  axsStock.axsNavObj.lastItem = null;
-  var listIndex = axsStock.axsNavObj.navListIdx;
-  axsStock.axsNavObj.navItemIdxs[listIndex] = index;
-      
-  var item = axsStock.axsNavObj.currentItem();
-  axsStock.axsNavObj.actOnItem(item);
+axsStock.nodeInsertedOrRemovedHandler = function(evt) {
+  var target = evt.target;
+  //Add listeners to the input fields of each added criteria row (node)
+  if (evt.type == 'DOMNodeInserted' && target.tagName == 'TR') {
 
-  axsStock.pkObj.updateCompletionField('hidden', true, 40, 20);
+   var minInput = target.childNodes[1].firstChild;
+    minInput.addEventListener('keypress',
+                               axsStock.criteriaInputKeyHandler,
+                               false);
+
+    var maxInput = target.childNodes[3].firstChild;
+    maxInput.addEventListener('keypress',
+                              axsStock.criteriaInputKeyHandler,
+                              false);
+
+    minInput.addEventListener('focus', axsStock.focusEventHandler, false);
+
+    //Change inputs' titles. The screen reader will read graspable text upon TAB
+    var criteria = target.childNodes[0].textContent;
+    criteria = axsStock.parseSpecChrsAndTkns(criteria) + ', ';
+    minInput.title = criteria + ' ' + axsStock.str.MIN;
+    maxInput.title = criteria + ' ' + axsStock.str.MAX;
+  }
+
+  var watchedNode = target.parentNode;
+  var functionMapping = axsStock.watchedNodeToFuncMap[watchedNode];
+  if (functionMapping) {
+    axsStock.executeMappedFunc(functionMapping, evt);
+  }
 };
 
 /**
- * Positions the focus on the company found by PowerKey
+ * Handler for the focus event of the min edit field of the criteria.
+ * Needed for avoiding reading of the first input field upon the page
+ * initialziation.
+ * @param {Event} evt A focus event
  */
-axsStock.goToCompanyRow = function() {
-	axsStock.pkObj = new PowerKey('resultsList', axsStock.axsJAXObj);
-  var body = axsStock.axsJAXObj.getActiveDocument().body;
-  axsStock.pkObj.createCompletionField(body,
-                                    30,
-                                    axsStock.pkSameColumnSearchHandler,
-                                    null,
-                                    null,
-                                    false);
-  axsStock.pkObj.setAutoHideCompletionField(true);
-  PowerKey.setDefaultCSSStyle();
-	
-  var companyNameLinks = axsStock.axsJAXObj.evalXPath(axsStock.COMPANIES_XPATH,
-                                                      document.body);        
-  var companyNames  = new Array();
-  for (var i = 0, companyName; companyName = companyNameLinks[i]; i++) {
-    companyNames.push(companyName.textContent);
+axsStock.focusEventHandler = function(evt) {
+  if (!axsStock.initialLoadComplete) {
+    //Iterrupt the screen reader
+    axsStock.axsJAXObj.speakTextViaNode(' ');
+    axsStock.axsJAXObj.lastFocusedNode.blur();
   }
-  axsStock.pkObj.setCompletionList(companyNames);
-  axsStock.pkObj.updateCompletionField('visible', true, 40, 20);
+};
+
+/**
+ * Hadles the ENTER key for finalizing the query i.e. to announce the search
+ * resutls.
+ * NOTE: These results are updated more often than are reported
+ * @param {Event} evt A keypress event
+ */
+axsStock.criteriaInputKeyHandler = function(evt) {
+  var target = evt.currentTarget;
+  if (evt.keyCode == 13) { // ENTER
+      axsStock.axsJAXObj.lastFocusedNode.blur();
+
+      //We finalize after ENTER - the application finalizes on lost fucus
+      window.setTimeout(function() {
+                          axsStock.searchSummary = '';
+                          axsStock.generateSummary();
+                          axsStock.announceSummary();
+                        },
+                        200);
+  }
+};
+
+/**
+ * Handles the DOMSubtreeModified event.
+ * This event happens when the selected node for the
+ * auto-complete search box changes.
+ * @param {Event} evt The DOMSubtreeModified event
+ */
+axsStock.DOMSubtreeModifiedHandler = function(evt) {
+  var attrib = evt.attrName;
+  var newVal = evt.newValue;
+  var oldVal = evt.prevValue;
+  var target = evt.target;
+  if (target.id == 'ac-list') {
+    for (var i = 0, child; child = target.childNodes[i]; i++) {
+      if (child.className == 'selected') {
+        axsStock.axsJAXObj.speakNode(child);
+      return;
+      }
+    }
+  }
+};
+
+/**
+ * Loads the CNR for the stock screener section and moves to
+ * the last postition in the list (if such exist) or to the
+ * beginning of the list.
+ */
+axsStock.loadStockScreenerCNRAndPosition = function() {
+  axsStock.loadStockScreenerCNR();
+
+  //Go to the last position in the Stock screener CNR
+  axsStock.restoreLastPosition();
 };
 
 /**
@@ -664,38 +781,40 @@ axsStock.goToCompanyRow = function() {
 axsStock.loadWatchedNodes = function() {
   //Watched node for the Stock Screener section
   var axsJAXObj = axsStock.axsJAXObj;
-  var stockScrParents = axsJAXObj.evalXPath(axsStock.SS_TBL_XPATH,
-                                            document.body);
-  
-  //Listeners which should be executed upon event in intervals (after a timeout)
-  var stockScrParent = stockScrParents[0];
-  var functionMapping = function() {                    
-  	                      axsStock.refreshStockCriteria();
-  	                    };
-  axsStock.watchedNodeToFuncMap[stockScrParent] = functionMapping;
+  var xpath = 'id("criteria_rows_tbody")';
+  var stockScrParents = axsJAXObj.evalXPath(xpath, document.body);
+
+  //Listeners which should be executed upon event in intervals 
+  //(after a timeout)
+  axsStock.watchedNodeResults = stockScrParents[0];
+  var funcMapping = function() {
+                          axsStock.refreshStockCriteria();
+                        };
+  axsStock.watchedNodeToFuncMap[axsStock.watchedNodeResults] = funcMapping;
 
   //Watched node for resuts change
-  var summaryParents = axsJAXObj.evalXPath(axsStock.SUMMARY_XPATH,
-                                           document.body);
-  var summaryParent = summaryParents[0];
-  functionMapping = function() {
-  	                  if (axsStock.currentCNRfile == axsStock.RES_CNR_STRING) {
-  	                    axsStock.refreshAllResultLists();
-  	                  }
-  	                  axsStock.generateSummary();
-  	                  /*
-  	                   * In the init phase result summary is spoken as soon as
-  	                   * it is generated. We explicitly control when the summary 
-  	                   * is spoken.
-  	                   */
-  	                  if (!axsStock.initialLoadComplete) {
-  	                  	axsStock.searchSummary = axsStock.APP_NAME_STRING + 
-  	                  	    axsStock.searchSummary;
-  	                  	axsStock.announceSummary();
-  	                  	axsStock.initialLoadComplete = true;
-  	                  }
-  	                };
-  axsStock.watchedNodeToFuncMap[summaryParent] = functionMapping;
+  xpath = 'id("searchresultssummary")';
+  var summaryParents = axsJAXObj.evalXPath(xpath, document.body);
+  axsStock.watchedNodeCritList = summaryParents[0];
+
+  funcMapping = function() {
+                  if (axsStock.currentCNRfile == axsStock.str.RES_CNR) {
+                    axsStock.refreshAllResultLists();
+                  }
+                  axsStock.generateSummary();
+                  /*
+                   * In the page init result summary is spoken as soon as
+                   * it is generated. We explicitly control when the summary
+                   * is spoken.
+                   */
+                  if (!axsStock.initialLoadComplete) {
+                    axsStock.searchSummary = axsStock.str.APP_NAME +
+                        axsStock.searchSummary;
+                    axsStock.announceSummary();
+                    axsStock.initialLoadComplete = true;
+                  }
+                };
+  axsStock.watchedNodeToFuncMap[axsStock.watchedNodeCritList] = funcMapping;
 };
 
 /**
@@ -708,26 +827,27 @@ axsStock.customizeStyleSheets = function() {
 };
 
 /**
- * Focuses on a drop down list and skips it if the list is not 
- * relevant in the current context.
- * @param {Object?} item A wrapper for the current DOM node.
+ * Focuses on a drop down list and skips it if the list is not
+ * relevant in the current context (if the criteria wizard is open).
+ * @param {Object} item A wrapper for the current DOM node.
  */
 axsStock.focusOnDropDownList = function(item) {
   if (axsStock.wizardOpened) {
     axsStock.skipList();
-    return; 
+    return;
   }
   var element = item.elem;
   axsStock.axsLensObj.view(element.parentNode);
-  var listTitle = axsStock.normalizeString(element.previousSibling.textContent);
-  axsStock.axsJAXObj.speakTextViaNode(listTitle);  
+  var listTitle = element.previousSibling.textContent;
+  listTitle = axsStock.normalizeString(listTitle);
+  axsStock.axsJAXObj.speakTextViaNode(listTitle);
   element.scrollIntoView(true);
   axsStock.axsJAXObj.markPosition(element);
 };
 
 /**
  * Reads the values in a drop down lists (Region, Exchange, Sector)
- * @param {Object?} item A wrapper for the current DOM node.
+ * @param {Object} item A wrapper for the current DOM node.
  */
 axsStock.readDropDownListItem = function(item) {
   //If the current list is irrelevant in the wizard context - skip it
@@ -743,150 +863,158 @@ axsStock.readDropDownListItem = function(item) {
 };
 
 /**
- * Selects an option from a drop down list. 
- * @param {Object?} item A wrapper for the current DOM node.
+ * Selects an option from a drop down list.
+ * @param {Object} item A wrapper for the current DOM node.
  */
 axsStock.selectDropDownListOption = function(item) {
-	var option = axsStock.axsNavObj.currentItem().elem;
-	option.selected = true;
-	axsStock.axsLensObj.view(null);
+  var option = axsStock.axsNavObj.currentItem().elem;
+  option.selected = true;
+  axsStock.axsLensObj.view(null);
+};
+
+/**
+ * Refreshes the Stock criteria list.
+ */
+axsStock.refreshStockCriteria = function() {
+  axsStock.axsNavObj.refreshList(axsStock.str.STOCK_SCR);
+  window.setTimeout(function() {
+                      axsStock.axsJAXObj.lastFocusedNode.blur();
+                    },
+                    0);
+
+  axsStock.restoreLastPosition();
 };
 
 /**
  * Adds a new selected criteria to the criteria list
+ * @param {Object} item A wrapper for the current DOM node.
  */
-axsStock.addSelectedCriteria = function(item) {
+axsStock.addCriteria = function(item) {
   var element = item.elem;
   //The button is not disabled and made invisible but is moved to (0, 0)
-  var text = axsStock.CRIT_ALREADY_STRING;
+  var text = axsStock.str.CRIT_ALREADY;
   if (element.offsetTop > 0) {
-  	//We want to stay in the criteria wizard
-  	axsStock.lastStockScreenerPosition = null;
-  	
-  	axsStock.axsJAXObj.clickElem(element, false);
-  	axsStock.axsJAXObj.speakTextViaNode('');
-  	text = axsStock.CRIT_ADDED_STRING;
+    //We want to stay in the criteria wizard
+    axsStock.lastStockScreenerPosition = null;
+
+    axsStock.axsJAXObj.clickElem(element, false);
+    axsStock.axsJAXObj.speakTextViaNode('');
+    text = axsStock.str.CRIT_ADDED;
   }
-  axsStock.searchSummary =  text + ', ' + axsStock.searchSummary;
-  window.setTimeout(function() {
-  	                  axsStock.axsJAXObj.lastFocusedNode.blur();
-  	                  axsStock.announceSummary();
-                     },
-                     200);
+  axsStock.searchSummary = text + ', ' + axsStock.searchSummary;
+
+  var func = function() {
+               axsStock.axsLensObj.view(null);
+               axsStock.axsJAXObj.lastFocusedNode.blur();
+               axsStock.announceSummary();
+             };
+
+  axsStock.executeAfterWatchedNodeMappedFunc(axsStock.watchedNodeCritList,
+                                             new Date(),
+                                             func);
 };
 
 /**
- * Reads the current criteria list (in the criterial wizard) and skips
- * lists irrelevant in the criteria wizard context
+ * Removes a criteria and announces the deletion
+ * @param {Object} item A wrapper for the current DOM node.
  */
-axsStock.readCurrentCrtieriaList = function(item) {
-	//Reset the last criteria row (in the criteria list) to its default state
-  axsStock.resetCriteriaRow();
-
-  //Skip and do not announce lists not accessible if the wizard is closed
-	if (!axsStock.wizardOpened) {
-    axsStock.skipList();
-	  return;
-	}
+axsStock.removeCriteria = function(item) {
+  axsStock.searchSummary = '';
+  axsStock.lastStockScreenerPosition = null;
 
   var element = item.elem;
   axsStock.axsJAXObj.clickElem(element, false);
-  var listTitle = axsStock.axsNavObj.currentList().title;
-  axsStock.axsJAXObj.speakTextViaNode(listTitle);
-  axsStock.axsLensObj.view(element.parentNode.parentNode);
+  var criteriaName = element.parentNode.parentNode.firstChild.textContent;
+
+  var func = function() {
+               axsStock.axsLensObj.view(null);
+               var text = axsStock.str.CRITERIA;
+               text = text + ' ' + criteriaName;
+               text = text + ' ' + axsStock.str.DELETED + '. ';
+               axsStock.searchSummary = text + ' ' + axsStock.searchSummary;
+               axsStock.announceSummary();
+             };
+
+  axsStock.executeAfterWatchedNodeMappedFunc(axsStock.watchedNodeCritList,
+                                             new Date(),
+                                             func);
 };
 
 /**
- * Skips a list and goes to the next or previous one depending 
- * on the last inter list navigation key which was pressed.
+ * Reads the description of a criteria from the criteria list.
+ * @param {Object} item A wrapper for the current DOM node.
  */
-axsStock.skipList = function() {
-  var key = axsStock.lastListNavigationKey.charCodeAt(0);
-  var method = axsStock.axsNavObj.topCharCodeMap[key];
-  method();
+axsStock.readCriteriaDesc = function(item) {
+   //If the current list is irrelevant in the wizard context - skip it
+  if (axsStock.wizardOpened) {
+    axsStock.skipList();
+    return;
+  }
+
+  var element = item.elem;
+
+  axsStock.cacheLastPosition();
+
+  //Remove the section explaining the criteria from the view (if present)
+  axsStock.axsJAXObj.clickElem(element, false);
+
+  //Rest the the last criteria row
+  axsStock.resetCriteriaRow();
+  axsStock.lastCriteriaRow = element;
+
+  var criteria = element.childNodes[0].textContent;
+  criteria = axsStock.parseSpecChrsAndTkns(criteria) + ', ';
+  var min = element.childNodes[1].childNodes[0].value;
+  min = axsStock.parseSpecChrsAndTkns(min) + ', ';
+  var max = element.childNodes[3].childNodes[0].value;
+  max = axsStock.parseSpecChrsAndTkns(max) + ', ';
+
+  var columnsText = new Array(criteria, min, max);
+  var rowText = axsStock.buildTableRowText(columnsText,
+      axsStock.stockScreenerDescArray);
+  axsStock.speakAndGo(element.firstChild, rowText);
 };
-
-/**
- * Generates a summary of the search results.
- */
-axsStock.generateSummary = function() {
-	var axsJAXObj = axsStock.axsJAXObj;
-  var summaryParents = axsJAXObj.evalXPath(axsStock.SUMMARY_XPATH,
-                                           document.body);
-  var suffix = '';
-  var summaryResult = summaryParents[0].childNodes[5];
-	if (summaryResult == undefined) {
-		summaryResult = summaryParents[0].childNodes[0];
-	} else {
-		suffix = axsStock.COMPANIES_FOUND_STRING + ', ';
-		suffix = suffix + ' ' + axsStock.RESULTS_FROM_STRING;
-		suffix = suffix + ' ' + summaryParents[0].childNodes[1].textContent;
-		suffix = suffix + ' ' + axsStock.TO_STRING;
-		suffix = suffix + ' ' + summaryParents[0].childNodes[3].textContent;
-	}
-	var text = summaryResult.textContent;
-	text = axsStock.normalizeString(text + ' ' + suffix);
-	axsStock.searchSummary = text + ', ' + axsStock.searchSummary;
-};
-
-/**
- * Reads the search summary message
- */
-axsStock.announceSummary = function() {
-	axsStock.axsJAXObj.speakTextViaNode(axsStock.searchSummary);
-  axsStock.searchSummary = '';
-}
-
-/**
- * Refreshes all lists in the CNR. Such an action is required upon
- * a dynamic change in the data presented by these lists.
- */
-axsStock.refreshAllResultLists = function() {
-	var navArray = axsStock.axsNavObj.navArray;
-	for (var i = 0, l; l = navArray[i]; i++) {
-	  axsStock.axsNavObj.refreshList(navArray[i].title);
-	}
-}
 
 /**
  * Reads the explanation of a certain criteria.
- * @param {Object?} item A wrapper for the current DOM node.
+ * @param {Object} item A wrapper for the current DOM node.
  */
 axsStock.readCriteriaExplanation = function(item) {
   if (!axsStock.wizardOpened) {
     return;
   }
+
   axsStock.axsLensObj.view(null);
-	var element = item.elem;
-	var text = '';
+  var element = item.elem;
+  var text = '';
+  var xpath = 'id("add_criteria_wizard")//td[3]';
   axsStock.axsJAXObj.clickElem(element, false);
-  var descriptions = axsStock.axsJAXObj.evalXPath(axsStock.WIZ_EXPL_XPATH,
-                                                     document.body);
+  var descriptions = axsStock.axsJAXObj.evalXPath(xpath, document.body);
   var descriptionSection = descriptions[0];
-  var message = descriptionSection.childNodes[1].firstChild.nextSibling.textContent;
+  var definition = document.getElementById('criteria_definition').textContent;
   var statusNode = descriptionSection.childNodes[5];
-  var criteriaStatus = axsStock.NOT_ADDED_STRING;
-  
+  var criteriaStatus = axsStock.str.NOT_ADDED;
+
   if (statusNode.className.indexOf('displaynone') == -1) {
-  	criteriaStatus = statusNode.textContent;
+    criteriaStatus = statusNode.textContent;
   }
 
   text = element.textContent + ' ';
-  text = text + ' ' + axsStock.STATUS_STRING + ' ' + criteriaStatus;
-  text = text + ', ' + axsStock.DEFINITION_STRING + ' ' + message;
+  text = text + ' ' + axsStock.str.STATUS + ' ' + criteriaStatus;
+  text = text + ', ' + axsStock.str.DEFINITION + ' ' + definition;
   axsStock.axsJAXObj.speakTextViaNode(text);
   axsStock.axsLensObj.view(descriptions[0]);
 };
 
 /**
- * Moves the focus on the input fields for the currently edited criteria.
- * @param {Object?} item A wrapper for the current DOM node.
+ * Moves the focus in the input fields for the currently edited criteria.
+ * @param {Object} item A wrapper for the current DOM node.
  */
 axsStock.focusOnCriteriaRangeInput = function(item) {
-	var rowElement = axsStock.axsNavObj.currentItem().elem;
-	
-	//Trigger the page event hadler for mouse over a criteria row
-	var event = document.createEvent('MouseEvents');
+  var rowElement = axsStock.axsNavObj.currentItem().elem;
+
+  //Trigger the page event hadler for mouse over a criteria row
+  var event = document.createEvent('MouseEvents');
   event.initMouseEvent('mouseover',
                        false,
                        false,
@@ -903,325 +1031,248 @@ axsStock.focusOnCriteriaRangeInput = function(item) {
                        0,
                        null);
   rowElement.dispatchEvent(event);
-  
-	var minInput = rowElement.childNodes[1].firstChild;
 
-	//Remove the section explaining the criteria from the view (if present)
+  var minInput = rowElement.childNodes[1].firstChild;
+
+  //Remove the section explaining the criteria from the view (if present)
   axsStock.axsJAXObj.clickElem(minInput, false);
-	minInput.focus();
-	minInput.select();
+  minInput.focus();
+  minInput.select();
 
-	//TODO: Refactor tab key fix
+  //TODO: Refactor tab key fix
   axsStock.axsJAXObj.tabKeyFixOn = false;
 };
 
 /**
- * Hadles the ENTER key for finalizing the query i.e. to announce the search
- * resutls to the user.
- * NOTE: These results are updated more often than are reported
- * @param {Event?} evt A keypress event
+ * Reads the current criteria list (in the criteria wizard) and skips
+ * lists irrelevant in the criteria wizard context
+ * @param {Object} item A wrapper for the current DOM node.
  */
-axsStock.criteriaInputKeyHandler = function(evt) {
-	var target = evt.currentTarget;
-	if (evt.keyCode == 13) { // ENTER
-	  	axsStock.axsJAXObj.lastFocusedNode.blur();
-	  		
-	  	//We finalize after ENTER - the application finalizes on lost fucus
-	  	window.setTimeout(function() {
-	  		                  axsStock.searchSummary = '';
-	  		                  axsStock.generateSummary();
-	  		                  axsStock.announceSummary();
-	  	                  },
-	  	                  200);
-	}
+axsStock.readCurrentCrtieriaList = function(item) {
+  //Reset the last criteria row (in the criteria list) to its default state
+  axsStock.resetCriteriaRow();
+
+  //Skip and do not announce lists not accessible if the wizard is closed
+  if (!axsStock.wizardOpened) {
+    axsStock.skipList();
+    return;
+  }
+
+  var element = item.elem;
+  axsStock.axsJAXObj.clickElem(element, false);
+  var listTitle = axsStock.axsNavObj.currentList().title;
+  axsStock.axsJAXObj.speakTextViaNode(listTitle);
+  axsStock.axsLensObj.view(element.parentNode.parentNode);
 };
 
 /**
- * Wraps arond an item list traversed with the fwd and back keys
+ * Resets the last visited criteria row (if such exists) to its default
+ * visual representation which is modified when the user focuses on that row.
  */
-axsStock.wrapAround = function(item) {
-	var element = item.elem;
-	if (element.tagName == 'A') {
-		axsStock.axsJAXObj.clickElem(element);
-	} else {
-    var item = axsStock.axsNavObj.currentItem();
-    axsStock.axsNavObj.actOnItem(item);
-	}
-}
-
-/**
- * Refreshes the Stock criteria list.
- */
-axsStock.refreshStockCriteria = function() {
-  axsStock.axsNavObj.refreshList(axsStock.STOCK_SCR_STRING);
-  window.setTimeout(function() {
-  	                  axsStock.axsJAXObj.lastFocusedNode.blur();
-  	                },
-                    0);
-  //Refreshing loses forces the list to be positioned before the first item
-  //Wait for the list to reload                  
-  window.setTimeout(axsStock.restoreLastPosition, 500);
-};
-
-/**
- * Handler for added and removed nodes in the document. If the node,
- * source of the event, is mapped to a function, the functions is 
- * executed. Otherwise, no action is taken.
- */
-axsStock.nodeInsertedOrRemovedHandler = function(evt) {
-	var target = evt.target;
-	//Add listeners to the input fields of each added criteria row (node)
-	if (evt.type == 'DOMNodeInserted' && target.tagName == 'TR') {
-	  //Listeners which should be executed upon every event (no timeout)
-    var minInput = target.childNodes[1].firstChild;
-    minInput.addEventListener('keypress',
-                               axsStock.criteriaInputKeyHandler,
-                               false);
-    var maxInput = target.childNodes[3].firstChild;
-    maxInput.addEventListener('keypress',
-                              axsStock.criteriaInputKeyHandler,
-                              false);
-                                       
-    minInput.addEventListener('focus', axsStock.handleFocusEvent, false);
-                              
-    //Change inputs' titles. The screen reader will read graspable text upon TAB    
-    var criteria = target.childNodes[0].textContent;
-    criteria = axsStock.parseSpecChrsAndTkns(criteria) + ', ';
-    minInput.title = criteria + ' ' + axsStock.MIN_STRING;
-    maxInput.title = criteria + ' ' + axsStock.MAX_STRING;
-	}
-	
-  var watchedNode = target.parentNode;
-  var functionMapping = axsStock.watchedNodeToFuncMap[watchedNode];
-  if (functionMapping) {
-    axsStock.executeMappedFunc(functionMapping, evt);
+axsStock.resetCriteriaRow = function() {
+  //TODO: Refactor tab key fix
+  axsStock.axsJAXObj.tabKeyFixOn = true;
+  if (axsStock.lastCriteriaRow !== null) {
+    axsStock.simulateMouseOutEvent(axsStock.lastCriteriaRow);
   }
 };
 
 /**
- * Handler for the focus event of the min edit fields of the criteria.
- * Needed for avoiding reading of the first input field upon the page 
- * initialziation.
+ * Reads the help (explanation) description for a criteria in the criteria list.
+ * @param {Object} item A wrapper for the current DOM node.
  */
-axsStock.handleFocusEvent = function(evt) {
-	if (!axsStock.initialLoadComplete) {
-		//Iterrupt the screen reader
-	  axsStock.axsJAXObj.speakTextViaNode(' ');
-	  axsStock.axsJAXObj.lastFocusedNode.blur();
-	}
-};
-
-/**
- * Executes a function mapped to a watched node. Since some events are generated
- * too frequently, taking actions on each occurence may cause significant 
- * overhed. The method is setting a triggered flag after an execution of 
- * the function is requested. The flag is cleared after a certain timeout. 
- * Upon the timeout the function is executed. During the timeout no further
- * execution requests for the same function are accepted.
- * @param {Object?} handlingFunction The function to execute 
- */
-axsStock.executeMappedFunc = function(handlingFunction, evt) {
-	if (axsStock.watchedNodeFuncEnabledMap[handlingFunction]) {
-	  return;
-	}
-	axsStock.watchedNodeFuncEnabledMap[handlingFunction] = true;
-	var delegatingFunction = function() {
-    axsStock.watchedNodeFuncEnabledMap[handlingFunction] = false;
-    handlingFunction(evt);
-  };
-  window.setTimeout(delegatingFunction, axsStock.EVT_HANDL_TIMEOUT_INT);
-};
-
-/**
- * Deletes a criteria and announces the deletion
- * @param {Object?} item A wrapper for the current DOM node.
- */
-axsStock.deleteCriteria = function(item) {
-	axsStock.searchSummary = '';
-	axsStock.lastStockScreenerPosition = null;
-	
-	var element = item.elem;
-	axsStock.axsJAXObj.clickElem(element);
-	//Wait the results to load
-	window.setTimeout(function() {
-		                  axsStock.axsLensObj.view(null);
-		                  var text = axsStock.CRITERIA_STRING + ' ';
-                      text = text + element.parentNode.parentNode.firstChild.
-                          textContent;
-                      text = text + ' ' + axsStock.DELETED_STRING +'.';
-                      axsStock.searchSummary = text + ' ' + 
-                          axsStock.searchSummary;
-		                  axsStock.announceSummary();
-	                  },
-	                  500);
-};
-
-/**
- * Opens and closes the criteria wizard.
- * @param {Object?} item A wrapper for the current DOM node.
- */
-axsStock.openCloseWizard = function(item) {
-	var element = item.elem;
-	var visible = false;
-	var text = axsStock.WIZ_OP_MSG_STRING;
-	var xPath = axsStock.WIZ_OP_LINK_XPATH ;
-	axsStock.wizardOpened = true;
-	
-  if (element.style.display == 'none') {
-		 xPath = axsStock.WIZ_CL_LINK_XPATH ;
-		 text = axsStock.WIZ_CL_MSG_STRING;
-		 axsStock.wizardOpened = false;
-	}
-	
-	var links = axsStock.axsJAXObj.evalXPath(xPath, document.body);
-  axsStock.axsJAXObj.clickElem(links[0], false);
-  axsStock.axsJAXObj.speakTextViaNode(text);
-  axsStock.axsLensObj.view(null);
+axsStock.readCriteriaHelp = function(item) {
+  var element = item.elem;
+  var descTitleNode = element.childNodes[0];
+  var linkNode = element.childNodes[1];
+  axsStock.axsJAXObj.clickElem(linkNode, false);
+  var xpath = '//div[@class="definition_title"]';
+  var explNodes = axsStock.axsJAXObj.evalXPath(xpath, document.body);
+  for (var i = 0, node; node = explNodes[i]; i++) {
+    var explTitleNode = explNodes[i].firstChild;
+    var descTitleText = axsStock.normalizeString(descTitleNode.textContent);
+    var explTitleText = axsStock.normalizeString(explTitleNode.textContent);
+    if (descTitleText == explTitleText) {
+      var explTextNode = explNodes[i].nextSibling;
+      axsStock.axsJAXObj.speakTextViaNode(explTextNode.textContent);
+      break;
+    }
+  }
 };
 
 /**
  * Refreshes the stock criteria list and announces its title.
  */
 axsStock.refreshStockCriteriaCNRAndAnnounceList = function() {
-	//Rest the the last criteria row - current row in the criteria list
+  //Rest the the last criteria row - current row in the criteria list
   axsStock.resetCriteriaRow();
-	
-	//If the current list is irrelevant in the wizard context - skip it
-	if (axsStock.wizardOpened) {
-		axsStock.skipList();
+
+  //If the current list is irrelevant in the wizard context - skip it
+  if (axsStock.wizardOpened) {
+    axsStock.skipList();
     return;
   }
-  
-	var listTitle = axsStock.axsNavObj.currentList().title;
-	axsStock.axsJAXObj.speakTextViaNode(listTitle);
-	var critHeaders = axsStock.axsJAXObj.evalXPath(axsStock.STOCK_SCR_XPATH,
-                                                 document.body);
-	var critHeader = critHeaders[0];
-	axsStock.axsLensObj.view(critHeader);
-	critHeader.scrollIntoView(true);
-  axsStock.axsJAXObj.markPosition(critHeader);
-};
 
-/**
- * Loads the CNR for the stock screener section and moves to
- * the first list of this section.
- */
-axsStock.loadStockScreenerCNRAndScroll = function() {
-	axsStock.loadStockScreenerCNR();
-	
-	//Go to the last position in the Stock screener CNR
-  axsStock.restoreLastPosition();
+  var listTitle = axsStock.axsNavObj.currentList().title;
+  axsStock.axsJAXObj.speakTextViaNode(listTitle);
+  var xpath = 'id("criteria_rows_tbody")/tr[1]/td[1]';
+  var critHeaders = axsStock.axsJAXObj.evalXPath(xpath, document.body);
+  var critHeader = critHeaders[0];
+  axsStock.axsLensObj.view(critHeader);
+  critHeader.scrollIntoView(true);
+  axsStock.axsJAXObj.markPosition(critHeader);
 };
 
 /**
  * Loads the CNR for the stock screener
  */
 axsStock.loadStockScreenerCNR = function() {
-	axsStock.currentCNRfile = axsStock.ST_SCR_CNR_STRING;
-	axsStock.axsNavObj.navInit(axsStock.CNR_ST_SCR_STRING , null);
+  axsStock.currentCNRfile = axsStock.str.ST_SCR_CNR;
+  axsStock.axsNavObj.navInit(axsStock.CNR_ST_SCR_STRING, null);
+};
+
+/**
+ * Generates a summary of the search results.
+ */
+axsStock.generateSummary = function() {
+  var axsJAXObj = axsStock.axsJAXObj;
+  var summaryParents = axsJAXObj.evalXPath(axsStock.xpath.SUMMARY,
+                                           document.body);
+  var suffix = '';
+  var summaryResult = summaryParents[0].childNodes[5];
+  if (summaryResult == undefined) {
+    summaryResult = summaryParents[0].childNodes[0];
+  } else {
+    suffix = axsStock.str.COMPANIES_FOUND + ', ';
+    suffix = suffix + ' ' + axsStock.str.RESULTS_FROM;
+    suffix = suffix + ' ' + summaryParents[0].childNodes[1].textContent;
+    suffix = suffix + ' ' + axsStock.str.TO;
+    suffix = suffix + ' ' + summaryParents[0].childNodes[3].textContent;
+  }
+
+  var text = summaryResult.textContent;
+  text = axsStock.normalizeString(text + ' ' + suffix);
+  axsStock.searchSummary = text + ', ' + axsStock.searchSummary;
+};
+
+/**
+ * Reads the search summary message
+ */
+axsStock.announceSummary = function() {
+  axsStock.axsJAXObj.speakTextViaNode(axsStock.searchSummary);
+  axsStock.searchSummary = '';
+};
+
+/**
+ * Executes a function mapped to a watched node. Since some events are generated
+ * too frequently, taking actions on each occurence may cause significant
+ * overhed. The method is setting a triggered flag after an execution of
+ * the function is requested. The flag is cleared upon a certain timeout and
+ * execution of the mapped function. During the timeout no further
+ * execution requests for the same function are accepted.
+ * @param {Function} handlingFunction The function to execute .
+ * @param {Event} evt Event to be propageted to the handlingFunction.
+ */
+axsStock.executeMappedFunc = function(handlingFunction, evt) {
+  var funcString = handlingFunction.toString();
+  if (axsStock.watchedNodeFuncEnabledMap[funcString]) {
+    return;
+  }
+  axsStock.watchedNodeFuncEnabledMap[funcString] = true;
+  var delegatingFunction = function() {
+    handlingFunction(evt);
+    axsStock.watchedNodeFuncEnabledMap[funcString] = false;
+  };
+  window.setTimeout(delegatingFunction, axsStock.EVT_HANDL_TIMEOUT_INT);
+};
+
+/**
+ * Executes a function after the function mapped to a watched node
+ * has been executed.
+ * @param {Object} node The watched DOM node.
+ * @param {Date} time The time of the function call.
+ * @param {Function} func The function to be executed.
+ * NOTE: Passing the current time is necessary to avoid infinite looping.
+ * due to incomplete execution of the function mapped to the watched node.
+ */
+axsStock.executeAfterWatchedNodeMappedFunc = function(node, time, func) {
+  var mappedFunc = axsStock.watchedNodeToFuncMap[node];
+  var completed = axsStock.watchedNodeFuncEnabledMap[mappedFunc.toString()];
+
+  if ((completed === undefined || !completed) &&
+      (new Date() - time <= axsStock.waitMaxTimeout)) {
+    var selfFunc = function(){
+          axsStock.executeAfterWatchedNodeMappedFunc(node, time, func);
+        };
+    window.setTimeout(selfFunc, axsStock.WAIT_RESULTS_RETRY_INTERVAL_INT);
+  } else {
+    window.setTimeout(func, 0);
+  }
+};
+
+/**
+ * Opens and closes the criteria wizard.
+ * @param {Object} item A wrapper for the current DOM node.
+ */
+axsStock.openCloseWizard = function(item) {
+  var element = item.elem;
+  var visible = false;
+  var text = axsStock.str.WIZ_OP_MSG;
+  var xPath = 'id("action_links")/a[@class="activelink"]';
+  axsStock.wizardOpened = true;
+
+  if (element.style.display == 'none') {
+     xPath = 'id("add_criteria_wizard")/div/a[1]';
+     text = axsStock.str.WIZ_CL_MSG;
+     axsStock.wizardOpened = false;
+  }
+
+  var links = axsStock.axsJAXObj.evalXPath(xPath, document.body);
+  axsStock.axsJAXObj.clickElem(links[0], false);
+  axsStock.axsJAXObj.speakTextViaNode(text);
+  axsStock.axsLensObj.view(null);
 };
 
 /**
  * Builds dynamically a CNR for the result section. Each column is a list
- * and the order of criteria in the Stock criteria section detemines 
+ * and the order of criteria in the Stock criteria section detemines
  * (potentially changes) the order of columns in the result table.
+ * @param {boolean} opt_readFirstResult If the first result in the table
+ * should be read. If the paremeter is ommited the default behavior is
+ * reading the first result.
  */
-axsStock.buildAndLoadResultTableCNR = function() {
-	axsStock.currentCNRfile = axsStock.RES_CNR_STRING;
+axsStock.buildAndLoadResultTableCNR = function(opt_readFirstResult) {
+  axsStock.currentCNRfile = axsStock.str.RES_CNR;
 
-	//Remeber the last position in the CNR before switching it
-	axsStock.cacheLastPosition();
+  //Remeber the last position in the CNR before switching it
+  axsStock.cacheLastPosition();
 
   //Build dynamically the CNR file
-  var tables = axsStock.axsJAXObj.evalXPath(axsStock.R_TBL_XPATH,
-                                            document.body);
+  var xpath = 'id("searchresults")/table/tbody';
+  var tables = axsStock.axsJAXObj.evalXPath(xpath, document.body);
   var topRow = tables[0].childNodes[0];
   var columns = topRow.childNodes;
   var cnrString = axsStock.CNR_RES_TOP_STRING;
+
   for (var i = 0, column; column = columns[i]; i++) {
     var columnCaption = axsStock.normalizeString(column.textContent);
     if (i == 1) {
-	 	  columnCaption = axsStock.addSpaceBetweenChars(columnCaption);
-	 	}
-	 	if (columnCaption.length > 0) {
-		  var values = new Array(column.textContent, i + 1);
-		  var filledTempl = axsStock.populateTemplate(axsStock.CNR_RES_STRING,
-		                                              values);
-		  cnrString = cnrString + filledTempl;
-	 	}
-	}
-
-	cnrString = cnrString + axsStock.CNR_RES_BTM_STRING;
-	axsStock.axsNavObj.navInit(cnrString, null);
-	axsStock.readCriteriaValue(axsStock.axsNavObj.nextItem());
-};
-
-/**
- * Populates a template replacing specail tokes (like {i} where is is an index)
- * with concrete values.
- * @param {string} template The template string to populate
- * @param values Array The array with replacement (concrete) values
- */
-axsStock.populateTemplate = function(template, values) {
-  var populated = new String(template);
-  for (var i = 0, value; i < values.length; i++) {
-  	var regExp = new RegExp('\{(' + i + ')\}', 'g');
-    populated = populated.replace(regExp, values[i]);
+       columnCaption = axsStock.addSpaceBetweenChars(columnCaption);
+     }
+     if (columnCaption.length > 0) {
+      var values = new Array(column.textContent, i + 1);
+      var filledTmpl;
+      filledTmpl = axsStock.populateTemplate(axsStock.CNR_RES_STRING, values);
+      cnrString = cnrString + filledTempl;
+     }
   }
-  return populated;
-};
 
-/**
- * Goes to the next/prevous page of results. Clicks on the link for
- * fetching the results and positions at the top of the results list.
- * @param {Object?} item A wrapper for the current DOM node.
- */
-axsStock.gotToTopOfListAndClickLink = function(item) {
-	var element = item.elem;
-	axsStock.axsNavObj.navItemIdxs[axsStock.axsNavObj.navListIdx] = 0;
-	axsStock.axsJAXObj.clickElem(element);
-	//Wait until the new data is loaded
-	window.setTimeout(function() {
-		                  //The result table is replaced => need locate the node
-		                  var id = element.previousSibling.previousSibling.id;
-						          var sortImage = document.getElementById(id);						          
-						          var sortOrder = '';
-						          if (sortImage.src.indexOf('up') > -1) {
-						            sortOrder = axsStock.ASCENDING_STRING;
-						          } else {
-						          	sortOrder = axsStock.DESCENDING_STRING;
-						          }
-						          var templateParameters = new Array(element.textContent, 
-						                                             sortOrder);
-						          var template = axsStock.SORT_ORDER_STRING;
-					            var text = axsStock.populateTemplate(template,
-					                                                 templateParameters);
-					            axsStock.searchSummary = text + ' ' + 
-					                axsStock.searchSummary;
-					            axsStock.announceSummary();
-	                  },
-	                  500);
-};
+  cnrString = cnrString + axsStock.CNR_RES_BTM_STRING;
+  axsStock.axsNavObj.navInit(cnrString, null);
 
-/**
- * Reads the value for a certain criteria from the results table.
- * @param {Object?} item A wrapper for the current DOM node.
- */
-axsStock.readCriteriaValue = function(item) {
-  var element = item.elem;
-  var company = element.parentNode.childNodes[0].textContent;
-  company = axsStock.normalizeString(company);
-  var text = company;
-  
-  if (element != element.parentNode.childNodes[0]) {
-    var columnValue = axsStock.getCellValue(element);
-    text = text + ', ' + columnValue;
+  if (opt_readFirstResult === undefined || opt_readFirstResult) {
+    axsStock.readResultCellValue(axsStock.axsNavObj.nextItem());
   }
-  
-  //Lists are parallel and switching them should keep the current row
-  var navListIdx = axsStock.axsNavObj.navListIdx;
-  axsStock.previousIdx = axsStock.axsNavObj.navItemIdxs[navListIdx];
-	axsStock.speakAndGo(item.elem, text);
 };
 
 /**
@@ -1229,32 +1280,53 @@ axsStock.readCriteriaValue = function(item) {
  * columns is managesd as a list changing columns should keep the user
  * on the same row.
  */
-axsStock.focusOnCurrentTableCell = function() {
-	//Rest the the last criteria row
+axsStock.readResultCellValueListEntry = function() {
+  //Rest the the last criteria row
   axsStock.resetCriteriaRow();
-  
-	//Lists are parallel and switching them should keep the current row
-	var navListIdx = axsStock.axsNavObj.navListIdx;
+
+  //Lists are parallel and switching them should keep the current row
+  var navListIdx = axsStock.axsNavObj.navListIdx;
   if (axsStock.previousIdx > -1) {
     axsStock.axsNavObj.navItemIdxs[navListIdx] = axsStock.previousIdx;
   }
-  
+
   var element = axsStock.axsNavObj.currentItem().elem;
-	var text = '';
-	var columnValue = axsStock.getCellValue(element);
-	var title = axsStock.axsNavObj.navArray[navListIdx].title;
-	title = axsStock.parseSpecChrsAndTkns(title);
-	text = title + ' ' + columnValue;
-	axsStock.speakAndGo(element, text);
+  var text = '';
+  var columnValue = axsStock.getCellValue(element);
+  var title = axsStock.axsNavObj.navArray[navListIdx].title;
+  title = axsStock.parseSpecChrsAndTkns(title);
+  text = title + ' ' + columnValue;
+  axsStock.speakAndGo(element, text);
+};
+
+/**
+ * Reads the value for a certain criteria from the results table.
+ * @param {Object} item A wrapper for the current DOM node.
+ */
+axsStock.readResultCellValue = function(item) {
+  var element = item.elem;
+  var company = element.parentNode.childNodes[0].textContent;
+  company = axsStock.normalizeString(company);
+  var text = company;
+
+  if (element != element.parentNode.childNodes[0]) {
+    var columnValue = axsStock.getCellValue(element);
+    text = text + ', ' + columnValue;
+  }
+
+  //Lists are parallel and switching them should keep the current row
+  var navListIdx = axsStock.axsNavObj.navListIdx;
+  axsStock.previousIdx = axsStock.axsNavObj.navItemIdxs[navListIdx];
+  axsStock.speakAndGo(item.elem, text);
 };
 
 /**
  * Returns the current value in a table cell.
- * @param {Object?} A DOM node object representing the table cell.
+ * @param {Object} tdElement A DOM node object representing the table cell.
  * @return {string} The value of the table cell.
  */
 axsStock.getCellValue = function(tdElement) {
-	var columnValue = tdElement.textContent; 
+  var columnValue = tdElement.textContent;
   if (tdElement == tdElement.parentNode.childNodes[1]) {
     columnValue = axsStock.addSpaceBetweenChars(columnValue);
   } else if (tdElement == tdElement.parentNode.childNodes[0]) {
@@ -1266,50 +1338,207 @@ axsStock.getCellValue = function(tdElement) {
 };
 
 /**
- * Reads the description of a criteria from the criteria list.
- * @param {Object?} item A wrapper for the current DOM node.
+ * Clicks on the link for sorting the current column and positions at the 
+ * top of the results list.
+ * @param {Object} item A wrapper for the current DOM node.
  */
-axsStock.readStockScreenrDesc = function(item) {
-	 //If the current list is irrelevant in the wizard context - skip it
-  if (axsStock.wizardOpened) {
-    axsStock.skipList();
-    return;
-  }
-  
-	var element = item.elem;
-	
-  axsStock.cacheLastPosition();
-	
-	//Remove the section explaining the criteria from the view (if present)
+axsStock.clickSortLinkAndGoTop = function(item) {
+  var element = item.elem;
+  axsStock.axsNavObj.navItemIdxs[axsStock.axsNavObj.navListIdx] = 0;
   axsStock.axsJAXObj.clickElem(element, false);
-  
-	//Rest the the last criteria row
-  axsStock.resetCriteriaRow();
-  axsStock.lastCriteriaRow = element;
-	
-	var criteria = element.childNodes[0].textContent;
-	criteria = axsStock.parseSpecChrsAndTkns(criteria) + ', ';	
-	var min = element.childNodes[1].childNodes[0].value;
-	min = axsStock.parseSpecChrsAndTkns(min) + ', ';
-	var max = element.childNodes[3].childNodes[0].value;
-	max = axsStock.parseSpecChrsAndTkns(max) + ', ';
-	
-	var columnsText = new Array(criteria, min, max);
-	var rowText = axsStock.buildTableRowText(columnsText, 
-      axsStock.stockScreenerDescArray);     
-  axsStock.speakAndGo(element.firstChild, rowText);
+
+  //Wait until the new data is loaded
+  var func = function() {
+               //The result table is replaced => need locate the node
+               var id = element.previousSibling.previousSibling.id;
+               var sortImage = document.getElementById(id);
+               var sortOrder = '';
+               if (sortImage.src.indexOf('up') > -1) {
+                 sortOrder = axsStock.str.ASCENDING;
+               } else {
+                 sortOrder = axsStock.str.DESCENDING;
+               }
+
+               var templateParameters = new Array(element.textContent,
+                                                  sortOrder);
+               var template = axsStock.SORT_ORDER_STRING;
+               var text = axsStock.populateTemplate(template,
+                                                    templateParameters);
+
+               axsStock.searchSummary = text + ' ' + axsStock.searchSummary;
+               axsStock.announceSummary();
+             };
+
+  axsStock.executeAfterWatchedNodeMappedFunc(axsStock.watchedNodeResults,
+                                             new Date(),
+                                             func);
 };
 
 /**
- * Resets the last visited table criteria row (if such exists) to its default
- * visual representation which is modified when the user focuses on that row.
+ * Positions the focus on the row with company name found by PowerKey.
+ * We treat the company name as a row title.
+ * NOTE: The column in which the user is does not change.
  */
-axsStock.resetCriteriaRow = function() {
-	//TODO: Refactor tab key fix
-  axsStock.axsJAXObj.tabKeyFixOn = true;
-  if (axsStock.lastCriteriaRow != null) {
-    axsStock.simulateMouseOutEvent(axsStock.lastCriteriaRow);
+axsStock.goToRow = function() {
+  if (axsStock.currentCNRfile == axsStock.str.ST_SCR_CNR) {
+    axsStock.buildAndLoadResultTableCNR(false);
   }
+  var items = axsStock.axsNavObj.navArray[0].items;
+  var elementNames = new Array();
+  for (var i = 0, item; item = items[i]; i++) {
+    elementNames[i] = item.elem.textContent;
+  }
+  axsStock.goToItem(axsStock.pkVerticalSearchHandler, elementNames);
+};
+
+/**
+ * Positions the focus on the column with criteria name found by PowerKey.
+ * We use the table column names.
+ * NOTE: The row in which the user is does not change.
+ */
+axsStock.goToColumn = function() {
+  if (axsStock.currentCNRfile == axsStock.str.ST_SCR_CNR) {
+    axsStock.buildAndLoadResultTableCNR(false);
+    //Initialize to the first item in the list
+    axsStock.axsNavObj.navItemIdxs[axsStock.axsNavObj.navListIdx] = 0;
+  }
+  var xpath = 'id("searchresults")//tr[1]/td[@class="top_row"]';
+  var elements = axsStock.axsJAXObj.evalXPath(xpath, document.body);
+  var elementNames = new Array();
+  for (var i = 0, element; element = elements[i]; i++) {
+    elementNames[i] = element.textContent;
+  }
+  axsStock.goToItem(axsStock.pkHorizontalSearchHandler, elementNames);
+};
+
+/**
+ * Positions the focus on a column cell with value found by PowerKey.
+ * NOTE: The column in which the user is does not change.
+ */
+axsStock.goToValueInColumn = function() {
+  if (axsStock.currentCNRfile == axsStock.str.ST_SCR_CNR) {
+    axsStock.buildAndLoadResultTableCNR(false);
+  }
+  var items = axsStock.axsNavObj.currentList().items;
+  var elementNames = new Array();
+  for (var i = 0, item; item = items[i]; i++) {
+    elementNames[i] = item.elem.textContent;
+  }
+  axsStock.goToItem(axsStock.pkVerticalSearchHandler, elementNames);
+};
+
+/**
+ * Positions the focus on a row cell with value found by PowerKey.
+ * NOTE: The row in which the user is does not change.
+ */
+axsStock.goToValueInRow = function() {
+  if (axsStock.currentCNRfile == axsStock.str.ST_SCR_CNR) {
+    axsStock.buildAndLoadResultTableCNR(false);
+    axsStock.axsNavObj.navItemIdxs[axsStock.axsNavObj.navListIdx] = 0;
+  }
+  var rowIndex = axsStock.axsNavObj.navItemIdxs[axsStock.axsNavObj.navListIdx];
+  var elementNames = new Array();
+  for (var i = 0, list; list = axsStock.axsNavObj.navArray[i]; i++) {
+    elementNames[i] = list.items[rowIndex].elem.textContent;
+  }
+  axsStock.goToItem(axsStock.pkHorizontalSearchHandler, elementNames);
+};
+
+/**
+ * Enables PowerKey search from element names and in case of a successful
+ * search delegates to a handler.
+ * @param {Object} handler Hadler to process the found element.
+ * @param {Array} elementNames The array of names searched by PowerKey.
+ */
+axsStock.goToItem = function(handler, elementNames) {
+  //Initialize
+  axsStock.pkObj = new PowerKey('list', axsStock.axsJAXObj);
+  var body = axsStock.axsJAXObj.getActiveDocument().body;
+  axsStock.pkObj.createCompletionField(body,
+                                       30,
+                                       handler,
+                                       null,
+                                       elementNames,
+                                       false);
+  axsStock.pkObj.setAutoHideCompletionField(true);
+  PowerKey.setDefaultCSSStyle();
+  axsStock.pkObj.updateCompletionField('visible', true, 40, 20);
+};
+
+/**
+ * Positions the user in a result table column with index found by PowerKey
+ * and at the same time keeps the current row.
+ * @param {string} command A command mapped to the found element.
+ * @param {number} index The array index of the found element.
+ * @param {number} id The command id.
+ * @param {Array} args The command arguments.
+ */
+axsStock.pkHorizontalSearchHandler = function(command, index, id, args) {
+  axsStock.axsNavObj.lastItem = null;
+  var itemIndex = axsStock.axsNavObj.navItemIdxs[axsStock.axsNavObj.navListIdx];
+  axsStock.axsNavObj.navListIdx = index;
+  axsStock.axsNavObj.navItemIdxs[index] = itemIndex;
+
+  var item = axsStock.axsNavObj.currentItem();
+  axsStock.axsNavObj.actOnItem(item);
+
+  axsStock.pkObj.updateCompletionField('hidden', true, 40, 20);
+};
+
+/**
+ * Positions the user in a row cell that contains value that found
+ * during the power key search. (i.e. search by column value)
+ * @param {string} command A command mapped to the found element.
+ * @param {number} index The array index of the found element.
+ * @param {number} id The command id.
+ * @param {Array} args The command arguments.
+ */
+axsStock.pkVerticalSearchHandler = function(command, index, id, args) {
+  axsStock.axsNavObj.lastItem = null;
+  axsStock.axsNavObj.navItemIdxs[axsStock.axsNavObj.navListIdx] = index;
+
+  var item = axsStock.axsNavObj.currentItem();
+  axsStock.axsNavObj.actOnItem(item);
+
+  axsStock.pkObj.updateCompletionField('hidden', true, 40, 20);
+};
+
+/**
+ * Refreshes all lists in the CNR. Such an action is required upon
+ * a dynamic change in the data presented by these lists.
+ */
+axsStock.refreshAllResultLists = function() {
+  var navArray = axsStock.axsNavObj.navArray;
+  for (var i = 0, list; list = navArray[i]; i++) {
+    axsStock.axsNavObj.refreshList(list.title);
+  }
+};
+
+/**
+ * Wraps around an item list traversed with the fwd and back keys
+ * @param {Object} item A wrapper for the current DOM node.
+ */
+axsStock.wrapAround = function(item) {
+  var element = item.elem;
+  if (element.tagName == 'A') {
+    axsStock.axsJAXObj.clickElem(element, false);
+  } else {
+    item = axsStock.axsNavObj.currentItem();
+    axsStock.axsNavObj.actOnItem(item);
+  }
+};
+
+/**
+ * Skips a list and goes to the next or previous one depending
+ * on the last inter list navigation key which was pressed.
+ */
+axsStock.skipList = function() {
+  if (axsStock.lastListNavigationKey === null){
+    return;
+  }
+  var key = axsStock.lastListNavigationKey.charCodeAt(0);
+  var method = axsStock.axsNavObj.topCharCodeMap[key];
+  method();
 };
 
 /**
@@ -1328,33 +1557,49 @@ axsStock.cacheLastPosition = function() {
  * Restores the last position in the Stock screener section.
  */
 axsStock.restoreLastPosition = function() {
-	if (axsStock.lastStockScreenerPosition == null) {
-		return;
-	}
-	
+  if (axsStock.lastStockScreenerPosition === null) {
+    return;
+  }
+
   var listIndex = axsStock.lastStockScreenerPosition.listIndex;
   var itemIndex = axsStock.lastStockScreenerPosition.itemIndex;
- 
+
   axsStock.axsNavObj.lastItem = null;
   axsStock.axsNavObj.navListIdx = listIndex;
   axsStock.axsNavObj.navItemIdxs[listIndex] = itemIndex;
-    
+
   var item = axsStock.axsNavObj.currentItem();
   if (item !== undefined) {
     axsStock.axsNavObj.actOnItem(item);
   } else {
-    var currentList = axsStock.axsNavObj.navArray[listIndex]; 
+    var currentList = axsStock.axsNavObj.navArray[listIndex];
     axsStock.axsNavObj.actOnTarget(currentList.entryTarget);
   }
 };
 
 /**
+ * Populates a template replacing specail tokes (like {i} where is is an index)
+ * with concrete values.
+ * @param {string} template The template string to populate
+ * @param {Array} values The array with replacement (concrete) values
+ * @return {string} The string generated from populating the template
+ */
+axsStock.populateTemplate = function(template, values) {
+  var populated = new String(template);
+  for (var i = 0, value; i < values.length; i++) {
+    var regExp = new RegExp('\{(' + i + ')\}', 'g');
+    populated = populated.replace(regExp, values[i]);
+  }
+  return populated;
+};
+
+/**
  * Simulates a mouse out event.
- * @param {Object?} targetNode The DOM node which is the target (source) 
+ * @param {Object} targetNode The DOM node which is the target (source)
  * of the event.
  */
 axsStock.simulateMouseOutEvent = function(targetNode) {
-	var event = document.createEvent('MouseEvents');
+  var event = document.createEvent('MouseEvents');
   event.initMouseEvent('mouseout',
                         false,
                         false,
@@ -1370,36 +1615,13 @@ axsStock.simulateMouseOutEvent = function(targetNode) {
                         false,
                         0,
                         null);
-   targetNode.dispatchEvent(event);
-};
-
-/**
- * Reads the help (explanation) description for a criteria in the criteria list.
- * @param {Object?} item A wrapper for the current DOM node.
- */
-axsStock.readHelpDesc = function(item) {
-	var element = item.elem;
-	var descTitleNode = element.childNodes[0];
-	var linkNode = element.childNodes[1];
-	axsStock.axsJAXObj.clickElem(linkNode, false);
-	var explNodes = axsStock.axsJAXObj.evalXPath(axsStock.EXPL_NODES_XPATH,
-                                                  document.body);                                       
-	for (var i = 0, node; node = explNodes[i]; i++) {
-		var explTitleNode = explNodes[i].firstChild;
-		var descTitleText = axsStock.normalizeString(descTitleNode.textContent);
-		var explTitleText = axsStock.normalizeString(explTitleNode.textContent);
-		if (descTitleText == explTitleText) {
-			var explTextNode = explNodes[i].nextSibling;
-			axsStock.axsJAXObj.speakTextViaNode(explTextNode.textContent);
-			break;
-		}
-	}
+  targetNode.dispatchEvent(event);
 };
 
 /**
  * Adds white spaces beteen the characters of a string
  * @param {string} text The processed text.
- * @return {string} The processed text with white spaces added between its 
+ * @return {string} The processed text with white spaces added between its
  * characters.
  */
 axsStock.addSpaceBetweenChars = function(text) {
@@ -1415,8 +1637,8 @@ axsStock.addSpaceBetweenChars = function(text) {
 
 /**
  * Speaks a text and positions the screen to an element.
- * @param {Node} element DOM node 
- * @param {string} text The text to be spoken. 
+ * @param {Node} element DOM node
+ * @param {string} text The text to be spoken.
  * characters.
  */
 axsStock.speakAndGo = function(element, text) {
@@ -1428,60 +1650,67 @@ axsStock.speakAndGo = function(element, text) {
 
 /**
  * Builds a sentence for presenting (speaking) a table row. The sentence is
- * built by alternating a phrase and a column content. 
- * @param {Array?} textContents Array with the contents of table columns. 
- * @param {Array?} columnDesriptors Array of phrases to be added between the
+ * built by alternating a phrase and a column content.
+ * @param {Array?} textContents Array with the contents of table columns.
+ * @param {Array} columnDesc Array of phrases to be added between the
  * column values.
  * @return {string} The assembled sentence.
  */
-axsStock.buildTableRowText = function(textContents, columnDesriptors) {  
+axsStock.buildTableRowText = function(textContents, columnDesc) {
   //check inputs
   if (textContents === null) {
-    return;
+    return '';
   }
+
   //assemble text
   var rowText = '';
   for (var i = 0, textContent; textContent = textContents[i]; i++) {
-    if (columnDesriptors !== null && i < columnDesriptors.length) {
-       rowText = rowText + ' ' + columnDesriptors[i] ;
+    if (i < columnDesc.length) {
+      rowText = rowText + ' ' + columnDesc[i];
     }
     rowText = rowText + ' ' + textContents[i];
   }
-  if (columnDesriptors !== null && i < columnDesriptors.length) {
-    rowText = rowText + ' ' + columnDesriptors[i];
+  if (i < columnDesc.length) {
+    rowText = rowText + ' ' + columnDesc[i];
   }
   return rowText;
-}
+};
 
 /**
  * Replaces phrases (i.e. the entire text), tokens (i.e. words), and symbols
  * (i.e. characters) of the processed text with predefined values (mappings).
- * built by alternating a phrase and a column content. 
- * @param {string} The text to be processed  
+ * built by alternating a phrase and a column content.
+ * @param {string} text The text to be processed
  * @return {string} The text with replaced phrases/tokens/symbols.
  */
 axsStock.parseSpecChrsAndTkns = function(text) {
   var parsedText = '';
+
   //check input
-  if (text === null || text === '') {
+  if (text === '') {
     return text;
   }
+
   //remove leading and trailing spaces
   text = axsStock.normalizeString(text);
+
   //check for phrase word mapping
   var phraseMapping = axsStock.phrasesMap[text];
   if (phraseMapping != undefined) {
     return phraseMapping;
   }
+
   //process every word separately
   var tokens = text.split(' ');
-  for (var i = 0, t; t = tokens[i]; i++) {      
+  for (var i = 0, t; t = tokens[i]; i++) {
     var token = tokens[i];
+
     //check for whole word mapping
     var tokenMapping = axsStock.phrasesMap[token];
     if (tokenMapping != undefined) {
       token = tokenMapping;
     } else {
+
       //remove brackets
       if (token.length > 0 && token.charAt(0) === '(') {
           token = token.substring(1);
@@ -1489,11 +1718,13 @@ axsStock.parseSpecChrsAndTkns = function(text) {
       if (token.length > 1 && token.charAt(token.length - 1) === ')') {
         token = token.substring(0, token.length - 1);
       }
+
       //parse the first character
       var prefixMapping = axsStock.charPrefixMap[token.charAt(0)];
       if (prefixMapping != undefined) {
         token = prefixMapping + ' ' + token.substring(1);
       }
+
       //parse the last character
       var lastCharacter = token.charAt(token.length - 1);
       var suffixMapping = axsStock.charSuffixMap[lastCharacter];
@@ -1507,11 +1738,12 @@ axsStock.parseSpecChrsAndTkns = function(text) {
 };
 
 /**
- * Normalizes a string to enable correct presentation (i.e. speaking). All 
- * leading and trailing spaces are truncated, all types of white space 
- * characters are rplaced by ' ', and all carriage returns ('\r') and line 
+ * Normalizes a string to enable correct presentation (i.e. speaking). All
+ * leading and trailing spaces are truncated, all types of white space
+ * characters are rplaced by ' ', and all carriage returns ('\r') and line
  * feeds(\n) are removed.
- * @param {string} The text to be normalized. 
+ * @param {string} text The text to be normalized.
+ * @return {string} The normalized version of the text
  */
 axsStock.normalizeString = function(text) {
   //remove leading and trailing spaces
@@ -1525,16 +1757,17 @@ axsStock.normalizeString = function(text) {
 /**
  * Handler for key events. 'ESC' unfocuses the current focused element and
  * 'q' reads (speaks) the current quote.
- * @param {Event?} evt A keypress event
+ * @param {Event} evt A keypress event
+ * @return {boolean} If true, the event should be propagated.
  */
 axsStock.keyHandler = function(evt) {
-  //If Ctrl is held, it must be for some AT. 
+  //If Ctrl is held, it must be for some AT.
   if (evt.ctrlKey) return true;
 
   if (evt.keyCode == 27) { // ESC
     axsStock.axsJAXObj.lastFocusedNode.blur();
     return false;
-  } else if ((evt.charCode == 104) || (evt.charCode ==  108)) { //h or l 
+  } else if ((evt.charCode == 104) || (evt.charCode == 108)) { //h or l
     axsStock.lastListNavigationKey = String.fromCharCode(evt.charCode);
   }
   if (axsStock.axsJAXObj.inputFocused) {
@@ -1543,7 +1776,7 @@ axsStock.keyHandler = function(evt) {
   var command = axsStock.charCodeMap[evt.charCode];
 
   if (command) {
-    return  command();
+    return command();
   }
   return true;
 };
@@ -1553,14 +1786,14 @@ axsStock.keyHandler = function(evt) {
  */
 axsStock.charCodeMap = {
   // Map additional keyboard behavior that involves char codes here
-  // / (slash symbol)    
- 47 : function () {
+  // / (slash symbol)
+ 47 : function() {
        document.getElementById('searchbox').focus();
        document.getElementById('searchbox').select();
        return false;
-     }, 
-  // ? (question mark)       
-  63 : function () {
+     },
+  // ? (question mark)
+  63 : function() {
        var helpStr = axsStock.HELP + axsStock.axsNavObj.localHelpString() +
                      axsStock.axsNavObj.globalHelpString();
        axsStock.axsJAXObj.speakTextViaNode(helpStr);
