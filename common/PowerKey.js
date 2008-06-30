@@ -99,8 +99,8 @@ var PowerKey = function(context, axsJAX) {
   this.hideCmdFieldOnBlur_ = false;
 
 
-  this.cmpIdMap = {};
-  this.cmpIndexList_ = {};
+  this.idMap = {};
+  this.indexList_ = {};
   if (axsJAX && PowerKey.isGecko) {
     this.axsJAX_ = axsJAX;
   }
@@ -108,11 +108,11 @@ var PowerKey = function(context, axsJAX) {
 
 
 /**
- * The reg exp indicating the pattern of the parameter to a completion. It should
- * start with '<', end wit '>' and contain only characters and numbers.
+ * The reg exp indicating the pattern of the parameter to a completion. It 
+ * should start with '<', end wit '>' and contain only characters and numbers.
  * @type {RegExp}
  */
-PowerKey.CMD_PARAM = /^\<[A-Z|a-z|0-9]+\>$/;
+PowerKey.CMD_PARAM = /^\<[A-Z|a-z|0-9|\-|\_]+\>$/;
 
 
 /**
@@ -133,7 +133,7 @@ PowerKey.RIGHT_TRIMMABLE = /(\s|\r|\n)+$/;
 
 /**
  * Attaches event listener and sets the user specified handler or the
- * default handler of the action map is provided.
+ * default handler if the action map is provided.
  * @param {Element?} target The element to attach the event listerner to.
  * @param {string} event The event to listen for.
  * @param {Function?} handler The event handler.
@@ -185,10 +185,11 @@ PowerKey.prototype.detachHandler = function(target, event, handler) {
 /**
  * Creates a floating element for holding the completion shell's text field.
  * @param {Element} parent The element whose child this element will be.
- * @param {number} size The size of the completion text field in # of characters.
+ * @param {number} size The size of the completion text field in # of 
+ *     characters.
  * @param {Function?} handler The completion handler.
  *     handler = function(completion, index, elementId, args) {}
- * @param {Object?} completionMap The object consisting of completion strings as
+ * @param {Object?} actionMap The object consisting of completion strings as
  *     keys and functions as values.
  * @param {Array?} completionList The array of completions.
  * @param {boolean} browseOnly Whether the completion list is browse-only.
@@ -196,7 +197,7 @@ PowerKey.prototype.detachHandler = function(target, event, handler) {
 PowerKey.prototype.createCompletionField = function(parent,
                                                  size,
                                                  handler,
-                                                 completionMap,
+                                                 actionMap,
                                                  completionList,
                                                  browseOnly) {
   var self = this;
@@ -252,7 +253,7 @@ PowerKey.prototype.createCompletionField = function(parent,
     this.cmpList_ = completionList;
     this.filterList_ = this.cmpList_;
     for (var i = 0, cmp; cmp = this.cmpList_[i]; i++) {
-      this.cmpIndexList_[cmp.toLowerCase()] = i;
+      this.indexList_[cmp.toLowerCase()] = i;
     }
     this.listPos_ = -1;
   }
@@ -260,7 +261,7 @@ PowerKey.prototype.createCompletionField = function(parent,
   // filter the completion list on keyup if it is not UP or DOWN arrow.
   this.attachHandlerAndListen(this.cmpTextElement, PowerKey.Event.KEYUP,
       function(evt) {
-        self.handleCompletionKeyUp_.call(self, evt, completionMap, handler);
+        self.handleCompletionKeyUp_.call(self, evt, actionMap, handler);
       }, null);
 
   this.attachHandlerAndListen(this.cmpTextElement, PowerKey.Event.KEYDOWN,
@@ -281,13 +282,15 @@ PowerKey.prototype.createCompletionField = function(parent,
  * Handle keyup events. If the key is not an arrow key, filter the list by the
  * contents of the completion text field.
  * @param {Object} evt The key event object.
- * @param {Object} completionMap The object consisting of completion strings as
+ * @param {Object} actionMap The object consisting of completion strings as
  *     keys and functions as values.
  * @param {Function?} handler The completion handler.
  *     handler = function(completion, index, elementId, args) {}
  * @private
  */
-PowerKey.prototype.handleCompletionKeyUp_ = function(evt, completionMap, handler) {
+PowerKey.prototype.handleCompletionKeyUp_ = function(evt,
+                                                     actionMap,
+                                                     handler) {
   if (this.cmpTextElement.value.length === 0) {
     this.filterList_ = this.cmpList_;
   }
@@ -313,42 +316,45 @@ PowerKey.prototype.handleCompletionKeyUp_ = function(evt, completionMap, handler
   }
   // Handle ENTER key pressed in the completion field.
   if (evt.keyCode == PowerKey.keyCodes.ENTER) {
+    if (this.cmpTextElement.readOnly) {
+      return;
+    }
     // Select current filtered list item.
     if (this.filterList_ &&
         this.filterList_.length > 0 &&
         this.cmpTextElement.value != this.filterList_[this.listPos_] &&
-        // Not a parametric completion, or an incomplete parametric completion.
+        // Does not have parameters or is incomplete
         (this.filterList_[this.listPos_].indexOf('<') < 0 ||
             (this.filterList_[this.listPos_].indexOf('<') >= 0 &&
-             this.filterList_[this.listPos_].split(',').length !=
-                this.cmpTextElement.value.split(',').length))) {
+             this.filterList_[this.listPos_].split(' ').length >
+                 this.cmpTextElement.value.split(' ').length))) {
       this.selectCurrentListItem_();
       return;
     }
-    var cmp = this.cmpTextElement.value;
+    var str = this.cmpTextElement.value;
     var originalCmd = (PowerKey.isIE ? this.listElement_.innerText :
           this.listElement_.textContent).toLowerCase();
-    // Change only the basic portion (non-argument) of the completion to lower
-    // case. For ex: In 'Watch Video funnySeries', only 'Watch Video' is 
+    // Change only the basic portion (non-argument) of the selection to lower
+    // case. For ex: In 'Watch Video funnySeries', only 'Watch Video' is
     // changed to lower case.
     var pos = originalCmd.indexOf('<');
     var baseCmd;
     if (pos >= 0) {
-      baseCmd = cmp.substr(0, pos - 1).toLowerCase();
-      cmp = baseCmd + ' ' + cmp.substr(pos);
+      baseCmd = str.substr(0, pos - 1).toLowerCase();
+      str = baseCmd + ' ' + str.substr(pos);
     } else {
-      cmp = cmp.toLowerCase();
-      baseCmd = cmp;
+      str = str.toLowerCase();
+      baseCmd = str;
     }
     var handled = false;
-    if (completionMap) {
-      handled = this.completionHandler_.call(this, cmp,
-          originalCmd, completionMap);
+    if (actionMap) {
+      handled = this.actionHandler_.call(this, str,
+          originalCmd, actionMap);
     }
     if (handler && !handled) {
-      var args = this.getCompletionArgs_(cmp, originalCmd);
-      handler(baseCmd, this.cmpIndexList_[originalCmd],
-          this.cmpIdMap[originalCmd], args);
+      var args = this.getArguments_(str, originalCmd);
+      handler(baseCmd, this.indexList_[originalCmd],
+          this.idMap[originalCmd], args);
     }
     this.cmpTextElement.value = '';
   }
@@ -419,9 +425,9 @@ PowerKey.prototype.setNoCompletionStr = function(str) {
 PowerKey.prototype.setCompletionList = function(list) {
   this.cmpList_ = list;
   this.filterList_ = this.cmpList_;
-  this.cmpIndexList_ = {};
+  this.indexList_ = {};
   for (var i = 0, cmp; cmp = this.cmpList_[i]; i++) {
-    this.cmpIndexList_[cmp.toLowerCase()] = i;
+    this.indexList_[cmp.toLowerCase()] = i;
   }
   this.listPos_ = -1;
 };
@@ -504,6 +510,7 @@ PowerKey.prototype.updateCompletionField = function(status,
     }
     this.cmpFloatElement.className = 'pkHiddenStatus';
     this.cmpTextElement.value = '';
+    this.listPos_ = -1;
   }
   if (opt_resize) {
     var viewportSz = PowerKey.getViewportSize();
@@ -575,7 +582,7 @@ PowerKey.prototype.updateStatusElement = function(text,
  * @param {string} tags The tags to be selected.
  * @param {Function} func Only those elements are considered for which
  *     this function returns true.
- * @param {boolean} newList If this is true, all entries in cmpIdMap
+ * @param {boolean} newList If this is true, all entries in idMap
  *     are erased, and a new mapping of completions and IDs is created.
  * @return {Array} The array of completion strings.
  */
@@ -583,8 +590,8 @@ PowerKey.prototype.createCompletionList = function(tags, func, newList) {
   var cmpList = new Array();
   var tagArray = tags.split(/\s+/);
   if (newList) {
-    delete this.cmpIdMap;
-    this.cmpIdMap = new Object();
+    delete this.idMap;
+    this.idMap = new Object();
   }
   for (var j = 0, tag; tag = tagArray[j]; j++) {
     var nodeArray = document.getElementsByTagName(tag);
@@ -599,8 +606,8 @@ PowerKey.prototype.createCompletionList = function(tags, func, newList) {
             label = label.substring(6);
           }
           cmpList.push(label);
-          if (String(this.cmpIdMap[label.toLowerCase()]) == 'undefined') {
-            this.cmpIdMap[label.toLowerCase()] = node.id;
+          if (String(this.idMap[label.toLowerCase()]) == 'undefined') {
+            this.idMap[label.toLowerCase()] = node.id;
           }
         }
       }
@@ -661,28 +668,28 @@ PowerKey.prototype.getWordFilterMatches_ = function(list, token, maxMatches) {
 /**
  * Compares the original and user-entered completion and returns the array
  * of arguments if any, otherwise returns null.
- * @param {String} cmp The user-entered completion.
+ * @param {String} str The string to parse for arguments.
  * @param {String} originalCmd The original completion.
  * @return {Array} Returns an array of completion arguments.
  * @private
  */
-PowerKey.prototype.getCompletionArgs_ = function(cmp, originalCmd) {
-  cmp = cmp.replace(/\s+/g, ' ');
+PowerKey.prototype.getArguments_ = function(str, originalCmd) {
+  str = str.replace(/\s+/g, ' ');
   originalCmd = originalCmd.replace(/\s+/g, ' ');
   var pos = originalCmd.indexOf('<');
   if (pos < 0) {
     return [];
   }
   originalCmd = originalCmd.substr(pos);
-  cmp = cmp.substr(pos);
-  var cmpTokens = cmp.split(',');
-  var ocmpTokens = originalCmd.split(',');
-  if (cmpTokens.length != ocmpTokens.length) {
+  str = str.substr(pos);
+  var strTokens = str.split(',');
+  var ostrTokens = originalCmd.split(',');
+  if (strTokens.length != ostrTokens.length) {
     return [];
   }
   var args = [];
   for (var i = 0, j = 0, token1, token2;
-       (token1 = cmpTokens[i]) && (token2 = ocmpTokens[i]);
+       (token1 = strTokens[i]) && (token2 = ostrTokens[i]);
        i++) {
     token1 = PowerKey.leftTrim(PowerKey.rightTrim(token1));
     token2 = PowerKey.leftTrim(PowerKey.rightTrim(token2));
@@ -696,20 +703,20 @@ PowerKey.prototype.getCompletionArgs_ = function(cmp, originalCmd) {
 
 /**
  * The default completion handler: executes the appropriate functions
- * by looking at the completion map.
- * @param {string} cmp The completion to be handled/executed.
+ * by looking at the action map.
+ * @param {string} act The action/selection to be handled.
  * @param {string} originalCmd The original format of the completion without
  *     the final parameter values.
- * @param {Object} completionMap The HashMap consisting of completion strings
+ * @param {Object} actionMap The HashMap consisting of completion strings
  *     as keys and functions as values.
  * @return {boolean} Whether the completion was successfully handled.
  * @private
  */
-PowerKey.prototype.completionHandler_ = function(cmp,
-                                              originalCmd,
-                                              completionMap) {
-  var args = this.getCompletionArgs_(cmp, originalCmd);
-  var actionObj = completionMap[originalCmd];
+PowerKey.prototype.actionHandler_ = function(act,
+                                             originalCmd,
+                                             actionMap) {
+  var args = this.getArguments_(act, originalCmd);
+  var actionObj = actionMap[originalCmd];
   if (actionObj && actionObj[this.context]) {
     var func = actionObj[this.context] + '(args);';
     window.setTimeout(func, 0);
@@ -725,9 +732,10 @@ PowerKey.prototype.completionHandler_ = function(cmp,
  * @private
  */
 PowerKey.prototype.prevListItem_ = function() {
-  if (this.listPos_ > 0) {
-    this.listPos_--;
+  if (this.listPos_ < 0) {
+    this.listPos_ = 0;
   }
+  this.listPos_ = (this.listPos_ || this.filterList_.length) - 1;
   if (this.listPos_ >= 0) {
     this.setListElement_(this.filterList_[this.listPos_]);
   }
@@ -739,9 +747,7 @@ PowerKey.prototype.prevListItem_ = function() {
  * @private
  */
 PowerKey.prototype.nextListItem_ = function() {
-  if (this.listPos_ < this.filterList_.length - 1) {
-    this.listPos_++;
-  }
+  this.listPos_ = (this.listPos_ + 1) % this.filterList_.length;
   if (this.listPos_ < this.filterList_.length) {
     this.setListElement_(this.filterList_[this.listPos_]);
   }
@@ -980,7 +986,7 @@ PowerKey.cssStr =
 '.pkOpaqueStatusText { background-color: transparent; ' +
   'font-family: Arial, Helvetica, sans-serif; font-size: 30px; ' +
   'font-weight: bold; color: #fff;}' +
-'.pkOpaqueCompletionText {border-style: none; background-color: transparent; ' +
+'.pkOpaqueCompletionText {border-style: none; background-color:transparent; ' +
   'font-family: Arial, Helvetica, sans-serif; font-size: 35px; ' +
   'font-weight: bold; color: #fff; width: 1000px; height: 50px;}';
 
