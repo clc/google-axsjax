@@ -5,13 +5,13 @@
 <script>
 function generateOutput(){
   var input = document.getElementById('input');
-  var out = '  var cnrString = "';  
-  var whiteSpace = '                  "';
+  var out = "  var cnrString = '";  
+  var whiteSpace = "                  '";
   var charCount = 19;
   for (var i = 0, c; c = input.value.charAt(i); i++){
     if ((charCount > 77) || 
 	    (c == '\n')){
-	  out = out + '" +\n' + whiteSpace;
+	  out = out + "' +\n" + whiteSpace;
 	  charCount = 19;
 	}
 	if (c != '\n'){
@@ -19,7 +19,7 @@ function generateOutput(){
 	}
 	charCount++;
   }
-  out = out + '";';  
+  out = out + "';";  
   var output = document.getElementById('output');
   output.value = out;
 }
