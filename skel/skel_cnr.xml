@@ -1,12 +1,12 @@
-<cnr next='RIGHT l' prev='LEFT h' comment='Mix and match the examples below to suit the page that you are working on.'>
+<cnr next="RIGHT l" prev="LEFT h" comment="Mix and match the examples below to suit the page that you are working on.">
 
-  <list title='Simple list' next='DOWN j' prev='UP k'>  
+  <list title="Simple list" next="DOWN j" prev="UP k">  
     <item>
       /put/xpath/to/content/here
     </item>
   </list>	
 
-  <list title='List with multiple sets of items' next='DOWN j' prev='UP k'>  
+  <list title="List with multiple sets of items" next="DOWN j" prev="UP k">  
     <item>
       /put/xpath/to/content/here
     </item>
@@ -16,57 +16,57 @@
     <item>
       /count/defaults/to/*/so/all/nodes/from/the/start/are/taken
     </item>
-    <item index='3'>
+    <item index="3">
       /put/xpath/to/some/content/where/we/only/want/nodes/after/the/3rd/node
     </item>
-    <item count='2'>
+    <item count="2">
       /put/xpath/to/some/content/where/we/only/want/the/first/two/nodes
     </item>
-    <item index='4' count='1'>
+    <item index="4" count="1">
       /put/xpath/to/some/content/where/we/only/want/the/5th/node
     </item>
   </list>	
 
-  <list title='Simple list with a hotkey that causes the user to jump directly to this list' hotkey='h' next='DOWN j' prev='UP k' onEmpty='The simple list with a hotkey is not available.'>  
+  <list title="Simple list with a hotkey that causes the user to jump directly to this list" hotkey="h" next="DOWN j" prev="UP k" onEmpty="The simple list with a hotkey is not available.">  
     <item>
       /put/xpath/to/content/here
     </item>
   </list>	
   
-  <list title='List with triggers' next='DOWN j' prev='UP k' fwd='n' back='p'>  
+  <list title="List with triggers" next="DOWN j" prev="UP k" fwd="n" back="p">  
     <item>
       /put/xpath/to/content/here
     </item>
-    <target title='Switch to the tab associated with this list' trigger='listEntry'>
+    <target title="Switch to the tab associated with this list" trigger="listEntry">
       /put/xpath/to/the/tab/for/this/list/here
     </target>	
-    <target title='Next page' trigger='listTail'>
+    <target title="Next page" trigger="listTail">
       /put/xpath/to/next/page/link/here
     </target>	
-    <target title='Previous page' trigger='listHead'>
+    <target title="Previous page" trigger="listHead">
       /put/xpath/to/prev/page/link/here
     </target>	
   </list>	
   
-  <list title='List that uses targets to do various actions on the current item' next='DOWN j' prev='UP k'>  
+  <list title="List that uses targets to do various actions on the current item" next="DOWN j" prev="UP k">  
     <item>
       /put/xpath/to/content/here
     </item>
-    <target title='Do something to the current item' hotkey='a'>
+    <target title="Do something to the current item" hotkey="a">
       .//put/xpath/of/some/action/link/relative/to/the/current/item/here
     </target>	
-    <target title='Do something else to the current item' hotkey='b' onEmpty='Action B cannot be performed on the current item.'>
+    <target title="Do something else to the current item" hotkey="b" onEmpty="Action B cannot be performed on the current item.">
       .//put/xpath/of/some/other/action/link/relative/to/the/current/item/here
     </target>	
   </list>	
   
-  <list title='List that uses CALL to issue a call back to speakComplexDataIntelligently(itemObject) with the current item as the parameter' next='DOWN j' prev='UP k'>  
-    <item action='CALL:speakComplexDataIntelligently'>
+  <list title="List that uses CALL to issue a call back to speakComplexDataIntelligently(itemObject) with the current item as the parameter" next="DOWN j" prev="UP k">  
+    <item action="CALL:speakComplexDataIntelligently">
       /put/xpath/to/content/here
     </item>
   </list>	
   
-  <target title='Allow users to go to the next page regardless of which list they are in' hotkey='PGDOWN'>
+  <target title="Allow users to go to the next page regardless of which list they are in" hotkey="PGDOWN">
     /put/xpath/to/next/page/link/here
   </target>	
   

@@ -59,13 +59,14 @@ axsProductSearch.init = function(){
   //Add event listeners
   document.addEventListener('keypress', axsProductSearch.keyHandler, true);
   
-  var cnrString = "<cnr next='RIGHT l' prev='LEFT h'>" +
-                  "<list title='Cycle Results' next='DOWN j' prev='UP k' fwd='n' back='p'>" +
-                  "<item>" +
-                  "/html/body/table[3]/tbody/tr[not(@class)]" +
-                  "</item>" +
-                  "</list>" +
-                  "</cnr>";
+  var cnrString = '<cnr next="RIGHT l" prev="LEFT h">' +
+                  '  <list title="Cycle Results" next="DOWN j" prev="UP k" fw' +
+                  'd="n" back="p">' +
+                  '    <item>' +
+                  '      /html/body/table[3]/tbody/tr[not(@class)]' +
+                  '    </item>' +
+                  '  </list>' +
+                  '</cnr>';
 
   axsProductSearch.axsNavObj.navInit(cnrString, null);
 

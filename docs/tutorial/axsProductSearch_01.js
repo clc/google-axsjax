@@ -64,22 +64,23 @@ axsProductSearch.init = function(){
   //Add event listeners
   document.addEventListener('keypress', axsProductSearch.keyHandler, true);
   
-  var cnrString = "<cnr next='RIGHT l' prev='LEFT h'>" +
-                  "<list title='Cycle Results' next='DOWN j' prev='UP k' fwd='n' back='p'>" +
-                  "<item action='CALL:axsProductSearch.speakResult'>" +
-                  "/html/body/table[3]/tbody/tr[not(@class)]" +
-                  "</item>" +
-                  "<target title='Next page' trigger='listTail'>" +
-                  "//img[contains(@src,'nav_next.gif')]/.." +
-                  "</target>" +
-                  "<target title='Previous page' trigger='listHead'>" +
-                  "//img[contains(@src,'G_oogle_arrow.gif')]/.." +
-                  "</target>" +
-                  "<target title='Go to result' hotkey='ENTER'>" +
-                  "./td[contains(@class,'ps-rcont')]/a" +
-                  "</target>" +
-                  "</list>" +
-                  "</cnr>";
+  var cnrString = '<cnr next="RIGHT l" prev="LEFT h">' +
+                  '  <list title="Cycle Results" next="DOWN j" prev="UP k" fw' +
+                  'd="n" back="p">' +
+                  '    <item>' +
+                  '      /html/body/table[3]/tbody/tr[not(@class)]' +
+                  '    </item>' +
+                  '    <target title="Next page" trigger="listTail">' +
+                  '      //img[contains(@src,"nav_next.gif")]/..' +
+                  '    </target>' +
+                  '    <target title="Previous page" trigger="listHead">' +
+                  '      //img[contains(@src,"G_oogle_arrow.gif")]/..' +
+                  '    </target>	' +
+                  '    <target title="Go to result" hotkey="ENTER">' +
+                  '      ./td[contains(@class,"ps-rcont")]/a' +
+                  '    </target>' +
+                  '  </list>' +
+                  '</cnr>';
 
   axsProductSearch.axsNavObj.navInit(cnrString, null);
 
