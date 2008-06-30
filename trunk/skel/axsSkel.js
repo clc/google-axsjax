@@ -61,7 +61,7 @@ axsSkel.init = function(){
   document.addEventListener('DOMAttrModified', axsSkel.attrModifiedHandler, true);
   document.addEventListener('keypress', axsSkel.keyHandler, true);
   
-  var cnrString = "PUT THE CNR XML HERE";
+  var cnrString = 'PUT THE CNR XML HERE';
 
   axsSkel.axsNavObj.navInit(cnrString, null);
 
