@@ -216,212 +216,227 @@ axsQuotes.init = function(){
                             true);
 
   //Content navigation rule is hardcoded for efficiency
-  var cnrString = "<cnr next='RIGHT l' prev='LEFT h'>" +
-
-  "<target title='Stock screener' hotkey='s'>" +
-    "//body//tbody//td[2]/form/a" +
-  "</target>" +
-
-  "<list title='Market data' next='DOWN j' prev='UP k' fwd='n' back='p'>" +
-    "<item action='CALL:axsQuotes.readCurrentQuote'>" +
-      "id('md')//tr[1]/td[1]" +
-    "</item>" +
-    "<item action='CALL:axsQuotes.readMarketDataRow'>" +
-      "id('md')//tr" +
-    "</item>" +
-    "<item action='CALL:axsQuotes.readAfterHours'>" +
-      "id('md')//tr//nobr" +
-    "</item>" +
-    "<target title='Go to section' trigger='listEntry'>" +
-      "id('companyheader')" +
-    "</target>" +
-  "</list>" +
-
-  "<list title='News' next='DOWN j' prev='UP k' fwd='n' back='p'>" +
-    "<item action='CALL:axsQuotes.readNewsDesc'>" +
-      "id('newsmovingdiv')//div[@class='inner']//tbody" +
-    "</item>" +
-    "<item>" +
-      "id('older_news_link')//following-sibling::a[not(./img)]" +
-    "</item>" +
-    "<target title='Go to link' hotkey='ENTER'>" +
-       ".//ancestor-or-self::a" +
-    "</target>" +
-    "<target title='Related articles' hotkey='r' onEmpty='No related " +
-        "articles available'>" +
-      "./../../..//a[@class='g bld' or @class='rl' or @class='rg']" +
-    "</target>" +
-    "<target title='Go to section' trigger='listEntry'>" +
-      "id('companyheader')" +
-    "</target>" +
-  "</list>" +
-
-  "<list title='Related companies' next='DOWN j' prev='UP k' fwd='n' " +
-      "back='p'>" +
-    "<item action='CALL:axsQuotes.readRelCompDesc'>" +
-      "id('related')//tbody//tr" +
-    "</item>" +
-    "<target title='Go to link' hotkey='ENTER'>" +
-       ".//a" +
-    "</target>" +
-    "<target title='Go to section' trigger='listEntry'>" +
-      "id('related')/div[@class='hdg']" +
-    "</target>" +
-  "</list>" +
-
-  "<list title='Discussions' next='DOWN j' prev='UP k' fwd='n' back='p'>" +
-    "<item>" +
-      "id('groups')//div[@class='item']" +
-    "</item>" +
-    "<target title='Go to link' hotkey='ENTER'>" +
-       ".//a" +
-    "</target>" +
-    "<target title='Go to section' trigger='listEntry'>" +
-      "id('groups')/div[@class='hdg']" +
-    "</target>" +
-  "</list>" +
-
-  "<list title='Blog posts' next='DOWN j' prev='UP k' fwd='n' back='p'>" +
-    "<item>" +
-      "id('blogs')//div[@class='item']" +
-    "</item>" +
-    "<target title='Go to link' hotkey='ENTER' onEmpty='No link available.'>" +
-      ".//a" +
-    "</target>" +
-    "<target title='Go to section' trigger='listEntry'>" +
-      "id('blogs')/div[@class='hdg']" +
-    "</target>" +
-  "</list>" +
-
-  "<list title='Events' next='DOWN j' prev='UP k' fwd='n' back='p'>" +
-    "<item action='CALL:axsQuotes.readEventsDesc'>" +
-      "id('events')//tr" +
-    "</item>" +
-    "<item>" +
-      "id('events')/following-sibling::*//a" +
-    "</item>" +
-    "<target title='Go to section' trigger='listEntry'>" +
-      "id('blogs')/following-sibling::div[@class='content']/div[@class='hdg']" +
-    "</target>" +
-    "<target title='Go to link' hotkey='ENTER' onEmpty='No link available.'>" +
-      ".//descendant-or-self::a" +
-    "</target>" +
-  "</list>" +
-
-  "<list title='Summary' next='DOWN j' prev='UP k' fwd='n' back='p'>" +
-    "<item action='CALL:axsQuotes.readSummaryTextCompDesc'>" +
-      "id('summary')//div[@class='item companySummary']" +
-    "</item>" +
-    "<item>" +
-      "id('summary')//div[@class='content']//td[1]" +
-    "</item>" +
-    "<item action='CALL:axsQuotes.readSummarylinksCompDesc'>" +
-      "id('summary')//div[@class='content']//a[@id='fs-chome' or @id='fs-']" +
-    "</item>" +
-    "<target title='Go to link' hotkey='ENTER' onEmpty='No link available.'>" +
-      ".//descendant-or-self::a" +
-    "</target>" +
-    "<target title='Go to section' trigger='listEntry'>" +
-      "id('summary')/div[@class='hdg']" +
-    "</target>" +
-  "</list>" +
-
-  "<list title='Income statement in millions of US dollars' next='DOWN j' " +
-      "prev='UP k' fwd='n' back='p'>" +
-    "<item action='CALL:axsQuotes.readFinancialCompDesc'>" +
-      "id('fd')//tr[position() &gt; 1 and position() &lt; 6]" +
-    "</item>" +
-    "<target title='Income statement section' trigger='listEntry'>" +
-      "id('fd')//tr[1]//td[1]axsQuotes.str.BIO" +
-    "</target>" +
-    "<target title='Go to link' hotkey='ENTER'>" +
-      "./../tr[1]//a" +
-    "</target>" +
-    "<target title='Go to section' trigger='listEntry'>" +
-      "id('fd')//tr[1][//a]" +
-    "</target>" +
-  "</list>" +
-  
-  "<list title='Balance sheet in millions of US dollars' " +
-      "next='DOWN j' prev='UP k' fwd='n' back='p'>" +
-    "<item action='CALL:axsQuotes.readFinancialCompDesc'>" +
-      "id('fd')//tr[position() &gt; 6 and position() &lt; 12]" +
-    "</item>" +
-    "<target title='Go to link' hotkey='ENTER'>" +
-      "./../tr[6]//a" +
-    "</target>" +
-    "<target title='Go to section' trigger='listEntry'>" +
-      "id('fd')//tr[6][//a]" +
-    "</target>" +
-  "</list>" +
-
-  "<list title='Cash flow in millions of US dollars' next='DOWN j' " +
-      "prev='UP k' fwd='n' back='p'>" +
-    "<item action='CALL:axsQuotes.readFinancialCompDesc'>" +
-      "id('fd')//tr[position() &gt; 12 and position() &lt; 18]" +
-    "</item>" +
-    "<target title='Go to link' hotkey='ENTER'>" +
-      "./../tr[12]//a" +
-    "</target>" +
-    "<target title='Go to section' trigger='listEntry'>" +
-      "id('fd')//tr[12][//a]" +
-    "</target>" +
-  "</list>" +
-
-  "<list title='Key statistics and ratios' next='DOWN j' prev='UP k' " +
-      "fwd='n' back='p'>" +
-    "<item action='CALL:axsQuotes.readRatAndStatsCompDesc'>" +
-      "id('keyratios')//tr[@class]" +
-    "</item>" +
-    "<item>" +
-      "id('keyratios')//a" +
-    "</item>" +
-    "<target title='More ratios' hotkey='ENTER' onEmpty='No link available.'>" +
-      "." +
-    "</target>" +
-    "<target title='Go to section' trigger='listEntry'>" +
-      "id('keyratios')/div[@class='hdg']" +
-    "</target>" +
-  "</list>" +
-
-  "<list title='More resources' next='DOWN j' prev='UP k' fwd='n' back='p'>" +
-    "<item>" +
-      "id('m-analyst')/.. | id('m-sec')/.. | id('m-hold')/.. | " +
-      "id('m-options')/.. | id('m-research')/.. | id('m-wiki')/.. | " +
-      "id('m-transcripts')/.." +
-    "</item>" +
-    "<target title='Go to link' hotkey='ENTER'>" +
-      ".//a" +
-    "</target>" +
-    "<target title='Go to section' trigger='listEntry' >" +
-      "id('keyratios')/following-sibling::div[@class='hdg']" +
-    "</target>" +
-  "</list>" +
-
-  "<list title='Officers and directors' next='DOWN j' prev='UP k' fwd='n' " +
-      "back='p'>" +
-    "<item action='CALL:axsQuotes.readManagementDescription'>" +
-      "id('management')//tr[not(@id='hide') and @id]" +
-    "</item>" +
-    "<item>" +
-      "id('management')//td/a" +
-    "</item>" +
-    "<target title='Biography and compensation' hotkey='b'>" +
-      ".//following-sibling::tr[1]//a[@id='e-p']" +
-    "</target>" +
-    "<target title='Trading activity' hotkey='t' onEmpty='No trading " +
-        "activity available.'>" +
-      ".//following-sibling::tr[1]//a[@id='e-t']" +
-    "</target>" +
-    "<target title='Go to link' hotkey='ENTER' onEmpty='No link available.'>" +
-      "." +
-    "</target>" +
-    "<target title='Go to section' trigger='listEntry'>" +
-      "id('mgmtdiv')" +
-    "</target>" +
-  "</list>" +
-
-  "</cnr>";
+  var cnrString = '<cnr next="RIGHT l" prev="LEFT h">' +
+                  '  <target title="Stock screener" hotkey="s">' +
+                  '    //a[@href="/finance/stockscreener"]' +
+                  '  </target>' +
+                  '  <list title="Market data" next="DOWN j" prev="UP k" fwd=' +
+                  '"n" back="p">' +
+                  '    <item action="CALL:axsQuotes.readCurrentQuote">' +
+                  '      id("md")//span[@class="pr"]/..' +
+                  '    </item>' +
+                  '    <item action="CALL:axsQuotes.readMarketDataRow">' +
+                  '      id("md")//tr' +
+                  '    </item>' +
+                  '    <item action="CALL:axsQuotes.readAfterHours">' +
+                  '      id("md")//tr//nobr' +
+                  '    </item>' +
+                  '    <target title="Go to section" trigger="listEntry">' +
+                  '      id("companyheader")' +
+                  '    </target>' +
+                  '  </list>' +
+                  '  <list title="News" next="DOWN j" prev="UP k" fwd="n" bac' +
+                  'k="p">' +
+                  '    <item action="CALL:axsQuotes.readNewsDesc">' +
+                  '      id("newsmovingdiv")//div[@class="inner"]//tbody' +
+                  '    </item>' +
+                  '    <item>' +
+                  '      id("older_news_link")//following-sibling::a[not(./im' +
+                  'g)]' +
+                  '    </item>' +
+                  '    <target title="Go to link" hotkey="ENTER">' +
+                  '      .//ancestor-or-self::a' +
+                  '    </target>' +
+                  '    <target title="Related articles" hotkey="r" onEmpty="N' +
+                  'o related ' +
+                  '        articles available">' +
+                  '      .//a[@class="g bld" or @class="rl" or @class="rg"]' +
+                  '    </target>' +
+                  '    <target title="Go to section" trigger="listEntry">' +
+                  '      id("companyheader")' +
+                  '    </target>' +
+                  '  </list>' +
+                  '  <list title="Related companies" next="DOWN j" prev="UP k' +
+                  '" fwd="n" ' +
+                  '      back="p">' +
+                  '    <item action="CALL:axsQuotes.readRelCompDesc">' +
+                  '      id("related")//tbody//tr' +
+                  '    </item>' +
+                  '    <target title="Go to link" hotkey="ENTER">' +
+                  '       .//a' +
+                  '    </target>' +
+                  '    <target title="Go to section" trigger="listEntry">' +
+                  '      id("related")/div[@class="hdg"]' +
+                  '    </target>' +
+                  '  </list>' +
+                  '  <list title="Discussions" next="DOWN j" prev="UP k" fwd=' +
+                  '"n" back="p">' +
+                  '    <item>' +
+                  '      id("groups")//div[@class="item"]' +
+                  '    </item>' +
+                  '    <target title="Go to link" hotkey="ENTER">' +
+                  '      .//a' +
+                  '    </target>' +
+                  '    <target title="Go to section" trigger="listEntry">' +
+                  '      id("groups")/div[@class="hdg"]' +
+                  '    </target>' +
+                  '  </list>' +
+                  '  <list title="Blog posts" next="DOWN j" prev="UP k" fwd="' +
+                  'n" back="p">' +
+                  '    <item>' +
+                  '      id("blogs")//div[@class="item"]' +
+                  '    </item>' +
+                  '    <target title="Go to link" hotkey="ENTER" onEmpty="No ' +
+                  'link available.">' +
+                  '      .//a' +
+                  '    </target>' +
+                  '    <target title="Go to section" trigger="listEntry">' +
+                  '      id("blogs")/div[@class="hdg"]' +
+                  '    </target>' +
+                  '  </list>' +
+                  '  <list title="Events" next="DOWN j" prev="UP k" fwd="n" b' +
+                  'ack="p">' +
+                  '    <item action="CALL:axsQuotes.readEventsDesc">' +
+                  '      id("events")//tr' +
+                  '    </item>' +
+                  '    <item>' +
+                  '      id("events")/following-sibling::*//a' +
+                  '    </item>' +
+                  '    <target title="Go to section" trigger="listEntry">' +
+                  '      id("blogs")/following-sibling::div[@class="content"]' +
+                  '/div[@class="hdg"]' +
+                  '    </target>' +
+                  '    <target title="Go to link" hotkey="ENTER" onEmpty="No ' +
+                  'link available.">' +
+                  '      .//descendant-or-self::a' +
+                  '    </target>' +
+                  '  </list>' +
+                  '  <list title="Summary" next="DOWN j" prev="UP k" fwd="n" ' +
+                  'back="p">' +
+                  '    <item action="CALL:axsQuotes.readSummaryTextCompDesc">' +
+                  '      id("summary")//div[@class="item companySummary"]' +
+                  '    </item>' +
+                  '    <item>' +
+                  '      id("summary")//div[@class="content"]//td[1]' +
+                  '    </item>' +
+                  '    <item action="CALL:axsQuotes.readSummarylinksCompDesc"' +
+                  '>' +
+                  '      id("summary")//div[@class="content"]//a[contains(@id' +
+                  ',"fs-")]' +
+                  '    </item>' +
+                  '    <target title="Go to link" hotkey="ENTER" onEmpty="No ' +
+                  'link available.">' +
+                  '      .//descendant-or-self::a' +
+                  '    </target>' +
+                  '    <target title="Go to section" trigger="listEntry">' +
+                  '      id("summary")/div[@class="hdg"]' +
+                  '    </target>' +
+                  '  </list>' +
+                  '  <list title="Income statement in millions of US dollars"' +
+                  ' next="DOWN j" ' +
+                  '      prev="UP k" fwd="n" back="p">' +
+                  '    <item index="1" count="4" action="CALL:axsQuotes.readF' +
+                  'inancialCompDesc">' +
+                  '      id("fd")//tr' +
+                  '    </item>' +
+                  '    <target title="Income statement section" trigger="list' +
+                  'Entry">' +
+                  '      id("fd")//tr[1]//td[1]axsQuotes.str.BIO' +
+                  '    </target>' +
+                  '    <target title="Go to link" hotkey="ENTER">' +
+                  '      ./../tr[1]//a' +
+                  '    </target>' +
+                  '    <target title="Go to section" trigger="listEntry">' +
+                  '      id("fd")//tr[1][//a]' +
+                  '    </target>' +
+                  '  </list>  ' +
+                  '  <list title="Balance sheet in millions of US dollars" ' +
+                  '      next="DOWN j" prev="UP k" fwd="n" back="p">' +
+                  '    <item index="7" count="5" action="CALL:axsQuotes.readF' +
+                  'inancialCompDesc">' +
+                  '      id("fd")//tr' +
+                  '    </item>' +
+                  '    <target title="Go to link" hotkey="ENTER">' +
+                  '      ./../tr[6]//a' +
+                  '    </target>' +
+                  '    <target title="Go to section" trigger="listEntry">' +
+                  '      id("fd")//tr[6][//a]' +
+                  '    </target>' +
+                  '  </list>' +
+                  '  <list title="Cash flow in millions of US dollars" next="' +
+                  'DOWN j" ' +
+                  '      prev="UP k" fwd="n" back="p">' +
+                  '    <item index="12" count="5" action="CALL:axsQuotes.read' +
+                  'FinancialCompDesc">' +
+                  '      id("fd")//tr' +
+                  '    </item>' +
+                  '    <target title="Go to link" hotkey="ENTER">' +
+                  '      ./../tr[12]//a' +
+                  '    </target>' +
+                  '    <target title="Go to section" trigger="listEntry">' +
+                  '      id("fd")//tr[12][//a]' +
+                  '    </target>' +
+                  '  </list>' +
+                  '  <list title="Key statistics and ratios" next="DOWN j" pr' +
+                  'ev="UP k" ' +
+                  '      fwd="n" back="p">' +
+                  '    <item action="CALL:axsQuotes.readRatAndStatsCompDesc">' +
+                  '      id("keyratios")//tr[@class]' +
+                  '    </item>' +
+                  '    <item>' +
+                  '      id("keyratios")//a' +
+                  '    </item>' +
+                  '    <target title="More ratios" hotkey="ENTER" onEmpty="No' +
+                  ' link available.">' +
+                  '      .' +
+                  '    </target>' +
+                  '    <target title="Go to section" trigger="listEntry">' +
+                  '      id("keyratios")/div[@class="hdg"]' +
+                  '    </target>' +
+                  '  </list>' +
+                  '  <list title="More resources" next="DOWN j" prev="UP k" f' +
+                  'wd="n" back="p">' +
+                  '    <item>' +
+                  '      id("m-analyst")/.. | id("m-sec")/.. | id("m-hold")/.' +
+                  '. | ' +
+                  '          id("m-options")/.. | id("m-research")/.. | id("m' +
+                  '-wiki")/.. | ' +
+                  '          id("m-transcripts")/..' +
+                  '    </item>' +
+                  '    <target title="Go to link" hotkey="ENTER">' +
+                  '      .//a' +
+                  '    </target>' +
+                  '    <target title="Go to section" trigger="listEntry" >' +
+                  '      id("keyratios")/following-sibling::div[@class="hdg"]' +
+                  '    </target>' +
+                  '  </list>' +
+                  '  <list title="Officers and directors" next="DOWN j" prev=' +
+                  '"UP k" fwd="n" ' +
+                  '      back="p">' +
+                  '    <item action="CALL:axsQuotes.readManagementDescription' +
+                  '">' +
+                  '      id("management")//tr[not(@id="hide") and @id]' +
+                  '    </item>' +
+                  '    <item>' +
+                  '      id("management")//td/a' +
+                  '    </item>' +
+                  '    <target title="Biography and compensation" hotkey="b">' +
+                  '      .//following-sibling::tr[1]//a[@id="e-p"]' +
+                  '    </target>' +
+                  '    <target title="Trading activity" hotkey="t" onEmpty="N' +
+                  'o trading ' +
+                  '        activity available.">' +
+                  '      .//following-sibling::tr[1]//a[@id="e-t"]' +
+                  '    </target>' +
+                  '    <target title="Go to link" hotkey="ENTER" onEmpty="No ' +
+                  'link available.">' +
+                  '      .' +
+                  '    </target>' +
+                  '    <target title="Go to section" trigger="listEntry">' +
+                  '      id("mgmtdiv")' +
+                  '    </target>' +
+                  '  </list>' +
+                  '  </cnr>';
 
   axsQuotes.axsNavObj.navInit(cnrString, null);
   axsQuotes.axsLensObj = new AxsLens(axsQuotes.axsJAXObj);
