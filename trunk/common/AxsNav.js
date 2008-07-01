@@ -110,7 +110,7 @@ AxsNav.prototype.validateList = function(navList) {
     navList.targets = this.makeTargetsArray(navList.cnrNode);
     this.navItemIdxs[this.navListIdx] = -1;
   }
-  if ((navList.items.length === 0) || (navList.entryTarget === null)){
+  if ((navList.items.length === 0) && (navList.entryTarget === null)){
     valid = false;
   }
   return valid;
