@@ -27,7 +27,6 @@ var axsStock = {};
  * @type {Object}
  */
 axsStock.str = {
-  EMPTY : '',
   MIN : 'Min,',
   MAX : 'Max,',
   COMPANIES_FOUND : 'companies found',
@@ -89,378 +88,434 @@ axsStock.SORT_ORDER_STRING = 'Column {0} sorted in {1} order.';
  * Top section of the Results CNR which is dynamically generated
  * @type {string}
  */
-axsStock.CNR_RES_TOP_STRING = "<cnr next='RIGHT l' prev='LEFT h'>" + '\n' +
+axsStock.CNR_RES_TOP_STRING = '<cnr next="RIGHT l" prev="LEFT h">' + '\n' +
 
-    "<target title='Go to the stock screener section' hotkey='s' " +
-        "action='CALL:axsStock.loadStockScreenerCNRAndPosition'>" +
-      "/html" +
-    "</target>" +
+    '<target title="Go to the stock screener section" hotkey="s" ' +
+        'action="CALL:axsStock.loadStockScreenerCNRAndPosition">' +
+      '/html' +
+    '</target>' +
 
-    "<target title='Search company' hotkey='f' " +
-        "action='CALL:axsStock.goToRow'>" +
-      "/html" +
-    "</target>" +
+    '<target title="Search company" hotkey="f" ' +
+        'action="CALL:axsStock.goToRow">' +
+      '/html' +
+    '</target>' +
 
-    "<target title='Search criteria' hotkey='c' " +
-        "action='CALL:axsStock.goToColumn'>" +
-      "/html" +
-    "</target>" +
+    '<target title="Search criteria" hotkey="c" ' +
+        'action="CALL:axsStock.goToColumn">' +
+      '/html' +
+    '</target>' +
 
-    "<target title='Search column value' hotkey='v' " +
-        "action='CALL:axsStock.goToValueInColumn'>" +
-      "/html" +
-    "</target>" +
+    '<target title="Search column value" hotkey="v" ' +
+        'action="CALL:axsStock.goToValueInColumn">' +
+      '/html' +
+    '</target>' +
 
-    "<target title='Search row value' hotkey='z' " +
-        "action='CALL:axsStock.goToValueInRow'>" +
-      "/html" +
-    "</target>";
+    '<target title="Search row value" hotkey="z" ' +
+        'action="CALL:axsStock.goToValueInRow">' +
+      '/html' +
+    '</target>';
 
 /**
  * Bottom section of the Results CNR which is dynamically generated
  * @type {string}
  */
-axsStock.CNR_RES_BTM_STRING = "</cnr>";
+axsStock.CNR_RES_BTM_STRING = '</cnr>';
 
 /**
  * Body section of the Results CNR which is a template applied for each column
  * @type {string}
  */
-axsStock.CNR_RES_STRING = "<list title='{0}' fwd='DOWN j n' back='UP k p' " +
-        "type='dynamic'>" +
+axsStock.CNR_RES_STRING = '<list title="{0}" fwd="DOWN j n" back="UP k p" ' +
+    '        type="dynamic">' +
 
-    "<item action='CALL:axsStock.readResultCellValue'>" +
-      "id('searchresults')/table[@class='results innermargin']//tr/td[{1}]" +
-      "[not(@class='top_row') and not(@class='bottom_row')]" +
-    "</item>" +
+    '    <item action="CALL:axsStock.readResultCellValue">' +
+    '      id("searchresults")/table[@class="results innermargi' +
+    'n"]//tr/td[{1}]' +
+    '          [not(@class="top_row") and not(@class="bottom_ro' +
+    'w")]' +
+    '    </item>' +
 
-    "<target title='Go to section' trigger='listEntry' " +
-        "action='CALL:axsStock.readResultCellValueListEntry'>" +
-      "id('criteria_rows')" +
-    "</target>" +
+    '    <target title="Go to section" trigger="listEntry" ' +
+    '        action="CALL:axsStock.readResultCellValueListEntry' +
+    '">' +
+    '      id("criteria_rows")' +
+    '    </target>' +
 
-    "<target title='Go to link' hotkey='ENTER' onEmpty='No link available'>" +
-      ".//a" +
-    "</target>" +
+    '    <target title="Go to link" hotkey="ENTER" onEmpty="No ' +
+    'link available">' +
+    '      .//a' +
+    '    </target>' +
 
-    "<target title='Next page' trigger='listTail' " +
-        "action='CALL:axsStock.wrapAround'>" +
-      "id('searchresults')//td[position() > 1]//span[@class='navb']/..  " +
-          " | //div[@class='footerLinks']" +
-    "</target>" +
+    '    <target title="Next page" trigger="listTail" ' +
+    '        action="CALL:axsStock.wrapAround">' +
+    '      id("searchresults")//td[position() > 1]//span[@class' +
+    '="navb"]/..  ' +
+    '           | //div[@class="footerLinks"]' +
+    '    </target>' +
 
-    "<target title='Previous page' trigger='listHead' " +
-        "action='CALL:axsStock.wrapAround'>" +
-      "id('searchresults')//td[1]//span[@class='navb']/.. " +
-          "| //div[@class='footerLinks']" +
-    "</target>" +
+    '    <target title="Previous page" trigger="listHead" ' +
+    '        action="CALL:axsStock.wrapAround">' +
+    '      id("searchresults")//td[1]//span[@class="navb"]/.. ' +
+    '          | //div[@class="footerLinks"]' +
+    '    </target>' +
 
-    "<target title='Reverse sorting order' hotkey='r' onEmpty='This column is" +
-        "not sortable' action='CALL:axsStock.clickSortLinkAndGoTop'>" +
-      "id('searchresults')//td[{1}]/a[@class='activelink']" +
-    "</target>" +
+    '    <target title="Reverse sorting order" hotkey="r" onEmp' +
+    'ty="This column is' +
+    '        not sortable" action="CALL:axsStock.clickSortLinkA' +
+    'ndGoTop">' +
+    '      id("searchresults")//td[{1}]/a[@class="activelink"]' +
+    '    </target>' +
 
-  "</list>";
+    '    </list>';
 
 /**
  * CNR String for the stock screener controls section
  * @type {string}
  */
-axsStock.CNR_ST_SCR_STRING = "<cnr next='RIGHT l' prev='LEFT h'>" +
-
-    "<target title='Go to the results section' hotkey='s' " +
-        "action='CALL:axsStock.buildAndLoadResultTableCNR'>" +
-      "/html" +
-    "</target>" +
-
-    "<target title='Open and close criteria wizard' hotkey='w' " +
-        "action='CALL:axsStock.openCloseWizard'>" +
-      "id('action_links')" +
-    "</target>" +
-
-    "<target title='Reset to default criteria' hotkey='d'>" +
-      "id('action_links')//a[not(@class)]" +
-    "</target>" +
-
-    "<target title='Search company' hotkey='f' " +
-        "action='CALL:axsStock.goToRow'>" +
-      "/html" +
-    "</target>" +
-
-    "<target title='Search criteria' hotkey='c' " +
-        "action='CALL:axsStock.goToColumn'>" +
-      "/html" +
-    "</target>" +
-
-    "<target title='Search column value' hotkey='v' " +
-        "action='CALL:axsStock.goToValueInColumn'>" +
-      "/html" +
-    "</target>" +
-
-    "<target title='Search row value' hotkey='z' " +
-        "action='CALL:axsStock.goToValueInRow'>" +
-      "/html" +
-    "</target>" +
-
-    "<list title='Region' next='DOWN j' prev='UP k' fwd='n' back='p' " +
-        "type='dynamic'>" +
-
-      "<item action='CALL:axsStock.readDropDownListItem'>" +
-        "id('regionselect')//option" +
-      "</item>" +
-
-      "<target title='Focus on region' trigger='listEntry' " +
-          "action='CALL:axsStock.focusOnDropDownList'>" +
-        "id('regionselect')" +
-      "</target>" +
-
-      "<target title='Select region' hotkey='ENTER' " +
-          "action='CALL:axsStock.selectDropDownListOption'>" +
-        "/html" +
-      "</target>" +
-
-    "</list>" +
-
-    "<list title='Exchange' next='DOWN j' prev='UP k' fwd='n' back='p' " +
-        "type='dynamic'>" +
-
-      "<item action='CALL:axsStock.readDropDownListItem'>" +
-        "id('exchangeselect')//option" +
-      "</item>" +
-
-      "<target title='Focus on exchange' trigger='listEntry' " +
-          "action='CALL:axsStock.focusOnDropDownList'>" +
-        "id('exchangeselect')" +
-      "</target>" +
-
-      "<target title='Select exchange' hotkey='ENTER' " +
-          "action='CALL:axsStock.selectDropDownListOption'>" +
-        "/html" +
-      "</target>" +
-
-    "</list>" +
-
-    "<list title='Sector' next='DOWN j' prev='UP k' fwd='n' back='p' " +
-        "type='dynamic'>" +
-
-      "<item action='CALL:axsStock.readDropDownListItem'>" +
-        "id('sectorselect')//option" +
-      "</item>" +
-
-      "<target title='Focus on sector' trigger='listEntry' " +
-          "action='CALL:axsStock.focusOnDropDownList'>" +
-        "id('sectorselect')" +
-      "</target>" +
-
-      "<target title='Select sector' hotkey='ENTER' " +
-          "action='CALL:axsStock.selectDropDownListOption'>" +
-        "/html" +
-      "</target>" +
-
-    "</list>" +
-
-    "<list title='Criteria list' next='DOWN j' prev='UP k' fwd='n' back='p' " +
-        "type='dynamic'>" +
-
-      "<item action='CALL:axsStock.readCriteriaDesc'>" +
-        "id('criteria_rows_tbody')/tr[not(.//b)]" +
-      "</item>" +
-
-      "<target title='Load CNR and go to section' trigger='listEntry' " +
-          "action='CALL:axsStock.refreshStockCriteriaCNRAndAnnounceList'>" +
-        "id('criteria_rows')" +
-      "</target>" +
-
-      "<target title='Delete criteria' hotkey='DEL' onEmpty='This element is " +
-          "not a criteria' action='CALL:axsStock.removeCriteria'>" +
-        ".//img[not(@id) and @class='activelink']" +
-      "</target>" +
-
-      "<target title='Edit criteria' hotkey='ENTER' onEmpty='This element is " +
-          "not a criteria' action='CALL:axsStock.focusOnCriteriaRangeInput'>" +
-        "/html" +
-      "</target>" +
-
-      "<target title='Explain criteria' hotkey='e' onEmpty='This element is " +
-          "not a criteria and has no explanation' " +
-          "action='CALL:axsStock.readCriteriaHelp'>" +
-        ".//img[@id and @class='activelink']/.." +
-      "</target>" +
-
-    "</list>" +
-
-    "<list title='Popular criteria' next='DOWN j' prev='UP k' fwd='n' " +
-        "back='p' type='dynamic'>" +
-
-      "<item action='CALL:axsStock.readCriteriaExplanation'>" +
-        "id('popular')//a" +
-      "</item>" +
-
-      "<target title='Load CNR and go to section' trigger='listEntry' " +
-          "action='CALL:axsStock.readCurrentCrtieriaList'>" +
-        "//table[@class='searchtabs']//tr[1]//a" +
-      "</target>" +
-
-      "<target title='Add selected criteria' hotkey='ENTER' " +
-          "action='CALL:axsStock.addCriteria'>" +
-        "id('criteria_button')/button" +
-      "</target>" +
-
-    "</list>" +
-
-    "<list title='Price criteria' next='DOWN j' prev='UP k' fwd='n' " +
-        "back='p' type='dynamic'>" +
-
-      "<item action='CALL:axsStock.readCriteriaExplanation'>" +
-        "id('price')//a" +
-      "</item>" +
-
-      "<target title='Load CNR and go to section' trigger='listEntry' " +
-          "action='CALL:axsStock.readCurrentCrtieriaList'>" +
-        "//table[@class='searchtabs']//tr[2]//a" +
-      "</target>" +
-
-      "<target title='Add selected criteria' hotkey='ENTER' " +
-          "action='CALL:axsStock.addCriteria'>" +
-        "id('criteria_button')/button" +
-      "</target>" +
-
-    "</list>" +
-
-    "<list title='Volume criteria' next='DOWN j' prev='UP k' fwd='n' " +
-        "back='p' type='dynamic'>" +
-
-      "<item action='CALL:axsStock.readCriteriaExplanation'>" +
-        "id('volume')//a" +
-      "</item>" +
-
-      "<target title='Load CNR and go to section' trigger='listEntry' " +
-          "action='CALL:axsStock.readCurrentCrtieriaList'>" +
-        "//table[@class='searchtabs']//tr[3]//a" +
-      "</target>" +
-
-      "<target title='Add selected criteria' hotkey='ENTER' " +
-          "action='CALL:axsStock.addCriteria'>" +
-        "id('criteria_button')/button" +
-      "</target>" +
-
-    "</list>" +
-
-    "<list title='Valuation criteria' next='DOWN j' prev='UP k' fwd='n' " +
-        "back='p' type='dynamic'>" +
-
-      "<item action='CALL:axsStock.readCriteriaExplanation'>" +
-        "id('valuation')//a" +
-      "</item>" +
-
-      "<target title='Load CNR and go to section' trigger='listEntry' " +
-          "action='CALL:axsStock.readCurrentCrtieriaList'>" +
-        "//table[@class='searchtabs']//tr[4]//a" +
-      "</target>" +
-
-      "<target title='Add selected criteria' hotkey='ENTER' " +
-          "action='CALL:axsStock.addCriteria'>" +
-        "id('criteria_button')/button" +
-      "</target>" +
-
-    "</list>" +
-
-    "<list title='Dividend criteria' next='DOWN j' prev='UP k' fwd='n' " +
-        "back='p' type='dynamic'>" +
-
-      "<item action='CALL:axsStock.readCriteriaExplanation'>" +
-        "id('dividend')//a" +
-      "</item>" +
-
-      "<target title='Load CNR and go to section' trigger='listEntry' " +
-          "action='CALL:axsStock.readCurrentCrtieriaList'>" +
-        "//table[@class='searchtabs']//tr[5]//a" +
-      "</target>" +
-
-      "<target title='Add selected criteria' hotkey='ENTER' " +
-          "action='CALL:axsStock.addCriteria'>" +
-        "id('criteria_button')/button" +
-      "</target>" +
-
-    "</list>" +
-
-    "<list title='Balance sheet criteria' next='DOWN j' prev='UP k' fwd='n' " +
-        "back='p' type='dynamic'>" +
-
-      "<item action='CALL:axsStock.readCriteriaExplanation'>" +
-        "id('balancesheetratios')//a" +
-      "</item>" +
-
-      "<target title='Load CNR and go to section' trigger='listEntry' " +
-          "action='CALL:axsStock.readCurrentCrtieriaList'>" +
-        "//table[@class='searchtabs']//tr[6]//a" +
-      "</target>" +
-
-      "<target title='Add selected criteria' hotkey='ENTER' " +
-          "action='CALL:axsStock.addCriteria'>" +
-        "id('criteria_button')/button" +
-      "</target>" +
-
-    "</list>" +
-
-    "<list title='Stock metrics criteria' next='DOWN j' prev='UP k' fwd='n' " +
-        "back='p' type='dynamic'>" +
-
-      "<item action='CALL:axsStock.readCriteriaExplanation'>" +
-        "id('stockmetrics')//a" +
-      "</item>" +
-
-      "<target title='Load CNR and go to section' trigger='listEntry' " +
-          "action='CALL:axsStock.readCurrentCrtieriaList'>" +
-        "//table[@class='searchtabs']//tr[7]//a" +
-      "</target>" +
-
-      "<target title='Add selected criteria' hotkey='ENTER' " +
-          "action='CALL:axsStock.addCriteria'>" +
-        "id('criteria_button')/button" +
-      "</target>" +
-
-    "</list>" +
-
-    "<list title='Margins criteria' next='DOWN j' prev='UP k' fwd='n' " +
-        "back='p' type='dynamic'>" +
-
-      "<item action='CALL:axsStock.readCriteriaExplanation'>" +
-        "id('margins')//a" +
-      "</item>" +
-
-      "<target title='Load CNR and go to section' trigger='listEntry' " +
-          "action='CALL:axsStock.readCurrentCrtieriaList'>" +
-        "//table[@class='searchtabs']//tr[8]//a" +
-      "</target>" +
-
-      "<target title='Add selected criteria' hotkey='ENTER' " +
-          "action='CALL:axsStock.addCriteria'>" +
-        "id('criteria_button')/button" +
-      "</target>" +
-
-    "</list>" +
-
-    "<list title='Growth criteria' next='DOWN j' prev='UP k' fwd='n' " +
-        "back='p' type='dynamic'>" +
-
-      "<item action='CALL:axsStock.readCriteriaExplanation'>" +
-        "id('growth')//a" +
-      "</item>" +
-
-      "<target title='Load CNR and go to section' trigger='listEntry' " +
-          "action='CALL:axsStock.readCurrentCrtieriaList'>" +
-        "//table[@class='searchtabs']//tr[9]//a" +
-      "</target>" +
-
-      "<target title='Add selected criteria' hotkey='ENTER' " +
-          "action='CALL:axsStock.addCriteria'>" +
-        "id('criteria_button')/button" +
-      "</target>" +
-
-    "</list>" +
-
-  "</cnr>";
+axsStock.CNR_ST_SCR_STRING = '<cnr next="RIGHT l" prev="LEFT h">' +
+
+    '    <target title="Go to the results section" hotkey="s" ' +
+    '        action="CALL:axsStock.buildAndLoadResultTableCNR">' +
+    '      /html' +
+    '    </target>' +
+
+    '    <target title="Open and close criteria wizard" hotkey=' +
+    '"w" ' +
+    '        action="CALL:axsStock.openCloseWizard">' +
+    '      id("action_links")' +
+    '    </target>' +
+
+    '    <target title="Reset to default criteria" hotkey="d">' +
+    '      id("action_links")//a[not(@class)]' +
+    '    </target>' +
+
+    '    <target title="Search company" hotkey="f" ' +
+    '        action="CALL:axsStock.goToRow">' +
+    '      /html' +
+    '    </target>' +
+
+    '    <target title="Search criteria" hotkey="c" ' +
+    '        action="CALL:axsStock.goToColumn">' +
+    '      /html' +
+    '    </target>' +
+
+    '    <target title="Search column value" hotkey="v" ' +
+    '        action="CALL:axsStock.goToValueInColumn">' +
+    '      /html' +
+    '    </target>' +
+
+    '    <target title="Search row value" hotkey="z" ' +
+    '        action="CALL:axsStock.goToValueInRow">' +
+    '      /html' +
+    '    </target>' +
+
+    '    <list title="Region" next="DOWN j" prev="UP k" fwd="n"' +
+    ' back="p" ' +
+    '        type="dynamic">' +
+
+    '      <item action="CALL:axsStock.readDropDownListItem">' +
+    '        id("regionselect")//option' +
+    '      </item>' +
+
+    '      <target title="Focus on region" trigger="listEntry" ' +
+    '          action="CALL:axsStock.focusOnDropDownList">' +
+    '        id("regionselect")' +
+    '      </target>' +
+
+    '      <target title="Select region" hotkey="ENTER" ' +
+    '          action="CALL:axsStock.selectDropDownListOption">' +
+    '        /html' +
+    '      </target>' +
+
+    '    </list>' +
+
+    '    <list title="Exchange" next="DOWN j" prev="UP k" fwd="' +
+    'n" back="p" ' +
+    '        type="dynamic">' +
+
+    '      <item action="CALL:axsStock.readDropDownListItem">' +
+    '        id("exchangeselect")//option' +
+    '      </item>' +
+
+    '      <target title="Focus on exchange" trigger="listEntry' +
+    '" ' +
+    '          action="CALL:axsStock.focusOnDropDownList">' +
+    '        id("exchangeselect")' +
+    '      </target>' +
+
+    '      <target title="Select exchange" hotkey="ENTER" ' +
+    '          action="CALL:axsStock.selectDropDownListOption">' +
+    '        /html' +
+    '      </target>' +
+
+    '    </list>' +
+
+    '    <list title="Sector" next="DOWN j" prev="UP k" fwd="n"' +
+    ' back="p" ' +
+    '        type="dynamic">' +
+
+    '      <item action="CALL:axsStock.readDropDownListItem">' +
+    '        id("sectorselect")//option' +
+    '      </item>' +
+
+    '      <target title="Focus on sector" trigger="listEntry" ' +
+    '          action="CALL:axsStock.focusOnDropDownList">' +
+    '        id("sectorselect")' +
+    '      </target>' +
+
+    '      <target title="Select sector" hotkey="ENTER" ' +
+    '          action="CALL:axsStock.selectDropDownListOption">' +
+    '        /html' +
+    '      </target>' +
+
+    '    </list>' +
+
+    '    <list title="Criteria list" next="DOWN j" prev="UP k" ' +
+    'fwd="n" back="p" ' +
+    '        type="dynamic">' +
+
+    '      <item action="CALL:axsStock.readCriteriaDesc">' +
+    '        id("criteria_rows_tbody")/tr[not(.//b)]' +
+    '      </item>' +
+
+    '      <target title="Load CNR and go to section" trigger="' +
+    'listEntry" ' +
+    '          action="CALL:axsStock.refreshStockCriteriaCNRAnd' +
+    'AnnounceList">' +
+    '        id("criteria_rows")' +
+    '      </target>' +
+
+    '      <target title="Delete criteria" hotkey="DEL" onEmpty' +
+    '="This element is ' +
+    '          not a criteria" action="CALL:axsStock.removeCri' +
+    'teria">' +
+    '        .//img[not(@id) and @class="activelink"]' +
+    '      </target>' +
+
+    '      <target title="Edit criteria" hotkey="ENTER" onEmpty' +
+    '="This element is ' +
+    '          not a criteria" action="CALL:axsStock.focusOnCri' +
+    'teriaRangeInput">' +
+    '        /html' +
+    '      </target>' +
+
+    '      <target title="Explain criteria" hotkey="e" onEmpty=' +
+    '"This element is ' +
+    '          not a criteria and has no explanation" ' +
+    '          action="CALL:axsStock.readCriteriaHelp">' +
+    '        .//img[@id and @class="activelink"]/..' +
+    '      </target>' +
+
+    '    </list>' +
+
+    '    <list title="Popular criteria" next="DOWN j" prev="UP ' +
+    'k" fwd="n" ' +
+    '        back="p" type="dynamic">' +
+
+    '      <item action="CALL:axsStock.readCriteriaExplanation"' +
+    '>' +
+    '        id("popular")//a' +
+    '      </item>' +
+
+    '      <target title="Load CNR and go to section" trigger="' +
+    'listEntry" ' +
+    '          action="CALL:axsStock.readCurrentCrtieriaList">' +
+    '        //table[@class="searchtabs"]//tr[1]//a' +
+    '      </target>' +
+
+    '      <target title="Add selected criteria" hotkey="ENTER"' +
+    ' ' +
+    '          action="CALL:axsStock.addCriteria">' +
+    '        id("criteria_button")/button' +
+    '      </target>' +
+
+    '    </list>' +
+
+    '    <list title="Price criteria" next="DOWN j" prev="UP k"' +
+    ' fwd="n" ' +
+    '        back="p" type="dynamic">' +
+
+    '      <item action="CALL:axsStock.readCriteriaExplanation"' +
+    '>' +
+    '        id("price")//a' +
+    '      </item>' +
+
+    '      <target title="Load CNR and go to section" trigger="' +
+    'listEntry" ' +
+    '          action="CALL:axsStock.readCurrentCrtieriaList">' +
+    '        //table[@class="searchtabs"]//tr[2]//a' +
+    '      </target>' +
+
+    '      <target title="Add selected criteria" hotkey="ENTER"' +
+    ' ' +
+    '          action="CALL:axsStock.addCriteria">' +
+    '        id("criteria_button")/button' +
+    '      </target>' +
+
+    '    </list>' +
+
+    '    <list title="Volume criteria" next="DOWN j" prev="UP k' +
+    '" fwd="n" ' +
+    '        back="p" type="dynamic">' +
+
+    '      <item action="CALL:axsStock.readCriteriaExplanation"' +
+    '>' +
+    '        id("volume")//a' +
+    '      </item>' +
+
+    '      <target title="Load CNR and go to section" trigger="' +
+    'listEntry" ' +
+    '          action="CALL:axsStock.readCurrentCrtieriaList">' +
+    '        //table[@class="searchtabs"]//tr[3]//a' +
+    '      </target>' +
+
+    '      <target title="Add selected criteria" hotkey="ENTER"' +
+    ' ' +
+    '          action="CALL:axsStock.addCriteria">' +
+    '        id("criteria_button")/button' +
+    '      </target>' +
+
+    '    </list>' +
+
+    '    <list title="Valuation criteria" next="DOWN j" prev="U' +
+    'P k" fwd="n" ' +
+    '        back="p" type="dynamic">' +
+
+    '      <item action="CALL:axsStock.readCriteriaExplanation"' +
+    '>' +
+    '        id("valuation")//a' +
+    '      </item>' +
+
+    '      <target title="Load CNR and go to section" trigger="' +
+    'listEntry" ' +
+    '          action="CALL:axsStock.readCurrentCrtieriaList">' +
+    '        //table[@class="searchtabs"]//tr[4]//a' +
+    '      </target>' +
+
+    '      <target title="Add selected criteria" hotkey="ENTER"' +
+    ' ' +
+    '          action="CALL:axsStock.addCriteria">' +
+    '        id("criteria_button")/button' +
+    '      </target>' +
+
+    '    </list>' +
+
+    '    <list title="Dividend criteria" next="DOWN j" prev="UP' +
+    ' k" fwd="n" ' +
+    '        back="p" type="dynamic">' +
+
+    '      <item action="CALL:axsStock.readCriteriaExplanation"' +
+    '>' +
+    '        id("dividend")//a' +
+    '      </item>' +
+
+    '      <target title="Load CNR and go to section" trigger="' +
+    'listEntry" ' +
+    '          action="CALL:axsStock.readCurrentCrtieriaList">' +
+    '        //table[@class="searchtabs"]//tr[5]//a' +
+    '      </target>' +
+
+    '      <target title="Add selected criteria" hotkey="ENTER"' +
+    ' ' +
+    '          action="CALL:axsStock.addCriteria">' +
+    '        id("criteria_button")/button' +
+    '      </target>' +
+
+    '    </list>' +
+
+    '    <list title="Balance sheet criteria" next="DOWN j" pre' +
+    'v="UP k" fwd="n" ' +
+    '        back="p" type="dynamic">' +
+
+    '      <item action="CALL:axsStock.readCriteriaExplanation"' +
+    '>' +
+    '        id("balancesheetratios")//a' +
+    '      </item>' +
+
+    '      <target title="Load CNR and go to section" trigger="' +
+    'listEntry" ' +
+    '          action="CALL:axsStock.readCurrentCrtieriaList">' +
+    '        //table[@class="searchtabs"]//tr[6]//a' +
+    '      </target>' +
+
+    '      <target title="Add selected criteria" hotkey="ENTER"' +
+    ' ' +
+    '          action="CALL:axsStock.addCriteria">' +
+    '        id("criteria_button")/button' +
+    '      </target>' +
+
+    '    </list>' +
+
+    '    <list title="Stock metrics criteria" next="DOWN j" pre' +
+    'v="UP k" fwd="n" ' +
+    '        back="p" type="dynamic">' +
+
+    '      <item action="CALL:axsStock.readCriteriaExplanation"' +
+    '>' +
+    '        id("stockmetrics")//a' +
+    '      </item>' +
+
+    '      <target title="Load CNR and go to section" trigger="' +
+    'listEntry" ' +
+    '          action="CALL:axsStock.readCurrentCrtieriaList">' +
+    '        //table[@class="searchtabs"]//tr[7]//a' +
+    '      </target>' +
+
+    '      <target title="Add selected criteria" hotkey="ENTER"' +
+    ' ' +
+    '          action="CALL:axsStock.addCriteria">' +
+    '        id("criteria_button")/button' +
+    '      </target>' +
+
+    '    </list>' +
+
+    '    <list title="Margins criteria" next="DOWN j" prev="UP ' +
+    'k" fwd="n" ' +
+    '        back="p" type="dynamic">' +
+
+    '      <item action="CALL:axsStock.readCriteriaExplanation"' +
+    '>' +
+    '        id("margins")//a' +
+    '      </item>' +
+
+    '      <target title="Load CNR and go to section" trigger="' +
+    'listEntry" ' +
+    '          action="CALL:axsStock.readCurrentCrtieriaList">' +
+    '        //table[@class="searchtabs"]//tr[8]//a' +
+    '      </target>' +
+
+    '      <target title="Add selected criteria" hotkey="ENTER"' +
+    ' ' +
+    '          action="CALL:axsStock.addCriteria">' +
+    '        id("criteria_button")/button' +
+    '      </target>' +
+
+    '    </list>' +
+
+    '    <list title="Growth criteria" next="DOWN j" prev="UP k' +
+    '" fwd="n" ' +
+    '        back="p" type="dynamic">' +
+
+    '      <item action="CALL:axsStock.readCriteriaExplanation"' +
+    '>' +
+    '        id("growth")//a' +
+    '      </item>' +
+
+    '      <target title="Load CNR and go to section" trigger="' +
+    'listEntry" ' +
+    '          action="CALL:axsStock.readCurrentCrtieriaList">' +
+    '        //table[@class="searchtabs"]//tr[9]//a' +
+    '      </target>' +
+
+    '      <target title="Add selected criteria" hotkey="ENTER"' +
+    ' ' +
+    '          action="CALL:axsStock.addCriteria">' +
+    '        id("criteria_button")/button' +
+    '      </target>' +
+
+    '    </list>' +
+
+    '  </cnr>';
 
 /**
  * Stores the last position in the stock screener section to which 
@@ -493,7 +548,7 @@ axsStock.searchSummary = '';
  * Array for presenting the stock screener description
  * @type {Array}
  */
-axsStock.stockScreenerDescArray = new Array(axsStock.str.EMPTY,
+axsStock.stockScreenerDescArray = new Array('',
                                             axsStock.str.MIN,
                                             axsStock.str.MAX);
 
@@ -801,6 +856,7 @@ axsStock.loadWatchedNodes = function() {
                   if (axsStock.currentCNRfile == axsStock.str.RES_CNR) {
                     axsStock.refreshAllResultLists();
                   }
+
                   axsStock.generateSummary();
                   /*
                    * In the page init result summary is spoken as soon as
@@ -878,7 +934,10 @@ axsStock.selectDropDownListOption = function(item) {
 axsStock.refreshStockCriteria = function() {
   axsStock.axsNavObj.refreshList(axsStock.str.STOCK_SCR);
   window.setTimeout(function() {
-                      axsStock.axsJAXObj.lastFocusedNode.blur();
+                      var lastFocusedNode = axsStock.axsJAXObj.lastFocusedNode;
+                      if (lastFocusedNode && lastFocusedNode.blur) {
+                        lastFocusedNode.blur();
+                      }
                     },
                     0);
 
@@ -1136,8 +1195,8 @@ axsStock.loadStockScreenerCNR = function() {
  */
 axsStock.generateSummary = function() {
   var axsJAXObj = axsStock.axsJAXObj;
-  var summaryParents = axsJAXObj.evalXPath(axsStock.xpath.SUMMARY,
-                                           document.body);
+  var xPath = 'id("searchresultssummary")';
+  var summaryParents = axsJAXObj.evalXPath(xPath, document.body);
   var suffix = '';
   var summaryResult = summaryParents[0].childNodes[5];
   if (summaryResult == undefined) {
@@ -1783,6 +1842,8 @@ axsStock.keyHandler = function(evt) {
 
 /**
  * Map from character codes to functions
+ * @return {boolean} Always returns false to indicate 
+ *                   that the keycode has been handled.
  */
 axsStock.charCodeMap = {
   // Map additional keyboard behavior that involves char codes here
