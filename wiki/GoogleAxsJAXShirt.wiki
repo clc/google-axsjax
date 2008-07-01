@@ -3,8 +3,14 @@
 
 = Get your own Google-AxsJAX Shirt =
 
-We are giving away Google-AxsJAX shirts to anyone who writes good AxsJAX scripts. Please post your scripts on [http://groups.google.com/group/accessible the Google Accessible grouplist]; if the script is good, we'll include it in the project, give you full credit for it, and send a Google-AxsJAX t-shirt your way!
+We are giving away Google-AxsJAX shirts to anyone who writes good AxsJAX scripts. 
 
-These shirts have [http://google-axsjax.googlecode.com/svn/trunk/logos/braille.gif the Google logo in Braille] on the front and [http://google-axsjax.googlecode.com/svn/trunk/logos/AXSJAX.png the AxsJAX logo] on the back. Offer good while supplies last, so write your script today!
+Please post your scripts on [http://groups.google.com/group/accessible the Google Accessible grouplist].
+
+If the script is good, we'll include it in the project, give you full credit for it, and send a Google-AxsJAX t-shirt your way!
+
+These shirts have [http://google-axsjax.googlecode.com/svn/trunk/logos/braille.gif the Google logo in Braille] on the front and [http://google-axsjax.googlecode.com/svn/trunk/logos/AXSJAX.png the AxsJAX logo] on the back. 
+
+Offer good while supplies last, so write your script today!
 
 [http://google-axsjax.googlecode.com/svn/trunk/docs/tutorial/tutorial.html To help you get started, checkout the tutorial on writing AxsJAX scripts.]
