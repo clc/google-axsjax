@@ -1309,6 +1309,11 @@ axsStock.buildAndLoadResultTableCNR = function(opt_readFirstResult) {
   //Build dynamically the CNR file
   var xpath = 'id("searchresults")/table/tbody';
   var tables = axsStock.axsJAXObj.evalXPath(xpath, document.body);
+  
+  if (tables[0] === undefined) {
+  	return;
+  }
+  
   var topRow = tables[0].childNodes[0];
   var columns = topRow.childNodes;
   var cnrString = axsStock.CNR_RES_TOP_STRING;

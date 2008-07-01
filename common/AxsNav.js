@@ -110,10 +110,26 @@ AxsNav.prototype.validateList = function(navList) {
     navList.targets = this.makeTargetsArray(navList.cnrNode);
     this.navItemIdxs[this.navListIdx] = -1;
   }
-  if (navList.items.length === 0) {
+  if ((navList.items.length === 0) || (navList.entryTarget === null)){
     valid = false;
   }
   return valid;
+};
+
+AxsNav.prototype.doListEntryActions = function() {
+  var currentList = this.currentList();
+  var target = currentList.entryTarget;
+  var func = null;
+  if (target !== null){
+    this.actOnTarget(target);
+    func = this.getCallbackFunction(target.action);
+  }
+  if (func === null){
+    this.announceCurrentList();
+    if (this.snd_ !== null){
+      this.snd_.play(this.LIST_SND_URL);
+	}
+  }
 };
 
 /**
@@ -638,19 +654,7 @@ AxsNav.prototype.setUpNavKeys = function(cnrDOM, emptyLists){
                           this.topKeyCodeMap,
                           function(){
                             self.nextList();
-                            var currentList = self.currentList();
-							var target = currentList.entryTarget;		
-							var func = null;
-                            if (target !== null){
-                              self.actOnTarget(target);
-							  func = self.getCallbackFunction(target.action);
-                            }
-                            if (func === null){
-                              self.announceCurrentList();
-                              if (self.snd_ !== null){
-                                self.snd_.play(self.LIST_SND_URL);
-                              }
-							}  
+                            self.doListEntryActions();
                           });
 
   keys = new Array();
@@ -663,19 +667,7 @@ AxsNav.prototype.setUpNavKeys = function(cnrDOM, emptyLists){
                           this.topKeyCodeMap,
                           function(){
                             self.prevList();
-                            var currentList = self.currentList();
-							var target = currentList.entryTarget;
-							var func = null;
-                            if (target !== null){
-                              self.actOnTarget(target);
-							  func = self.getCallbackFunction(target.action);
-                            }
-                            if (func === null){
-                              self.announceCurrentList();
-                              if (self.snd_ !== null){
-                                self.snd_.play(self.LIST_SND_URL);
-                              }
-							}  
+                            self.doListEntryActions();
                           });
 
 
