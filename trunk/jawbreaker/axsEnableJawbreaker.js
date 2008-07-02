@@ -1,5 +1,24 @@
-//AxsJAX script for Jawbreaker game at:
-//http://www.minijuegosgratis.com/juegos/jawbreaker/jawbreaker.htm
+// Copyright 2008 Google Inc.
+// 
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// 
+//      http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+/**
+ * @fileoverview Greasemonkey JavaScript to enhance accessibility of 
+ * Jawbreaker game at:
+ * http://www.minijuegosgratis.com/juegos/jawbreaker/jawbreaker.htm
+ * @author clchen@google.com (Charles L. Chen)
+ */
+
 
 var axsJb = {};
                                 
@@ -25,6 +44,11 @@ axsJb.prevBallImg = null;
 
 axsJb.axsJaxObj = new AxsJAX(false);
 
+/**
+ * The AxsSound object that will play earcons
+ * @type AxsSound
+ */
+axsJb.axsSoundObj = new AxsSound(true);
 
 axsJb.getCurrentPosition = function(){
   axsJb.prevBallImg.style.outline = 'none';
@@ -170,6 +194,7 @@ axsJb.gotoNext = function(color){
   for ( ; col <= axsJb.MAXCOL; col++){
     ballImg = axsJb.getBallImgNode(row,col);
     if ((axsJb.getUrlOfBallImg(ballImg) == uTargetImgUrl) || (axsJb.getUrlOfBallImg(ballImg) == sTargetImgUrl)){
+      axsJb.axsSoundObj.play('item');
       axsJb.col = col;
       axsJb.row = row;
       axsJb.getCurrentPosition();
@@ -183,6 +208,7 @@ axsJb.gotoNext = function(color){
     for (col = 0; col <= axsJb.MAXCOL; col++){
       ballImg = axsJb.getBallImgNode(row,col);
       if ((axsJb.getUrlOfBallImg(ballImg) == uTargetImgUrl) || (axsJb.getUrlOfBallImg(ballImg) == sTargetImgUrl)){
+        axsJb.axsSoundObj.play('item');
         axsJb.col = col;
         axsJb.row = row;
         axsJb.getCurrentPosition();
@@ -197,6 +223,7 @@ axsJb.gotoNext = function(color){
     for (col = 0; col <= axsJb.MAXCOL; col++){
       ballImg = axsJb.getBallImgNode(row,col);
       if ((axsJb.getUrlOfBallImg(ballImg) == uTargetImgUrl) || (axsJb.getUrlOfBallImg(ballImg) == sTargetImgUrl)){
+        axsJb.axsSoundObj.play('loop');
         axsJb.col = col;
         axsJb.row = row;
         axsJb.getCurrentPosition();
@@ -220,21 +247,25 @@ axsJb.undo = function(){
 };
 
 axsJb.up = function(){
+  axsJb.axsSoundObj.play('item');
   axsJb.row--;
   if (axsJb.row < 0){ axsJb.row = 0; }
   axsJb.getCurrentPosition();
 };
 axsJb.down = function(){
+  axsJb.axsSoundObj.play('item');
   axsJb.row++;
   if (axsJb.row > axsJb.MAXROW){  axsJb.row = axsJb.MAXROW; }
   axsJb.getCurrentPosition();
 };
 axsJb.left = function(){
+  axsJb.axsSoundObj.play('item');
   axsJb.col--;
   if (axsJb.col < 0){ axsJb.col = 0; }
   axsJb.getCurrentPosition();
 };
 axsJb.right = function(){
+  axsJb.axsSoundObj.play('item');
   axsJb.col++;
   if (axsJb.col > axsJb.MAXCOL){ axsJb.col = axsJb.MAXCOL; }
   axsJb.getCurrentPosition();
@@ -286,20 +317,24 @@ axsJb.keyCodeMap = {
 axsJb.charCodeMap = {
   117 : axsJb.undo,   // u
    97 : function() {    // a
+          axsJb.axsSoundObj.play('item');
           var targCol = axsJb.findFirstBallInRow();
           if (targCol != -1) axsJb.col = targCol;
           axsJb.getCurrentPosition();
         },
   101 : function() {    // e
+          axsJb.axsSoundObj.play('item');
           axsJb.col = axsJb.MAXCOL;
           axsJb.getCurrentPosition();
         },
   116 : function() {    // t
+          axsJb.axsSoundObj.play('item');
           var targRow = axsJb.findFirstBallInCol();
           if (targRow != -1) axsJb.row = targRow;
           axsJb.getCurrentPosition();
         },
    98 : function() {    // b
+          axsJb.axsSoundObj.play('item');
           axsJb.row = axsJb.MAXROW;
           axsJb.getCurrentPosition();
         },
