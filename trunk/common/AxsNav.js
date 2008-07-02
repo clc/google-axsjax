@@ -38,10 +38,9 @@ var AxsNav = function(axsJAXObj){
   this.axs_ = axsJAXObj;
   this.lens_ = null;
   this.snd_ = null;
-  var baseURL = 'http://google-axsjax.googlecode.com/svn/trunk/';
-  this.LIST_SND_URL = baseURL + 'common/earcons/list.mp3';
-  this.ITEM_SND_URL = baseURL + 'common/earcons/item.mp3';
-  this.LOOP_SND_URL = baseURL + 'common/earcons/loop.mp3';
+  this.LIST_SND = 'list';
+  this.ITEM_SND = 'item';
+  this.LOOP_SND = 'loop';
   this.keyHandler = null;
 };
 
@@ -127,7 +126,7 @@ AxsNav.prototype.doListEntryActions = function() {
   if (func === null){
     this.announceCurrentList();
     if (this.snd_ !== null){
-      this.snd_.play(this.LIST_SND_URL);
+      this.snd_.play(this.LIST_SND);
 	}
   }
 };
@@ -229,9 +228,9 @@ AxsNav.prototype.nextItem = function(){
   this.lastItem = items[itemIndex];
   if (this.snd_ !== null){
     if (looped){
-      this.snd_.play(this.LOOP_SND_URL);
+      this.snd_.play(this.LOOP_SND);
     } else {
-      this.snd_.play(this.ITEM_SND_URL);
+      this.snd_.play(this.ITEM_SND);
     }
   }
   return this.lastItem;
@@ -244,14 +243,14 @@ AxsNav.prototype.nextItem = function(){
  * @return {Object?} The next item. Use item.elem to get at the DOM node.
  */
 AxsNav.prototype.fwdItem = function(){
-  var currentList = this.navArray[this.navListIdx];
-  var oldIndex = this.navItemIdxs[this.navListIdx];
-  var item = this.nextItem();
-  var newIndex = this.navItemIdxs[this.navListIdx];
-  if ((currentList.tailTarget !== null) && (newIndex <= oldIndex)){
-    this.actOnTarget(currentList.tailTarget);
+  var list = this.navArray[this.navListIdx];
+  var index = this.navItemIdxs[this.navListIdx];
+  if ((list.tailTarget !== null) && (index+1 >= list.items.length)){
+    this.actOnTarget(list.tailTarget);
+	this.navItemIdxs[this.navListIdx] = 0;
     return null;
   }
+  var item = this.nextItem();
   return item;
 };
 
@@ -295,9 +294,9 @@ AxsNav.prototype.prevItem = function(){
   this.lastItem = items[itemIndex];
   if (this.snd_ !== null){
     if (looped){
-     this.snd_.play(this.LOOP_SND_URL);
+     this.snd_.play(this.LOOP_SND);
     } else {
-     this.snd_.play(this.ITEM_SND_URL);
+     this.snd_.play(this.ITEM_SND);
     }
   }
   return this.lastItem;
@@ -310,14 +309,14 @@ AxsNav.prototype.prevItem = function(){
  * @return {Object?} The previous item. Use item.elem to get at the DOM node.
  */
 AxsNav.prototype.backItem = function(){
-  var currentList = this.navArray[this.navListIdx];
-  var oldIndex = this.navItemIdxs[this.navListIdx];
-  var item = this.prevItem();
-  var newIndex = this.navItemIdxs[this.navListIdx];
-  if ((currentList.headTarget !== null) && (newIndex >= oldIndex)){
-    this.actOnTarget(currentList.headTarget);
+  var list = this.navArray[this.navListIdx];
+  var index = this.navItemIdxs[this.navListIdx];
+  if ((list.headTarget !== null) && (index-1 <= -1)){
+    this.actOnTarget(list.headTarget);
+	this.navItemIdxs[this.navListIdx] = list.items.length;
     return null;
   }
+  var item = this.prevItem();
   return item;
 };
 

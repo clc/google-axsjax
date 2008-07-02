@@ -22,7 +22,10 @@
  * Class for playing sound from a URL.
  * @constructor
  */
-var AxsSound = function(){
+var AxsSound = function(earconsOnly){
+  this.earconsSwf = 'http://google-axsjax.googlecode.com/svn/trunk/common/earcons/axsEarcons.swf?sound=';
+  this.earconsObj = null;
+  this.earconsOnly = earconsOnly;
   this.sm2BaseURL = 'http://google-axsjax.googlecode.com/svn/trunk/thirdparty/soundmanager2/';
   this.sm2LinkerFrame = null;
   this.initSucceeded = false;
@@ -39,6 +42,10 @@ AxsSound.prototype.setVerbosity = function(verbosity){
 };
 
 AxsSound.prototype.init = function(){
+  //Earcons do not need initialization
+  if (earconsOnly){
+    return;
+  }
   if (this.initSucceeded){
     return;
   }	
@@ -83,6 +90,10 @@ AxsSound.prototype.checkInitStatus = function(){
 };
 
 AxsSound.prototype.play = function(url){
+  var playedEarcon = this.playEarcon(url);
+  if (this.earconsOnly || playedEarcon){
+    return;
+  }
   if (!this.initSucceeded){
     this.init();
 	var self = this;
@@ -93,6 +104,10 @@ AxsSound.prototype.play = function(url){
 };
 
 AxsSound.prototype.playSeg = function(url,startTime,endTime){
+  var playedEarcon = this.playEarcon(url);
+  if (this.earconsOnly || playedEarcon){
+    return;
+  }
   if (!this.initSucceeded){
     this.init();
 	var self = this;
@@ -103,6 +118,13 @@ AxsSound.prototype.playSeg = function(url,startTime,endTime){
 };
 
 AxsSound.prototype.stop = function(){
+  if (this.earconsObj !== null){
+    this.earconsObj.parentNode.removeChild(earconsObj);
+	this.earconsObj = null;
+  }
+  if (this.earconsOnly){
+    return;
+  }
   if (!this.initSucceeded){
 	return;
   }
@@ -110,6 +132,9 @@ AxsSound.prototype.stop = function(){
 };
 
 AxsSound.prototype.getTime = function(){
+  if (this.earconsOnly){
+    return -1;
+  }
   if (!this.initSucceeded){
 	return -1;
   }
@@ -128,4 +153,33 @@ AxsSound.prototype.isPlaying = function(){
     return false;
   }
   return true;
+};
+
+
+AxsSound.prototype.playEarcon = function(earcon){
+  if (this.earconsObj !== null){
+    this.earconsObj.parentNode.removeChild(this.earconsObj);
+	this.earconsObj = null;
+  }
+  var earconCMD = '';
+  switch (earcon){
+    case 'item':
+      earconCMD = 'item';
+      break;
+    case 'list':
+      earconCMD = 'list';
+      break;
+    case 'loop':
+      earconCMD = 'loop';
+      break;
+    default:
+  }
+  if (earconCMD === ''){
+    return false;
+  }
+  this.earconsObj = document.createElement('embed');
+  this.earconsObj.height = 0;
+  this.earconsObj.width = 0;
+  this.earconsObj.src = this.earconsSwf + earconCMD;
+  document.body.appendChild(this.earconsObj);
 };
