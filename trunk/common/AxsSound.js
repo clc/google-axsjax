@@ -163,14 +163,26 @@ AxsSound.prototype.playEarcon = function(earcon){
   }
   var earconCMD = '';
   switch (earcon){
+    case 'alert':
+      earconCMD = 'alert';
+      break;
+    case 'deselect':
+      earconCMD = 'deselect';
+      break;
     case 'item':
       earconCMD = 'item';
       break;
     case 'list':
       earconCMD = 'list';
       break;
-    case 'loop':
-      earconCMD = 'loop';
+    case 'select':
+      earconCMD = 'select';
+      break;
+    case 'success':
+      earconCMD = 'success';
+      break;
+    case 'wrap':
+      earconCMD = 'wrap';
       break;
     default:
   }

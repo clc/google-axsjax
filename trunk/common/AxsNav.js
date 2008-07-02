@@ -40,7 +40,7 @@ var AxsNav = function(axsJAXObj){
   this.snd_ = null;
   this.LIST_SND = 'list';
   this.ITEM_SND = 'item';
-  this.LOOP_SND = 'loop';
+  this.WRAP_SND = 'wrap';
   this.keyHandler = null;
 };
 
@@ -228,7 +228,7 @@ AxsNav.prototype.nextItem = function(){
   this.lastItem = items[itemIndex];
   if (this.snd_ !== null){
     if (looped){
-      this.snd_.play(this.LOOP_SND);
+      this.snd_.play(this.WRAP_SND);
     } else {
       this.snd_.play(this.ITEM_SND);
     }
@@ -294,7 +294,7 @@ AxsNav.prototype.prevItem = function(){
   this.lastItem = items[itemIndex];
   if (this.snd_ !== null){
     if (looped){
-     this.snd_.play(this.LOOP_SND);
+     this.snd_.play(this.WRAP_SND);
     } else {
      this.snd_.play(this.ITEM_SND);
     }
