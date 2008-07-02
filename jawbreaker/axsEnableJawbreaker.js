@@ -194,7 +194,11 @@ axsJb.gotoNext = function(color){
   for ( ; col <= axsJb.MAXCOL; col++){
     ballImg = axsJb.getBallImgNode(row,col);
     if ((axsJb.getUrlOfBallImg(ballImg) == uTargetImgUrl) || (axsJb.getUrlOfBallImg(ballImg) == sTargetImgUrl)){
-      axsJb.axsSoundObj.play('item');
+      if (((col + 1) == axsJb.col) || ((col - 1) == axsJb.col)){
+	    axsJb.axsSoundObj.play('item');
+      } else {
+	    axsJb.axsSoundObj.play('list');	  
+	  }
       axsJb.col = col;
       axsJb.row = row;
       axsJb.getCurrentPosition();
@@ -208,7 +212,11 @@ axsJb.gotoNext = function(color){
     for (col = 0; col <= axsJb.MAXCOL; col++){
       ballImg = axsJb.getBallImgNode(row,col);
       if ((axsJb.getUrlOfBallImg(ballImg) == uTargetImgUrl) || (axsJb.getUrlOfBallImg(ballImg) == sTargetImgUrl)){
-        axsJb.axsSoundObj.play('item');
+	    if ((col == axsJb.col) && (((row + 1) == axsJb.row) || ((row - 1) == axsJb.row))){
+	      axsJb.axsSoundObj.play('item');
+        } else {
+	      axsJb.axsSoundObj.play('list');	  
+	    }
         axsJb.col = col;
         axsJb.row = row;
         axsJb.getCurrentPosition();
@@ -223,7 +231,7 @@ axsJb.gotoNext = function(color){
     for (col = 0; col <= axsJb.MAXCOL; col++){
       ballImg = axsJb.getBallImgNode(row,col);
       if ((axsJb.getUrlOfBallImg(ballImg) == uTargetImgUrl) || (axsJb.getUrlOfBallImg(ballImg) == sTargetImgUrl)){
-        axsJb.axsSoundObj.play('loop');
+        axsJb.axsSoundObj.play('wrap');
         axsJb.col = col;
         axsJb.row = row;
         axsJb.getCurrentPosition();
@@ -247,27 +255,43 @@ axsJb.undo = function(){
 };
 
 axsJb.up = function(){
-  axsJb.axsSoundObj.play('item');
   axsJb.row--;
-  if (axsJb.row < 0){ axsJb.row = 0; }
+  if (axsJb.row < 0){
+    axsJb.axsSoundObj.play('alert');
+    axsJb.row = 0;
+  } else {
+    axsJb.axsSoundObj.play('item');
+  }
   axsJb.getCurrentPosition();
 };
 axsJb.down = function(){
-  axsJb.axsSoundObj.play('item');
   axsJb.row++;
-  if (axsJb.row > axsJb.MAXROW){  axsJb.row = axsJb.MAXROW; }
+  if (axsJb.row > axsJb.MAXROW){
+    axsJb.axsSoundObj.play('alert');
+    axsJb.row = axsJb.MAXROW; 
+  } else {
+    axsJb.axsSoundObj.play('item');
+  }
   axsJb.getCurrentPosition();
 };
 axsJb.left = function(){
-  axsJb.axsSoundObj.play('item');
   axsJb.col--;
-  if (axsJb.col < 0){ axsJb.col = 0; }
+  if (axsJb.col < 0){
+    axsJb.axsSoundObj.play('alert');
+    axsJb.col = 0;
+  } else {
+    axsJb.axsSoundObj.play('item');
+  }
   axsJb.getCurrentPosition();
 };
 axsJb.right = function(){
-  axsJb.axsSoundObj.play('item');
   axsJb.col++;
-  if (axsJb.col > axsJb.MAXCOL){ axsJb.col = axsJb.MAXCOL; }
+  if (axsJb.col > axsJb.MAXCOL){
+    axsJb.axsSoundObj.play('alert');
+    axsJb.col = axsJb.MAXCOL; 
+  } else {
+    axsJb.axsSoundObj.play('item');
+  }
   axsJb.getCurrentPosition();
 };
 
@@ -317,24 +341,24 @@ axsJb.keyCodeMap = {
 axsJb.charCodeMap = {
   117 : axsJb.undo,   // u
    97 : function() {    // a
-          axsJb.axsSoundObj.play('item');
+          axsJb.axsSoundObj.play('list');
           var targCol = axsJb.findFirstBallInRow();
           if (targCol != -1) axsJb.col = targCol;
           axsJb.getCurrentPosition();
         },
   101 : function() {    // e
-          axsJb.axsSoundObj.play('item');
+          axsJb.axsSoundObj.play('list');
           axsJb.col = axsJb.MAXCOL;
           axsJb.getCurrentPosition();
         },
   116 : function() {    // t
-          axsJb.axsSoundObj.play('item');
+          axsJb.axsSoundObj.play('list');
           var targRow = axsJb.findFirstBallInCol();
           if (targRow != -1) axsJb.row = targRow;
           axsJb.getCurrentPosition();
         },
    98 : function() {    // b
-          axsJb.axsSoundObj.play('item');
+          axsJb.axsSoundObj.play('list');
           axsJb.row = axsJb.MAXROW;
           axsJb.getCurrentPosition();
         },
@@ -344,10 +368,20 @@ axsJb.charCodeMap = {
   106 : axsJb.down,    // j
   108 : axsJb.right,    // l
    32 : function() {    // SPACE
+          var wasSelected = false;
+          if (axsJb.getUrlOfBallImg(axsJb.getBallImgNode(axsJb.row,axsJb.col)).indexOf('s_') === 0){
+		    wasSelected = true;
+		  }
           axsJb.axsJaxObj.clickElem(axsJb.getBallImgNode(axsJb.row,axsJb.col), false);
           if (axsJb.getUrlOfBallImg(axsJb.getBallImgNode(axsJb.row,axsJb.col)).indexOf('s_') === 0){
+            axsJb.axsSoundObj.play('select');
             axsJb.sayStats();
           } else {
+		    if (wasSelected){
+              axsJb.axsSoundObj.play('success');
+			} else {
+              axsJb.axsSoundObj.play('alert');
+			}
             var totalScore = document.getElementById('userscore').textContent;
             axsJb.axsJaxObj.speakTextViaNode('Total ' + totalScore);
           }
@@ -356,6 +390,7 @@ axsJb.charCodeMap = {
    99 : axsJb.speakCol,    // c
   114 : axsJb.speakRow,    // r
   100 : function() {    // d
+          axsJb.axsSoundObj.play('deselect');
           jb.deselectBlocks();
           axsJb.axsJaxObj.speakTextViaNode('Deselected. ');
         },
