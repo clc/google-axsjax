@@ -132,6 +132,7 @@ function pickScript(){
   }
   else if (currentURL === 'http://www.minijuegosgratis.com/juegos/jawbreaker/jawbreaker.htm'){
     theScript.src = baseURL + 'jawbreaker/axsEnableJawbreaker.js';
+    scriptsArray.push(sndLib);
     shouldInsertScripts = true;    
   }
   else if ((currentURL.indexOf('http://www.xkcd.com') === 0) || (currentURL.indexOf('http://xkcd.com') === 0)){
