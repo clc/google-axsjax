@@ -66,7 +66,9 @@ AxsNav.prototype.makeItemsArray = function(listNode){
     //sets of cnrItems and even if one set does not exist as expected,
     //the other sets should still be available.
     try{
+	  //Strip all leading and trailing spaces from the xpath
       var xpath = entry.textContent;
+	  xpath = xpath.replace(/^\s\s*/, '').replace(/\s\s*$/, '');
       var htmlElem = this.axs_.getActiveDocument().documentElement;
       var elems = this.axs_.evalXPath(xpath, htmlElem);
       var idxStr = entry.getAttribute('index') || '0';
@@ -611,7 +613,7 @@ AxsNav.prototype.actOnTarget = function(target){
         item.action = target.action;
         item.elem = elems[0];
         func(item);
-    } else {
+    } else {	
       this.axs_.clickElem(elems[0], false);
       elems[0].scrollIntoView(true);
     }
@@ -717,7 +719,9 @@ AxsNav.prototype.makeTargetsArray = function(listNode){
   var cnrTargets = listNode.getElementsByTagName('target');
   for (var i = 0, entry; entry = cnrTargets[i]; i++){
     var target = new Object();
+    //Strip all leading and trailing spaces from the xpath
     target.xpath = entry.textContent;
+    target.xpath = target.xpath.replace(/^\s\s*/, '').replace(/\s\s*$/, '');
     target.title = entry.getAttribute('title') || '';
     target.trigger = entry.getAttribute('trigger') || 'key';
     target.hotkeyStr = entry.getAttribute('hotkey') || '';
@@ -802,7 +806,9 @@ AxsNav.prototype.navInit = function(cnrString, opt_customNavMethod){
   for (i = 0, currentNode; currentNode = cnrNode.childNodes[i]; i++){
     if (currentNode.tagName == 'target'){
       var target = new Object();
+      //Strip all leading and trailing spaces from the xpath
       target.xpath = currentNode.textContent;
+      target.xpath = target.xpath.replace(/^\s\s*/, '').replace(/\s\s*$/, '');
       target.title = currentNode.getAttribute('title') || '';
       target.trigger = currentNode.getAttribute('trigger') || 'key';
       target.hotkeyStr = currentNode.getAttribute('hotkey') || '';
