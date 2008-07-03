@@ -928,3 +928,30 @@ AxsNav.prototype.refreshList = function(listTitle){
   }
   return reloaded;
 };
+
+/**
+ * Disables the default keyboard handler for the AxsNav object by detaching it 
+ * from the keypress event listener for the current document.
+ */
+AxsNav.prototype.disableNavKeys = function() {
+  if (this.keyHandler !== null){
+    document.removeEventListener('keypress', this.keyHandler, true);
+  }
+};
+
+/**
+ * Re-enables the default keyboard handler for the AxsNav object by reattaching it
+ * to the keypress event listener for the current document.
+ * This function assumes AxsNav.prototype.setUpNavKeys has already been called
+ * so that this.keyHandler is already setup and ready to go.
+ */
+AxsNav.prototype.enableNavKeys = function() {
+  if (this.keyHandler !== null){
+    // Remove it once so that the keyHandler is not accidentally added twice
+	// just in case enableNavKeys has already been called.
+	// If it has not already been added, this first removeEventListener call
+	// is a no-op.
+    document.removeEventListener('keypress', this.keyHandler, true);
+	document.addEventListener('keypress', this.keyHandler, true);
+  }
+};
