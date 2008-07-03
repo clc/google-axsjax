@@ -157,9 +157,11 @@ AxsSound.prototype.isPlaying = function(){
 
 
 AxsSound.prototype.playEarcon = function(earcon){
-  if (this.earconsObj !== null){
-    this.earconsObj.parentNode.removeChild(this.earconsObj);
-	this.earconsObj = null;
+  if (this.earconsObj === null){
+    this.earconsObj = document.createElement('embed');
+    this.earconsObj.height = 0;
+    this.earconsObj.width = 0;	
+	document.body.appendChild(this.earconsObj);
   }
   var earconCMD = '';
   switch (earcon){
@@ -189,9 +191,5 @@ AxsSound.prototype.playEarcon = function(earcon){
   if (earconCMD === ''){
     return false;
   }
-  this.earconsObj = document.createElement('embed');
-  this.earconsObj.height = 0;
-  this.earconsObj.width = 0;
   this.earconsObj.src = this.earconsSwf + earconCMD;
-  document.body.appendChild(this.earconsObj);
 };
