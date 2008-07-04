@@ -29,7 +29,7 @@ function pickCNR(){
     return;
   }
   
-  var baseURL = 'http://www.corp.google.com/~clchen/AxsJAX/';
+  var baseURL = 'http://google-axsjax.googlecode.com/svn/trunk/';
   var theLib = document.createElement('script');
   theLib.type = 'text/javascript';
   theLib.src = baseURL + 'common/AxsJAX.js';   
