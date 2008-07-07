@@ -40,12 +40,6 @@ var AxsLens = function(axsJAXObj){
 
   this.lens.style.display = 'none';
   activeDoc.body.appendChild(this.lens);
-
-  // Firefox on Windows can use fontSizeAdjust which is easier
-  // and more precise. Use sniffing code from example at:
-  // http://www.mozilla.org/docs/web-developer/sniffer/browser_type.html
-  var agt = navigator.userAgent.toLowerCase();
-  this.is_win   = ( (agt.indexOf("win")!=-1) || (agt.indexOf("16bit")!=-1) );
 };
 
 AxsLens.prototype.view = function(targetNode){
@@ -100,29 +94,8 @@ AxsLens.prototype.enlargeImages = function(){
 };
 
 AxsLens.prototype.magnifyText = function(){
-    // fontSizeAdjust is based on the aspect value of the font.
-    // The default aspect value of Arial is .52
-    var fontSizeAdjust = this.multiplier * 0.52;
-    this.lens.style.fontSizeAdjust = fontSizeAdjust;
-/*
-  if (this.is_win){
-    // fontSizeAdjust is based on the aspect value of the font.
-    // The default aspect value of Arial is .52
-    var fontSizeAdjust = this.multiplier * 0.52;
-    this.lens.style.fontSizeAdjust = fontSizeAdjust;
-  } else if (this.lens.firstChild){
-    var descendants = this.lens.firstChild.getElementsByTagName('*');
-    for (var i=0, child; child=descendants[i]; i++){
-      if (!child.Axs_OrigFontSize){
-        var style = window.getComputedStyle(child, null);
-        var sizeStr = style.fontSize;
-        child.Axs_OrigFontSize = sizeStr.substring(0,sizeStr.length-2);
-      }
-    }
-    for (i=0, child; child=descendants[i]; i++){
-      child.style.fontSize = (child.Axs_OrigFontSize * this.multiplier)
-                             + 'px !important';
-    }
-  }
-*/
+  // fontSizeAdjust is based on the aspect value of the font.
+  // The default aspect value of Arial is .52
+  var fontSizeAdjust = this.multiplier * 0.52;
+  this.lens.style.fontSizeAdjust = fontSizeAdjust;
 };
