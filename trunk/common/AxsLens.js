@@ -100,6 +100,11 @@ AxsLens.prototype.enlargeImages = function(){
 };
 
 AxsLens.prototype.magnifyText = function(){
+    // fontSizeAdjust is based on the aspect value of the font.
+    // The default aspect value of Arial is .52
+    var fontSizeAdjust = this.multiplier * 0.52;
+    this.lens.style.fontSizeAdjust = fontSizeAdjust;
+/*
   if (this.is_win){
     // fontSizeAdjust is based on the aspect value of the font.
     // The default aspect value of Arial is .52
@@ -119,4 +124,5 @@ AxsLens.prototype.magnifyText = function(){
                              + 'px !important';
     }
   }
+*/
 };
