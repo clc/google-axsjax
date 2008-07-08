@@ -30,8 +30,8 @@ var axsGMail = {};
 axsGMail.CLASS = {
   AUTOCOMPLETE_INACTIVE : 'ac-row',      //Contacts list
   AUTOCOMPLETE_ACTIVE : 'ac-row active',  
-  CSS_LAYOUT_COMPONENT_ : 'XoqCub', // The chat window has this class
-  CSS_HCONT_CHILD_ : 'EGSDee',      // The chat window has this class  
+  LAYOUT_COMPONENT_ : 'XoqCub', // The chat window has this class
+  HCONT_CHILD_ : 'EGSDee',      // The chat window has this class  
   APP_MENU_ITEM_ACTIVE_ : 'P0GJpc', //More actions menu item
   ROUNDED_BOX_CONTENT_ : 'm14Grb', //alerts ("conversation has been muted")
   NP_LABEL_ : 'yyT6sf',
@@ -281,8 +281,8 @@ axsGMail.mainDoc_domInsertionHandler = function(evt){
   var target = evt.target;
   var className = target.className;
   if ((target.tagName == 'DIV') &&
-      (className.indexOf(axsGMail.CLASS.CSS_LAYOUT_COMPONENT_) != -1) &&
-      (className.indexOf(axsGMail.CLASS.CSS_HCONT_CHILD_) != -1)){
+      (className.indexOf(axsGMail.CLASS.LAYOUT_COMPONENT_) != -1) &&
+      (className.indexOf(axsGMail.CLASS.HCONT_CHILD_) != -1)){
     window.setTimeout(function(){axsGMail.chatWindowHandler(target);}, 0);
   }
 };
