@@ -23,6 +23,33 @@
 // create namespace
 var axsGMail = {};
 
+/**
+ * Collection of classnames
+ * @type {Object}
+ */
+axsGMail.CLASS = {
+  AUTOCOMPLETE_INACTIVE : 'ac-row',      //Contacts list
+  AUTOCOMPLETE_ACTIVE : 'ac-row active',  
+  CSS_LAYOUT_COMPONENT_ : 'XoqCub', // The chat window has this class
+  CSS_HCONT_CHILD_ : 'EGSDee',      // The chat window has this class  
+  APP_MENU_ITEM_ACTIVE_ : 'P0GJpc', //More actions menu item
+  ROUNDED_BOX_CONTENT_ : 'm14Grb', //alerts ("conversation has been muted")
+  NP_LABEL_ : 'yyT6sf',
+  TL_UNREAD_ROW_ : 'QhHSYc',
+  TL_STARRED_CELL_ : 'n1QcP',
+  TL_FIN_CHECKED_ROW_ : 'rfza3e',
+  CVF_STAR_ON_ICON_ : 'kyZrld',
+  CV_CHEVRON_ : 'AG5mQe',
+  CVF_HEADER_LEFT_CELL_ : 'zyVlgb',
+  CVF_HEADER_TEXT_ : 'XZlFIc',
+  CVF_RELATIVE_DATE_ : 'rziBod',
+  CV_EXPANDED_ : 'HprMsc',
+  CHAT_BACKGROUND_AVAILABLE_ : 'ilX2xb',
+  CHAT_BACKGROUND_OFFLINE_ : 'OvtWcf'
+};
+
+
+
 //These are strings used to find specific links
 /**
  * @type {string}
@@ -252,11 +279,14 @@ axsGMail.extraKeyboardNavHandler = function(evt){
  */
 axsGMail.mainDoc_domInsertionHandler = function(evt){
   var target = evt.target;
+  var className = target.className;
   if ((target.tagName == 'DIV') &&
-      (target.className == 'XoqCub EGSDee')){
+      (className.indexOf(axsGMail.CLASS.CSS_LAYOUT_COMPONENT_) != -1) &&
+      (className.indexOf(axsGMail.CLASS.CSS_HCONT_CHILD_) != -1)){
     window.setTimeout(function(){axsGMail.chatWindowHandler(target);}, 0);
   }
 };
+
 
 /**
  * Provides keyboard handling for the canvas area.
@@ -335,23 +365,20 @@ axsGMail.domAttrModifiedHandler = function(evt){
   var oldVal = evt.prevValue;
   var target = evt.target;
   if ((attrib == 'class') &&
-      (oldVal == 'SenFne') &&
-      (newVal == 'SenFne P0GJpc')){
+      (newVal.indexOf(axsGMail.CLASS.APP_MENU_ITEM_ACTIVE_) != -1)){  
     target.setAttribute('tabindex', 0);
     window.setTimeout(new function(){target.focus();}, 0);
     return;
   }
   if ((attrib == 'class') &&
-      (oldVal == 'ac-row') &&
-      (newVal == 'ac-row active')){
+      (oldVal == axsGMail.CLASS.AUTOCOMPLETE_INACTIVE) &&
+      (newVal == axsGMail.CLASS.AUTOCOMPLETE_ACTIVE)){
     if (!axsGMail.buddiesInputNode){
       axsGMail.chat_prepChatField();
       }
     axsGMail.chat_speakSelectedAutoComplete(target);
     return;
   }
-
-
   if (axsGMail.gMonkeyObj.getActiveViewType() == 'tl'){
     axsGMail.TL_domAttrModifiedHandler(evt);
   } else if (axsGMail.gMonkeyObj.getActiveViewType() == 'cv'){
@@ -411,27 +438,27 @@ axsGMail.TL_domAttrModifiedHandler = function(evt){
 
   //Message selected
   if ((attrib == 'class') &&
-      (oldVal.indexOf('rfza3e') == -1) &&
-      (newVal.indexOf('rfza3e') != -1)){
+      (oldVal.indexOf(axsGMail.CLASS.TL_FIN_CHECKED_ROW_) == -1) &&
+      (newVal.indexOf(axsGMail.CLASS.TL_FIN_CHECKED_ROW_) != -1)){
     axsGMail.axsJAXObj.speakTextViaNode(axsGMail.SELECTED_STRING);
   }
   //Message deselected
   if ((attrib == 'class') &&
-      (oldVal.indexOf('rfza3e') != -1) &&
-      (newVal.indexOf('rfza3e') == -1)){
+      (oldVal.indexOf(axsGMail.CLASS.TL_FIN_CHECKED_ROW_) != -1) &&
+      (newVal.indexOf(axsGMail.CLASS.TL_FIN_CHECKED_ROW_) == -1)){
     message = axsGMail.NOT_STRING + axsGMail.SELECTED_STRING;
     axsGMail.axsJAXObj.speakTextViaNode(message);
   }
   //Message starred
   if ((attrib == 'class') &&
-      (oldVal.indexOf('n1QcP') == -1) &&
-      (newVal.indexOf('n1QcP') != -1)){
+      (oldVal.indexOf(axsGMail.CLASS.TL_STARRED_CELL_) == -1) &&
+      (newVal.indexOf(axsGMail.CLASS.TL_STARRED_CELL_) != -1)){
     axsGMail.axsJAXObj.speakTextViaNode(axsGMail.STARRED_STRING);
   }
   //Message unstarred
   if ((attrib == 'class') &&
-      (oldVal.indexOf('n1QcP') != -1) &&
-      (newVal.indexOf('n1QcP') == -1)){
+      (oldVal.indexOf(axsGMail.CLASS.TL_STARRED_CELL_) != -1) &&
+      (newVal.indexOf(axsGMail.CLASS.TL_STARRED_CELL_) == -1)){
     message = axsGMail.NOT_STRING + axsGMail.STARRED_STRING;
     axsGMail.axsJAXObj.speakTextViaNode(message);
   }
@@ -445,7 +472,7 @@ axsGMail.TL_domAttrModifiedHandler = function(evt){
 axsGMail.TL_domInsertionHandler = function(evt){
   var target = evt.target;
   //Process alerts
-  if (target.parentNode.className == 'm14Grb'){
+  if (target.parentNode.className == axsGMail.CLASS.ROUNDED_BOX_CONTENT_){
     var message = target.parentNode.firstChild.textContent;
     var activeDoc = axsGMail.axsJAXObj.getActiveDocument();
     var undoLink = activeDoc.getElementById('link_undo');
@@ -464,8 +491,9 @@ axsGMail.TL_domInsertionHandler = function(evt){
  * @return {boolean} Whether the threadlist item is new or not
  */
 axsGMail.TL_isNew = function(tlItem){
-  return (tlItem.className.indexOf('QhHSYc') != -1);
+  return (tlItem.className.indexOf(axsGMail.CLASS.TL_UNREAD_ROW_) != -1);
 };
+
 
 /**
  * Given a threadlist item, determines if it is 
@@ -486,7 +514,7 @@ axsGMail.TL_isSelected = function(tlItem){
  */
 axsGMail.TL_isStarred = function(tlItem){
   var star = tlItem.childNodes[1];
-  return (star.className.indexOf('n1QcP') != -1);
+  return (star.className.indexOf(axsGMail.CLASS.TL_STARRED_CELL_) != -1);
 };
 
 /**
@@ -598,7 +626,7 @@ axsGMail.CV_domAttrModifiedHandler = function(evt){
 
   //Going to a new message causes an arrow to become 
   //visible to the left of the message
-  if ((attrib == 'class') && (newVal == 'AG5mQe')){
+  if ((attrib == 'class') && (newVal == axsGMail.CLASS.CV_CHEVRON_)){
     var cvItem = target.nextSibling;
     if (cvItem.tagName == 'IMG'){
       cvItem = cvItem.nextSibling;
@@ -607,14 +635,14 @@ axsGMail.CV_domAttrModifiedHandler = function(evt){
   }
   //Message starred
   if ((attrib == 'class') &&
-      (oldVal.indexOf('kJv9nb') == -1) &&
-      (newVal.indexOf('kJv9nb') != -1)){
+      (oldVal.indexOf(axsGMail.CLASS.CVF_STAR_ON_ICON_) == -1) &&
+      (newVal.indexOf(axsGMail.CLASS.CVF_STAR_ON_ICON_) != -1)){
     axsGMail.axsJAXObj.speakTextViaNode(axsGMail.STARRED_STRING);
   }
   //Message unstarred
   if ((attrib == 'class') &&
-      (oldVal.indexOf('kJv9nb') != -1) &&
-      (newVal.indexOf('kJv9nb') == -1)){
+      (oldVal.indexOf(axsGMail.CLASS.CVF_STAR_ON_ICON_) != -1) &&
+      (newVal.indexOf(axsGMail.CLASS.CVF_STAR_ON_ICON_) == -1)){
     var message = axsGMail.NOT_STRING + axsGMail.STARRED_STRING;
     axsGMail.axsJAXObj.speakTextViaNode(message);
   }
@@ -628,7 +656,7 @@ axsGMail.CV_domAttrModifiedHandler = function(evt){
  */
 axsGMail.CV_isStarred = function(cvItem){
   var star = axsGMail.CV_getStarImgNode(cvItem);
-  return (star.className.indexOf('kJv9nb') != -1);
+  return (star.className.indexOf(axsGMail.CLASS.CVF_STAR_ON_ICON_) != -1);
 };
 
 /**
@@ -650,7 +678,9 @@ axsGMail.CV_getStarImgNode = function(cvItem){
 axsGMail.CV_getSender = function(cvItem){
   var tdArray = cvItem.getElementsByTagName('TD');
   for (var i = 0, currentTd; currentTd = tdArray[i]; i++){
-    if (currentTd.className == 'zyVlgb XZlFIc'){
+    var className = currentTd.className;
+    if ((className.indexOf(axsGMail.CLASS.CVF_HEADER_LEFT_CELL_) != -1) && 
+	    (className.indexOf(axsGMail.CLASS.CVF_HEADER_TEXT_) != -1)){
       return currentTd;
     }
   }
@@ -665,9 +695,12 @@ axsGMail.CV_getSender = function(cvItem){
  */
 axsGMail.CV_getSnippet = function(cvItem){
   var senderNode = axsGMail.CV_getSender(cvItem);
-  if (senderNode &&
-      senderNode.nextSibling &&
-      (senderNode.nextSibling.className == 'zyVlgb XZlFIc')){
+  if (!senderNode || !senderNode.nextSibling){
+    return null;
+  }
+  var className = senderNode.nextSibling.className;
+  if ((className.indexOf(axsGMail.CLASS.CVF_HEADER_LEFT_CELL_) != -1) && 
+	  (className.indexOf(axsGMail.CLASS.CVF_HEADER_TEXT_) != -1)){ 
     return senderNode.nextSibling;
   }
   return null;
@@ -680,10 +713,10 @@ axsGMail.CV_getSnippet = function(cvItem){
  * @return {element} A DOM node that contains the date
  */
 axsGMail.CV_getDate = function(cvItem){
-  var tdArray = cvItem.getElementsByTagName('TD');
-  for (var i = 0, currentTd; currentTd = tdArray[i]; i++){
-    if (currentTd.className == 'i8p5Ld'){
-      return currentTd;
+  var spans = cvItem.getElementsByTagName('SPAN');
+  for (var i = 0, currentSpan; currentSpan = spans[i]; i++){
+    if (currentSpan.className == axsGMail.CLASS.CVF_RELATIVE_DATE_){
+      return currentSpan;
     }
   }
   return null;
@@ -725,7 +758,7 @@ axsGMail.CV_goToItem = function(cvItem){
   if (!axsGMail.CV_needToSpeak){
     return;
   }
-  if (cvItem.parentNode.className == 'HprMsc'){
+  if (cvItem.parentNode.className == axsGMail.CLASS.CV_EXPANDED_){
     axsGMail.CV_needToSpeak = false;
   } else {
     axsGMail.CV_forceExpandAll();
@@ -803,7 +836,9 @@ axsGMail.initQuickNav = function(){
  */
 axsGMail.getLabels = function(){
   var navPane = axsGMail.gMonkeyObj.getNavPaneElement();
-  var expression = ".//DIV[contains(concat(' ', @class, ' '), 'yyT6sf')]";
+  var expression = ".//DIV[contains(concat(' ', @class, ' '), '" + 
+                   axsGMail.CLASS.NP_LABEL_ + 
+                   "')]";
   return axsGMail.axsJAXObj.evalXPath(expression, navPane);
 };
 
@@ -852,9 +887,10 @@ axsGMail.chat_speakSelectedAutoComplete = function(acRowDiv){
   var xpath = 'div/div[1]/div[1]';
   var statusDiv = axsGMail.axsJAXObj.evalXPath(xpath, acRowDiv)[0];
   var status = '';
-  if (statusDiv.firstChild.className == 'T3MKEc ilX2xb'){
+  var className = statusDiv.firstChild.className;
+  if (className.indexOf(axsGMail.CLASS.CHAT_BACKGROUND_AVAILABLE_) != -1){
     status = axsGMail.ONLINE_STRING;
-  } else if (statusDiv.firstChild.className == 'T3MKEc OvtWcf'){
+  } else if (className.indexOf(axsGMail.CLASS.CHAT_BACKGROUND_OFFLINE_) != -1){
     status = axsGMail.OFFLINE_STRING;
   } else {
     status = axsGMail.IDLE_STRING;
@@ -862,6 +898,7 @@ axsGMail.chat_speakSelectedAutoComplete = function(acRowDiv){
   var userDiv = axsGMail.axsJAXObj.evalXPath('div/div[1]/div[2]', acRowDiv)[0];
   axsGMail.axsJAXObj.speakText(userDiv.textContent + status);
 };
+
 
 /**
  * Monitor function that checks if spoken feedback needs to be given to the 
@@ -874,7 +911,7 @@ axsGMail.chat_needToSpeakMonitor = function(){
   if (axsGMail.chat_needToSpeak){
     var canvasFrame = window.content.document.getElementById('canvas_frame');
     var canvasBody = canvasFrame.contentDocument.body;
-    var xpath = "//div[@class='ac-row active']";
+    var xpath = "//div[@class='" + axsGMail.CLASS.AUTOCOMPLETE_ACTIVE + "']";
     var acRowDiv = axsGMail.axsJAXObj.evalXPath(xpath, canvasBody)[0];
     axsGMail.chat_speakSelectedAutoComplete(acRowDiv);
   }
