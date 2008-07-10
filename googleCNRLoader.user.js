@@ -4,59 +4,31 @@
 /**
  * @fileoverview 
  * The Google AxsJAX CNR (Content Navigation Rule) Loader Greasemonkey 
- * script will load and run the appropriate CNR for the current page 
- * you are viewing if there is such a CNR available. 
+ * script will load and run axsCNRLoader.js
+ * This adds a level of indirection and allows users to get the latest
+ * version without needing to download and install it each time.
  *
  * For more information about CNR, please see the AxsJAX project page at:
  * http://google-axsjax.googlecode.com
  *
  * The CNRs are available as blog posts on blogspot with the tag "CNR".
- * By default, cnrSource points to Charles L. Chen's blog 
- * (http://clcworld.blogspot.com). If you would like to change this to
- * some other blog, change cnrSource so that it contains the URL of 
- * the blog you wish to use.
+ * By default, window.wrappedJSObject.axsCNRSource points to  
+ * Charles L. Chen's blog (http://clcworld.blogspot.com). If you would 
+ * like to change this to some other blog, change cnrSource so that 
+ * it contains the URL of the blog you wish to use.
  *
  * @author clchen@google.com (Charles L. Chen)
  */
  
+ // Replace this with the Blogspot ATOM Feed URL that contains 
+ // the CNRs that you want to use. 
+ window.wrappedJSObject.axsCNRSource = 'http://clcworld.blogspot.com/atom.xml';
  
- 
- 
-function pickCNR(){
-  // Don't try to run a CNR if there is already 
-  // an AxsJAX script for the page.
-  if (typeof(AxsJAX) != 'undefined'){
-    return;
-  }
-  
-  var baseURL = 'http://google-axsjax.googlecode.com/svn/trunk/';
-  var theLib = document.createElement('script');
-  theLib.type = 'text/javascript';
-  theLib.src = baseURL + 'common/AxsJAX.js';   
-  var navLib = document.createElement('script');
-  navLib.type = 'text/javascript';
-  navLib.src = baseURL + 'common/AxsNav.js';
-  var lensLib = document.createElement('script');
-  lensLib.type = 'text/javascript';
-  lensLib.src = baseURL + 'common/AxsLens.js';
-  var sndLib = document.createElement('script');
-  sndLib.type = 'text/javascript';
-  sndLib.src = baseURL + 'common/AxsSound.js';
-  var cnrLoader = document.createElement('script');
-  cnrLoader.type = 'text/javascript';
-  cnrLoader.src = baseURL + 'common/AxsCNRLoader.js';
-  var cnrRunner = document.createElement('script');
-  cnrRunner.type = 'text/javascript';
-  cnrRunner.src = baseURL + 'common/AxsCNRRunner.js';
-  
-  document.getElementsByTagName('head')[0].appendChild(theLib);
-  document.getElementsByTagName('head')[0].appendChild(navLib);
-  document.getElementsByTagName('head')[0].appendChild(lensLib);
-  document.getElementsByTagName('head')[0].appendChild(sndLib);
-  document.getElementsByTagName('head')[0].appendChild(cnrLoader);  
-  document.getElementsByTagName('head')[0].appendChild(cnrRunner); 
-  
- 
+ function loadCNRSystem(){
+  var theScript = document.createElement('script');
+  theScript.src = 'http://google-axsjax.googlecode.com/svn/trunk/common/axsCNRLoader.js';
+  theScript.src = 'http://www.corp.google.com/~clchen/AxsJAX/common/axsCNRLoader.js';
+  document.getElementsByTagName('head')[0].appendChild(theScript);
 }
- 
- window.setTimeout(pickCNR,500);
+
+loadCNRSystem();
