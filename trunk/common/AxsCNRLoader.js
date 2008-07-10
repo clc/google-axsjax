@@ -1,88 +1,59 @@
 // Copyright 2008 Google Inc.
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// All Rights Reserved.
 
 /**
- * @fileoverview AxsCNRLoader - JavaScript library for loading
- * CNR files from the web
+ * @fileoverview 
+ * This script will load and run the appropriate CNR for the current page
+ * you are viewing if there is such a CNR available. 
+ *
+ * For more information about CNR, please see the AxsJAX project page at:
+ * http://google-axsjax.googlecode.com
+ *
+ * The CNRs are available as blog posts on blogspot with the tag "CNR".
+ * By default, cnrSource points to Charles L. Chen's blog 
+ * (http://clcworld.blogspot.com). If you would like to change this to
+ * some other blog, change cnrSource so that it contains the URL of 
+ * the blog you wish to use.
+ *
  * @author clchen@google.com (Charles L. Chen)
  */
-
-/**
- * Class for managing loading of CNRs
- * @constructor
- */
-var AxsCNRLoader = {}
-
-AxsCNRLoader.init = function(){
-  AxsCNRLoader.ready = false;
-  AxsCNRLoader.busy = false;
-  var self = this;
-    
-  var script = document.createElement('script');
-  script.src = 'http://www.google.com/jsapi?callback=AxsCNRLoader.googleLoadHandler';
-  script.type = 'text/javascript';
-  document.getElementsByTagName('head')[0].appendChild(script);
-};
-
-AxsCNRLoader.googleLoadHandler = function(){
-  google.load('feeds', '1', {callback: AxsCNRLoader.feedsReadyHandler});
-}
-
-AxsCNRLoader.feedsReadyHandler = function(){
-  AxsCNRLoader.ready = true;
-};
-
-AxsCNRLoader.load = function(url, srcType, callback){
-  if (!AxsCNRLoader.ready || AxsCNRLoader.busy){
-    var tempFunc = function(){
-                     AxsCNRLoader.load(url, srcType, callback);
-                   };
-    window.setTimeout(tempFunc,100);
+ 
+ 
+ 
+ 
+function pickCNR(){
+  // Don't try to run a CNR if there is already 
+  // an AxsJAX script for the page.
+  if (typeof(AxsJAX) != 'undefined'){
     return;
   }
-  AxsCNRLoader.busy = true;
-  if (srcType == 'blogger'){
-    var feed = new google.feeds.Feed(url);
-	var handler = function(result){
-                    AxsCNRLoader.handleBlogger(result, callback);
-                  }; 
-    feed.load(handler);  
-  }
-};
-
-AxsCNRLoader.handleBlogger = function(result, callback){
-  var cnrs = new Array();
-  var entries = result.feed.entries;
-  for (var i=0, entry; entry = entries[i]; i++){
-    var isCNR = false;
-    for (var j=0, cat; cat = entry.categories[j]; j++){
-	  if (cat == 'CNR'){
-	    isCNR = true;
-	  }	
-	}
-	if (isCNR){
-	  var cnrObj = new Object();
-	  cnrObj.url = entry.title;
-	  var unescapedRule = entry.content.replace(/<br>/g, '');
-	  unescapedRule = unescapedRule.replace(/&lt;/g, '<');
-	  unescapedRule = unescapedRule.replace(/&gt;/g, '>');
-	  unescapedRule = unescapedRule.replace(/&#39;/g, '"');
-	  cnrObj.rule = unescapedRule;
-	  cnrs.push(cnrObj);
-	}
-  }  
-  callback(cnrs);
-};
-
-AxsCNRLoader.init();
+  
+  var baseURL = 'http://google-axsjax.googlecode.com/svn/trunk/';
+  var theLib = document.createElement('script');
+  theLib.type = 'text/javascript';
+  theLib.src = baseURL + 'common/AxsJAX.js';   
+  var navLib = document.createElement('script');
+  navLib.type = 'text/javascript';
+  navLib.src = baseURL + 'common/AxsNav.js';
+  var lensLib = document.createElement('script');
+  lensLib.type = 'text/javascript';
+  lensLib.src = baseURL + 'common/AxsLens.js';
+  var sndLib = document.createElement('script');
+  sndLib.type = 'text/javascript';
+  sndLib.src = baseURL + 'common/AxsSound.js';
+  var cnrFetcher = document.createElement('script');
+  cnrFetcher.type = 'text/javascript';
+  cnrFetcher.src = baseURL + 'common/AxsCNRFetcher.js';
+  var cnrRunner = document.createElement('script');
+  cnrRunner.type = 'text/javascript';
+  cnrRunner.src = baseURL + 'common/AxsCNRRunner.js';
+  
+  document.getElementsByTagName('head')[0].appendChild(theLib);
+  document.getElementsByTagName('head')[0].appendChild(navLib);
+  document.getElementsByTagName('head')[0].appendChild(lensLib);
+  document.getElementsByTagName('head')[0].appendChild(sndLib);
+  document.getElementsByTagName('head')[0].appendChild(cnrFetcher);  
+  document.getElementsByTagName('head')[0].appendChild(cnrRunner); 
+}
+ 
+ window.setTimeout(pickCNR,500);

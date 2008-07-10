@@ -150,7 +150,10 @@ axsCNRRunner.urlMatcher = function(cnrArray){
 
 
 axsCNRRunner.init = function(){
-  AxsCNRLoader.load(axsCNRRunner.CNR_SRC, axsCNRRunner.SRC_TYPE, axsCNRRunner.urlMatcher);
+  if (typeof(axsCNRSource) != 'undefined'){
+    axsCNRRunner.CNR_SRC = axsCNRSource;
+  }
+  AxsCNRFetcher.load(axsCNRRunner.CNR_SRC, axsCNRRunner.SRC_TYPE, axsCNRRunner.urlMatcher);
 };
 
 axsCNRRunner.init();
