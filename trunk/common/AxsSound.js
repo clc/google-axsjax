@@ -43,7 +43,7 @@ AxsSound.prototype.setVerbosity = function(verbosity){
 
 AxsSound.prototype.init = function(){
   //Earcons do not need initialization
-  if (earconsOnly){
+  if (this.earconsOnly){
     return;
   }
   if (this.initSucceeded){
@@ -118,8 +118,8 @@ AxsSound.prototype.playSeg = function(url,startTime,endTime){
 };
 
 AxsSound.prototype.stop = function(){
-  if (this.earconsObj !== null){
-    this.earconsObj.parentNode.removeChild(earconsObj);
+  if (this.earconsObj){
+    this.earconsObj.parentNode.removeChild(this.earconsObj);
 	this.earconsObj = null;
   }
   if (this.earconsOnly){
@@ -157,12 +157,6 @@ AxsSound.prototype.isPlaying = function(){
 
 
 AxsSound.prototype.playEarcon = function(earcon){
-  if (this.earconsObj === null){
-    this.earconsObj = document.createElement('embed');
-    this.earconsObj.height = 0;
-    this.earconsObj.width = 0;	
-	document.body.appendChild(this.earconsObj);
-  }
   var earconCMD = '';
   switch (earcon){
     case 'alert':
@@ -190,6 +184,12 @@ AxsSound.prototype.playEarcon = function(earcon){
   }
   if (earconCMD === ''){
     return false;
+  }
+  if (this.earconsObj === null){
+    this.earconsObj = document.createElement('embed');
+    this.earconsObj.height = 0;
+    this.earconsObj.width = 0;	
+	document.body.appendChild(this.earconsObj);
   }
   this.earconsObj.src = this.earconsSwf + earconCMD;
 };
