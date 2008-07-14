@@ -47,6 +47,12 @@ axsProductSearch.axsNavObj = null;
 axsProductSearch.axsLensObj = null;
 
 /**
+ * The AxsSound object that will play earcons
+ * @type AxsSound?
+ */
+axsProductSearch.axsSoundObj = null;
+
+/**
  * The magnification factor for the AxsLens object.
  * @type number
  */
@@ -73,6 +79,8 @@ axsProductSearch.init = function(){
   axsProductSearch.axsLensObj = new AxsLens(axsProductSearch.axsJAXObj);
   axsProductSearch.axsNavObj.setLens(axsProductSearch.axsLensObj);
   axsProductSearch.axsLensObj.setMagnification(axsProductSearch.magSize);
+  axsProductSearch.axsSoundObj = new AxsSound(true);
+  axsProductSearch.axsNavObj.setSound(axsProductSearch.axsSoundObj);
 };
 
 
@@ -101,6 +109,18 @@ axsProductSearch.keyCodeMap = {
 
 axsProductSearch.charCodeMap = {
   // Map additional keyboard behavior that involves char codes here
+  // - (minus symbol)
+  45 : function () {
+         axsProductSearch.magSize -= 0.10;
+         axsProductSearch.axsLensObj.setMagnification(axsProductSearch.magSize);
+	     return false;
+       },
+  // = (equal symbol) 	   
+  61 : function () {
+         axsProductSearch.magSize += 0.10;
+         axsProductSearch.axsLensObj.setMagnification(axsProductSearch.magSize);
+	     return false;
+       },
   63 : function () {
          var helpStr = axsProductSearch.HELP +
                        axsProductSearch.axsNavObj.localHelpString() +
