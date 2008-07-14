@@ -47,6 +47,12 @@ axsSkel.axsNavObj = null;
 axsSkel.axsLensObj = null;
 
 /**
+ * The AxsSound object that will play earcons
+ * @type AxsSound?
+ */
+axsSkel.axsSoundObj = null;
+
+/**
  * The magnification factor for the AxsLens object.
  * @type number
  */
@@ -68,6 +74,8 @@ axsSkel.init = function(){
   axsSkel.axsLensObj = new AxsLens(axsSkel.axsJAXObj);
   axsSkel.axsNavObj.setLens(axsSkel.axsLensObj);
   axsSkel.axsLensObj.setMagnification(axsSkel.magSize);
+  axsSkel.axsSoundObj = new AxsSound(true);
+  axsSkel.axsNavObj.setSound(axsSkel.axsSoundObj);
   
   //Delete the next line when you are done with your script.
   alert('AxsSkel loaded and initialized!');
@@ -114,6 +122,18 @@ axsSkel.keyCodeMap = {
 
 axsSkel.charCodeMap = {
   // Map additional keyboard behavior that involves char codes here
+  // - (minus symbol)
+  45 : function () {
+         axsSkel.magSize -= 0.10;
+         axsSkel.axsLensObj.setMagnification(axsSkel.magSize);
+	     return false;
+       },
+  // = (equal symbol) 	   
+  61 : function () {
+         axsSkel.magSize += 0.10;
+         axsSkel.axsLensObj.setMagnification(axsSkel.magSize);
+	     return false;
+       },
   63 : function () {
          var helpStr = axsSkel.HELP +
                        axsSkel.axsNavObj.localHelpString() +
