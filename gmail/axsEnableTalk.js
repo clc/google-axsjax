@@ -106,6 +106,7 @@ axsTalk.axsJAXObj = null;
 
 axsTalk.inputFocused = false;
 axsTalk.lastFocusedNode = null;
+axsTalk.liveRegionsCleaned = false;
 
 axsTalk.init = function(){
   axsTalk.axsJAXObj = new AxsJAX(true);
@@ -119,13 +120,25 @@ axsTalk.init = function(){
   document.addEventListener('blur', axsTalk.blurHandler, true);
 
   document.addEventListener('DOMNodeInserted', axsTalk.domInsertionHandler, true);
-  //Read the first thing on the page.
-  //Use a set time out just in case the browser is not entirely ready yet.
- // window.setTimeout(axsImageSearch.goToNextResult,100);
+  
+  axsTalk.liveRegionsCleaned = false;
 };
 
-
-
+/**
+ * The current live region implementation causes both the username
+ * and the message to be spoken. This is redundant information
+ * since a chat involves only two people and the user knows the message
+ * they sent themselves, and anything they did not send themselves
+ * must have come from the other end. 
+ */
+axsTalk.cleanUpLiveRegions = function(){
+  var xpath = '//*[@aria-live]';
+  var liveRegions = axsTalk.axsJAXObj.evalXPath(xpath,document.body);
+  for (var i=0, lr; lr = liveRegions[i]; i++){
+    lr.removeAttribute('aria-live');
+  }
+  axsTalk.liveRegionsCleaned = true;
+}
 
 
 /**
@@ -178,8 +191,6 @@ axsTalk.extraKeyboardNavHandler = function(evt){
     return true;
   }
 
-
-
   if (evt.charCode == 63){ // ? (question mark)
     axsTalk.axsJAXObj.speakTextViaNode(axsTalk.HELP_STRING);
     return false;
@@ -193,10 +204,13 @@ axsTalk.domInsertionHandler = function(evt){
   if ( (target.tagName == 'DIV') &&
        ( (target.className == 'RNCQof') ||
          (target.className == 'h8iICe') )  ){
+    if (!axsTalk.liveRegionsCleaned){
+	  axsTalk.cleanUpLiveRegions();
+	}
     axsTalk.setMsgLang(target);
-    axsTalk.axsJAXObj.speakNode(axsTalk.getMessageNode(target),true);
+    axsTalk.axsJAXObj.speakNode(axsTalk.getMessageNode(target),true);	
     axsTalk.recordMessage(target);
-    }
+  }
 };
 
 axsTalk.recordMessage = function(messageDiv){
