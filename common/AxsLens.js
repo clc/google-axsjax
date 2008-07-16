@@ -42,24 +42,32 @@ var AxsLens = function(axsJAXObj){
   activeDoc.body.appendChild(this.lens);
 };
 
+/**
+ * View the targetNode through AxsLens.
+ * This method will create a copy of the 
+ * targetNode, apply the lens' transformation
+ * to the copy, and place the copy in an
+ * element floating above the targetNode.
+ * @param {Object} targetNode The DOM node to be viewed
+ */
 AxsLens.prototype.view = function(targetNode){
   while (this.lens.firstChild){
     this.lens.removeChild(this.lens.firstChild);
-  } 
+  }
   if (targetNode === null) {
     this.lens.style.display = 'none';
-  	return;
+    return;
   }
   var left = 0;
   var top = 0;
   var obj = targetNode;
   if (obj.offsetParent) {
-		left = obj.offsetLeft;
-		top = obj.offsetTop;
+    left = obj.offsetLeft;
+    top = obj.offsetTop;
     obj = obj.offsetParent;
     while (obj !== null) {
-			left += obj.offsetLeft;
-			top += obj.offsetTop;
+      left += obj.offsetLeft;
+      top += obj.offsetTop;
       obj = obj.offsetParent;
     }
   }
@@ -71,19 +79,26 @@ AxsLens.prototype.view = function(targetNode){
   this.lens.style.top = top + 'px';
   this.lens.style.left = left + 'px';
   this.lens.style.zIndex = 999;
-  this.lens.style.display = 'block';  
+  this.lens.style.display = 'block';
 };
 
-
+/**
+ * Sets the multiplication factor of the lens
+ * @param {Number} multiplier The multiplication factor to be used 
+ * by the lens when magnifying content
+ */
 AxsLens.prototype.setMagnification = function(multiplier){
   this.multiplier = multiplier;
   this.magnifyText();
   this.enlargeImages();
 };
 
+/**
+ * Enlarges the images of the content being viewed in the lens.
+ */
 AxsLens.prototype.enlargeImages = function(){
   var images = this.lens.getElementsByTagName('img');
-  for (var i=0,image; image = images[i]; i++){
+  for (var i = 0, image; image = images[i]; i++){
     if (!image.hasAttribute('Axs_OrigHeight')){
       image.setAttribute('Axs_OrigHeight', image.height);
       image.setAttribute('Axs_OrigWidth', image.width);
@@ -93,6 +108,9 @@ AxsLens.prototype.enlargeImages = function(){
   }
 };
 
+/**
+ * Enlarges the text of the content being viewed in the lens.
+ */
 AxsLens.prototype.magnifyText = function(){
   // fontSizeAdjust is based on the aspect value of the font.
   // The default aspect value of Arial is .52
