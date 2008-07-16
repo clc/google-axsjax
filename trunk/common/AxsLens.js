@@ -48,7 +48,8 @@ var AxsLens = function(axsJAXObj){
  * targetNode, apply the lens' transformation
  * to the copy, and place the copy in an
  * element floating above the targetNode.
- * @param {Object} targetNode The DOM node to be viewed
+ * If targetNode is set to null, the lens will stop being displayed.
+ * @param {Object?} targetNode The DOM node to be viewed
  */
 AxsLens.prototype.view = function(targetNode){
   while (this.lens.firstChild){
