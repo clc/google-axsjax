@@ -44,13 +44,18 @@ var AxsNav = function(axsJAXObj){
   this.keyHandler = null;
 };
 
-//Constant strings to be internationalized
-AxsNav.NEXTLIST_STRING = ', next list. ';
-AxsNav.PREVLIST_STRING = ', previous list. ';
-AxsNav.GOFORWARD_STRING = ', go forward. ';
-AxsNav.GOBACKWARDS_STRING = ', go backwards. ';
-AxsNav.CYCLENEXT_STRING = ', cycle next. ';
-AxsNav.CYCLEPREV_STRING = ', cycle previous. ';
+/**
+ * Object that contains all string literals used by AxsNav.
+ * @type {Object}
+ */
+AxsNav.str = {
+  NEXTLIST : ', next list. ',
+  PREVLIST : ', previous list. ',
+  GOFORWARD : ', go forward. ',
+  GOBACKWARDS : ', go backwards. ',
+  CYCLENEXT : ', cycle next. ',
+  CYCLEPREV : ', cycle previous. '
+};
 
 /**
  * Makes an array of items given a navigation list node and its index.
@@ -66,9 +71,9 @@ AxsNav.prototype.makeItemsArray = function(listNode){
     //sets of cnrItems and even if one set does not exist as expected,
     //the other sets should still be available.
     try{
-	  //Strip all leading and trailing spaces from the xpath
+      //Strip all leading and trailing spaces from the xpath
       var xpath = entry.textContent;
-	  xpath = xpath.replace(/^\s\s*/, '').replace(/\s\s*$/, '');
+      xpath = xpath.replace(/^\s\s*/, '').replace(/\s\s*$/, '');
       var htmlElem = this.axs_.getActiveDocument().documentElement;
       var elems = this.axs_.evalXPath(xpath, htmlElem);
       var idxStr = entry.getAttribute('index') || '0';
@@ -99,6 +104,14 @@ AxsNav.prototype.makeItemsArray = function(listNode){
   return itemsArray;
 };
 
+/**
+ * Returns whether the specified navigation list is valid.
+ * If the navigation list is dynamic and appears to not be valid,
+ * this function will try to reload it and check whether or 
+ * not it becomes valid.
+ * @param {Object} navList The specified list object to check.
+ * @return {boolean} Whether the specified list object is valid.
+ */
 AxsNav.prototype.validateList = function(navList) {
   var valid = true;
   //Reload dynamic lists  
@@ -117,6 +130,9 @@ AxsNav.prototype.validateList = function(navList) {
   return valid;
 };
 
+/**
+ * Performs the specified action with a list is switched into.
+ */
 AxsNav.prototype.doListEntryActions = function() {
   var currentList = this.currentList();
   var target = currentList.entryTarget;
@@ -129,7 +145,7 @@ AxsNav.prototype.doListEntryActions = function() {
     this.announceCurrentList();
     if (this.snd_ !== null){
       this.snd_.play(this.LIST_SND);
-	}
+    }
   }
 };
 
@@ -247,9 +263,9 @@ AxsNav.prototype.nextItem = function(){
 AxsNav.prototype.fwdItem = function(){
   var list = this.navArray[this.navListIdx];
   var index = this.navItemIdxs[this.navListIdx];
-  if ((list.tailTarget !== null) && (index+1 >= list.items.length)){
+  if ((list.tailTarget !== null) && (index + 1 >= list.items.length)){
     this.actOnTarget(list.tailTarget);
-	this.navItemIdxs[this.navListIdx] = 0;
+    this.navItemIdxs[this.navListIdx] = 0;
     return null;
   }
   var item = this.nextItem();
@@ -313,9 +329,9 @@ AxsNav.prototype.prevItem = function(){
 AxsNav.prototype.backItem = function(){
   var list = this.navArray[this.navListIdx];
   var index = this.navItemIdxs[this.navListIdx];
-  if ((list.headTarget !== null) && (index-1 <= -1)){
+  if ((list.headTarget !== null) && (index - 1 <= -1)){
     this.actOnTarget(list.headTarget);
-	this.navItemIdxs[this.navListIdx] = list.items.length;
+    this.navItemIdxs[this.navListIdx] = list.items.length;
     return null;
   }
   var item = this.prevItem();
@@ -613,7 +629,7 @@ AxsNav.prototype.actOnTarget = function(target){
         item.action = target.action;
         item.elem = elems[0];
         func(item);
-    } else {	
+    } else {
       this.axs_.clickElem(elems[0], false);
       elems[0].scrollIntoView(true);
     }
@@ -713,7 +729,11 @@ AxsNav.prototype.setUpNavKeys = function(cnrDOM, emptyLists){
   document.addEventListener('keypress', this.keyHandler, true);
 };
 
-
+/**
+ * Returns an array of target objects for the given <list> node
+ * @param {Object} listNode  A <list> node
+ * @return {Array} An array of target objects
+ */
 AxsNav.prototype.makeTargetsArray = function(listNode){
   var targetsArray = new Array();
   var cnrTargets = listNode.getElementsByTagName('target');
@@ -840,10 +860,10 @@ AxsNav.prototype.navInit = function(cnrString, opt_customNavMethod){
 AxsNav.prototype.globalHelpString = function(){
   var helpStr = '';
   if (this.nextListKeys !== ''){
-    helpStr = helpStr + this.nextListKeys + AxsNav.NEXTLIST_STRING;
+    helpStr = helpStr + this.nextListKeys + AxsNav.str.NEXTLIST;
   }
   if (this.prevListKeys !== ''){
-    helpStr = helpStr + this.prevListKeys + AxsNav.PREVLIST_STRING;
+    helpStr = helpStr + this.prevListKeys + AxsNav.str.PREVLIST;
   }
   var i = 0;
   var target = null;
@@ -871,16 +891,16 @@ AxsNav.prototype.localHelpString = function(){
   var currentList = this.navArray[this.navListIdx];
   var helpStr = '';
   if (currentList.fwdKeys !== ''){
-    helpStr = helpStr + currentList.fwdKeys + AxsNav.GOFORWARD_STRING;
+    helpStr = helpStr + currentList.fwdKeys + AxsNav.str.GOFORWARD;
   }
   if (currentList.backKeys !== ''){
-    helpStr = helpStr + currentList.backKeys + AxsNav.GOBACKWARDS_STRING;
+    helpStr = helpStr + currentList.backKeys + AxsNav.str.GOBACKWARDS;
   }
   if (currentList.nextKeys !== ''){
-    helpStr = helpStr + currentList.nextKeys + AxsNav.CYCLENEXT_STRING;
+    helpStr = helpStr + currentList.nextKeys + AxsNav.str.CYCLENEXT;
   }
   if (currentList.prevKeys !== ''){
-    helpStr = helpStr + currentList.prevKeys + AxsNav.CYCLEPREV_STRING;
+    helpStr = helpStr + currentList.prevKeys + AxsNav.str.CYCLEPREV;
   }
   for (var i = 0, target; target = currentList.targets[i]; i++){
     if (target.hotkeyStr !== ''){
@@ -917,9 +937,10 @@ AxsNav.prototype.setSound = function(snd){
 
 /**
  * Refreshes the dynamic list with the specified title.
+ * @param {string?} listTitle The title of the list that should be refreshed.
  * @return {boolean} True if the list was successfully refreshed.
  */
-AxsNav.prototype.refreshList = function(listTitle){ 
+AxsNav.prototype.refreshList = function(listTitle){
   if (listTitle === null) {
     return false;
   }
@@ -946,18 +967,18 @@ AxsNav.prototype.disableNavKeys = function() {
 };
 
 /**
- * Re-enables the default keyboard handler for the AxsNav object by reattaching it
- * to the keypress event listener for the current document.
+ * Re-enables the default keyboard handler for the AxsNav object by reattaching
+ * it to the keypress event listener for the current document.
  * This function assumes AxsNav.prototype.setUpNavKeys has already been called
  * so that this.keyHandler is already setup and ready to go.
  */
 AxsNav.prototype.enableNavKeys = function() {
   if (this.keyHandler !== null){
     // Remove it once so that the keyHandler is not accidentally added twice
-	// just in case enableNavKeys has already been called.
-	// If it has not already been added, this first removeEventListener call
-	// is a no-op.
+    // just in case enableNavKeys has already been called.
+    // If it has not already been added, this first removeEventListener call
+    // is a no-op.
     document.removeEventListener('keypress', this.keyHandler, true);
-	document.addEventListener('keypress', this.keyHandler, true);
+    document.addEventListener('keypress', this.keyHandler, true);
   }
 };
