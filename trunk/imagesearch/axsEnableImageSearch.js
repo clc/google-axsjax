@@ -51,11 +51,11 @@ axsImageSearch.HELP_STRING =
 
 /**
  * The AxsJAX object that will do the tickling and speaking.
- * @type AxsJAX
+ * @type AxsJAX?
  */
 axsImageSearch.axsJAXObj = null;
 
-axsImageSearch.resultsArray = null;
+axsImageSearch.resultsArray = new Array();
 axsImageSearch.resultsIndex = 0;
 
 
@@ -91,7 +91,7 @@ axsImageSearch.init = function(){
 /**
  * When an input blank has focus, the keystrokes should go into the blank
  * and should not trigger hot key commands.
- * @param {event} A Focus event
+ * @param {Object} evt A Focus event
  */
 axsImageSearch.focusHandler = function(evt){
   axsImageSearch.lastFocusedNode = evt.target;
@@ -104,7 +104,7 @@ axsImageSearch.focusHandler = function(evt){
 /**
  * When no input blanks have focus, the keystrokes should trigger hot key
  * commands.
- * @param {event} A Blur event
+ * @param {Object} evt A Blur event
  */
 axsImageSearch.blurHandler = function (evt){
   axsImageSearch.lastFocusedNode = null;

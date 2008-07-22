@@ -182,6 +182,16 @@ axsJb.findFirstBallInRow = function(){
   return -1;
 };
 
+
+axsJb.isSelected = function(row, col){
+  var ballImgNode = axsJb.getBallImgNode(row,col);
+  var ballURL = axsJb.getUrlOfBallImg(ballImgNode);
+  if (ballURL.indexOf('s_') === 0){
+    return true;
+  }
+  return false;
+};
+
 axsJb.gotoNext = function(color){
   var uTargetImgUrl = 'p_' + color + '.gif';
   var sTargetImgUrl = 's_' + color + '.gif';
@@ -369,11 +379,11 @@ axsJb.charCodeMap = {
   108 : axsJb.right,    // l
    32 : function() {    // SPACE
           var wasSelected = false;
-          if (axsJb.getUrlOfBallImg(axsJb.getBallImgNode(axsJb.row,axsJb.col)).indexOf('s_') === 0){
+          if (axsJb.isSelected(axsJb.row,axsJb.col)){
 		    wasSelected = true;
 		  }
           axsJb.axsJaxObj.clickElem(axsJb.getBallImgNode(axsJb.row,axsJb.col), false);
-          if (axsJb.getUrlOfBallImg(axsJb.getBallImgNode(axsJb.row,axsJb.col)).indexOf('s_') === 0){
+          if (axsJb.isSelected(axsJb.row,axsJb.col)){
             axsJb.axsSoundObj.play('select');
             axsJb.sayStats();
           } else {
