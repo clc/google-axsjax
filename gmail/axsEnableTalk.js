@@ -99,7 +99,7 @@ axsTalk.itemsIndex = 0;
 
 /**
  * The AxsJAX object that will do the tickling and speaking.
- * @type AxsJAX
+ * @type AxsJAX?
  */
 axsTalk.axsJAXObj = null;
 
@@ -144,7 +144,7 @@ axsTalk.cleanUpLiveRegions = function(){
 /**
  * When an input blank has focus, the keystrokes should go into the blank
  * and should not trigger hot key commands.
- * @param {event} A Focus event
+ * @param {Object} evt A Focus event
  */
 axsTalk.focusHandler = function(evt){
   axsTalk.lastFocusedNode = evt.target;
@@ -157,7 +157,7 @@ axsTalk.focusHandler = function(evt){
 /**
  * When no input blanks have focus, the keystrokes should trigger hot key
  * commands.
- * @param {event} A Blur event
+ * @param {Object} evt A Blur event
  */
 axsTalk.blurHandler = function (evt){
   axsTalk.lastFocusedNode = null;

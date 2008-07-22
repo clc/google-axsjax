@@ -969,6 +969,8 @@ axsQuotes.keyHandler = function(evt) {
 
 /**
  * Map from character codes to functions
+ * @return {boolean} Always returns false to indicate 
+ *                   that the keycode has been handled.
  */
 axsQuotes.charCodeMap = {
   // Map additional keyboard behavior that involves char codes here
