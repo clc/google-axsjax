@@ -135,7 +135,7 @@ axsCal.domInsertionHandler = function(evt){
 
 /* Functions for working with the Calendars List */
 axsCal.getCalendars = function(){
-  var rootNode = document.getElementById('todrawfav');
+  var rootNode = document.getElementById('calendars');
   var xpath = "//div[@class='calListRow']";
   axsCal.calendarsArray = axsCal.axsJAXObj.evalXPath(xpath, rootNode);
 };
