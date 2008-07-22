@@ -48,8 +48,6 @@ axsGMail.CLASS = {
   CHAT_BACKGROUND_OFFLINE_ : 'OvtWcf'
 };
 
-
-
 //These are strings used to find specific links
 /**
  * @type {string}
@@ -142,34 +140,34 @@ axsGMail.HELP_STRING =
 
 /**
  * The AxsJAX object that will do the tickling and speaking.
- * @type AxsJAX
+ * @type AxsJAX?
  */
 axsGMail.axsJAXObj = null;
 
 /**
  * The GMonkey object provided by GMail
  * http://code.google.com/p/gmail-greasemonkey/wiki/GmailGreasemonkey10API
- * @type GMonkey
+ * @type Object?
  */
 axsGMail.gMonkeyObj = null;
 
 /**
  * The DOM node that provides quick navigation for the labels
- * @type Element
+ * @type Element?
  */
 axsGMail.quickNavNode = null;
 
 /**
  * The DOM node that provides an input field for typing 
   * in the name of the buddy the user wishes to chat with
- * @type Element
+ * @type Element?
  */
 axsGMail.buddiesInputNode = null;
 
 
 /**
  * The DOM node that is the current item in the threadlist view
- * @type Element
+ * @type Element?
  */
 axsGMail.TL_currentItem = null;
 /**
@@ -183,7 +181,7 @@ axsGMail.TL_needToSpeak = false;
 
 /**
  * The DOM node that is the current item in the conversation view
- * @type Element
+ * @type Element?
  */
 axsGMail.CV_currentItem = null;
 /**
@@ -198,14 +196,14 @@ axsGMail.CV_needToSpeak = false;
 /**
  * Whether or not the user has made some keyboard action which 
   * should receive spoken feedback in the chat view.
- * @type Element
+ * @type boolean
  */
 axsGMail.chat_needToSpeak = false;
 
 /**
  * Initializes the AxsJAX script for GMail.
  * Note that this should not be done until after the GMonkey object is ready.
- * @param {GMonkey} gmObj The GMonkey object for the page.
+ * @param {Object} gmObj The GMonkey object for the page.
  */
 axsGMail.init = function(gmObj){
   axsGMail.axsJAXObj = new AxsJAX(true);
@@ -253,7 +251,7 @@ axsGMail.init = function(gmObj){
 
 /**
  * Provides keyboard handling for the main document.
- * @param {event} evt A keypress event
+ * @param {Object} evt A keypress event
  * @return {boolean} Indicates whether the keypress was handled
  */
 axsGMail.extraKeyboardNavHandler = function(evt){
@@ -275,7 +273,7 @@ axsGMail.extraKeyboardNavHandler = function(evt){
 
 /**
  * Provides handling for DOM node insertion events for the main document.
- * @param {event} evt A DOM node insertion
+ * @param {Object} evt A DOM node insertion
  */
 axsGMail.mainDoc_domInsertionHandler = function(evt){
   var target = evt.target;
@@ -290,7 +288,7 @@ axsGMail.mainDoc_domInsertionHandler = function(evt){
 
 /**
  * Provides keyboard handling for the canvas area.
- * @param {event} evt A keypress event
+ * @param {Object} evt A keypress event
  * @return {boolean} Indicates whether the keypress was handled
  */
 axsGMail.canvas_extraKeyboardNavHandler = function(evt){
@@ -357,7 +355,7 @@ axsGMail.canvas_extraKeyboardNavHandler = function(evt){
 
 /**
  * Provides handling for DOM attribute modified events for the canvas area.
- * @param {event} evt A DOM attribute modified event
+ * @param {Object} evt A DOM attribute modified event
  */
 axsGMail.domAttrModifiedHandler = function(evt){
   var attrib = evt.attrName;
@@ -367,7 +365,7 @@ axsGMail.domAttrModifiedHandler = function(evt){
   if ((attrib == 'class') &&
       (newVal.indexOf(axsGMail.CLASS.APP_MENU_ITEM_ACTIVE_) != -1)){  
     target.setAttribute('tabindex', 0);
-    window.setTimeout(new function(){target.focus();}, 0);
+    window.setTimeout(function(){target.focus();}, 0);
     return;
   }
   if ((attrib == 'class') &&
@@ -388,7 +386,7 @@ axsGMail.domAttrModifiedHandler = function(evt){
 
 /**
  * Provides handling for DOM node insertion events for the canvas area.
- * @param {event} evt A DOM node insertion
+ * @param {Object} evt A DOM node insertion
  */
 axsGMail.domInsertionHandler = function(evt){
   if (axsGMail.gMonkeyObj.getActiveViewType() == 'tl'){
@@ -420,7 +418,7 @@ axsGMail.viewChangeHandler = function(){
 /**
  * Provides handling for DOM attribute modified events 
  * when in the threadlist view.
- * @param {event} evt A DOM attribute modified event
+ * @param {Object} evt A DOM attribute modified event
  */
 axsGMail.TL_domAttrModifiedHandler = function(evt){
   var attrib = evt.attrName;
@@ -467,7 +465,7 @@ axsGMail.TL_domAttrModifiedHandler = function(evt){
 /**
  * Provides handling for DOM node insertion events 
  * when in the threadlist view.
- * @param {event} evt A DOM node insertion
+ * @param {Object} evt A DOM node insertion
  */
 axsGMail.TL_domInsertionHandler = function(evt){
   var target = evt.target;
@@ -487,7 +485,7 @@ axsGMail.TL_domInsertionHandler = function(evt){
 /**
  * Given a threadlist item, determines if it is 
  * new or not.
- * @param {element} tlItem A DOM node that is a threadlist item
+ * @param {Element} tlItem A DOM node that is a threadlist item
  * @return {boolean} Whether the threadlist item is new or not
  */
 axsGMail.TL_isNew = function(tlItem){
@@ -498,7 +496,7 @@ axsGMail.TL_isNew = function(tlItem){
 /**
  * Given a threadlist item, determines if it is 
  * selected or not.
- * @param {element} tlItem A DOM node that is a threadlist item
+ * @param {Element} tlItem A DOM node that is a threadlist item
  * @return {boolean} Whether the threadlist item is selected or not
  */
 axsGMail.TL_isSelected = function(tlItem){
@@ -509,7 +507,7 @@ axsGMail.TL_isSelected = function(tlItem){
 /**
  * Given a threadlist item, determines if it is 
  * starred or not.
- * @param {element} tlItem A DOM node that is a threadlist item
+ * @param {Element} tlItem A DOM node that is a threadlist item
  * @return {boolean} Whether the threadlist item is starred or not
  */
 axsGMail.TL_isStarred = function(tlItem){
@@ -520,8 +518,8 @@ axsGMail.TL_isStarred = function(tlItem){
 /**
  * Given a threadlist item, returns the DOM node that
  * contains the sender.
- * @param {element} tlItem A DOM node that is a threadlist item
- * @return {element} A DOM node that contains the sender
+ * @param {Element} tlItem A DOM node that is a threadlist item
+ * @return {Element} A DOM node that contains the sender
  */
 axsGMail.TL_getSender = function(tlItem){
   return tlItem.childNodes[2];
@@ -530,8 +528,8 @@ axsGMail.TL_getSender = function(tlItem){
 /**
  * Given a threadlist item, returns the DOM node that
  * contains the subject.
- * @param {element} tlItem A DOM node that is a threadlist item
- * @return {element} A DOM node that contains the subject
+ * @param {Element} tlItem A DOM node that is a threadlist item
+ * @return {Element} A DOM node that contains the subject
  */
 axsGMail.TL_getSubject = function(tlItem){
   return tlItem.childNodes[4].firstChild;
@@ -540,8 +538,8 @@ axsGMail.TL_getSubject = function(tlItem){
 /**
  * Given a threadlist item, returns the DOM node that
  * contains the snippet.
- * @param {element} tlItem A DOM node that is a threadlist item
- * @return {element} A DOM node that contains the snippet
+ * @param {Element} tlItem A DOM node that is a threadlist item
+ * @return {Element} A DOM node that contains the snippet
  */
 axsGMail.TL_getSnippet = function(tlItem){
   return tlItem.childNodes[4].lastChild;
@@ -550,8 +548,8 @@ axsGMail.TL_getSnippet = function(tlItem){
 /**
  * Given a threadlist item, returns the DOM node that
  * contains the date.
- * @param {element} tlItem A DOM node that is a threadlist item
- * @return {element} A DOM node that contains the date
+ * @param {Element} tlItem A DOM node that is a threadlist item
+ * @return {Element} A DOM node that contains the date
  */
 axsGMail.TL_getDate = function(tlItem){
   return tlItem.lastChild;
@@ -559,7 +557,7 @@ axsGMail.TL_getDate = function(tlItem){
 
 /**
  * Causes the user's AT to speak the given threadlist item
- * @param {element} tlItem A DOM node that is a threadlist item
+ * @param {Element} tlItem A DOM node that is a threadlist item
  */
 axsGMail.TL_speakItem = function(tlItem){
   if (!axsGMail.TL_needToSpeak){
@@ -616,7 +614,7 @@ axsGMail.TL_needToSpeakMonitor = function(){
 /**
  * Provides handling for DOM attribute modified events 
  * when in the conversation view.
- * @param {event} evt A DOM attribute modified event
+ * @param {Object} evt A DOM attribute modified event
  */
 axsGMail.CV_domAttrModifiedHandler = function(evt){
   var attrib = evt.attrName;
@@ -651,7 +649,7 @@ axsGMail.CV_domAttrModifiedHandler = function(evt){
 /**
  * Given a conversation item, determines if it is 
  * starred or not.
- * @param {element} cvItem A DOM node that is a conversation item
+ * @param {Element} cvItem A DOM node that is a conversation item
  * @return {boolean} Whether the conversation item is starred or not
  */
 axsGMail.CV_isStarred = function(cvItem){
@@ -662,8 +660,8 @@ axsGMail.CV_isStarred = function(cvItem){
 /**
  * Given a conversation item, returns the DOM node that
  * contains the star.
- * @param {element} cvItem A DOM node that is a conversation item
- * @return {element} A DOM node that contains the star
+ * @param {Element} cvItem A DOM node that is a conversation item
+ * @return {Element?} A DOM node that contains the star
  */
 axsGMail.CV_getStarImgNode = function(cvItem){
   return cvItem.getElementsByTagName('IMG')[0];
@@ -672,8 +670,8 @@ axsGMail.CV_getStarImgNode = function(cvItem){
 /**
  * Given a conversation item, returns the DOM node that
  * contains the sender.
- * @param {element} cvItem A DOM node that is a conversation item
- * @return {element} A DOM node that contains the sender
+ * @param {Element} cvItem A DOM node that is a conversation item
+ * @return {Element?} A DOM node that contains the sender
  */
 axsGMail.CV_getSender = function(cvItem){
   var tdArray = cvItem.getElementsByTagName('TD');
@@ -690,8 +688,8 @@ axsGMail.CV_getSender = function(cvItem){
 /**
  * Given a conversation item, returns the DOM node that
  * contains the snippet.
- * @param {element} cvItem A DOM node that is a conversation item
- * @return {element} A DOM node that contains the snippet
+ * @param {Element} cvItem A DOM node that is a conversation item
+ * @return {Element?} A DOM node that contains the snippet
  */
 axsGMail.CV_getSnippet = function(cvItem){
   var senderNode = axsGMail.CV_getSender(cvItem);
@@ -709,8 +707,8 @@ axsGMail.CV_getSnippet = function(cvItem){
 /**
  * Given a conversation item, returns the DOM node that
  * contains the date.
- * @param {element} cvItem A DOM node that is a conversation item
- * @return {element} A DOM node that contains the date
+ * @param {Element} cvItem A DOM node that is a conversation item
+ * @return {Element?} A DOM node that contains the date
  */
 axsGMail.CV_getDate = function(cvItem){
   var spans = cvItem.getElementsByTagName('SPAN');
@@ -725,8 +723,8 @@ axsGMail.CV_getDate = function(cvItem){
 /**
  * Given a conversation item, returns the DOM node that
  * contains the content.
- * @param {element} cvItem A DOM node that is a conversation item
- * @return {element} A DOM node that contains the content
+ * @param {Element} cvItem A DOM node that is a conversation item
+ * @return {Element?} A DOM node that contains the content
  */
 axsGMail.CV_getContent = function(cvItem){
   if (cvItem.childNodes.length > 3){
@@ -752,7 +750,7 @@ axsGMail.CV_forceExpandAll = function(){
 
 /**
  * Goes to the specified conversation item
- * @param {element} cvItem A DOM node that is a conversation item
+ * @param {Element} cvItem A DOM node that is a conversation item
  */
 axsGMail.CV_goToItem = function(cvItem){
   if (!axsGMail.CV_needToSpeak){
@@ -832,7 +830,7 @@ axsGMail.initQuickNav = function(){
 
 /**
  * Returns an array of all the labels that the user has.
- * @return {array} An array of all the user's labels 
+ * @return {Array} An array of all the user's labels 
  */
 axsGMail.getLabels = function(){
   var navPane = axsGMail.gMonkeyObj.getNavPaneElement();
@@ -844,7 +842,7 @@ axsGMail.getLabels = function(){
 
 /**
  * Handles keypresses when the user is focused on the "Quick Nav" module.
- * @param {event} evt A keypress event
+ * @param {Object} evt A keypress event
  */
 axsGMail.quickNav_keyHandler = function(evt){
   if (evt.keyCode == 13){
@@ -880,7 +878,7 @@ axsGMail.chat_prepChatField = function(){
 
 /**
  * Causes the user's AT to speak the given autocomplete.
- * @param {element} acRowDiv An autocomplete row.
+ * @param {Element} acRowDiv An autocomplete row.
  */
 axsGMail.chat_speakSelectedAutoComplete = function(acRowDiv){
   axsGMail.chat_needToSpeak = false;
@@ -923,7 +921,7 @@ axsGMail.chat_needToSpeakMonitor = function(){
  * the chat in a new popout window. If the user brings up the chat in a
  * new popout window, the AxsJAX script for GMail chat will be applied
  * in that new popout window.
- * @param {element} chatWindowDiv A chat window
+ * @param {Element} chatWindowDiv A chat window
  */
 axsGMail.chatWindowHandler = function(chatWindowDiv){
   var textArea = chatWindowDiv.getElementsByTagName('textarea')[0];
