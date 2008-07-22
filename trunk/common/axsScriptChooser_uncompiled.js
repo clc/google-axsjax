@@ -24,61 +24,6 @@
 
 function pickScript(){
   var baseURL = 'http://google-axsjax.googlecode.com/svn/trunk/';
-  var foundCompiledScript = pickFromCompiled(baseURL);
-  if (!foundCompiledScript){
-    pickFromUncompiled(baseURL);
-  }
-}
-
-
-function pickFromCompiled(scriptsBaseURL){
-  var scriptURL = '';
-  if(urlIsGoogle()){  
-    var path = document.location.pathname;
-    var prefix = document.location.host;
-	var search = document.location.search;
-    prefix = prefix.substring(0,prefix.indexOf('.'));
-    if ((prefix == 'www') && (path.indexOf('/ig') === 0)){
-      scriptURL = scriptsBaseURL + 'igoogle/comp_igoogle.js';
-    }	
-    else if (path.indexOf('/calendar') === 0 ){
-      scriptURL = scriptsBaseURL + 'calendar/comp_calendar.js';
-    }
-    else if ( (prefix == 'images') && (path.indexOf('/images') === 0 ) ){
-      scriptURL = scriptsBaseURL + 'imagesearch/comp_imagesearch.js';
-    }
-    else if ((prefix == 'finance') && (path.indexOf('/finance') === 0 )){
-      if (path.indexOf('stockscreener') > 0) {
-        scriptURL = scriptsBaseURL + 'finance/comp_financeStockScreener.js';
-	  } else if (search.indexOf('?') === 0) {
-        scriptURL = scriptsBaseURL + 'finance/comp_financeQuotes.js';
-      } else {
-        scriptURL = scriptsBaseURL + 'finance/comp_financeHome.js';
-      }
-    }
-    else if ((prefix == 'www')
-        || (path.indexOf('/search') === 0)
-        || (path.indexOf('/custom') === 0)
-        || (path.indexOf('/cse') === 0)){
-      scriptURL = scriptsBaseURL + 'websearch/comp_websearch.js';
-    }
-  }
-  else if (document.baseURI == 'http://www.minijuegosgratis.com/juegos/jawbreaker/jawbreaker.htm'){
-    scriptURL = scriptsBaseURL + 'jawbreaker/comp_jawbreaker.js';
-  }
-  if (scriptURL !== ''){
-    var theScript = document.createElement('script');
-    theScript.type = 'text/javascript';
-	theScript.src = scriptURL;
-	document.getElementsByTagName('head')[0].appendChild(theScript);
-	return true;
-  }	
-  return false;
-}
-
-
-function pickFromUncompiled(scriptsBaseURL){  
-  var baseURL = scriptsBaseURL;
   var theLib = document.createElement('script');
   theLib.type = 'text/javascript';
   theLib.src = baseURL + 'common/AxsJAX.js';
@@ -122,9 +67,24 @@ function pickFromUncompiled(scriptsBaseURL){
     var prefix = document.location.host;
 	var search = document.location.search;
     prefix = prefix.substring(0,prefix.indexOf('.'));
-    if ((prefix == 'www') && (path.indexOf('/sky') === 0)){
+    if ((prefix == 'www') && (path.indexOf('/ig') === 0)){
+      theScript.src = baseURL + 'igoogle/axsEnableIGoogle.js';
+      scriptsArray.push(navLib);
+      scriptsArray.push(lensLib);
+      shouldInsertScripts = true;
+    }
+    else if ((prefix == 'www') && (path.indexOf('/sky') === 0)){
       theScript.src = baseURL + 'sky/axsEnableSky.js';
       scriptsArray.push(sndLib);
+      shouldInsertScripts = true;
+    }
+    else if (path.indexOf('/calendar') === 0 ){
+      theScript.src = baseURL + 'calendar/axsEnableCalendar.js';
+      scriptsArray.push(pkLib);
+      shouldInsertScripts = true;
+    }
+    else if ( (prefix == 'images') && (path.indexOf('/images') === 0 ) ){
+      theScript.src = baseURL + 'imagesearch/axsEnableImageSearch.js';
       shouldInsertScripts = true;
     }
     else if ( (prefix == 'scholar') && (path.indexOf('/scholar') === 0 ) ){
@@ -146,6 +106,34 @@ function pickFromUncompiled(scriptsBaseURL){
       scriptsArray.push(lensLib);
       shouldInsertScripts = true;
     }
+    else if ((prefix == 'finance') && (path.indexOf('/finance') === 0 )){
+      if (path.indexOf('stockscreener') > 0) {
+        theScript.src = baseURL + 'finance/axsEnableFinanceStockScreener.js';
+	  } else if (search.indexOf('?') === 0) {
+        theScript.src = baseURL + 'finance/axsEnableFinanceQuotes.js';
+      } else {
+        theScript.src = baseURL + 'finance/axsEnableFinanceHome.js';
+      }
+      scriptsArray.push(navLib);
+      scriptsArray.push(lensLib);
+      scriptsArray.push(pkLib);
+      shouldInsertScripts = true;
+    }	
+    else if ((prefix == 'www')
+        || (path.indexOf('/search') === 0)
+        || (path.indexOf('/custom') === 0)
+        || (path.indexOf('/cse') === 0)){
+      theScript.src = baseURL + 'websearch/axsEnableWebSearch.js';
+      scriptsArray.push(navLib);
+      scriptsArray.push(lensLib);
+      scriptsArray.push(sndLib);
+      shouldInsertScripts = true;
+    }
+  }
+  else if (currentURL === 'http://www.minijuegosgratis.com/juegos/jawbreaker/jawbreaker.htm'){
+    theScript.src = baseURL + 'jawbreaker/axsEnableJawbreaker.js';
+    scriptsArray.push(sndLib);
+    shouldInsertScripts = true;    
   }
   else if ((currentURL.indexOf('http://www.xkcd.com') === 0) || (currentURL.indexOf('http://xkcd.com') === 0)){
     theScript.src = baseURL + 'xkcd/axsEnableXKCD.js';
