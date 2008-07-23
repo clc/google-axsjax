@@ -145,12 +145,11 @@ axsReader.domInsertionHandler = function(event){
     }
   }
   //Handle tag navigation
-  if (target.className ==
-          'banner banner-background label-keyboard-selector'){
+  if (target.className.indexOf('stream-list') != -1){
     axsReader.axsJAXObj.assignId(target);
     axsReader.tagSelectorTopDivId = target.id;
     //Must be done as a timeout as the childNodes do not exist at this point
-    window.setTimeout(axsReader.announceSelectedTag,100);
+    window.setTimeout(axsReader.announceSelectedTag,0);
   }
 
 };
@@ -161,6 +160,7 @@ axsReader.domInsertionHandler = function(event){
 axsReader.announceSelectedTag = function(){
   var topDiv = document.getElementById(axsReader.tagSelectorTopDivId);
   var selectedTag = axsReader.findSelectedTag(topDiv);
+  axsReader.debugVar = selectedTag.textContent;
   axsReader.axsJAXObj.speakText(selectedTag.textContent);
 };
 
@@ -231,6 +231,7 @@ axsReader.domAttrModifiedHandler = function(evt){
              && (newVal == 'info-message')
              && (oldVal == 'info-message hidden')){
     axsReader.axsJAXObj.speakTextViaNode(target);
+	//Tag navigation
   } else if ( (attrib == 'class')
              && (newVal ==
                      'banner banner-background label-keyboard-selector hidden')
@@ -396,7 +397,7 @@ axsReader.unsubscribeFromFeedCurrentlyOpen = function(){
  * Open the "Browse feed bundles" panel
  */
 axsReader.browseFeedBundles = function(){
-  var baseURL = document.documentURI.split('#')[0];
+  var baseURL = document.location.toString().split('#')[0];
   document.location = baseURL + '#directory-page';
   axsReader.axsJAXObj.speakTextViaNode(axsReader.BUNDLES_LOADED_STRING);
   axsReader.feedBundlesArray = new Array();
