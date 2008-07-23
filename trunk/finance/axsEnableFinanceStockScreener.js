@@ -22,6 +22,7 @@
 // create namespace
 var axsStock = {};
 
+
 /**
  * Object that contains all string literal used for enhancing the presentation
  * @type {Object}
@@ -319,7 +320,7 @@ axsStock.CNR_ST_SCR_STRING = '<cnr next="RIGHT l" prev="LEFT h">' +
 
     '      <target title="Load CNR and go to section" trigger="' +
     'listEntry" ' +
-    '          action="CALL:axsStock.readCurrentCrtieriaList">' +
+    '          action="CALL:axsStock.readCurrentCriteriaList">' +
     '        //table[@class="searchtabs"]//tr[1]//a' +
     '      </target>' +
 
@@ -342,7 +343,7 @@ axsStock.CNR_ST_SCR_STRING = '<cnr next="RIGHT l" prev="LEFT h">' +
 
     '      <target title="Load CNR and go to section" trigger="' +
     'listEntry" ' +
-    '          action="CALL:axsStock.readCurrentCrtieriaList">' +
+    '          action="CALL:axsStock.readCurrentCriteriaList">' +
     '        //table[@class="searchtabs"]//tr[2]//a' +
     '      </target>' +
 
@@ -365,7 +366,7 @@ axsStock.CNR_ST_SCR_STRING = '<cnr next="RIGHT l" prev="LEFT h">' +
 
     '      <target title="Load CNR and go to section" trigger="' +
     'listEntry" ' +
-    '          action="CALL:axsStock.readCurrentCrtieriaList">' +
+    '          action="CALL:axsStock.readCurrentCriteriaList">' +
     '        //table[@class="searchtabs"]//tr[3]//a' +
     '      </target>' +
 
@@ -388,7 +389,7 @@ axsStock.CNR_ST_SCR_STRING = '<cnr next="RIGHT l" prev="LEFT h">' +
 
     '      <target title="Load CNR and go to section" trigger="' +
     'listEntry" ' +
-    '          action="CALL:axsStock.readCurrentCrtieriaList">' +
+    '          action="CALL:axsStock.readCurrentCriteriaList">' +
     '        //table[@class="searchtabs"]//tr[4]//a' +
     '      </target>' +
 
@@ -411,7 +412,7 @@ axsStock.CNR_ST_SCR_STRING = '<cnr next="RIGHT l" prev="LEFT h">' +
 
     '      <target title="Load CNR and go to section" trigger="' +
     'listEntry" ' +
-    '          action="CALL:axsStock.readCurrentCrtieriaList">' +
+    '          action="CALL:axsStock.readCurrentCriteriaList">' +
     '        //table[@class="searchtabs"]//tr[5]//a' +
     '      </target>' +
 
@@ -434,7 +435,7 @@ axsStock.CNR_ST_SCR_STRING = '<cnr next="RIGHT l" prev="LEFT h">' +
 
     '      <target title="Load CNR and go to section" trigger="' +
     'listEntry" ' +
-    '          action="CALL:axsStock.readCurrentCrtieriaList">' +
+    '          action="CALL:axsStock.readCurrentCriteriaList">' +
     '        //table[@class="searchtabs"]//tr[6]//a' +
     '      </target>' +
 
@@ -457,7 +458,7 @@ axsStock.CNR_ST_SCR_STRING = '<cnr next="RIGHT l" prev="LEFT h">' +
 
     '      <target title="Load CNR and go to section" trigger="' +
     'listEntry" ' +
-    '          action="CALL:axsStock.readCurrentCrtieriaList">' +
+    '          action="CALL:axsStock.readCurrentCriteriaList">' +
     '        //table[@class="searchtabs"]//tr[7]//a' +
     '      </target>' +
 
@@ -480,7 +481,7 @@ axsStock.CNR_ST_SCR_STRING = '<cnr next="RIGHT l" prev="LEFT h">' +
 
     '      <target title="Load CNR and go to section" trigger="' +
     'listEntry" ' +
-    '          action="CALL:axsStock.readCurrentCrtieriaList">' +
+    '          action="CALL:axsStock.readCurrentCriteriaList">' +
     '        //table[@class="searchtabs"]//tr[8]//a' +
     '      </target>' +
 
@@ -503,7 +504,7 @@ axsStock.CNR_ST_SCR_STRING = '<cnr next="RIGHT l" prev="LEFT h">' +
 
     '      <target title="Load CNR and go to section" trigger="' +
     'listEntry" ' +
-    '          action="CALL:axsStock.readCurrentCrtieriaList">' +
+    '          action="CALL:axsStock.readCurrentCriteriaList">' +
     '        //table[@class="searchtabs"]//tr[9]//a' +
     '      </target>' +
 
@@ -1107,7 +1108,7 @@ axsStock.focusOnCriteriaRangeInput = function(item) {
  * lists irrelevant in the criteria wizard context
  * @param {Object} item A wrapper for the current DOM node.
  */
-axsStock.readCurrentCrtieriaList = function(item) {
+axsStock.readCurrentCriteriaList = function(item) {
   //Reset the last criteria row (in the criteria list) to its default state
   axsStock.resetCriteriaRow();
 
