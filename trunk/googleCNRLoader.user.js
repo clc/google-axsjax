@@ -27,7 +27,6 @@
  function loadCNRSystem(){
   var theScript = document.createElement('script');
   theScript.src = 'http://google-axsjax.googlecode.com/svn/trunk/common/axsCNRLoader.js';
-  theScript.src = 'http://www.corp.google.com/~clchen/AxsJAX/common/axsCNRLoader.js';
   document.getElementsByTagName('head')[0].appendChild(theScript);
 }
 
