@@ -365,7 +365,14 @@ axsGMail.domAttrModifiedHandler = function(evt){
   if ((attrib == 'class') &&
       (newVal.indexOf(axsGMail.CLASS.APP_MENU_ITEM_ACTIVE_) != -1)){  
     target.setAttribute('tabindex', 0);
-    window.setTimeout(function(){target.focus();}, 0);
+	var text = target.textContent;
+	// Do a focus and then a speakTextViaNode because JAWS doesn't seem to like
+	// elements that contain nobr in the middle (silent when focused).
+    window.setTimeout( function(){
+	                     target.focus(); 
+						 axsGMail.axsJAXObj.speakTextViaNode(text, target);
+					   }, 
+					   0);
     return;
   }
   if ((attrib == 'class') &&
