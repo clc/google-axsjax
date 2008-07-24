@@ -20,26 +20,8 @@
  * to work for other browsers.
  * @author clchen@google.com (Charles L. Chen)
  */
-
-
-
 // create namespace
 var axsTalk = {};
-
-//These are strings used to find specific links
-
-
-//These are strings to be spoken to the user
-axsTalk.HELP_STRING =
-    'The following shortcut keys are available. ' +
-    'Down arrow or N, go to the next result. ' +
-    'Up arrow or P, go to the previous result. ' +
-    'Right arrow or J, cycle to the next result. ' +
-    'Left arrow or K, cycle to the previous result. ' +
-    'G, toggle between the snippet provided by Google Image Search and the alt text from the source of image. ' +
-    'Slash, jump to the search field. ' +
-    'Escape, leave the search field. ';
-
 
 axsTalk.translatorsTable  = {
   'ar2en' : 'en',
@@ -186,16 +168,6 @@ axsTalk.extraKeyboardNavHandler = function(evt){
     axsTalk.goToNextMessage();
     return false;
   }
-
-  if (axsTalk.inputFocused){
-    return true;
-  }
-
-  if (evt.charCode == 63){ // ? (question mark)
-    axsTalk.axsJAXObj.speakTextViaNode(axsTalk.HELP_STRING);
-    return false;
-  }
-
   return true;
 };
 
