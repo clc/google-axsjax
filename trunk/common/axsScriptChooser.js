@@ -56,6 +56,16 @@ function pickFromCompiled(scriptsBaseURL){
         scriptURL = scriptsBaseURL + 'finance/comp_financeHome.js';
       }
     }
+	else if (prefix == 'mail'){
+      if (document.baseURI.indexOf('&view=cw&fs=1&tf=1') != -1){
+        scriptURL = scriptsBaseURL + 'gmail/comp_talk.js';
+      } else {
+        scriptURL = scriptsBaseURL + 'gmail/comp_gmail.js';
+      }
+    }
+    else if (path.indexOf('/products') === 0 ){
+      scriptURL = scriptsBaseURL + 'productsearch/comp_productsearch.js';
+    }
     else if ((prefix == 'www')
         || (path.indexOf('/search') === 0)
         || (path.indexOf('/custom') === 0)
@@ -130,20 +140,6 @@ function pickFromUncompiled(scriptsBaseURL){
     else if ( (prefix == 'scholar') && (path.indexOf('/scholar') === 0 ) ){
       theScript.src = baseURL + 'scholar/axsEnableScholar.js';
       scriptsArray.push(navLib);
-      shouldInsertScripts = true;
-    }
-    else if (prefix == 'mail'){
-      if (currentURL.indexOf('&view=cw&fs=1&tf=1') != -1){
-        theScript.src = baseURL + 'gmail/axsEnableTalk.js';
-      } else {
-        theScript.src = baseURL + 'gmail/axsEnableGMail.js';
-      }
-      shouldInsertScripts = true;
-    }
-    else if (path.indexOf('/products') === 0 ){
-      theScript.src = baseURL + 'productsearch/axsEnableProductSearch.js';
-      scriptsArray.push(navLib);
-      scriptsArray.push(lensLib);
       shouldInsertScripts = true;
     }
   }
