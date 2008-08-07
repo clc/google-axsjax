@@ -1,76 +1,83 @@
-<cnr next='RIGHT l' prev='LEFT h'>
-  <list title='Cycle Results' next='DOWN j' prev='UP k' fwd='n' back='p'>
+<cnr next="RIGHT l" prev="LEFT h">
+  <list title="Cycle Results" next="DOWN j" prev="UP k" fwd="n" back="p" hotkey="n">
     <item>
       /html/body/table[3]/tbody/tr[not(@class)]
     </item>
-    <target title='Next page' trigger='listTail'>
-      //img[contains(@src,'nav_next.gif')]/..
+    <target title="Next page" trigger="listTail">
+      //img[contains(@src,"nav_next.gif")]/..
     </target>
-    <target title='Previous page' trigger='listHead'>
-      //img[contains(@src,'G_oogle_arrow.gif')]/..
+    <target title="Previous page" trigger="listHead">
+      //img[contains(@src,"G_oogle_arrow.gif")]/..
     </target>	
-    <target title='Go to result' hotkey='ENTER'>
-      ./td[contains(@class,'ps-rcont')]/a
+    <target title="Go to result" hotkey="ENTER">
+      ./td[contains(@class,"ps-rcont")]/a
     </target>
   </list>
-  
-  <list title='Refine by price' next='DOWN j' prev='UP k'>
+  <list title="Sponsored links" next="DOWN j" prev="UP k" hotkey="a">
     <item>
-      id('attr-div')//a[contains(@href,'lnk=prsugg')]
+      id("AXSJAX_SPONSOREDLINKS_SECTION")/span
     </item>
-    <target title='Perform refinement' hotkey='ENTER'>
+	<target title="Go to result" hotkey="ENTER">
+      .//a
+    </target>
+  </list>
+  <list title="Refine by price" next="DOWN j" prev="UP k">
+    <item>
+      id("attr-div")//a[contains(@href,"lnk=prsugg")]
+    </item>
+    <target title="Perform refinement" hotkey="ENTER">
       .
     </target>	
-	<target title = 'Display prices' trigger='listEntry'>
-	  id('attr-div')//a[contains(@href,'lnk=prsugg')]/../following-sibling::li[@class='nav']/a[contains(text(),'More')]
+	<target title = "Display prices" trigger="listEntry">
+	  id("attr-div")//a[contains(@href,"lnk=prsugg")]/../following-sibling::li[@class="nav"]/a[contains(text(),"More")]
 	</target>
   </list>
   
-  <list title='Refine by brand' next='DOWN j' prev='UP k'>
+  <list title="Refine by brand" next="DOWN j" prev="UP k">
     <item>
-      id('attr-div')//a[contains(@href,'lnk=brsugg')]
+      id("attr-div")//a[contains(@href,"lnk=brsugg")]
     </item>
-    <target title='Perform refinement' hotkey='ENTER'>
+    <target title="Perform refinement" hotkey="ENTER">
       .
     </target>
-	<target title = 'Display brands' trigger='listEntry'>
-	  id('attr-div')//a[contains(@href,'lnk=brsugg')]/../following-sibling::li[@class='nav']/a[contains(text(),'More')]
+	<target title = "Display brands" trigger="listEntry">
+	  id("attr-div")//a[contains(@href,"lnk=brsugg")]/../following-sibling::li[@class="nav"]/a[contains(text(),"More")]
 	</target>
   </list>
   
-  <list title='Refine by store' next='DOWN j' prev='UP k'>
+  <list title="Refine by store" next="DOWN j" prev="UP k">
     <item>
-      id('attr-div')//a[contains(@href,'lnk=storesugg')]
+      id("attr-div")//a[contains(@href,"lnk=storesugg")]
     </item>
-    <target title='Perform refinement' hotkey='ENTER'>
+    <target title="Perform refinement" hotkey="ENTER">
       .
     </target>
-	<target title = 'Display stores' trigger='listEntry'>
-	  id('attr-div')//a[contains(@href,'lnk=storesugg')]/../following-sibling::li[@class='nav']/a[contains(text(),'More')]
+	<target title = "Display stores" trigger="listEntry">
+	  id("attr-div")//a[contains(@href,"lnk=storesugg")]/../following-sibling::li[@class="nav"]/a[contains(text(),"More")]
 	</target>
   </list>
   
-  <list title='Refine by merchant rating' next='DOWN j' prev='UP k'>
+  <list title="Refine by merchant rating" next="DOWN j" prev="UP k">
     <item>
-      id('attr-div')//a[contains(@href,'lnk=merchant_review')]
+      id("attr-div")//a[contains(@href,"lnk=merchant_review")]
     </item>
-    <target title='Perform refinement' hotkey='ENTER'>
+    <target title="Perform refinement" hotkey="ENTER">
       .
     </target>
-	<target title = 'Display merchant rating' trigger='listEntry'>
-	  id('attr-div')//a[contains(@href,'lnk=merchant_review')]/../following-sibling::li[@class='nav']/a[contains(text(),'More')]
+	<target title = "Display merchant rating" trigger="listEntry">
+	  id("attr-div")//a[contains(@href,"lnk=merchant_review")]/../following-sibling::li[@class="nav"]/a[contains(text(),"More")]
 	</target>
   </list>
   
-  <list title='Refine by related searches' next='DOWN j' prev='UP k'>
+  <list title="Refine by related searches" next="DOWN j" prev="UP k">
     <item>
-      id('attr-div')//a[contains(@href,'lnk=qsugt')]
+      id("attr-div")//a[contains(@href,"lnk=qsugt")]
     </item>
-    <target title='Perform refinement' hotkey='ENTER'>
+    <target title="Perform refinement" hotkey="ENTER">
       .
     </target>
-	<target title = 'Display related searches' trigger='listEntry'>
-	  id('attr-div')//a[contains(@href,'lnk=qsugt')]/../following-sibling::li[@class='nav']/a[contains(text(),'More')]
+	<target title = "Display related searches" trigger="listEntry">
+	  id("attr-div")//a[contains(@href,"lnk=qsugt")]/../following-sibling::li[@class="nav"]/a[contains(text(),"More")]
 	</target>
   </list>
   
