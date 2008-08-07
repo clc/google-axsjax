@@ -9,7 +9,7 @@ function generateOutput(){
   var whiteSpace = "                  '";
   var charCount = 19;
   for (var i = 0, c; c = input.value.charAt(i); i++){
-    if ((charCount > 77) || 
+    if ((charCount > 76) || 
 	    (c == '\n')){
 	  out = out + "' +\n" + whiteSpace;
 	  charCount = 19;
