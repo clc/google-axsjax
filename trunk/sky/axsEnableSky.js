@@ -67,7 +67,7 @@ axsSky.itemsIndex = -1;
 
 /**
  * The current item that is active in the menu
- * @type Node
+ * @type Node?
  */
 axsSky.currentItem = null;
 
