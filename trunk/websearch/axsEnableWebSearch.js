@@ -111,67 +111,87 @@ axsWebSearch.init = function(){
   document.addEventListener('keypress', axsWebSearch.extraKeyboardNavHandler,
                              true);
 
-  //Do any necessary preparations for browsing here
-  axsWebSearch.formatAdAreaSide();
-
-  var cnrString = "<cnr next='RIGHT l' prev='LEFT h'>" +
-      "<list title='One Box' hotkey='1' next='DOWN j' prev='UP k' " +
-      "onEmpty='There is no one box on this page.'>" +
-      "<item count='1'>" +
-      "id('res')/p[*]" +
-      "</item>" +
-      "<item count='1'>" +
-      "id('res')/div[@class='e']" +
-      "</item>" +
-      "</list>" +
-      "<list title='Results' hotkey='n' next='DOWN j' prev='UP k' " +
-      "fwd='n' back='p'>" +
-      "<item count='1'>" +
-      "id('res')//td[@class='j']/ul/li[text()='Make sure all words are " +
-      "spelled correctly.']/../.." +
-      "</item>" +
-      "<item>" +
-      "id('res')//div[@class='g']" +
-      "</item>" +
-      "<target title='Next page' trigger='listTail'>" +
-      "id('nn')/.." +
-      "</target>" +
-      "<target title='Prev page' trigger='listHead'>" +
-      "id('np')/.." +
-      "</target>" +
-      "</list>" +
-      "<list title='Sponsored Links' hotkey='a' next='DOWN j' prev='UP k' " +
-      "onEmpty='There are no sponsored links on this page.'>" +
-      "<item>" +
-      "id('tads')/div" +
-      "</item>" +
-      "<item>" +
-      "id('mbEnd')/tbody/tr[*]/td/span" +
-      "</item>" +
-      "</list>" +
-      "<list title='Related Searches' hotkey='s' next='DOWN j' prev='UP k' " +
-      "onEmpty='There are no related searches.'>" +
-      "<item>" +
-      "id('res')/table[*]/tbody/tr[*]/td[*]/a" +
-      "</item>" +
-      "<item>" +
-      "body/table[*]/tbody/tr[*]/td[*]/a/b/.." +
-      "</item>" +
-      "</list>" +
-      "<list title='Alternate Search Categories' hotkey='c' next='DOWN j' " +
-      "prev='UP k' " +
-      "onEmpty='There are no other categories to search within.'>" +
-      "<item>" +
-      "body/table[*]/tbody/tr/td[*]/font/a[@class='q']" +
-      "</item>" +
-      "</list>" +
-      "<target title='Next page' hotkey='PGDOWN'>" +
-      "id('nn')/.." +
-      "</target>" +
-      "<target title='Previous page' hotkey='PGUP'>" +
-      "id('np')/.." +
-      "</target>" +
-      "</cnr>";
+  var cnrString = '<cnr next="RIGHT l" prev="LEFT h">' +
+                  '        <list title="One Box" hotkey="1" next="DOWN j" pr' +
+                  'ev="UP k" onEmpty="There is no one box on this page.">' +
+                  '		<item count="1">' +
+                  '                  id("res")//div[contains(@class,"rbt")]' +
+                  '		</item>   ' +
+                  '		<item count="1">' +
+                  '                  id("res")/div[@class="e"]/table[not(con' +
+                  'tains(@id,"brs"))]/..' +
+                  '		</item>          ' +
+                  '	<item count="1" comment="Use a [*] here since some one ' +
+                  'boxes have an extra garbage node that is empty at the star' +
+                  't.">' +
+                  '                  id("res")/p[*]' +
+                  '		</item>		' +
+                  '		<item count="1">' +
+                  '                  //h2[@class="r"]/..' +
+                  '		</item>   		' +
+                  '        </list>' +
+                  '        <list title="Results" hotkey="n" next="DOWN j" pr' +
+                  'ev="UP k" fwd="n" back="p">' +
+                  '		<item count="1">' +
+                  '                  id("res")//td[@class="j"]/ul/li[text()=' +
+                  '"Make sure all words are spelled correctly."]/../..' +
+                  '		</item>' +
+                  '		<item>' +
+                  '		    id("res")//div[@class="g"]' +
+                  '		</item>' +
+                  '		<target title="Next page" trigger="listTail">' +
+                  '                  id("nn")/..' +
+                  '		</target>' +
+                  '		<target title="Prev page" trigger="listHead">' +
+                  '                  id("np")/..' +
+                  '		</target>' +
+                  '        </list>' +
+                  '        <list title="Sponsored Links" hotkey="a" next="DO' +
+                  'WN j" prev="UP k" onEmpty="There are no sponsored links on' +
+                  ' this page.">' +
+                  '		<item>' +
+                  '		    id("tads")//li' +
+                  '		</item>' +
+                  '		<item>' +
+                  '		    id("mbEnd")//li' +
+                  '		</item>' +
+                  '	</list>' +
+                  '        <list title="Related Searches" hotkey="s" next="D' +
+                  'OWN j" prev="UP k" onEmpty="There are no related searches.' +
+                  '">' +
+                  '		<item>' +
+                  '		    id("res")/table[*]/tbody/tr[*]/td[*]/a' +
+                  '		</item>' +
+                  '		<item>' +
+                  '		    body/table[*]/tbody/tr[*]/td[*]/a/b/..' +
+                  '		</item>' +
+                  '  </list>' +
+                  '        <list title="Alternate Search Categories" hotkey=' +
+                  '"c" next="DOWN j" prev="UP k" onEmpty="There are no other ' +
+                  'categories to search within.">' +
+                  '		<item>' +
+                  '		    body/table[*]/tbody/tr/td[*]/font/a[@class="q"]' +
+                  '		</item>' +
+                  '	</list>' +
+				  '    <list title="Google Services" hotkey="g" next="DOWN j"' +
+                  ' prev="UP k">' +
+                  '		<item>' +
+                  '		    id("gbar")//a[@class="gb1"]' +
+                  '		</item>' +
+                  '		<item>' +
+                  '		    id("gbar")//a[@class="gb2"]' +
+                  '		</item>' +
+                  '		<item>' +
+                  '		    id("gb")/a' +
+                  '		</item>' +
+                  '	</list>' +
+                  '        <target title="Next page" hotkey="PGDOWN">' +
+                  '          id("nn")/..' +
+                  '        </target>' +
+                  '        <target title="Previous page" hotkey="PGUP">' +
+                  '          id("np")/..' +
+                  '        </target>' +
+                  '</cnr>';
 
   axsWebSearch.axsNavObj.navInit(cnrString, null);
   axsWebSearch.HELP_STRING_POST = axsWebSearch.axsNavObj.globalHelpString() +
@@ -180,7 +200,7 @@ axsWebSearch.init = function(){
   axsWebSearch.axsLensObj = new AxsLens(axsWebSearch.axsJAXObj);
   axsWebSearch.axsNavObj.setLens(axsWebSearch.axsLensObj);
   axsWebSearch.axsLensObj.setMagnification(axsWebSearch.magSize);
-  
+
   axsWebSearch.axsSoundObj = new AxsSound(true);
   axsWebSearch.axsNavObj.setSound(axsWebSearch.axsSoundObj);
 
@@ -240,52 +260,6 @@ axsWebSearch.getCurrentLink = function(){
   } else {
     return currentElem.getElementsByTagName('a')[0].href;
   }
-};
-
-
-//************
-//Functions for Ads
-//************
-
-/**
- * Formats the sponsored links section on the right of the search results.
- * The Ads area on the right side is inside one big FONT tag.
- * There is no structure that groups the individual ads.
- * Add this structure to make it possible to speak these ads individually.
- */
-axsWebSearch.formatAdAreaSide = function(){
-  var adTable = window.content.document.getElementById('mbEnd');
-  if (!adTable){
-    return;
-  }
-  //This is the FONT tag that contains all the ads
-  var xpath = ".//span[@class='a']/..";
-  var adArea = axsWebSearch.axsJAXObj.evalXPath(xpath, adTable)[0];
-
-  if (!adArea){
-    return;
-  }
-
-  var currentAdAnchor = adArea.firstChild;
-  var adSpan = window.content.document.createElement('span');
-
-  while (currentAdAnchor){
-    var nextAnchor = currentAdAnchor.nextSibling;
-    if (currentAdAnchor.tagName && currentAdAnchor.tagName == 'FONT'){
-      var newAdSpan = window.content.document.createElement('span');
-      newAdSpan.appendChild(currentAdAnchor.cloneNode(true));
-      adArea.replaceChild(adSpan, currentAdAnchor);
-      adSpan = newAdSpan;
-    } else {
-      adSpan.appendChild(currentAdAnchor.cloneNode(true));
-      adArea.removeChild(currentAdAnchor);
-    }
-    currentAdAnchor = nextAnchor;
-  }
-  adArea.appendChild(adSpan);
-  //Clean up by deleting the first child which is a blank node
-  adArea.removeChild(adArea.firstChild);
-  axsWebSearch.adAreaSideId = axsWebSearch.axsJAXObj.assignId(adArea);
 };
 
 
@@ -382,48 +356,53 @@ axsWebSearch.extraKeyboardNavHandler = function(evt){
     }
     return false;
   }
-  
-  var command =  axsWebSearch.charCodeMap[evt.charCode];
 
-  if (command)  return  command();
+  var command = axsWebSearch.charCodeMap[evt.charCode];
+
+  if (command) return command();
 
   return true;
 };
 
+/**
+ * Map from character codes to functions
+ * @return {boolean} Always returns false to indicate 
+ *                   that the keycode has been handled.
+ */
 axsWebSearch.charCodeMap = {
   // ? (question mark)
-  63 : function () {
+  63 : function() {
          var helpStr = axsWebSearch.HELP_STRING_PRE +
                        axsWebSearch.axsNavObj.localHelpString() +
                        axsWebSearch.HELP_STRING_POST;
                        axsWebSearch.axsJAXObj.speakTextViaNode(helpStr);
-	     return false;
-       }, 
+         return false;
+       },
   // - (minus symbol)
-  45 : function () {
+  45 : function() {
          axsWebSearch.decreaseMagnification();
-	     return false;
-       }, 
-  // = (equal symbol) 	   
-  61 : function () {
+         return false;
+       },
+  // = (equal symbol)
+  61 : function() {
          axsWebSearch.increaseMagnification();
-	     return false;
-       }, 
-  // / (slash symbol)	   
-  47 : function () {
+         return false;
+       },
+  // / (slash symbol)
+  47 : function() {
          document.getElementsByName('q')[0].focus();
          document.getElementsByName('q')[0].select();
-	     return false;
-       }, 
-  // A	   
-  65 : function () {
-         axsWebSearch.switchToAccessibleSearch();
-	     return false;
+         return false;
        },
-  // W	   
-  87 : function () {
+  // A
+  65 : function() {
+         axsWebSearch.switchToAccessibleSearch();
+         return false;
+       },
+  // W
+  87 : function() {
          axsWebSearch.switchToWebSearch();
-	     return false;
+         return false;
        }
 };
 

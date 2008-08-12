@@ -1,43 +1,43 @@
 <cnr>
-  <list title='Cycle Results' next='DOWN j' prev='UP k' fwd='n' back='p'>
+  <list title="Cycle Results" next="DOWN j" prev="UP k" fwd="n" back="p">
     <item>
-      //p[@class='g']
+      //p[@class="g"]
     </item>
-    <target title='Open result' hotkey='ENTER'>
-      ./span[@class='w']
+    <target title="Open result" hotkey="ENTER">
+      ./span[@class="w"]
     </target>
-    <target title='Cited by' hotkey='c' onEmpty='There are no citations.'>
-      ./font/a[contains(text(),'Cited by')]
+    <target title="Cited by" hotkey="c" onEmpty="There are no citations.">
+      ./font/a[contains(text(),"Cited by")]
     </target>
-    <target title='All versions' hotkey='v' onEmpty='There are no other versions.'>
+    <target title="All versions" hotkey="v" onEmpty="There are no other versions.">
       ./a
     </target>
-    <target title='Related Articles' hotkey='r' onEmpty='There are no related articles.'>
-      ./font/a[text()='Related Articles']
+    <target title="Related Articles" hotkey="r" onEmpty="There are no related articles.">
+      ./font/a[text()="Related Articles"]
     </target>
-    <target title='Web Search' hotkey='w'>
-      ./font/a[text()='Web Search']
+    <target title="Web Search" hotkey="w">
+      ./font/a[text()="Web Search"]
     </target>
-    <target title='Library Search' hotkey='l' onEmpty='Library search is unavailable for this article.'>
-      ./font/a[text()='Library Search']
+    <target title="Library Search" hotkey="l" onEmpty="Library search is unavailable for this article.">
+      ./font/a[text()="Library Search"]
     </target>
-    <target title='B L Direct' hotkey='b' onEmpty='B L direct is unavailable for this article.'>
-      ./font/a[text()='BL Direct']
+    <target title="B L Direct" hotkey="b" onEmpty="B L direct is unavailable for this article.">
+      ./font/a[text()="BL Direct"]
     </target>
-    <target title='Import to citation' hotkey='i' onEmpty='Please go to scholar preferences and choose the citation format you wish to use.'>
-      ./font/a[contains(text(),'Import into')]
+    <target title="Import to citation" hotkey="i" onEmpty="Please go to scholar preferences and choose the citation format you wish to use.">
+      ./font/a[contains(text(),"Import into")]
     </target>
-    <target title='Next page' trigger='listTail'>
-      //img[contains(@src,'nav_next.gif')]/..
+    <target title="Next page" trigger="listTail">
+      //img[contains(@src,"nav_next.gif")]/..
     </target>
-    <target title='Prev page' trigger='listHead'>
-      //img[contains(@src,'nav_previous.gif')]/..
+    <target title="Prev page" trigger="listHead">
+      //img[contains(@src,"nav_previous.gif")]/..
     </target>
   </list>
-  <target title='Next page' hotkey='PGDOWN'>
-    //img[contains(@src,'nav_next.gif')]/..
+  <target title="Next page" hotkey="PGDOWN">
+    //img[contains(@src,"nav_next.gif")]/..
   </target>
-  <target title='Previous page' hotkey='PGUP'>
-    //img[contains(@src,'nav_previous.gif')]/..
+  <target title="Previous page" hotkey="PGUP">
+    //img[contains(@src,"nav_previous.gif")]/..
   </target>
 </cnr>
