@@ -66,6 +66,12 @@ function pickFromCompiled(scriptsBaseURL){
     else if (path.indexOf('/products') === 0 ){
       scriptURL = scriptsBaseURL + 'productsearch/comp_productsearch.js';
     }
+    else if ((prefix == 'www') && (path.indexOf('/sky') === 0)){
+      scriptURL = scriptsBaseURL + 'sky/comp_sky.js';
+    }	
+    else if ( (prefix == 'scholar') && (path.indexOf('/scholar') === 0 ) ){
+      scriptURL = scriptsBaseURL + 'scholar/comp_scholar.js';
+    }	
     else if ((prefix == 'www')
         || (path.indexOf('/search') === 0)
         || (path.indexOf('/custom') === 0)
@@ -125,24 +131,7 @@ function pickFromUncompiled(scriptsBaseURL){
     theScript.src = baseURL + 'common/cmd/imgText-exp.js';
     shouldInsertScripts = true;
   }
-
-  //Check for Google
-  else if(urlIsGoogle()){  
-    var path = document.location.pathname;
-    var prefix = document.location.host;
-	var search = document.location.search;
-    prefix = prefix.substring(0,prefix.indexOf('.'));
-    if ((prefix == 'www') && (path.indexOf('/sky') === 0)){
-      theScript.src = baseURL + 'sky/axsEnableSky.js';
-      scriptsArray.push(sndLib);
-      shouldInsertScripts = true;
-    }
-    else if ( (prefix == 'scholar') && (path.indexOf('/scholar') === 0 ) ){
-      theScript.src = baseURL + 'scholar/axsEnableScholar.js';
-      scriptsArray.push(navLib);
-      shouldInsertScripts = true;
-    }
-  }
+  //Check for uncompiled scripts
   else if ((currentURL.indexOf('http://www.xkcd.com') === 0) || (currentURL.indexOf('http://xkcd.com') === 0)){
     theScript.src = baseURL + 'xkcd/axsEnableXKCD.js';
     shouldInsertScripts = true;
