@@ -1,0 +1,52 @@
+<cnr next="RIGHT l" prev="LEFT h">
+  <list title="Cycle Results" next="DOWN j" prev="UP k" fwd="n" back="p">
+    <item>
+      /html/body/center/div/table/tbody/tr[6]/td/table/tbody/tr/td/div/table/tbody/tr/td/table[not(@class)]
+    </item>
+  </list>
+
+  <target title="Yesterdays forecast" hotkey="y" onEmpty="Yesterdays forecast is not available">
+    id("TFbuttonZ")//a[contains(@href,"/weather/pastweather/")]
+  </target>
+
+  <target title="Todays forecast" hotkey="d" onEmpty="Todays forecast is not available">
+    id("TFbuttonZ")//a[contains(@href,"/weather/local/")]
+  </target>
+
+  <target title="Tomorrows forecast" hotkey="o" onEmpty="Todays forecast is not available">
+    id("TFbuttonZ")//a[contains(@href,"?dayNum=1")]
+  </target>
+
+  <target title="Radar view" hotkey="r" onEmpty="Radar view is not available">
+    id("TFbuttonZ")//a[contains(@href,"/weather/map/interactive/")]
+  </target>
+
+  <target title="Hour-by-hour forecast" hotkey="u" onEmpty="Hour-by-hour forecast is not available">
+    id("TFbuttonZ")//a[contains(@href,"/weather/hourbyhour/")]
+  </target>
+
+  <target title="Weekend forecast" hotkey="w" onEmpty="Weekend forecast is not available">
+    id("TFbuttonZ")//a[contains(@href,"/weather/weekend/")]
+  </target>
+
+  <target title="Ten day forecast" hotkey="n" onEmpty="Ten day forecast is not available">
+    id("TFbuttonZ")//a[contains(@href,"/weather/tenday/")]
+  </target>
+
+  <target title="Text view" hotkey="t" onEmpty="Text view is not available">
+    id("TFbuttonB")//a[contains(@href,"/weather/narrative")]
+  </target>
+
+  <target title="More details" hotkey="m" onEmpty="More details are not available">
+    id("TFbuttonB")//a[contains(@href,"/weather/wxdetail/")]
+  </target>
+
+  <target title="Video" hotkey="v" onEmpty="Video is not available">
+    id("TFbuttonB")//a[contains(@href,"/multimedia/")]
+  </target>
+
+  <target title="Averages" hotkey="a" onEmpty="Averages are not available">
+    id("TFbuttonB")//a[contains(@href,"/weather/wxclimatology/")]
+  </target>
+
+</cnr>
