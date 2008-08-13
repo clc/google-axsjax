@@ -718,9 +718,11 @@ AxsNav.prototype.setUpNavKeys = function(cnrDOM, emptyLists){
                      if (evt.ctrlKey) return true;
                      if (self.axs_.inputFocused) return true;
                      var idx = self.navListIdx;
-                     var command = self.keyCodeMaps[idx][evt.keyCode] ||
-                                   self.charCodeMaps[idx][evt.charCode];
-                     if (command) return command();
+					 if (idx < self.keyCodeMaps.length){
+                       var command = self.keyCodeMaps[idx][evt.keyCode] ||
+                                     self.charCodeMaps[idx][evt.charCode];
+                       if (command) return command();
+					 }  
                      command = self.topKeyCodeMap[evt.keyCode] ||
                                self.topCharCodeMap[evt.charCode];
                      if (command) return command();
