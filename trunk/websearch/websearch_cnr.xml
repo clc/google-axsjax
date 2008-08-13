@@ -1,74 +1,74 @@
 <cnr next="RIGHT l" prev="LEFT h">
-        <list title="One Box" hotkey="1" next="DOWN j" prev="UP k" onEmpty="There is no one box on this page.">
-		<item count="1">
-                  id("res")//div[contains(@class,"rbt")]
-		</item>   
-		<item count="1">
-                  id("res")/div[@class="e"]/table[not(contains(@id,"brs"))]/..
-		</item>          
-        <item count="1" comment="Use a [*] here since some one boxes have an extra garbage node that is empty at the start.">
-                  id("res")/p[*]
-		</item>		
-		<item count="1">
-                  //h2[@class="r"]/..
-		</item>   		
-        </list>
+  <list title="One Box" hotkey="1" next="DOWN j" prev="UP k" onEmpty="There is no one box on this page.">
+    <item count="1">
+      id("res")//div[contains(@class,"rbt")]
+    </item>   
+    <item count="1">
+      id("res")/div[@class="e"]/table[not(contains(@id,"brs"))]/..
+    </item>          
+    <item count="1" comment="Use a [*] here since some one boxes have an extra garbage node that is empty at the start.">
+      id("res")/p[*]
+    </item>         
+    <item count="1">
+      //h2[@class="r"]/..
+    </item>                 
+  </list>
 
-        <list title="Results" hotkey="n" next="DOWN j" prev="UP k" fwd="n" back="p">
-		<item count="1">
-                  id("res")//td[@class="j"]/ul/li[text()="Make sure all words are spelled correctly."]/../..
-		</item>
-		<item>
-		    id("res")//div[@class="g"]
-		</item>
-		<target title="Next page" trigger="listTail">
-                  id("nn")/..
-		</target>
-		<target title="Prev page" trigger="listHead">
-                  id("np")/..
-		</target>
-        </list>
-
-        <list title="Sponsored Links" hotkey="a" next="DOWN j" prev="UP k" onEmpty="There are no sponsored links on this page.">
-		<item>
-		    id("tads")//li
-		</item>
-		<item>
-		    id("mbEnd")//li
-		</item>
-	</list>
-
-    <list title="Related Searches" hotkey="s" next="DOWN j" prev="UP k" onEmpty="There are no related searches.">
-		<item>
-		    id("res")/table[*]/tbody/tr[*]/td[*]/a
-		</item>
-		<item>
-		    body/table[*]/tbody/tr[*]/td[*]/a/b/..
-		</item>
-    </list>
-
-    <list title="Alternate Search Categories" hotkey="c" next="DOWN j" prev="UP k" onEmpty="There are no other categories to search within.">
-		<item>
-		    body/table[*]/tbody/tr/td[*]/font/a[@class="q"]
-		</item>
-	</list>
-	
-    <list title="Google Services" hotkey="g" next="DOWN j" prev="UP k">
-		<item>
-		    id("gbar")//a[@class="gb1"]
-		</item>
-		<item>
-		    id("gbar")//a[@class="gb2"]
-		</item>
-		<item>
-		    id("gb")/a
-		</item>
-	</list>
-
-    <target title="Next page" hotkey="PGDOWN">
+  <list title="Results" hotkey="n" next="DOWN j" prev="UP k" fwd="n" back="p">
+    <item count="1">
+      id("res")//td[@class="j"]/ul/li[text()="Make sure all words are spelled correctly."]/../..
+    </item>
+    <item>
+      id("res")//div[@class="g"]
+    </item>
+    <target title="Next page" trigger="listTail">
       id("nn")/..
     </target>
-    <target title="Previous page" hotkey="PGUP">
+    <target title="Prev page" trigger="listHead">
       id("np")/..
     </target>
+  </list>
+
+  <list title="Sponsored Links" hotkey="a" next="DOWN j" prev="UP k" onEmpty="There are no sponsored links on this page.">
+    <item>
+      id("tads")//li
+    </item>
+    <item>
+      id("mbEnd")//li
+    </item>
+  </list>
+
+  <list title="Related Searches" hotkey="s" next="DOWN j" prev="UP k" onEmpty="There are no related searches.">
+    <item>
+      id("res")/table[*]/tbody/tr[*]/td[*]/a
+    </item>
+    <item>
+      body/table[*]/tbody/tr[*]/td[*]/a/b/..
+    </item>
+  </list>
+
+  <list title="Alternate Search Categories" hotkey="c" next="DOWN j" prev="UP k" onEmpty="There are no other categories to search within.">
+    <item>
+      body/table[*]/tbody/tr/td[*]/font/a[@class="q"]
+    </item>
+  </list>
+  
+  <list title="Google Services" hotkey="g" next="DOWN j" prev="UP k">
+    <item>
+      id("gbar")//a[@class="gb1"]
+    </item>
+    <item>
+      id("gbar")//a[@class="gb2"]
+    </item>
+    <item>
+      id("gb")/a
+    </item>
+  </list>
+
+  <target title="Next page" hotkey="PGDOWN">
+    id("nn")/..
+  </target>
+  <target title="Previous page" hotkey="PGUP">
+    id("np")/..
+  </target>
 </cnr>
