@@ -73,38 +73,41 @@ axsAmazonProductSearch.init = function() {
   //Add event listeners
   document.addEventListener('keypress', axsAmazonProductSearch.keyHandler, true);
   
-  var cnrString = "<cnr next='RIGHT l' prev='LEFT h'>" +
-                  "  <list title='Search Results' next='j' prev='k' fwd='n' back='p'>" +
-                  "    <item>" +
-                  "      id('Results')//div[contains(@class,'result')]" +
-                  "    </item>" +
-                  "    <target title='Next page' trigger='listTail'>" +
-                  "      id('pagnNextLink')" +
-                  "    </target>" +
-                  "    <target title='Previous page' trigger='listHead'>" +
-                  "      id('pagnPrevLink')" + 
-                  "    </target>	" +
-                  "    <target title='Go to result' hotkey='ENTER'>" +
-                  "      .//div[@class='productTitle']/a" +
-                  "    </target>" +
-                  "  </list>" +
-                  "  <list title='Category List' next='DOWN j' prev='UP k'>" +
-                  "    <item>" +
-                  "      id('leftNavContainer')//li/a" +
-                  "    </item>" +
-                  "    <target title='Go to result' hotkey='ENTER'>" +
-                  "      ." +
-                  "    </target>" +
-                  "  </list>" +
-                  "  <list title='Recommendations' next='DOWN j' prev='UP k'>" +
-                  "    <item>" +
-                  "      id('footerRecs')//div/a/.." +
-                  "    </item>" +
-                  "    <target title='Go to result' hotkey='ENTER'>" +
-                  "      ./a" +
-                  "    </target>" +
-                  "  </list>" +
-                  "</cnr>";
+  var cnrString = '<cnr next="RIGHT l" prev="LEFT h">' +
+                  '  <list title="Search Results" next="j" prev="k" fwd="n" ' +
+                  'back="p">' +
+                  '    <item  action="CALL:axsAmazonProductSearch.speakResul' +
+                  't">' +
+                  '      id("Results")//div[contains(@class,"result")]' +
+                  '    </item>' +
+                  '    <target title="Next page" trigger="listTail">' +
+                  '      id("pagnNextLink")' +
+                  '    </target>' +
+                  '    <target title="Previous page" trigger="listHead">' +
+                  '      id("pagnPrevLink")' +
+                  '    </target>' +
+                  '    <target title="Go to result" hotkey="ENTER">' +
+                  '      .//div[@class="productTitle"]/a' +
+                  '    </target>' +
+                  '  </list>' +
+                  '  <list title="Category List" next="DOWN j" prev="UP k">' +
+                  '    <item>' +
+                  '      id("leftNavContainer")//li/a' +
+                  '    </item>' +
+                  '    <target title="Go to result" hotkey="ENTER">' +
+                  '      .' +
+                  '    </target>' +
+                  '  </list>' +
+                  '  <list title="Recommendations" next="DOWN j" prev="UP k"' +
+                  '>' +
+                  '    <item>' +
+                  '      id("footerRecs")//div/a/..' +
+                  '    </item>' +
+                  '    <target title="Go to result" hotkey="ENTER">' +
+                  '      ./a' +
+                  '    </target>' +
+                  '  </list>' +
+                  '</cnr>';
   
   axsAmazonProductSearch.axsNavObj.navInit(cnrString, null);
 
@@ -127,7 +130,7 @@ axsAmazonProductSearch.speakResult = function(item){
   var price = axsAmazonProductSearch.getPrice(resultRow);
   var ratings = axsAmazonProductSearch.getRatings(resultRow);
   
-  var message = title + ". " + price + ". " + ratings ; 
+  var message = title + '. ' + price + '. ' + ratings ; 
   
   axsAmazonProductSearch.axsLensObj.view(resultRow);
   resultRow.scrollIntoView(true);
@@ -135,39 +138,35 @@ axsAmazonProductSearch.speakResult = function(item){
 };
 
 axsAmazonProductSearch.getTitle = function(resultRow){
-  var itemNumberXPath = "./table/tbody/tr/td[1]/span/text()";  
+  var itemNumberXPath = './/div[contains(@class, "number")]';  
   var itemNumber = axsAmazonProductSearch.axsJAXObj.evalXPath(itemNumberXPath,resultRow)[0];
   
-  var titleXPath = "./table/tbody/tr/td[2]/table/tbody/tr/td/table/tbody/tr/td[2]/table/tbody/tr[1]/td/a/span/text()";  
+  var titleXPath = './/div[contains(@class, "productTitle")]';  
   var title = axsAmazonProductSearch.axsJAXObj.evalXPath(titleXPath,resultRow)[0];
-
-  var byXPath = "./table/tbody/tr/td[2]/table/tbody/tr/td/table/tbody/tr/td[2]/table/tbody/tr[1]/td/text()[2]";  
-  var by = axsAmazonProductSearch.axsJAXObj.evalXPath(byXPath,resultRow)[0];
   
-  return itemNumber.textContent + " " + title.textContent + " " + by.textContent;
+  return itemNumber.textContent + ' ' + title.textContent;
 };
 
 axsAmazonProductSearch.getPrice = function(resultRow){
-  var newPriceXPath = "./table/tbody/tr/td[2]/table/tbody/tr/td/table/tbody/tr/td[2]/table/tbody/tr[2]/td/span[3]/text()";
+  var newPriceXPath = './/div[contains(@class, "newPrice")]/span';
   var newPrice = axsAmazonProductSearch.axsJAXObj.evalXPath(newPriceXPath,resultRow)[0];
   
-  var numberUsedNewXPath = "./table/tbody/tr/td[2]/table/tbody/tr/td/table/tbody/tr/td[2]/table/tbody/tr[2]/td/span[4]/span/a/text()";
+  var numberUsedNewXPath = './/div[contains(@class, "usedPrice")]/a';
   var numberUsedNew = axsAmazonProductSearch.axsJAXObj.evalXPath(numberUsedNewXPath,resultRow)[0];
   
-  var usedPriceXPath = "./table/tbody/tr/td[2]/table/tbody/tr/td/table/tbody/tr/td[2]/table/tbody/tr[2]/td/span[4]/span/span/text()";
+  var usedPriceXPath = './/div[contains(@class, "usedPrice")]/span';
   var usedPrice = axsAmazonProductSearch.axsJAXObj.evalXPath(usedPriceXPath,resultRow)[0];
   
-  return "Buy new for " + newPrice.textContent + " or check our list of  " + numberUsedNew.textContent + " from " + usedPrice.textContent;
+  return 'Buy new for ' + newPrice.textContent + ' or check our list of  ' + numberUsedNew.textContent + ' from ' + usedPrice.textContent;
 };
 
 axsAmazonProductSearch.getRatings = function(resultRow){
-  var totalCustomersXPath = "./table/tbody/tr/td[2]/table/tbody/tr/td/table/tbody/tr/td[2]/table/tbody/tr[5]/td/span/span/a[2]/text()";
-  var totalCustomers = axsAmazonProductSearch.axsJAXObj.evalXPath(totalCustomersXPath,resultRow)[0];  
-  
-  var starXPath = "./table/tbody/tr/td[2]/table/tbody/tr/td/table/tbody/tr/td[2]/table/tbody/tr[5]/td/span/span/a[1]/img[contains(@alt,'star')]";
+  var totalCustomersXPath = './/div[contains(@class, "stars")]//a';
+  var totalCustomers = axsAmazonProductSearch.axsJAXObj.evalXPath(totalCustomersXPath,resultRow)[1];  
+  var starXPath = './/div[contains(@class, "stars")]//img';
   var star = axsAmazonProductSearch.axsJAXObj.evalXPath(starXPath,resultRow)[0];
   
-  return totalCustomers.textContent + " customers have rated this product with " + star.alt;
+  return totalCustomers.textContent + ' customers have rated this product with ' + star.alt;
 };
 
 axsAmazonProductSearch.keyHandler = function(evt){  
@@ -215,6 +214,12 @@ axsAmazonProductSearch.charCodeMap = {
          axsAmazonProductSearch.magSize += 0.10;
          axsAmazonProductSearch.axsLensObj.setMagnification(axsAmazonProductSearch.magSize);
 	     return false;
+       },
+  // / (slash symbol)
+  47 : function() {
+         document.getElementById('twotabsearchtextbox').focus();
+         document.getElementById('twotabsearchtextbox').select();
+         return false;
        },
   // ? (question mark)     
   63 : function () {

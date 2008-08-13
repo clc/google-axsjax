@@ -1,0 +1,32 @@
+<cnr next="RIGHT l" prev="LEFT h">
+  <list title="Search Results" next="j" prev="k" fwd="n" back="p">
+    <item  action="CALL:axsAmazonProductSearch.speakResult">
+      id("Results")//div[contains(@class,"result")]
+    </item>
+    <target title="Next page" trigger="listTail">
+      id("pagnNextLink")
+    </target>
+    <target title="Previous page" trigger="listHead">
+      id("pagnPrevLink")
+    </target>
+    <target title="Go to result" hotkey="ENTER">
+      .//div[@class="productTitle"]/a
+    </target>
+  </list>
+  <list title="Category List" next="DOWN j" prev="UP k">
+    <item>
+      id("leftNavContainer")//li/a
+    </item>
+    <target title="Go to result" hotkey="ENTER">
+      .
+    </target>
+  </list>
+  <list title="Recommendations" next="DOWN j" prev="UP k">
+    <item>
+      id("footerRecs")//div/a/..
+    </item>
+    <target title="Go to result" hotkey="ENTER">
+      ./a
+    </target>
+  </list>
+</cnr>
