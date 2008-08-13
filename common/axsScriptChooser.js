@@ -141,6 +141,20 @@ function pickFromUncompiled(scriptsBaseURL){
     theScript.src = baseURL + 'xkcd/axsEnableXKCD_TranscriptFetcher.js';
     shouldInsertScripts = true;
   }
+  else if (currentURL.indexOf('http://www.amazon.com') === 0){
+    theScript.src = baseURL + 'www.amazon.com/axsEnableAmazonSearch.js';
+    scriptsArray.push(navLib);
+    scriptsArray.push(lensLib);
+    scriptsArray.push(sndLib);
+    shouldInsertScripts = true;
+  }
+  else if (currentURL.indexOf('http://www.weather.com') === 0){
+    theScript.src = baseURL + 'www.weather.com/axsEnableWeather.js';
+    scriptsArray.push(navLib);
+    scriptsArray.push(lensLib);
+    scriptsArray.push(sndLib);
+    shouldInsertScripts = true;
+  }
   
 
   if (shouldInsertScripts){
