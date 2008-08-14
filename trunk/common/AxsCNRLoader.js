@@ -31,6 +31,7 @@ function pickCNR(){
     if ((script.src.indexOf(baseURL) === 0) &&
         (script.src.indexOf('AxsCNRLoader.js') == -1) &&
 		(script.src.indexOf('axsScriptChooser') == -1){
+		alert(script.src);
       return;
     }
   }
