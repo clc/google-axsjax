@@ -34,7 +34,7 @@ axsQuotes.HELP = 'The following shortcut keys are available. ';
 axsQuotes.str = {
   BIO : 'Bio',
   GT : '>',
-  OR : ' or ',
+  OR : 'or',
   STATUS : '. Status',
   PRICE : ' Price ',
   DATE : ' Date ',
@@ -48,16 +48,18 @@ axsQuotes.str = {
   MLN_ABBR : 'M',
   BLN : ' billion',
   BLN_ABBR : 'B',
-  EXCHANGE : '. Traded on ',
-  SYMBOL : '. Symbol ',
-  LAST_TRADE : '.  Last trade ',
-  CHANGE : ' Change ',
-  MKT_CAP : '. Market cap ',
+  EXCHANGE : 'Traded on',
+  SYMBOL : 'Symbol',
+  LAST_TRADE : 'Last trade',
+  CHANGE : 'Change',
+  MKT_CAP : 'Market cap',
   DELAY : ' Note that the last trade is delayed ' +
     'up to 20 minutes. ',
-  USD : ' US dollars. ',
+  USD : 'US dollars',
   TTM : 'TTM',
   TTM_SPACES : 'T T M',
+  EXAMPLE : 'Example',
+  DEFINITION : 'Definition',
 
 //Strings for stock excahnges
   NYSE : 'New York Stock Exchange',
@@ -87,7 +89,7 @@ axsQuotes.str = {
   WEEKS : 'Fifty two week',
   WEEKS_ABBR : '52Wk',
   AVG_VOL : 'Average volume',
-  AVG_ABR_VOL : 'Avg Vol:',
+  AVG_VOL_ABBR : 'Avg Vol:',
   NA_ABBR : '-',
   NA : 'Not available',
   INST_OWN : 'Institutional Ownership',
@@ -103,7 +105,7 @@ axsQuotes.str = {
 axsQuotes.QUOTE_XPATH = "id('md')//span[@class='pr']/..";
 
 /**
- * Array for building a sentence for the Data description section
+ * Array for building a sentence for the 'Data description' section
  * @type Array
  */
 axsQuotes.marketDataDescArray = new Array(axsQuotes.str.PRICE,
@@ -153,7 +155,7 @@ axsQuotes.phrasesMap[axsQuotes.str.P_E_ABBR] = axsQuotes.str.P_E;
 axsQuotes.phrasesMap[axsQuotes.str.F_P_E_ABBR] = axsQuotes.str.F_P_E;
 axsQuotes.phrasesMap[axsQuotes.str.VOL_ABBR] = axsQuotes.str.VOL;
 axsQuotes.phrasesMap[axsQuotes.str.AVG_VOL_ABBR] = axsQuotes.str.AVG_VOL;
-axsQuotes.phrasesMap[axsQuotes.str.INST_OWN_ABBR] = axsQuotes.INST_OWN;
+axsQuotes.phrasesMap[axsQuotes.str.INST_OWN_ABBR] = axsQuotes.str.INST_OWN;
 axsQuotes.phrasesMap[axsQuotes.str.EPS_ABBR] = axsQuotes.str.EPS;
 
 /**
@@ -191,6 +193,12 @@ axsQuotes.axsNavObj = null;
 axsQuotes.axsLensObj = null;
 
 /**
+ * The AxsJAX sound object used for palying earcons.
+ * @type {AxsSound?}
+ */
+axsQuotes.axsSound = null;
+
+/**
  * The magnification factor for the AxsLens object.
  * @type number
  */
@@ -203,6 +211,18 @@ axsQuotes.magSize = 2.5;
 axsQuotes.searchBoxFocusEnabled = false;
 
 /**
+ * Time out for processing events.
+ * @type {Number}
+ */
+axsQuotes.EVT_HANDL_TIMEOUT_INT = 300;
+
+/**
+ * Map for flags indicating if a handler for an event has been triggered
+ * @type {Object}
+ */
+axsQuotes.eventHandlerToEventMap = new Object();
+
+/**
  * Initializes the AxsJAX script for Google finance - quotes page.
  */
 axsQuotes.init = function(){
@@ -211,237 +231,382 @@ axsQuotes.init = function(){
 
   //Add event listeners
   document.addEventListener('keypress', axsQuotes.keyHandler, true);
-  document.addEventListener('DOMSubtreeModified',
-                            axsQuotes.DOMSubtreeModifiedHandler,
-                            true);
+
+  var func = axsQuotes.DOMSubtreeModifiedEventDispatch;
+  document.addEventListener('DOMSubtreeModified', func, true);
+
+  var func = axsQuotes.DOMNodeInsertedEventDispatch;
+  document.addEventListener('DOMNodeInserted', func, true);
 
   //Content navigation rule is hardcoded for efficiency
   var cnrString = '<cnr next="RIGHT l" prev="LEFT h">' +
+                  '' +
                   '  <target title="Stock screener" hotkey="s">' +
                   '    //a[@href="/finance/stockscreener"]' +
                   '  </target>' +
-                  '  <list title="Market data" next="DOWN j" prev="UP k" fwd=' +
-                  '"n" back="p">' +
+                  '' +
+                  '  <list title="Market data" next="DOWN j" prev="UP k" fwd' +
+                  '="n" back="p">' +
+                  '' +
                   '    <item action="CALL:axsQuotes.readCurrentQuote">' +
                   '      id("md")//span[@class="pr"]/..' +
                   '    </item>' +
-                  '    <item action="CALL:axsQuotes.readMarketDataRow">' +
-                  '      id("md")//tr' +
+                  '' +
+                  '    <item action="CALL:axsQuotes.readMarketDataItem">' +
+                  '      id("md")//tr/td[@class="key"]' +
                   '    </item>' +
+                  '' +
                   '    <item action="CALL:axsQuotes.readAfterHours">' +
                   '      id("md")//tr//nobr' +
                   '    </item>' +
+                  '' +
                   '    <target title="Go to section" trigger="listEntry">' +
                   '      id("companyheader")' +
                   '    </target>' +
+                  '' +
                   '  </list>' +
-                  '  <list title="News" next="DOWN j" prev="UP k" fwd="n" bac' +
-                  'k="p">' +
+                  '' +
+                  '  <list title="News" next="DOWN j" prev="UP k" fwd="n" ba' +
+                  'ck="p" type="dynamic">' +
+                  '' +
                   '    <item action="CALL:axsQuotes.readNewsDesc">' +
                   '      id("newsmovingdiv")//div[@class="inner"]//tbody' +
                   '    </item>' +
+                  '' +
                   '    <item>' +
-                  '      id("older_news_link")//following-sibling::a[not(./im' +
-                  'g)]' +
+                  '      id("older_news_link")//following-sibling::a[not(./i' +
+                  'mg)]' +
                   '    </item>' +
+                  '' +
                   '    <target title="Go to link" hotkey="ENTER">' +
                   '      .//ancestor-or-self::a' +
                   '    </target>' +
-                  '    <target title="Related articles" hotkey="r" onEmpty="N' +
-                  'o related ' +
+                  '' +
+                  '    <target title="Related articles" hotkey="r" onEmpty="' +
+                  'No related' +
                   '        articles available">' +
                   '      .//a[@class="g bld" or @class="rl" or @class="rg"]' +
                   '    </target>' +
+                  '' +
                   '    <target title="Go to section" trigger="listEntry">' +
-                  '      id("companyheader")' +
+                  '      //li/a[text()="News"]' +
                   '    </target>' +
+                  '' +
                   '  </list>' +
-                  '  <list title="Related companies" next="DOWN j" prev="UP k' +
-                  '" fwd="n" ' +
+                  '' +
+                  '  <list title="Blogs" next="DOWN j" prev="UP k" fwd="n" ba' +
+                  'ck="p" type="dynamic">' +
+                  '' +
+                  '    <item action="CALL:axsQuotes.readBlogsDesc">' +
+                  '      //div[@class="rss-item"]' +
+                  '    </item>' +
+                  '' +
+                  '    <target title="Go to blog" hotkey="ENTER">' +
+                  '      .//a[./img[@class="rssSprite"]]' +
+                  '    </target>' +
+                  '' +
+                  '    <target title="Go to section" trigger="listEntry">' +
+                  '      //li/a[text()="Blogs"]' +
+                  '    </target>' +
+                  '' +
+                  '  </list>' +
+                  '' +
+                  '  <list title="Feeds" next="DOWN j" prev="UP k" fwd="n" ba' +
+                  'ck="p" type="dynamic">' +
+                  '' +
+                  '    <item action="CALL:axsQuotes.readFeedExampleDesc">' +
+                  '      //div[./div[contains(@id, "rss-feed-item-snippet")]' +
+                  '          and not(.//b)]' +
+                  '    </item>' +
+                  '' +
+                  '    <item action="CALL:axsQuotes.readFeedSearchResDesc">' +
+                  '      //div[./div[contains(@id, "rss-feed-item-snippet")]' +
+                  '         and .//b]' +
+                  '    </item>' +
+                  '' +
+                  '    <item action="CALL:axsQuotes.readBlogsDesc">' +
+                  '      //div[@id="plot_feed_div_cont"]//' +
+                  '          div[@class="rss-item"]' +
+                  '    </item>' +
+                  '' +
+                  '    <target title="Go to feed source" hotkey="g">' +
+                  '      .//a[@class="g"]' +
+                  '    </target>' +
+                  '' +
+                  '    <target title="Try this example" hotkey="t">' +
+                  '      .//a[not(@class)]' +
+                  '    </target>' +
+                  '' +
+                  '    <target title="Go to feed" hotkey="ENTER"' +
+                  '        onEmpty="The current item is not a feed">' +
+                  '      .//a[./img[@class="rssSprite"]]' +
+                  '    </target>' +
+                  '' +
+                  '    <target title="Feed search" hotkey="s"' +
+                  '        action="CALL:axsQuotes.focusOnSearchBox">' +
+                  '      id("rss_query_box")' +
+                  '    </target>' +
+                  '' +
+                  '    <target title="Go to section" trigger="listEntry">' +
+                  '      //li/a[contains(text(), "Feeds")]' +
+                  '    </target>' +
+                  '' +
+                  '  </list>' +
+                  '' +
+                  '  <list title="Related companies" next="DOWN j" prev="UP ' +
+                  'k" fwd="n"' +
                   '      back="p">' +
+                  '' +
                   '    <item action="CALL:axsQuotes.readRelCompDesc">' +
                   '      id("related")//tbody//tr' +
                   '    </item>' +
+                  '' +
                   '    <target title="Go to link" hotkey="ENTER">' +
                   '       .//a' +
                   '    </target>' +
+                  '' +
                   '    <target title="Go to section" trigger="listEntry">' +
                   '      id("related")/div[@class="hdg"]' +
                   '    </target>' +
+                  '' +
                   '  </list>' +
-                  '  <list title="Discussions" next="DOWN j" prev="UP k" fwd=' +
-                  '"n" back="p">' +
+                  '' +
+                  '  <list title="Discussions" next="DOWN j" prev="UP k" fwd' +
+                  '="n" back="p">' +
+                  '' +
                   '    <item>' +
                   '      id("groups")//div[@class="item"]' +
                   '    </item>' +
+                  '' +
                   '    <target title="Go to link" hotkey="ENTER">' +
                   '      .//a' +
                   '    </target>' +
+                  '' +
                   '    <target title="Go to section" trigger="listEntry">' +
                   '      id("groups")/div[@class="hdg"]' +
                   '    </target>' +
+                  '' +
                   '  </list>' +
-                  '  <list title="Blog posts" next="DOWN j" prev="UP k" fwd="' +
-                  'n" back="p">' +
+                  '' +
+                  '  <list title="Blog posts" next="DOWN j" prev="UP k" fwd=' +
+                  '"n" back="p">' +
+                  '' +
                   '    <item>' +
                   '      id("blogs")//div[@class="item"]' +
                   '    </item>' +
-                  '    <target title="Go to link" hotkey="ENTER" onEmpty="No ' +
-                  'link available.">' +
+                  '' +
+                  '    <target title="Go to link" hotkey="ENTER" onEmpty="No' +
+                  ' ' +
+                  '        link available.">' +
                   '      .//a' +
                   '    </target>' +
+                  '' +
                   '    <target title="Go to section" trigger="listEntry">' +
                   '      id("blogs")/div[@class="hdg"]' +
                   '    </target>' +
+                  '' +
                   '  </list>' +
-                  '  <list title="Events" next="DOWN j" prev="UP k" fwd="n" b' +
-                  'ack="p">' +
+                  '' +
+                  '  <list title="Events" next="DOWN j" prev="UP k" fwd="n" ' +
+                  'back="p">' +
+                  '' +
                   '    <item action="CALL:axsQuotes.readEventsDesc">' +
                   '      id("events")//tr' +
                   '    </item>' +
+                  '' +
                   '    <item>' +
                   '      id("events")/following-sibling::*//a' +
                   '    </item>' +
+                  '' +
                   '    <target title="Go to section" trigger="listEntry">' +
-                  '      id("blogs")/following-sibling::div[@class="content"]' +
-                  '/div[@class="hdg"]' +
+                  '      id("blogs")/following-sibling::div[@class="content"' +
+                  ']' +
+                  '        /div[@class="hdg"]' +
                   '    </target>' +
-                  '    <target title="Go to link" hotkey="ENTER" onEmpty="No ' +
-                  'link available.">' +
+                  '' +
+                  '    <target title="Go to link" hotkey="ENTER" onEmpty="No' +
+                  '        link available.">' +
                   '      .//descendant-or-self::a' +
                   '    </target>' +
+                  '' +
                   '  </list>' +
-                  '  <list title="Summary" next="DOWN j" prev="UP k" fwd="n" ' +
-                  'back="p">' +
-                  '    <item action="CALL:axsQuotes.readSummaryTextCompDesc">' +
+                  '' +
+                  '  <list title="Summary" next="DOWN j" prev="UP k" fwd="n"' +
+                  ' back="p">' +
+                  '' +
+                  '    <item action="CALL:axsQuotes.readSummaryTextCompDesc"' +
+                  '>' +
                   '      id("summary")//div[@class="item companySummary"]' +
                   '    </item>' +
+                  '' +
                   '    <item>' +
                   '      id("summary")//div[@class="content"]//td[1]' +
                   '    </item>' +
-                  '    <item action="CALL:axsQuotes.readSummarylinksCompDesc"' +
-                  '>' +
-                  '      id("summary")//div[@class="content"]//a[contains(@id' +
-                  ',"fs-")]' +
+                  '' +
+                  '    <item action="CALL:axsQuotes.readSummarylinksCompDesc' +
+                  '">' +
+                  '      id("summary")//div[@class="content"]//a[contains(@i' +
+                  'd,"fs-")]' +
                   '    </item>' +
-                  '    <target title="Go to link" hotkey="ENTER" onEmpty="No ' +
-                  'link available.">' +
+                  '' +
+                  '    <target title="Go to link" hotkey="ENTER" onEmpty="No' +
+                  '        link available.">' +
                   '      .//descendant-or-self::a' +
                   '    </target>' +
+                  '' +
                   '    <target title="Go to section" trigger="listEntry">' +
                   '      id("summary")/div[@class="hdg"]' +
                   '    </target>' +
+                  '' +
                   '  </list>' +
-                  '  <list title="Income statement in millions of US dollars"' +
-                  ' next="DOWN j" ' +
-                  '      prev="UP k" fwd="n" back="p">' +
-                  '    <item index="1" count="4" action="CALL:axsQuotes.readF' +
-                  'inancialCompDesc">' +
+                  '' +
+                  '  <list title="Income statement in millions of US dollars' +
+                  '"' +
+                  '      next="DOWN j" prev="UP k" fwd="n" back="p">' +
+                  '    <item index="1" count="4"' +
+                  '        action="CALL:axsQuotes.readFinancialCompDesc">' +
                   '      id("fd")//tr' +
                   '    </item>' +
-                  '    <target title="Income statement section" trigger="list' +
-                  'Entry">' +
+                  '' +
+                  '    <target title="Income statement section" trigger="lis' +
+                  'tEntry">' +
                   '      id("fd")//tr[1]//td[1]axsQuotes.str.BIO' +
                   '    </target>' +
+                  '' +
                   '    <target title="Go to link" hotkey="ENTER">' +
                   '      ./../tr[1]//a' +
                   '    </target>' +
+                  '' +
                   '    <target title="Go to section" trigger="listEntry">' +
                   '      id("fd")//tr[1][//a]' +
                   '    </target>' +
-                  '  </list>  ' +
-                  '  <list title="Balance sheet in millions of US dollars" ' +
+                  '' +
+                  '  </list> ' +
+                  '' +
+                  '  <list title="Balance sheet in millions of US dollars"' +
                   '      next="DOWN j" prev="UP k" fwd="n" back="p">' +
-                  '    <item index="7" count="5" action="CALL:axsQuotes.readF' +
-                  'inancialCompDesc">' +
+                  '' +
+                  '    <item index="7" count="5"' +
+                  '        action="CALL:axsQuotes.readFinancialCompDesc">' +
                   '      id("fd")//tr' +
                   '    </item>' +
+                  '' +
                   '    <target title="Go to link" hotkey="ENTER">' +
                   '      ./../tr[6]//a' +
                   '    </target>' +
+                  '' +
                   '    <target title="Go to section" trigger="listEntry">' +
                   '      id("fd")//tr[6][//a]' +
                   '    </target>' +
+                  '' +
                   '  </list>' +
-                  '  <list title="Cash flow in millions of US dollars" next="' +
-                  'DOWN j" ' +
+                  '' +
+                  '  <list title="Cash flow in millions of US dollars" next=' +
+                  '"DOWN j" ' +
                   '      prev="UP k" fwd="n" back="p">' +
-                  '    <item index="12" count="5" action="CALL:axsQuotes.read' +
-                  'FinancialCompDesc">' +
+                  '' +
+                  '    <item index="12" count="5"' +
+                  '        action="CALL:axsQuotes.readFinancialCompDesc">' +
                   '      id("fd")//tr' +
                   '    </item>' +
+                  '' +
                   '    <target title="Go to link" hotkey="ENTER">' +
                   '      ./../tr[12]//a' +
                   '    </target>' +
+                  '' +
                   '    <target title="Go to section" trigger="listEntry">' +
                   '      id("fd")//tr[12][//a]' +
                   '    </target>' +
+                  '' +
                   '  </list>' +
-                  '  <list title="Key statistics and ratios" next="DOWN j" pr' +
-                  'ev="UP k" ' +
+                  '' +
+                  '  <list title="Key statistics and ratios" next="DOWN j" p' +
+                  'rev="UP k"' +
                   '      fwd="n" back="p">' +
-                  '    <item action="CALL:axsQuotes.readRatAndStatsCompDesc">' +
+                  '' +
+                  '    <item action="CALL:axsQuotes.readRatAndStatsCompDesc"' +
+                  '>' +
                   '      id("keyratios")//tr[@class]' +
                   '    </item>' +
+                  '' +
                   '    <item>' +
                   '      id("keyratios")//a' +
                   '    </item>' +
-                  '    <target title="More ratios" hotkey="ENTER" onEmpty="No' +
-                  ' link available.">' +
+                  '' +
+                  '    <target title="More ratios" hotkey="ENTER"' +
+                  '        onEmpty="No link available.">' +
                   '      .' +
                   '    </target>' +
+                  '' +
                   '    <target title="Go to section" trigger="listEntry">' +
                   '      id("keyratios")/div[@class="hdg"]' +
                   '    </target>' +
+                  '' +
                   '  </list>' +
-                  '  <list title="More resources" next="DOWN j" prev="UP k" f' +
-                  'wd="n" back="p">' +
+                  '' +
+                  '  <list title="More resources" next="DOWN j" prev="UP k"' +
+                  '      fwd="n" back="p">' +
+                  '' +
                   '    <item>' +
-                  '      id("m-analyst")/.. | id("m-sec")/.. | id("m-hold")/.' +
-                  '. | ' +
-                  '          id("m-options")/.. | id("m-research")/.. | id("m' +
-                  '-wiki")/.. | ' +
-                  '          id("m-transcripts")/..' +
+                  '      id("m-analyst")/.. | id("m-sec")/.. | id("m-hold")/' +
+                  '.. |' +
+                  '          id("m-options")/.. | id("m-research")/.. |' +
+                  '          id("m-wiki")/.. | id("m-transcripts")/..' +
                   '    </item>' +
+                  '' +
                   '    <target title="Go to link" hotkey="ENTER">' +
                   '      .//a' +
                   '    </target>' +
+                  '' +
                   '    <target title="Go to section" trigger="listEntry" >' +
-                  '      id("keyratios")/following-sibling::div[@class="hdg"]' +
+                  '      id("keyratios")/following-sibling::div[@class="hdg"' +
+                  ']' +
                   '    </target>' +
+                  '' +
                   '  </list>' +
-                  '  <list title="Officers and directors" next="DOWN j" prev=' +
-                  '"UP k" fwd="n" ' +
-                  '      back="p">' +
-                  '    <item action="CALL:axsQuotes.readManagementDescription' +
-                  '">' +
+                  '' +
+                  '  <list title="Officers and directors" next="DOWN j"' +
+                  '      prev="UP k" fwd="n" back="p">' +
+                  '' +
+                  '    <item action="CALL:axsQuotes.readManagementDescriptio' +
+                  'n">' +
                   '      id("management")//tr[not(@id="hide") and @id]' +
                   '    </item>' +
+                  '' +
                   '    <item>' +
                   '      id("management")//td/a' +
                   '    </item>' +
-                  '    <target title="Biography and compensation" hotkey="b">' +
-                  '      .//following-sibling::tr[1]//a[@id="e-p"]' +
+                  '' +
+                  '    <target title="Biography and compensation" hotkey="b"' +
+                  '>' +
+                  '      .//following-sibling::tr[1]//a[@class="e-p"]' +
                   '    </target>' +
-                  '    <target title="Trading activity" hotkey="t" onEmpty="N' +
-                  'o trading ' +
+                  '' +
+                  '    <target title="Trading activity" hotkey="t" onEmpty="' +
+                  'No trading' +
                   '        activity available.">' +
-                  '      .//following-sibling::tr[1]//a[@id="e-t"]' +
+                  '      .//following-sibling::tr[1]//a[@class="e-t"]' +
                   '    </target>' +
-                  '    <target title="Go to link" hotkey="ENTER" onEmpty="No ' +
-                  'link available.">' +
+                  '' +
+                  '    <target title="Go to link" hotkey="ENTER"' +
+                  '        onEmpty="No link available.">' +
                   '      .' +
                   '    </target>' +
+                  '' +
                   '    <target title="Go to section" trigger="listEntry">' +
                   '      id("mgmtdiv")' +
                   '    </target>' +
+                  '' +
                   '  </list>' +
+                  '' +
                   '  </cnr>';
 
   axsQuotes.axsNavObj.navInit(cnrString, null);
   axsQuotes.axsLensObj = new AxsLens(axsQuotes.axsJAXObj);
   axsQuotes.axsNavObj.setLens(axsQuotes.axsLensObj);
   axsQuotes.axsLensObj.setMagnification(axsQuotes.magSize);
+  axsQuotes.axsSound = new AxsSound(true);
+  axsQuotes.axsNavObj.setSound(axsQuotes.axsSound);
 
   //Table columns are static for the page but change over time
   axsQuotes.populateFinancialsDescArray();
@@ -456,24 +621,76 @@ axsQuotes.init = function(){
 };
 
 /**
- * Handles the DOMSubtreeModified event. 
- * This event happens when the selected node for the 
- * auto-complete search box changes.
- * @param {Event} evt The DOMSubtreeModified event
+ * Handles the DOMSubtreeModified event. This method serves as an
+ * event dispatch and delegates to specilaized event handlers.
+ * @param {Event} evt A DOMSubtreeModified event.
  */
-axsQuotes.DOMSubtreeModifiedHandler = function(evt){
-  var attrib = evt.attrName;
-  var newVal = evt.newValue;
-  var oldVal = evt.prevValue;
+axsQuotes.DOMSubtreeModifiedEventDispatch = function(evt) {
   var target = evt.target;
-  if (target.id == 'ac-list'){
-    for (var i = 0, child; child = target.childNodes[i]; i++){
-      if (child.className == 'selected'){
-        axsQuotes.axsJAXObj.speakNode(child);
-        return;
-      }
+
+  if (target.id == 'ac-list') {
+
+    axsQuotes.announceAutoCompletionValueEventHandler(evt);
+
+  } else if (target.className == 'goog-tabpane-tab-selected') {
+
+    axsQuotes.refreshNewsBlogsFeedsListEventHandler(evt);
+
+  }
+};
+
+/**
+ * Event handler for announcing the value in an auto completion box.
+ * @param {Event} evt A DOMSubtreeModified event.
+ */
+axsQuotes.announceAutoCompletionValueEventHandler = function(evt) {
+  var target = evt.target;
+  for (var i = 0, child; child = target.childNodes[i]; i++){
+    if (child.className == 'selected'){
+      axsQuotes.axsJAXObj.speakNode(child);
+      return;
     }
   }
+};
+
+/**
+ * Announces the title of the current feed list.
+ */
+axsQuotes.announceFeedListTitle = function() {
+  var xPath = '//div[@id="feed_list_title" and .//ancestor::div[contains' +
+      '(@id, "_div_cont") and not(contains(@style, "display: none"))]]';
+  var titles = axsQuotes.axsJAXObj.evalXPath(xPath, document.body);
+
+  if (titles.length > 0) {
+    var text = titles[0].textContent;
+    axsQuotes.axsJAXObj.speakTextViaNode(text);
+  }
+};
+
+/**
+ * Handles the DOMNodeInserted event. This method serves as an
+ * event dispatch and delegates to specilaized event handlers.
+ * @param {Event} evt A DOMSubtreeModified event.
+ */
+axsQuotes.DOMNodeInsertedEventDispatch = function(evt) {
+  var target = evt.target;
+
+  if (target.parentNode.parentNode.parentNode.id == 'scrollingListTd') {
+    axsQuotes.refreshNewsBlogsFeedsListEventHandler(evt);
+  }
+};
+
+/**
+ * Event handler for refreshing the current list using the current refresh 
+ * mode of the list.
+ * @param {Event} evt A DOMSubtreeModified event.
+ */
+axsQuotes.refreshNewsBlogsFeedsListEventHandler = function(evt) {
+  var func = function() {
+               axsQuotes.refreshCurrentList();
+               axsQuotes.announceFeedListTitle();
+  };
+  axsQuotes.executeFunctionAfterMostRecentEvent(func, evt);
 };
 
 /**
@@ -561,24 +778,19 @@ axsQuotes.populateRatAndStatDescArray = function() {
 };
 
 /**
- * Callback handler for reading rows of data in the 'Market data' list.
+ * Callback handler for reading criteria items in the 'Market data' list.
  * @param {Object?} item A wrapper for the current DOM node.
  */
-axsQuotes.readMarketDataRow = function(item) {
-  var element = item.elem;
-  var text = '';
-  var xpath = './td[@class="key" or @class="val"]';
-  var columns = axsQuotes.axsJAXObj.evalXPath(xpath, element);
-  var firstPhrase = '';
-  var secondPhrase = '';
-  for (var i = 0; i < columns.length; i = i + 2) {
-    firstPhrase = columns[i].textContent;
-    firstPhrase = axsQuotes.parseSpecChrsAndTkns(firstPhrase);
-    secondPhrase = columns[i + 1].textContent;
-    secondPhrase = axsQuotes.parseSpecChrsAndTkns(secondPhrase);
-    text = text + firstPhrase + ' ' + secondPhrase + '. ';
-  }
-  axsQuotes.speakAndGo(element, text);
+axsQuotes.readMarketDataItem = function(item) {
+  var criteria = item.elem;
+  var xPath = './/following-sibling::td[1]';
+  var value = axsQuotes.axsJAXObj.evalXPath(xPath, criteria)[0];
+
+  var criteriaText = axsQuotes.parseSpecChrsAndTkns(criteria.textContent);
+  var valueText = axsQuotes.parseSpecChrsAndTkns(value.textContent);
+
+  var text = criteriaText + ' ' + valueText + '.';
+  axsQuotes.speakAndGo(criteria, text);
 };
 
 /**
@@ -658,6 +870,67 @@ axsQuotes.readNewsDesc = function(item) {
   text = text + contents[1].childNodes[0].textContent;
   text = text + contents[1].childNodes[1].textContent;
   axsQuotes.speakAndGo(item.elem, text);
+};
+
+/**
+ * Callback handler for reading the 'Blogs' list.
+ * @param {Object} item A wrapper for the current DOM node.
+ */
+axsQuotes.readBlogsDesc = function(item) {
+  var element = item.elem;
+  var xPath = './/div[@class="content"]';
+  var content = axsQuotes.axsJAXObj.evalXPath(xPath, element)[0];
+
+  xPath = './/div[@class="date"]';
+  var date = axsQuotes.axsJAXObj.evalXPath(xPath, element)[0];
+
+  var text = content.textContent + ' ' + date.textContent;
+  axsQuotes.speakAndGo(element, text);
+};
+
+/**
+ * Callback handler for reading the examples in the 'Feeds' list.
+ * @param {Object} item A wrapper for the current DOM node.
+ */
+axsQuotes.readFeedExampleDesc = function(item) {
+  var element = item.elem;
+
+  var example = element.firstChild;
+  var xPath = './div[contains(@id, "rss-feed-item-snippet")]';
+  var definition = axsQuotes.axsJAXObj.evalXPath(xPath, element)[0].firstChild;
+
+  var text = axsQuotes.str.EXAMPLE + '. ' + example.textContent + ' ';
+  text = text + axsQuotes.str.DEFINITION + '. ' + definition.textContent;
+
+  axsQuotes.speakAndGo(element, text);
+};
+
+/**
+ * Callback handler for reading the search results in the 'Feeds' list.
+ * @param {Object} item A wrapper for the current DOM node.
+ */
+axsQuotes.readFeedSearchResDesc = function(item) {
+  var element = item.elem;
+
+  var text = element.textContent;
+  var xPath = './/a';
+  var links = axsQuotes.axsJAXObj.evalXPath(xPath, element);
+  for (var i = 0, link; link = links[i]; i++) {
+    text = text.replace(link.textContent, '');
+  }
+
+  axsQuotes.speakAndGo(element, text);
+};
+
+/**
+ * Callback handler for focusing on the search feed box.
+ * @param {Object} item A wrapper for the current DOM node.
+ */
+axsQuotes.focusOnSearchBox = function(item) {
+  var element = item.elem;
+  element.title = 'Search box';
+  element.focus();
+  element.select();
 };
 
 /**
@@ -766,6 +1039,7 @@ axsQuotes.readManagementDescription = function(item) {
   var element = item.elem;
   var personName = element.childNodes[1].textContent;
   personName = personName.replace(axsQuotes.str.GT, '');
+  personName = axsQuotes.normalizeString(personName);
   var position = element.childNodes[3].textContent;
   var info = element.nextSibling.nextSibling.textContent;
   var index = info.indexOf(axsQuotes.str.BIO);
@@ -830,6 +1104,50 @@ axsQuotes.addSpaceBetweenChars = function(text) {
 };
 
 /**
+ * Executes a function mapped to an event. Since some events are generated
+ * too frequently, taking actions on each event may cause significant
+ * overhed. This method is mapping the event in the function call to a
+ * handling function. Also the event has a timestamp indicating the time for
+ * planned execution (obtained by adding an offset to the current system time)
+ * of the function to which it is mapped (and will potentially handle it).
+ * The handling function is executed after the event timestamp expires.
+ * Subsequent requests for executing the same function remap the function to the
+ * event parameter in the call and the event timestamp is set as described
+ * above. After execution of the mapped function its mapping to an event is
+ * removed. Such an implementation ensures processing the last event mapped to
+ * the handling function after a certain timeout.
+ *
+ * @param {Function} func The handling function to execute.
+ * @param {Event} evt Event to be propageted to the handlingFunction.
+ */
+ axsQuotes.executeFunctionAfterMostRecentEvent = function(func, evt) {
+  if (axsQuotes.eventHandlerToEventMap[func.toString()]) {
+    evt.timeToHandle = new Date().getTime() + axsQuotes.EVT_HANDL_TIMEOUT_INT;
+    axsQuotes.eventHandlerToEventMap[func.toString()] = evt;
+    return;
+  }
+
+  evt.timeToHandle = new Date().getTime() + axsQuotes.EVT_HANDL_TIMEOUT_INT;
+  axsQuotes.eventHandlerToEventMap[func.toString()] = evt;
+
+  var delegFunc = function() {
+                    var currentTime = new Date().getTime();
+                    var key = func.toString();
+                    var event = axsQuotes.eventHandlerToEventMap[key];
+
+                    if (event.timeToHandle > currentTime) {
+                      var executionTimeout = event.timeToHandle - currentTime;
+                      window.setTimeout(delegFunc, executionTimeout);
+                    } else {
+                      func(event);
+                      axsQuotes.eventHandlerToEventMap[func.toString()] = null;
+                    }
+  };
+
+   window.setTimeout(delegFunc, axsQuotes.EVT_HANDL_TIMEOUT_INT);
+};
+
+/**
  * Speaks a text and positions the screen to an element.
  * @param {Node} element DOM node 
  * @param {string} text The text to be spoken. 
@@ -867,6 +1185,14 @@ axsQuotes.buildTableRowText = function(textContents, columnDesc) {
     rowText = rowText + ' ' + columnDesc[i];
   }
   return rowText;
+};
+
+/**
+ * Refreshes the current list of the active AxsNav object. 
+ */
+axsQuotes.refreshCurrentList = function() {
+  var list = axsQuotes.axsNavObj.currentList();
+  axsQuotes.axsNavObj.refreshList(list.title);
 };
 
 /**
@@ -991,4 +1317,4 @@ axsQuotes.charCodeMap = {
 };
 
 //Run the initialization routine of the script
-axsQuotes.init();
+window.addEventListener('load', axsQuotes.init, true);
