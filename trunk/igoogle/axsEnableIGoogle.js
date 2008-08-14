@@ -179,4 +179,4 @@ axsIG.goToPrevGadget = function(){
   axsIG.axsJAXObj.goTo(axsIG.axsLensObj.lens);
 };
 
-window.setTimeout("axsIG.init();",1000);
+window.setTimeout(function(){axsIG.init();},1000);
