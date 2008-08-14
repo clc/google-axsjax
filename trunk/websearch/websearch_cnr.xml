@@ -16,7 +16,7 @@
 
   <list title="Results" hotkey="n" next="DOWN j" prev="UP k" fwd="n" back="p">
     <item count="1">
-      id("res")//td[@class="j"]/ul/li[text()="Make sure all words are spelled correctly."]/../..
+      id("res")/div[@class="med"]
     </item>
     <item>
       id("res")//div[@class="g"]
@@ -40,16 +40,13 @@
 
   <list title="Related Searches" hotkey="s" next="DOWN j" prev="UP k" onEmpty="There are no related searches.">
     <item>
-      id("res")/table[*]/tbody/tr[*]/td[*]/a
-    </item>
-    <item>
-      body/table[*]/tbody/tr[*]/td[*]/a/b/..
+      id("brs")//a/b/..
     </item>
   </list>
 
   <list title="Alternate Search Categories" hotkey="c" next="DOWN j" prev="UP k" onEmpty="There are no other categories to search within.">
     <item>
-      body/table[*]/tbody/tr/td[*]/font/a[@class="q"]
+      id("prs")/a
     </item>
   </list>
   
