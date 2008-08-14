@@ -1317,4 +1317,5 @@ axsQuotes.charCodeMap = {
 };
 
 //Run the initialization routine of the script
-window.addEventListener('load', axsQuotes.init, true);
+//window.addEventListener('load', axsQuotes.init, true);
+axsQuotes.init(); //Run it directly when injecting

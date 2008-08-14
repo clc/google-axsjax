@@ -1898,4 +1898,5 @@ axsStock.init = function(evt) {
 
 //Run the initialization routine after the page loading is completed.
 //NOTE: Looking for the 'load' event does not quarantee load completion.
-window.addEventListener('DOMNodeInserted', axsStock.init, true);
+//window.addEventListener('DOMNodeInserted', axsStock.init, true);
+axsStock.init(); //Run it directly when injecting
