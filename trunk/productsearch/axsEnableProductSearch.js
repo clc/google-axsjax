@@ -235,7 +235,7 @@ axsProductSearch.speakResult = function(item){
 
 /**
  * Given a results row, returns the title of the product.
- * @param {Object} resultRow The row that contains the result
+ * @param {Node} resultRow The row that contains the result
  * @return {string} The title
  */
 axsProductSearch.getTitle = function(resultRow){
@@ -246,7 +246,7 @@ axsProductSearch.getTitle = function(resultRow){
 
 /**
  * Given a results row, returns the description of the product.
- * @param {Object} resultRow The row that contains the result
+ * @param {Node} resultRow The row that contains the result
  * @return {string} The description
  */
 axsProductSearch.getDesc = function(resultRow){
@@ -269,7 +269,7 @@ axsProductSearch.getDesc = function(resultRow){
 
 /**
  * Given a results row, returns the price of the product.
- * @param {Object} resultRow The row that contains the result
+ * @param {Node} resultRow The row that contains the result
  * @return {string} The price
  */
 axsProductSearch.getPrice = function(resultRow){
@@ -282,7 +282,7 @@ axsProductSearch.getPrice = function(resultRow){
  * Given a results row, generates a string states either how many stores 
  * are selling this product or the one store that is selling it. Which string
  * gets generated depends on what is there.
- * @param {Object} resultRow The row that contains the result
+ * @param {Node} resultRow The row that contains the result
  * @return {string} The seller information
  */
 axsProductSearch.getSeller = function(resultRow){
@@ -301,7 +301,7 @@ axsProductSearch.getSeller = function(resultRow){
 /**
  * Given a results row, generates a string that states the number of ratings 
  * and the average rating.
- * @param {Object} resultRow The row that contains the result
+ * @param {Node} resultRow The row that contains the result
  * @return {string} The number of raters and the averaged rating.
  */
 axsProductSearch.getRatings = function(resultRow){
@@ -322,7 +322,7 @@ axsProductSearch.getRatings = function(resultRow){
 /**
  * Given a results row, generates a string that says Google Checkout is 
  * available if it is available.
- * @param {Object} resultRow The row that contains the result
+ * @param {Node} resultRow The row that contains the result
  * @return {string?} Returns the ACCEPTS_CHECKOUT_STRING if checkout is 
  *                   accepted; otherwise, returns an empty string.
  */
