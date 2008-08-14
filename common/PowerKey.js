@@ -845,15 +845,8 @@ PowerKey.DefaultHandler.prototype.handler =
     }
     if (actionObj) {
       if (actionObj[pkObj.context]) {
-        var i, params = '';
-        var len = actionObj[pkObj.context].length;
-        if (len > 1) {
-          for (i = 1; i < len; i++)
-            params += actionObj[pkObj.context][i] + ',';
-        }
-        params = params.substring(0, params.length - 1);
-        var func = actionObj[pkObj.context][0] + '(' + params + ');';
-        window.setTimeout(func, 0);
+        var func = actionObj[pkObj.context];
+        func();
       }
     }
   }
@@ -985,7 +978,7 @@ PowerKey.cssStr =
   'font-size: 20px; filter: alpha(opacity=85); -moz-opacity: .80;}' +
 '.pkOpaqueStatusText { background-color: transparent; ' +
   'font-family: Arial, Helvetica, sans-serif; font-size: 30px; ' +
-  'font-weight: bold; color: #fff;}' +
+  'color: #fff;}' +
 '.pkOpaqueCompletionText {border-style: none; background-color:transparent; ' +
   'font-family: Arial, Helvetica, sans-serif; font-size: 35px; ' +
   'font-weight: bold; color: #fff; width: 1000px; height: 50px;}';
