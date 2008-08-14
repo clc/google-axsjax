@@ -127,7 +127,7 @@ axsWebSearch.init = function(){
                   '                  id("res")/p[*]' +
                   '		</item>		' +
                   '		<item count="1">' +
-                  '                  //h2[@class="r"]/..' +
+                  '           //td/h2[@class="r"]' +
                   '		</item>   		' +
                   '        </list>' +
                   '        <list title="Results" hotkey="n" next="DOWN j" pr' +
