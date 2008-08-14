@@ -10,7 +10,7 @@
       id("res")/p[*]
     </item>         
     <item count="1">
-      //h2[@class="r"]/..
+      //td/h2[@class="r"]/..
     </item>                 
   </list>
 
