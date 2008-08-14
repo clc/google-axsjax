@@ -36,17 +36,17 @@ function pickScript(){
   var sndLib = document.createElement('script');
   sndLib.type = 'text/javascript';
   sndLib.src = baseURL + 'common/AxsSound.js';
-  var pkLib = document.createElement('script');  
+  var pkLib = document.createElement('script');
   pkLib.type = 'text/javascript';
   pkLib.src = baseURL + 'common/PowerKey.js';
-  
+
   var scriptsArray = new Array();
   scriptsArray.push(theLib);
 
   //Do not insert anything if the scripts are already inserted.
   var scriptArray = document.getElementsByTagName('script');
-  for (var i=0; i<scriptArray.length; i++){
-    if(scriptArray[i].src == theLib.src){
+  for (var i = 0, script; script = scriptArray[i]; i++){
+    if (script.src == theLib.src){
       return;
     }
   }
@@ -62,11 +62,11 @@ function pickScript(){
   }
 
   //Check for Google
-  else if(urlIsGoogle()){  
+  else if (urlIsGoogle()){
     var path = document.location.pathname;
     var prefix = document.location.host;
-	var search = document.location.search;
-    prefix = prefix.substring(0,prefix.indexOf('.'));
+    var search = document.location.search;
+    prefix = prefix.substring(0, prefix.indexOf('.'));
     if ((prefix == 'www') && (path.indexOf('/ig') === 0)){
       theScript.src = baseURL + 'igoogle/axsEnableIGoogle.js';
       scriptsArray.push(navLib);
@@ -78,16 +78,16 @@ function pickScript(){
       scriptsArray.push(sndLib);
       shouldInsertScripts = true;
     }
-    else if (path.indexOf('/calendar') === 0 ){
+    else if (path.indexOf('/calendar') === 0){
       theScript.src = baseURL + 'calendar/axsEnableCalendar.js';
       scriptsArray.push(pkLib);
       shouldInsertScripts = true;
     }
-    else if ( (prefix == 'images') && (path.indexOf('/images') === 0 ) ){
+    else if ((prefix == 'images') && (path.indexOf('/images') === 0)){
       theScript.src = baseURL + 'imagesearch/axsEnableImageSearch.js';
       shouldInsertScripts = true;
     }
-    else if ( (prefix == 'scholar') && (path.indexOf('/scholar') === 0 ) ){
+    else if ((prefix == 'scholar') && (path.indexOf('/scholar') === 0)){
       theScript.src = baseURL + 'scholar/axsEnableScholar.js';
       scriptsArray.push(navLib);
       shouldInsertScripts = true;
@@ -100,16 +100,16 @@ function pickScript(){
       }
       shouldInsertScripts = true;
     }
-    else if (path.indexOf('/products') === 0 ){
+    else if (path.indexOf('/products') === 0){
       theScript.src = baseURL + 'productsearch/axsEnableProductSearch.js';
       scriptsArray.push(navLib);
       scriptsArray.push(lensLib);
       shouldInsertScripts = true;
     }
-    else if ((prefix == 'finance') && (path.indexOf('/finance') === 0 )){
+    else if ((prefix == 'finance') && (path.indexOf('/finance') === 0)){
       if (path.indexOf('stockscreener') > 0) {
         theScript.src = baseURL + 'finance/axsEnableFinanceStockScreener.js';
-	  } else if (search.indexOf('?') === 0) {
+      } else if (search.indexOf('?') === 0) {
         theScript.src = baseURL + 'finance/axsEnableFinanceQuotes.js';
       } else {
         theScript.src = baseURL + 'finance/axsEnableFinanceHome.js';
@@ -118,11 +118,11 @@ function pickScript(){
       scriptsArray.push(lensLib);
       scriptsArray.push(pkLib);
       shouldInsertScripts = true;
-    }	
-    else if ((prefix == 'www')
-        || (path.indexOf('/search') === 0)
-        || (path.indexOf('/custom') === 0)
-        || (path.indexOf('/cse') === 0)){
+    }
+    else if ((prefix == 'www') ||
+             (path.indexOf('/search') === 0) ||
+             (path.indexOf('/custom') === 0) ||
+             (path.indexOf('/cse') === 0)){
       theScript.src = baseURL + 'websearch/axsEnableWebSearch.js';
       scriptsArray.push(navLib);
       scriptsArray.push(lensLib);
@@ -133,14 +133,15 @@ function pickScript(){
   else if (currentURL === 'http://www.minijuegosgratis.com/juegos/jawbreaker/jawbreaker.htm'){
     theScript.src = baseURL + 'jawbreaker/axsEnableJawbreaker.js';
     scriptsArray.push(sndLib);
-    shouldInsertScripts = true;    
+    shouldInsertScripts = true;
   }
-  else if ((currentURL.indexOf('http://www.xkcd.com') === 0) || (currentURL.indexOf('http://xkcd.com') === 0)){
+  else if ((currentURL.indexOf('http://www.xkcd.com') === 0) ||
+           (currentURL.indexOf('http://xkcd.com') === 0)){
     theScript.src = baseURL + 'xkcd/axsEnableXKCD.js';
     shouldInsertScripts = true;
   }
-  else if ( (currentURL.indexOf('http://www.ohnorobot.com/transcribe.pl?comicid=apKHvCCc66NMg') === 0) &&
-            (currentURL.indexOf('#AxsJAX_Cmd') != -1)){
+  else if ((currentURL.indexOf('http://www.ohnorobot.com/transcribe.pl?comicid=apKHvCCc66NMg') === 0) &&
+           (currentURL.indexOf('#AxsJAX_Cmd') != -1)){
     theScript.src = baseURL + 'xkcd/axsEnableXKCD_TranscriptFetcher.js';
     shouldInsertScripts = true;
   }
@@ -158,13 +159,12 @@ function pickScript(){
     scriptsArray.push(sndLib);
     shouldInsertScripts = true;
   }
-  
 
   if (shouldInsertScripts){
     scriptsArray.push(theScript);
-	for (var i=0,script; script = scriptsArray[i]; i++){
-      document.getElementsByTagName('head')[0].appendChild(script);	
-	}
+    for (var i = 0, script; script = scriptsArray[i]; i++){
+      document.getElementsByTagName('head')[0].appendChild(script);
+    }
   }
 }
 
