@@ -13,12 +13,12 @@
 <!-- Search criteria CNR -->
 <cnr next="RIGHT l" prev="LEFT h">
 
-    <target title="Go to the results section" hotkey="s" 
+    <target title="Go to the results section" hotkey="s"
         action="CALL:axsStock.buildAndLoadResultTableCNR">
       /html
     </target>
 
-    <target title="Open and close criteria wizard" hotkey="w" 
+    <target title="Open and close add criteria wizard" hotkey="w"
         action="CALL:axsStock.openCloseWizard">
       id("action_links")
     </target>
@@ -27,278 +27,271 @@
       id("action_links")//a[not(@class)]
     </target>
 
-    <target title="Search company" hotkey="f" 
+    <target title="Search for row by company name" hotkey="f"
         action="CALL:axsStock.goToRow">
       /html
     </target>
 
-    <target title="Search criteria" hotkey="c" 
+    <target title="Search for a criteria" hotkey="c"
         action="CALL:axsStock.goToColumn">
       /html
     </target>
 
-    <target title="Search column value" hotkey="v" 
+    <target title="Search for a criteria value" hotkey="v"
         action="CALL:axsStock.goToValueInColumn">
       /html
     </target>
 
-    <target title="Search row value" hotkey="z" 
+    <target title="Search criteria by value" hotkey="z"
         action="CALL:axsStock.goToValueInRow">
       /html
     </target>
 
-    <list title="Region" next="DOWN j" prev="UP k" fwd="n" back="p" 
-        type="dynamic">
-
-      <item action="CALL:axsStock.readDropDownListItem">
-        id("regionselect")//option
-      </item>
-
-      <target title="Focus on region" trigger="listEntry" 
-          action="CALL:axsStock.focusOnDropDownList">
-        id("regionselect")
-      </target>
-
-      <target title="Select region" hotkey="ENTER" 
-          action="CALL:axsStock.selectDropDownListOption">
-        /html
-      </target>
-
-    </list>
-
-    <list title="Exchange" next="DOWN j" prev="UP k" fwd="n" back="p" 
-        type="dynamic">
+    <list title="Exchange" next="DOWN j" prev="UP k" fwd="n"
+        back="p" type="dynamic">
 
       <item action="CALL:axsStock.readDropDownListItem">
         id("exchangeselect")//option
       </item>
 
-      <target title="Focus on exchange" trigger="listEntry" 
+      <target title="Focus on exchange" trigger="listEntry"
           action="CALL:axsStock.focusOnDropDownList">
         id("exchangeselect")
       </target>
 
-      <target title="Select exchange" hotkey="ENTER" 
+      <target title="Select exchange" hotkey="ENTER"
           action="CALL:axsStock.selectDropDownListOption">
         /html
       </target>
 
     </list>
 
-    <list title="Sector" next="DOWN j" prev="UP k" fwd="n" back="p" 
-        type="dynamic">
+    <list title="Sector" next="DOWN j" prev="UP k" fwd="n"
+        back="p" type="dynamic">
 
       <item action="CALL:axsStock.readDropDownListItem">
         id("sectorselect")//option
       </item>
 
-      <target title="Focus on sector" trigger="listEntry" 
+      <target title="Focus on sector" trigger="listEntry"
           action="CALL:axsStock.focusOnDropDownList">
         id("sectorselect")
       </target>
 
-      <target title="Select sector" hotkey="ENTER" 
+      <target title="Select sector" hotkey="ENTER"
           action="CALL:axsStock.selectDropDownListOption">
         /html
       </target>
 
     </list>
 
-    <list title="Criteria list" next="DOWN j" prev="UP k" fwd="n" back="p" 
-        type="dynamic">
+    <list title="Criteria list" next="DOWN j" prev="UP k"
+        fwd="n" back="p" type="dynamic">
 
       <item action="CALL:axsStock.readCriteriaDesc">
         id("criteria_rows_tbody")/tr[not(.//b)]
       </item>
 
-      <target title="Load CNR and go to section" trigger="listEntry" 
+      <target title="Load CNR and go to section" trigger="listEntry"
           action="CALL:axsStock.refreshStockCriteriaCNRAndAnnounceList">
         id("criteria_rows")
       </target>
 
-      <target title="Delete criteria" hotkey="DEL" onEmpty="This element is 
-          not a criteria" action="CALL:axsStock.removeCriteria">
+      <target title="Delete criteria" hotkey="DEL"
+          onEmpty="This element is not a criteria"
+          action="CALL:axsStock.removeCriteria">
         .//img[not(@id) and @class="activelink"]
       </target>
 
-      <target title="Edit criteria" hotkey="ENTER" onEmpty="This element is 
-          not a criteria" action="CALL:axsStock.focusOnCriteriaRangeInput">
+      <target title="Edit criteria" hotkey="ENTER"
+          onEmpty="This element is not a criteria"
+          action="CALL:axsStock.focusOnCriteriaRangeInput">
         /html
       </target>
 
-      <target title="Explain criteria" hotkey="e" onEmpty="This element is 
-          not a criteria and has no explanation" 
+      <target title="Explain criteria" hotkey="e"
+          onEmpty="This element is not a criteria and has no explanation"
           action="CALL:axsStock.readCriteriaHelp">
         .//img[@id and @class="activelink"]/..
       </target>
 
     </list>
 
-    <list title="Popular criteria" next="DOWN j" prev="UP k" fwd="n" 
-        back="p" type="dynamic">
+    <list title="Popular criteria" next="DOWN j" prev="UP k"
+        fwd="n" back="p" type="dynamic">
 
       <item action="CALL:axsStock.readCriteriaExplanation">
         id("popular")//a
       </item>
 
-      <target title="Load CNR and go to section" trigger="listEntry" 
-          action="CALL:axsStock.readCurrentCrtieriaList">
+      <target title="Load CNR and go to section"
+          trigger="listEntry"
+          action="CALL:axsStock.readCurrentCriteriaList">
         //table[@class="searchtabs"]//tr[1]//a
       </target>
 
-      <target title="Add selected criteria" hotkey="ENTER" 
+      <target title="Add selected criteria" hotkey="ENTER"
           action="CALL:axsStock.addCriteria">
         id("criteria_button")/button
       </target>
 
     </list>
 
-    <list title="Price criteria" next="DOWN j" prev="UP k" fwd="n" 
-        back="p" type="dynamic">
+    <list title="Price criteria" next="DOWN j"
+        prev="UP k" fwd="n" back="p" type="dynamic">
 
       <item action="CALL:axsStock.readCriteriaExplanation">
         id("price")//a
       </item>
 
-      <target title="Load CNR and go to section" trigger="listEntry" 
-          action="CALL:axsStock.readCurrentCrtieriaList">
+      <target title="Load CNR and go to section"
+          trigger="listEntry"
+          action="CALL:axsStock.readCurrentCriteriaList">
         //table[@class="searchtabs"]//tr[2]//a
       </target>
 
-      <target title="Add selected criteria" hotkey="ENTER" 
+      <target title="Add selected criteria" hotkey="ENTER"
+ 
           action="CALL:axsStock.addCriteria">
         id("criteria_button")/button
       </target>
 
     </list>
 
-    <list title="Volume criteria" next="DOWN j" prev="UP k" fwd="n" 
-        back="p" type="dynamic">
+    <list title="Volume criteria" next="DOWN j" prev="UP k"
+        fwd="n" back="p" type="dynamic">
 
       <item action="CALL:axsStock.readCriteriaExplanation">
         id("volume")//a
       </item>
 
-      <target title="Load CNR and go to section" trigger="listEntry" 
-          action="CALL:axsStock.readCurrentCrtieriaList">
+      <target title="Load CNR and go to section"
+          trigger="listEntry"
+          action="CALL:axsStock.readCurrentCriteriaList">
         //table[@class="searchtabs"]//tr[3]//a
       </target>
 
-      <target title="Add selected criteria" hotkey="ENTER" 
+      <target title="Add selected criteria" hotkey="ENTER"
           action="CALL:axsStock.addCriteria">
         id("criteria_button")/button
       </target>
 
     </list>
 
-    <list title="Valuation criteria" next="DOWN j" prev="UP k" fwd="n" 
-        back="p" type="dynamic">
+    <list title="Valuation criteria" next="DOWN j"
+        prev="UP k" fwd="n" back="p" type="dynamic">
 
       <item action="CALL:axsStock.readCriteriaExplanation">
         id("valuation")//a
       </item>
 
-      <target title="Load CNR and go to section" trigger="listEntry" 
-          action="CALL:axsStock.readCurrentCrtieriaList">
+      <target title="Load CNR and go to section"
+          trigger="listEntry"
+          action="CALL:axsStock.readCurrentCriteriaList">
         //table[@class="searchtabs"]//tr[4]//a
       </target>
 
-      <target title="Add selected criteria" hotkey="ENTER" 
+      <target title="Add selected criteria" hotkey="ENTER"
           action="CALL:axsStock.addCriteria">
         id("criteria_button")/button
       </target>
 
     </list>
 
-    <list title="Dividend criteria" next="DOWN j" prev="UP k" fwd="n" 
-        back="p" type="dynamic">
+    <list title="Dividend criteria" next="DOWN j"
+        prev="UP k" fwd="n" back="p" type="dynamic">
 
       <item action="CALL:axsStock.readCriteriaExplanation">
         id("dividend")//a
       </item>
 
-      <target title="Load CNR and go to section" trigger="listEntry" 
-          action="CALL:axsStock.readCurrentCrtieriaList">
+      <target title="Load CNR and go to section"
+          trigger="listEntry"
+          action="CALL:axsStock.readCurrentCriteriaList">
         //table[@class="searchtabs"]//tr[5]//a
       </target>
 
-      <target title="Add selected criteria" hotkey="ENTER" 
+      <target title="Add selected criteria" hotkey="ENTER"
+ 
           action="CALL:axsStock.addCriteria">
         id("criteria_button")/button
       </target>
 
     </list>
 
-    <list title="Balance sheet criteria" next="DOWN j" prev="UP k" fwd="n" 
-        back="p" type="dynamic">
+    <list title="Balance sheet criteria" next="DOWN j"
+        prev="UP k" fwd="n" back="p" type="dynamic">
 
       <item action="CALL:axsStock.readCriteriaExplanation">
         id("balancesheetratios")//a
       </item>
 
-      <target title="Load CNR and go to section" trigger="listEntry" 
-          action="CALL:axsStock.readCurrentCrtieriaList">
+      <target title="Load CNR and go to section"
+          trigger="listEntry"
+          action="CALL:axsStock.readCurrentCriteriaList">
         //table[@class="searchtabs"]//tr[6]//a
       </target>
 
-      <target title="Add selected criteria" hotkey="ENTER" 
+      <target title="Add selected criteria" hotkey="ENTER"
           action="CALL:axsStock.addCriteria">
         id("criteria_button")/button
       </target>
 
     </list>
 
-    <list title="Stock metrics criteria" next="DOWN j" prev="UP k" fwd="n" 
-        back="p" type="dynamic">
+    <list title="Stock metrics criteria" next="DOWN j"
+        prev="UP k" fwd="n" back="p" type="dynamic">
 
       <item action="CALL:axsStock.readCriteriaExplanation">
         id("stockmetrics")//a
       </item>
 
-      <target title="Load CNR and go to section" trigger="listEntry" 
-          action="CALL:axsStock.readCurrentCrtieriaList">
+      <target title="Load CNR and go to section" trigger="listEntry"
+          action="CALL:axsStock.readCurrentCriteriaList">
         //table[@class="searchtabs"]//tr[7]//a
       </target>
 
-      <target title="Add selected criteria" hotkey="ENTER" 
+      <target title="Add selected criteria" hotkey="ENTER"
           action="CALL:axsStock.addCriteria">
         id("criteria_button")/button
       </target>
 
     </list>
 
-    <list title="Margins criteria" next="DOWN j" prev="UP k" fwd="n" 
-        back="p" type="dynamic">
+    <list title="Margins criteria" next="DOWN j" prev="UP k"
+        fwd="n" back="p" type="dynamic">
 
       <item action="CALL:axsStock.readCriteriaExplanation">
         id("margins")//a
       </item>
 
-      <target title="Load CNR and go to section" trigger="listEntry" 
-          action="CALL:axsStock.readCurrentCrtieriaList">
+      <target title="Load CNR and go to section"
+          trigger="listEntry"
+          action="CALL:axsStock.readCurrentCriteriaList">
         //table[@class="searchtabs"]//tr[8]//a
       </target>
 
-      <target title="Add selected criteria" hotkey="ENTER" 
-          action="CALL:axsStock.addCriteria">
+      <target title="Add selected criteria" hotkey="ENTER"
+           action="CALL:axsStock.addCriteria">
         id("criteria_button")/button
       </target>
 
     </list>
 
-    <list title="Growth criteria" next="DOWN j" prev="UP k" fwd="n" 
+    <list title="Growth criteria" next="DOWN j" prev="UP k" fwd="n"
         back="p" type="dynamic">
 
       <item action="CALL:axsStock.readCriteriaExplanation">
         id("growth")//a
       </item>
 
-      <target title="Load CNR and go to section" trigger="listEntry" 
-          action="CALL:axsStock.readCurrentCrtieriaList">
+      <target title="Load CNR and go to section"
+          trigger="listEntry"
+          action="CALL:axsStock.readCurrentCriteriaList">
         //table[@class="searchtabs"]//tr[9]//a
       </target>
 
-      <target title="Add selected criteria" hotkey="ENTER" 
+      <target title="Add selected criteria" hotkey="ENTER"
           action="CALL:axsStock.addCriteria">
         id("criteria_button")/button
       </target>

@@ -42,7 +42,8 @@ axsFinance.str = {
   MINUS_ABBR : '-',
   PRCNT_ABBR : '%',
   MILLION_ABBR : 'M',
-  BILLION_ABBR : 'B'
+  BILLION_ABBR : 'B',
+  GOOGLE_FINANCE : 'Google Finance'
 };
 
 /**
@@ -108,7 +109,7 @@ axsFinance.recQuotesDescArray = new Array('',
  * Template for presenting the sector status bar of the market summary section.
  * @type {string}
  */
-axsFinance.SECT_SUM_TMPL = '. {0} percent of this sector is ' +
+axsFinance.SECT_SUM_TMPL = '{0} percent of this sector is ' +
     'down. {1} percent of all the companies are down by more than {2} ' +
     'percent. {3} percent of this sector is up. {4} percent  of all the ' +
     'companies are up by more than {5} percent.';
@@ -138,6 +139,12 @@ axsFinance.axsLensObj = null;
 axsFinance.magSize = 2.5;
 
 /**
+ * The AxsJAX sound object used for palying earcons.
+ * @type {AxsSound?}
+ */
+axsFinance.axsSound = null;
+
+/**
  * Flag indicating if the page is initialized
  * @type {boolean}
  */
@@ -161,179 +168,231 @@ axsFinance.init = function(){
   searchBox.addEventListener('focus', axsFinance.searchBoxKeyHandler, false);
 
   var cnrString = '<cnr next="RIGHT l" prev="LEFT h">' +
-                  '  <target title="Go to link" hotkey="ENTER" onEmpty="No li' +
-                  'nk available">' +
+                  '' +
+                  '  <target title="Go to link" hotkey="ENTER"' +
+                  '      onEmpty="No link available">' +
                   '    ./descendant-or-self::a' +
                   '  </target>' +
+                  '' +
                   '  <target title="Stock screener" hotkey="s">' +
                   '    //a[@href="/finance/stockscreener"]' +
                   '  </target>' +
-                  '  <list title="Market summary" next="DOWN j" prev="UP k" f' +
-                  'wd="n" back="p">' +
-                  '    <item index="0" count="1" ' +
-                  '        action="CALL:axsFinance.handleMarketSummaryDescrip' +
-                  'tion">' +
-                  '      id("home-main")//div[contains(@class, "news major")]' +
-                  '//a' +
+                  '' +
+                  '  <list title="Market summary" next="DOWN j" prev="UP k"' +
+                  '      fwd="n" back="p">' +
+                  '' +
+                  '    <item index="0" count="1"' +
+                  '        action="CALL:axsFinance.handleMarketSummaryDescri' +
+                  'ption">' +
+                  '      id("home-main")//div[contains(@class, "news major")' +
+                  ']//a' +
                   '    </item>' +
+                  '' +
                   '    <item index="1">' +
-                  '      id("home-main")//div[contains(@class, "news major")]' +
-                  '//a' +
+                  '      id("home-main")//div[contains(@class, "news major")' +
+                  ']//a' +
                   '    </item>' +
+                  '' +
                   '  </list>' +
-                  '  <list title="Market summary indices and currencies" next' +
-                  '="DOWN j" ' +
-                  '      prev="UP k" fwd="n" back="p">' +
-                  '    <item action="CALL:axsFinance.readTableRowIndicesAndCu' +
-                  'rrencies">' +
+                  '' +
+                  '  <list title="Market summary indices and currencies"' +
+                  '      next="DOWN j" prev="UP k" fwd="n" back="p">' +
+                  '' +
+                  '    <item action="CALL:axsFinance.readTableRowIndicesAndC' +
+                  'urrencies">' +
                   '       id("sfe-mktsumm")//tr[*/*]' +
                   '    </item>' +
+                  '' +
                   '  </list>' +
-                  '  <list title="Market top stories" next="DOWN j" prev="UP ' +
-                  'k" fwd="n" ' +
-                  '      back="p">' +
-                  '    <item action="CALL:axsFinance.readMktTopStAndPortfRelT' +
-                  'opStDesc">' +
-                  '      id("market-news")//span[*]/a[not(@class)] | id("mark' +
-                  'et-news")/div/div[*]/a' +
+                  '' +
+                  '  <list title="Market top stories" next="DOWN j" prev="UP' +
+                  ' k"' +
+                  '      fwd="n" back="p">' +
+                  '' +
+                  '    <item action="CALL:axsFinance.readMktTopStAndPortfRel' +
+                  'TopStDesc">' +
+                  '      id("market-news")//span[*]/a[not(@class)] |' +
+                  '          id("market-news")/div/div[*]/a' +
                   '    </item>' +
-                  '    <target title="Related articles"  hotkey="r" onEmpty="' +
-                  'No related ' +
-                  '        articles available.">' +
-                  '      ./../following-sibling::div[@class="g-section ' +
-                  '          g-tpl-65 sfe-break-bottom" or @class="byline sfe' +
-                  '-break-bottom"]' +
+                  '' +
+                  '    <target title="Related articles"  hotkey="r"' +
+                  '        onEmpty="No related articles available.">' +
+                  '      ./../following-sibling::div[@class="g-section' +
+                  '          g-tpl-65 sfe-break-bottom" or' +
+                  '          @class="byline sfe-break-bottom"]' +
                   '          [1]/descendant::a[@class="more-rel"]' +
                   '    </target>' +
-                  '    <target title = "Market top stories" trigger="listEntr' +
-                  'y">' +
+                  '' +
+                  '    <target title = "Market top stories" trigger="listEnt' +
+                  'ry">' +
                   '      id("market-news-title")' +
                   '    </target>' +
+                  '' +
                   '  </list>' +
-                  '  <list title="Portfolio related top stories" next="DOWN j' +
-                  '" prev="UP k" ' +
-                  '      fwd="n" back="p">' +
-                  '    <item action="CALL:axsFinance.readMktTopStAndPortfRelT' +
-                  'opStDesc">' +
+                  '' +
+                  '  <list title="Portfolio related top stories"' +
+                  '      next="DOWN j" prev="UP k" fwd="n" back="p">' +
+                  '' +
+                  '    <item action="CALL:axsFinance.readMktTopStAndPortfRel' +
+                  'TopStDesc">' +
                   '      id("portfolio-news")//span[*]/a[not(@class)]' +
                   '    </item>' +
-                  '    <target title="Related articles"  hotkey="r" onEmpty="' +
-                  'No related ' +
-                  '        articles available.">' +
-                  '      ./../following-sibling::div[@class="sfe-break-bottom' +
-                  '" or ' +
-                  '          @class="byline sfe-break-bottom"][1]/descendant:' +
-                  ':a[@class="more-rel"]' +
+                  '' +
+                  '    <target title="Related articles"  hotkey="r"' +
+                  '        onEmpty="No related articles available.">' +
+                  '      ./../following-sibling::div[@class="sfe-break-botto' +
+                  'm" or' +
+                  '          @class="byline sfe-break-bottom"][1]/' +
+                  '          descendant::a[@class="more-rel"]' +
                   '    </target>' +
-                  '    <target title = "Portfolio related top stories" trigge' +
-                  'r="listEntry">' +
+                  '' +
+                  '    <target title = "Portfolio related top stories"' +
+                  '        trigger="listEntry">' +
                   '      id("portfolio-news-title")' +
                   '    </target>' +
+                  '' +
                   '  </list>' +
-                  '  <list title="Video top stories" next="DOWN j" prev="UP k' +
-                  '" fwd="n" ' +
+                  '' +
+                  '  <list title="Video top stories" next="DOWN j" prev="UP ' +
+                  'k" fwd="n"' +
                   '      back="p" type="dynamic">' +
+                  '' +
                   '    <item action="CALL:axsFinance.readVideoDesc">' +
                   '      id("video-news")//a' +
                   '    </item>' +
-                  '    <target title = "Video top stories" trigger="listEntry' +
-                  '">' +
+                  '' +
+                  '    <target title = "Video top stories" trigger="listEntr' +
+                  'y">' +
                   '      id("video-news-title")' +
                   '    </target>' +
-                  '  </list>' +
-                  '  <list title="Recent quotes" next="DOWN j" prev="UP k" fw' +
-                  'd="n" back="p">' +
                   '' +
-                  '    <item action="CALL:axsFinance.readTableRowRecentQuotes' +
-                  'Desc">' +
-                  '      id("home-main")//table[@class="quotes"]//td[@class="' +
-                  'symbol"]/..[not(@class="colHeader")]' +
-                  '    </item>' +
                   '  </list>' +
-                  '  <list title="Sector summary" next="DOWN j" prev="UP k" f' +
-                  'wd="n" back="p">' +
-                  '    <item action="CALL:axsFinance.readTableRowSectorSummar' +
-                  'yDesc">' +
-                  '       id("secperf")/table/tbody/tr[not(@class="colHeader"' +
-                  ')]' +
-                  '    </item>' +
-                  '  </list>' +
-                  '  <list title="Popular trends" next="DOWN j" prev="UP k" f' +
-                  'wd="n" back="p">' +
                   '' +
-                  '    <item action="CALL:axsFinance.readTableRowTrendsNoVolu' +
-                  'meDesc">' +
+                  '  <list title="Recent quotes" next="DOWN j" prev="UP k"' +
+                  '      fwd="n" back="p" type="dynamic">' +
+                  '' +
+                  '    <item action="CALL:axsFinance.readTableRowRecentQuote' +
+                  'sDesc">' +
+                  '      id("home-main")//table[@class="quotes"]//' +
+                  '      td[@class="symbol"]/..[not(@class="colHeader")]' +
+                  '    </item>' +
+                  '' +
+                  '  </list>' +
+                  '' +
+                  '  <list title="Sector summary" next="DOWN j" prev="UP k"' +
+                  '      fwd="n" back="p">' +
+                  '' +
+                  '    <item action="CALL:axsFinance.readTableRowSectorSumma' +
+                  'ryDesc">' +
+                  '       id("secperf")/table/tbody/tr[not(@class="colHeader' +
+                  '")]' +
+                  '    </item>' +
+                  '' +
+                  '  </list>' +
+                  '' +
+                  '  <list title="Popular trends" next="DOWN j" prev="UP k"' +
+                  '      fwd="n" back="p">' +
+                  '' +
+                  '    <item action="CALL:axsFinance.readTableRowTrendsNoVol' +
+                  'umeDesc">' +
                   '       id("tm_zeitgeist")//td[@class="symbol"]/..' +
                   '    </item>' +
+                  '' +
                   '    <target title = "Popular trends" trigger="listEntry">' +
                   '      id("l_tm_zeitgeist")' +
                   '    </target>' +
+                  '' +
                   '  </list>' +
-                  '  <list title="Price trends gainers" next="DOWN j" prev="U' +
-                  'P k" fwd="n" ' +
-                  '      back="p">' +
-                  '    <item action="CALL:axsFinance.readTableRowTrendsNoVolu' +
-                  'meDesc">' +
+                  '' +
+                  '  <list title="Price trends gainers" next="DOWN j"' +
+                  '      prev="UP k" fwd="n" back="p">' +
+                  '' +
+                  '    <item action="CALL:axsFinance.readTableRowTrendsNoVol' +
+                  'umeDesc">' +
                   '      id("tm_price_0")//td[@class="change chg"]/..' +
                   '    </item>' +
-                  '    <target title = "Price trends gainers" trigger="listEn' +
+                  '' +
+                  '    <target title = "Price trends gainers" trigger="listE' +
+                  'ntry">' +
+                  '      id("l_tm_price")' +
+                  '    </target>' +
+                  '' +
+                  '  </list>' +
+                  '' +
+                  '  <list title="Price trends losers" next="DOWN j" prev="U' +
+                  'P k"' +
+                  '      fwd="n" back="p">' +
+                  '' +
+                  '    <item action="CALL:axsFinance.readTableRowTrendsNoVol' +
+                  'umeDesc">' +
+                  '      id("tm_price_0")//td[@class="change chr"]/..' +
+                  '    </item>' +
+                  '' +
+                  '    <target title = "Price trends losers" trigger="listEn' +
                   'try">' +
                   '      id("l_tm_price")' +
                   '    </target>' +
+                  '' +
                   '  </list>' +
-                  '  <list title="Price trends losers" next="DOWN j" prev="UP' +
-                  ' k" fwd="n" ' +
-                  '      back="p">' +
-                  '    <item action="CALL:axsFinance.readTableRowTrendsNoVolu' +
-                  'meDesc">' +
-                  '      id("tm_price_0")//td[@class="change chr"]/..' +
-                  '    </item>' +
-                  '    <target title = "Price trends losers" trigger="listEnt' +
-                  'ry">' +
-                  '      id("l_tm_price")' +
-                  '    </target>' +
-                  '  </list>' +
-                  '  <list title="Market capitalization trends gainers" next=' +
-                  '"DOWN j" ' +
-                  '      prev="UP k" fwd="n" back="p">' +
-                  '    <item action="CALL:axsFinance.readTableRowTrendsNoVolu' +
-                  'meDesc">' +
+                  '' +
+                  '  <list title="Market capitalization trends gainers"' +
+                  '      next="DOWN j" prev="UP k" fwd="n" back="p">' +
+                  '' +
+                  '    <item action="CALL:axsFinance.readTableRowTrendsNoVol' +
+                  'umeDesc">' +
                   '     id("tm_mcap_0")//td[@class="change chg"]/..' +
                   '    </item>' +
-                  '    <target title = "Market capitalization trends gainers"' +
-                  ' trigger="listEntry">' +
-                  '      id("l_tm_mcap")' +
-                  '    </target>' +
-                  '  </list>' +
-                  '  <list title="Market capitalization trends losers" next="' +
-                  'DOWN j" ' +
-                  '      prev="UP k" fwd="n" back="p">' +
-                  '    <item action="CALL:axsFinance.readTableRowTrendsNoVolu' +
-                  'meDesc">' +
-                  '     id("tm_mcap_0")//td[@class="change chr"]/..' +
-                  '    </item>' +
-                  '    <target title = "Market capitalization trends losers" ' +
+                  '' +
+                  '    <target title = "Market capitalization trends gainers' +
+                  '"' +
                   '        trigger="listEntry">' +
                   '      id("l_tm_mcap")' +
                   '    </target>' +
+                  '' +
                   '  </list>' +
-                  '  <list title="Volume trends" next="DOWN j" prev="UP k" fw' +
-                  'd="n" back="p">' +
-                  '    <item action="CALL:axsFinance.readTableRowTrendsVolume' +
-                  'Desc">' +
-                  '      id("tm_volume_0")//td[@class="name"]/.. | id("tm_vol' +
-                  'ume_0")/div' +
+                  '' +
+                  '  <list title="Market capitalization trends losers"' +
+                  '      next="DOWN j" prev="UP k" fwd="n" back="p">' +
+                  '' +
+                  '    <item action="CALL:axsFinance.readTableRowTrendsNoVol' +
+                  'umeDesc">' +
+                  '     id("tm_mcap_0")//td[@class="change chr"]/..' +
                   '    </item>' +
+                  '' +
+                  '    <target title = "Market capitalization trends losers"' +
+                  ' ' +
+                  '        trigger="listEntry">' +
+                  '      id("l_tm_mcap")' +
+                  '    </target>' +
+                  '' +
+                  '  </list>' +
+                  '' +
+                  '  <list title="Volume trends" next="DOWN j" prev="UP k"' +
+                  '      fwd="n" back="p">' +
+                  '' +
+                  '    <item action="CALL:axsFinance.readTableRowTrendsVolum' +
+                  'eDesc">' +
+                  '      id("tm_volume_0")//td[@class="name"]/.. |' +
+                  '          id("tm_volume_0")/div' +
+                  '    </item>' +
+                  '' +
                   '    <target title = "Volume trends" trigger="listEntry">' +
                   '      id("l_tm_volume")' +
                   '    </target>' +
+                  '' +
                   '  </list>' +
+                  '' +
                   '</cnr>';
 
   axsFinance.axsNavObj.navInit(cnrString, null);
   axsFinance.axsLensObj = new AxsLens(axsFinance.axsJAXObj);
   axsFinance.axsNavObj.setLens(axsFinance.axsLensObj);
+  axsFinance.axsSound = new AxsSound(true);
+  axsFinance.axsNavObj.setSound(axsFinance.axsSound);
   axsFinance.axsLensObj.setMagnification(axsFinance.magSize);
+
+  //Blur the element selected by default
+  document.getElementById('searchbox').blur();
 };
 
 /**
@@ -347,6 +406,7 @@ axsFinance.DOMSubtreeModifiedHandler = function(evt){
   var newVal = evt.newValue;
   var oldVal = evt.prevValue;
   var target = evt.target;
+
   if (target.id == 'ac-list'){
     for (var i = 0, child; child = target.childNodes[i]; i++){
       if (child.className == 'selected'){
@@ -354,6 +414,11 @@ axsFinance.DOMSubtreeModifiedHandler = function(evt){
         return;
       }
     }
+  } else if (target.id == 'video-news') {
+    window.setTimeout(function() {
+                        axsFinance.axsNavObj.refreshList('Video top stories');
+                      },
+                      0);
   }
 };
 
@@ -500,17 +565,17 @@ axsFinance.readTableRowRecentQuotesDesc = function(item) {
   var columns = item.elem.childNodes;
 
   var company = columns[1].textContent;
-  var price = axsFinance.parseSpecialChars(columns[5].textContent);
-  var absoluteChange = columns[7].childNodes[1].textContent;
+  var price = axsFinance.parseSpecialChars(columns[2].textContent);
+  var absoluteChange = columns[3].childNodes[0].textContent;
   absoluteChange = axsFinance.parseSpecialChars(absoluteChange);
 
-  var relativeChange = columns[7].childNodes[3].textContent;
+  var relativeChange = columns[3].childNodes[2].textContent;
   //due to inconsistency in http://finance.google.com/finance
   if (relativeChange.charAt(1) != '-') {
     relativeChange = '+' + relativeChange.substring(1);
   }
   relativeChange = axsFinance.parseSpecialChars(relativeChange);
-  var marketCap = axsFinance.parseSpecialChars(columns[9].textContent);
+  var marketCap = axsFinance.parseSpecialChars(columns[4].textContent);
 
   var textContents = new Array(company,
                                price,
@@ -520,6 +585,7 @@ axsFinance.readTableRowRecentQuotesDesc = function(item) {
 
   var rowText = axsFinance.buildTableRowText(textContents,
                                           axsFinance.recQuotesDescArray);
+
   axsFinance.speakAndGo(item.elem, rowText);
 };
 
@@ -575,7 +641,7 @@ axsFinance.readTableRowSectorSummaryDesc = function(item) {
   var statusBarDesc = axsFinance.populateTemplate(axsFinance.SECT_SUM_TMPL,
                                                 percentParameters);
 
-  var rowText = sector + ' ' + absoluteChange + ' ' + statusBarDesc;
+  var rowText = sector + ' ' + absoluteChange + '. ' + statusBarDesc;
   axsFinance.speakAndGo(item.elem, rowText);
 };
 
@@ -780,4 +846,5 @@ axsFinance.charCodeMap = {
     }
 };
 
-axsFinance.init();
+//Run the initialization routine of the script
+window.addEventListener('load', axsFinance.init, true);
