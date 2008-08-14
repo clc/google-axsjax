@@ -196,8 +196,10 @@ AxsJAX.prototype.speakText = function(textString){
   var doc = window.content.document;
   var audioNode = doc.createElement('span');
   audioNode.id = 'AxsJAX_audioNode';
-  audioNode.style.visibility = 'hidden';
-  this.setAttributeOf(audioNode, 'live', 'rude');
+  this.setAttributeOf(audioNode, 'role', 'alert');
+  audioNode.style.position = 'absolute'; 
+  audioNode.style.left = '-1000em';
+
   var oldAudioNode = doc.getElementById(audioNode.id);
   if (oldAudioNode){
     doc.body.removeChild(oldAudioNode);
