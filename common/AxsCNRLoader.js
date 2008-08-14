@@ -22,13 +22,19 @@
  
  
 function pickCNR(){
+  var baseURL = 'http://google-axsjax.googlecode.com/svn/trunk/';
+
   // Don't try to run a CNR if there is already 
   // an AxsJAX script for the page.
-  if (typeof(AxsJAX) != 'undefined'){
-    return;
+  var scriptArray = document.getElementsByTagName('script');
+  for (var i = 0, script; script = scriptArray[i]; i++){
+    if ((script.src.indexOf(baseURL) === 0) &&
+        (script.src.indexOf('AxsCNRLoader.js') == -1) &&
+		(script.src.indexOf('axsScriptChooser') == -1){
+      return;
+    }
   }
-  
-  var baseURL = 'http://google-axsjax.googlecode.com/svn/trunk/';
+
   var theLib = document.createElement('script');
   theLib.type = 'text/javascript';
   theLib.src = baseURL + 'common/AxsJAX.js';   
