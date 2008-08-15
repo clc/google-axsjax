@@ -1,0 +1,66 @@
+#    -*- mode: org -*-
+* Where are the AxsJAX Downloads?
+
+** Introduction
+
+If you're thinking, "AxsJAX sounds great, but where are the downloads?", 
+then you are reading the correct file.
+
+AxsJAX is served entirely on the web cloud; aside from a small loader file, 
+there is nothing for you to install. All of the enhancements are fetched at 
+runtime for you; this means that as sites get AxsJAXed and as existing 
+scripts get improved, you get the benefits immediately without dealing with 
+the hassle of updates.
+
+** For end users
+
+To use the AxsJAX enhancement scripts, you will need an ARIA-aware browser + 
+AT combination.
+
+If you are using [[http://getfirefox.com][Firefox 3]] + a screen reader that 
+will work with ARIA, you need to install 
+[[https://addons.mozilla.org/en-US/firefox/addon/748][Greasemonkey] first. 
+After installing Greasemonkey, install 
+[[http://google-axsjax.googlecode.com/svn/trunk/googleScriptLoader.user.js][the AxsJAX loader script.]]
+Note that if your assistive technology has modes, you will have to be in the 
+forms mode of your screen reader (aka, "turn off the PC cursor") for AJAX web 
+applications that make heavy use of the keyboard to work properly since you 
+need to make sure that your keystrokes are going to the web application and
+not being swallowed by your screen reader. As an AJAX powered framework that is
+driven by the keyboard, AxsJAX also needs you to be in forms mode to work properly.
+
+If you are using [[http://getfirefox.com][Firefox 3]] + 
+[[http://firevox.clcworld.net][Fire Vox]], then you just need to make sure 
+you have "Use site specific enhancements" checked. You do not need to install 
+anything else as Fire Vox will automatically load AxsJAX scripts for you.
+
+By convention, AxsJAX enhancements use the following keys:
+
+  - ? (question mark) : Speaks the available keys and actions for the current web page  
+  - Esc : Leave the currently focused text field. This allows you to send keystrokes so that you can interact with the AxsJAX enhancement on the page instead of typing characters into the text field.  
+  - j or down arrow : Go to the next item in the current category  
+  - k or up arrow : Go to the previous item in the current category  
+  - l or right arrow : Go to the next category of items  
+  - h or left arrow : Go to the previous category of items  
+  - Enter : Perform the most obvious action for the current item that you are on. For example, if you are currently on a search result, then pressing Enter will follow the link for that result.
+  
+
+These keys are only available if there is an AxsJAX enhancement for the site 
+that you are on. Also, while we try to stick with these conventions as much as 
+possible, there may be times where we deviate slightly. The best way of 
+discovering the keys is to hit the "?" (question mark) to hear the available 
+keys and actions for the current web page.
+    
+** For developers
+
+[[http://google-axsjax.googlecode.com/svn/trunk/docs/tutorial/tutorial.html][Please see the tutorial for Writing AxsJAX Scripts.]]
+
+** For everyone
+
+[[http://google-axsjax.googlecode.com/svn/trunk/docs/faq.html][Please read the AxsJAX FAQ.]]
+
+#+TITLE:     Where are the Downloads for AxsJAX?
+#+AUTHOR:    T.V. Raman, Charles L. Chen
+#+EMAIL:     raman@google.com, clchen@google.com
+#+LANGUAGE:  en
+#+OPTIONS:   H:3 num:t toc:t \n:nil @:t ::t |:t ^:t f:t *:t TeX:t LaTeX:nil skip:t p:nil
