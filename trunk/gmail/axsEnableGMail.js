@@ -206,7 +206,17 @@ axsGMail.chat_needToSpeak = false;
  * @param {Object} gmObj The GMonkey object for the page.
  */
 axsGMail.init = function(gmObj){
-  axsGMail.axsJAXObj = new AxsJAX(true);
+  var mainDoc;
+  try {
+    mainDoc = window.content.document;
+    axsGMail.axsJAXObj = new AxsJAX(true);
+  } catch (e) {
+    alert('You are using a browser that does not fully support the features ' +
+          'needed by the AxsJAX experiment. It\'s functionality will be ' +
+          'available the next time you access your account from a supported ' +
+          'browser.');
+    return;
+  }
   axsGMail.gMonkeyObj = gmObj;
 
   axsGMail.TL_currentItem = null;
@@ -218,7 +228,6 @@ axsGMail.init = function(gmObj){
 
 
   //Add event listeners
-  var mainDoc = window.content.document;
   mainDoc.addEventListener('keypress', axsGMail.extraKeyboardNavHandler,
                              true);
   mainDoc.addEventListener('DOMNodeInserted',
