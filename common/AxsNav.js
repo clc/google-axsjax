@@ -37,6 +37,7 @@ var AxsNav = function(axsJAXObj){
   this.keyCodeMaps = new Array();
   this.axs_ = axsJAXObj;
   this.lens_ = null;
+  this.pk_ = null;
   this.snd_ = null;
   this.LIST_SND = 'list';
   this.ITEM_SND = 'item';
@@ -49,12 +50,22 @@ var AxsNav = function(axsJAXObj){
  * @type {Object}
  */
 AxsNav.str = {
-  NEXTLIST : ', next list. ',
-  PREVLIST : ', previous list. ',
-  GOFORWARD : ', go forward. ',
-  GOBACKWARDS : ', go backwards. ',
-  CYCLENEXT : ', cycle next. ',
-  CYCLEPREV : ', cycle previous. '
+  NEXT_LIST : 'next list',
+  PREV_LIST : 'previous list',
+  GO_FORWARD : 'go forward',
+  GO_BACKWARDS : 'go backwards',
+  CYCLE_NEXT : 'cycle next',
+  CYCLE_PREV : 'cycle previous',
+  SELECT_ACTION : 'Select available action',
+  NO_AVAILABLE_ACTION : 'No available actions',
+  PGUP : 'Page up',
+  PGDOWN : 'Page down',
+  ENTER : 'Enter',
+  DEL : 'Delete',
+  UP : 'Up',
+  DOWN : 'Down',
+  LEFT : 'Left',
+  RIGHT : 'Right'
 };
 
 /**
@@ -102,6 +113,31 @@ AxsNav.prototype.makeItemsArray = function(listNode){
     catch(err){ }
   }
   return itemsArray;
+};
+
+/**
+ * Set the PowerKey object used for displaying the valid actions in a
+ * given context. The PowerKey auto completion input element is invoked
+ * via a shortcutKey.
+ * @param {PowerKey} powerKeyObj A PowerKey object
+ * @param {string} shortcutKey A key for invoking PowerKey
+ */
+AxsNav.prototype.setPowerKey = function(powerKeyObj, shortcutKey) {
+  if (shortcutKey) {
+    this.pk_ = powerKeyObj;
+    //Initialize the PowerKey object if it has not been initialized yet
+    if (this.pk_.cmpTextElement === null) {
+      this.defaultInitPowerKeyObj();
+    }
+    var self = this;
+    var keyArray = new Array(shortcutKey);
+    this.assignKeysToMethod(keyArray,
+                            this.topCharCodeMap,
+                            this.topKeyCodeMap,
+                            function() {
+                              self.showAvailableActionsSelector();
+                            });
+  }
 };
 
 /**
@@ -446,8 +482,7 @@ AxsNav.prototype.assignKeysToMethod = function(keyArray,
                                                charMap, 
                                                keyMap, 
                                                method){
-  for (var i = 0; i < keyArray.length; i++){
-    var key = keyArray[i];
+  for (var i = 0, key; key = keyArray[i]; i++){
     if (key == 'LEFT'){
       keyMap[37] = method;
     } else if (key == 'UP'){
@@ -717,18 +752,37 @@ AxsNav.prototype.setUpNavKeys = function(cnrDOM, emptyLists){
                      //If Ctrl is held, it must be for some AT.
                      if (evt.ctrlKey) return true;
                      if (self.axs_.inputFocused) return true;
-                     var idx = self.navListIdx;
-                       if (idx < self.keyCodeMaps.length){
-                       var command = self.keyCodeMaps[idx][evt.keyCode] ||
-                                     self.charCodeMaps[idx][evt.charCode];
-                       if (command) return command();
+
+                     var command = self.getFunctionForKey(evt.keyCode,
+                                                          evt.charCode);
+                     if (command) {
+                       return command();
                      }
-                     command = self.topKeyCodeMap[evt.keyCode] ||
-                               self.topCharCodeMap[evt.charCode];
-                     if (command) return command();
                    };
 
   document.addEventListener('keypress', this.keyHandler, true);
+};
+
+/**
+ * Returns a function mapped to a key. 
+ * @param {number} keyCode A key code.
+ * @param {munber} charCode A char code.
+ * @return {Function?} A function mapped to the keyCode or charCode,
+ * undefined if the mapping does not exist.
+ */
+AxsNav.prototype.getFunctionForKey = function(keyCode, charCode) {
+  var command = null;
+  var idx = this.navListIdx;
+  if (idx < this.keyCodeMaps.length) {
+    command = this.keyCodeMaps[idx][keyCode] ||
+              this.charCodeMaps[idx][charCode] ||
+              null;
+  }
+  if (command === null) {
+    command = this.topKeyCodeMap[keyCode] ||
+              this.topCharCodeMap[charCode];
+  }
+  return command;
 };
 
 /**
@@ -859,60 +913,68 @@ AxsNav.prototype.navInit = function(cnrString, opt_customNavMethod){
  *
  * @return {string} The help string for globally available keys.
  */
-AxsNav.prototype.globalHelpString = function(){
+AxsNav.prototype.globalHelpString = function() {
+  var globalActions = this.getGlobalActions();
+
   var helpStr = '';
-  if (this.nextListKeys !== ''){
-    helpStr = helpStr + this.nextListKeys + AxsNav.str.NEXTLIST;
+  for (var i = 0, action; action = globalActions[i]; i++) {
+    helpStr = helpStr + action.keys + ', ' + action.title + '. ';
   }
-  if (this.prevListKeys !== ''){
-    helpStr = helpStr + this.prevListKeys + AxsNav.str.PREVLIST;
-  }
-  var i = 0;
-  var target = null;
-  for (i = 0, target; target = this.targetsArray[i]; i++){
-    if (target.hotkeyStr !== ''){
-      helpStr = helpStr + target.hotkeyStr + ', ' + target.title + '. ';
-    }
-  }
-  var list = null;
-  for (i = 0, list; list = this.navArray[i]; i++){
-    if (list.hotKeys !== ''){
-      helpStr = helpStr + list.hotKeys + ', ' + list.title + '. ';
-    }
-  }
+
+  helpStr = helpStr + this.nextListKeys + ', ' + AxsNav.str.NEXT_LIST;
+  helpStr = helpStr + this.prevListKeys + ', ' + AxsNav.str.PREV_LIST;
+
+  // Make the keys sound nicer when spoken
+  helpStr = helpStr.replace('PGUP', AxsNav.str.PGUP);
+  helpStr = helpStr.replace('PGDOWN', AxsNav.str.PGDOWN);
+  helpStr = helpStr.replace('ENTER', AxsNav.str.Enter);
+  helpStr = helpStr.replace('DEL', AxsNav.str.Delete);
+  helpStr = helpStr.replace('UP', AxsNav.str.UP);
+  helpStr = helpStr.replace('DOWN', AxsNav.str.DOWN);
+  helpStr = helpStr.replace('LEFT', AxsNav.str.LEFT);
+  helpStr = helpStr.replace('RIGHT', AxsNav.str.RIGHT);
+
   return helpStr;
 };
 
 /**
  * Generates a help string for locally available keys.
- * Keys which are global are NOT included.
- *
  * @return {string} The help string for locally available keys.
  */
-AxsNav.prototype.localHelpString = function(){
-  var currentList = this.navArray[this.navListIdx];
+AxsNav.prototype.localHelpString = function() {
+  var localActions = this.getLocalActions();
+
   var helpStr = '';
-  if (currentList.fwdKeys !== ''){
-    helpStr = helpStr + currentList.fwdKeys + AxsNav.str.GOFORWARD;
+  for (var i = 0, action; action = localActions[i]; i++) {
+    helpStr = helpStr + action.keys + ', ' + action.title + '. ';
   }
-  if (currentList.backKeys !== ''){
-    helpStr = helpStr + currentList.backKeys + AxsNav.str.GOBACKWARDS;
+
+  var list = this.currentList();
+  if (list.nextKeys !== '') {
+    helpStr = helpStr + list.nextKeys + ', ' + AxsNav.str.CYCLE_NEXT + '. ';
   }
-  if (currentList.nextKeys !== ''){
-    helpStr = helpStr + currentList.nextKeys + AxsNav.str.CYCLENEXT;
+  if (list.prevKeys !== '') {
+    helpStr = helpStr + list.prevKeys + ', ' + AxsNav.str.CYCLE_PREV + '. ';
   }
-  if (currentList.prevKeys !== ''){
-    helpStr = helpStr + currentList.prevKeys + AxsNav.str.CYCLEPREV;
+  if (list.fwdKeys !== '') {
+    helpStr = helpStr + list.fwdKeys + ', ' + AxsNav.str.GO_FORWARD + '. ';
   }
-  for (var i = 0, target; target = currentList.targets[i]; i++){
-    if (target.hotkeyStr !== ''){
-      helpStr = helpStr + target.hotkeyStr + ', ' + target.title + '. ';
-    }
+  if (list.backKeys !== '') {
+    helpStr = helpStr + list.backKeys + ', ' + AxsNav.str.GO_BACKWARDS + '. ';
   }
+
+  // Make the keys sound nicer when spoken
+  helpStr = helpStr.replace('PGUP', AxsNav.str.PGUP);
+  helpStr = helpStr.replace('PGDOWN', AxsNav.str.PGDOWN);
+  helpStr = helpStr.replace('ENTER', AxsNav.str.Enter);
+  helpStr = helpStr.replace('DEL', AxsNav.str.Delete);
+  helpStr = helpStr.replace('UP', AxsNav.str.UP);
+  helpStr = helpStr.replace('DOWN', AxsNav.str.DOWN);
+  helpStr = helpStr.replace('LEFT', AxsNav.str.LEFT);
+  helpStr = helpStr.replace('RIGHT', AxsNav.str.RIGHT);
+
   return helpStr;
 };
-
-
 
 /**
  * This function sets the lens to be used when going to an item's element.
@@ -983,4 +1045,180 @@ AxsNav.prototype.enableNavKeys = function() {
     document.removeEventListener('keypress', this.keyHandler, true);
     document.addEventListener('keypress', this.keyHandler, true);
   }
+};
+
+/**
+ * Shows a PowerKey input box for selecting an available action. 
+ * Available actions are those that have nodes when their xPaths
+ * are evaluated when this function is called.
+ */
+AxsNav.prototype.showAvailableActionsSelector = function() {
+  //Fail silently if the PowerKey object is not set
+  if (this.pk_ === null) {
+    return;
+  }
+
+  var globalActions = this.getGlobalActions();
+  var localActions = this.getLocalActions();
+
+  if ((globalActions.length + localActions.length) === 0){
+    this.axs_.speakTextViaNode(AxsNav.str.NO_AVAILABLE_ACTION);
+    return;
+  }
+
+  var actionTitles = new Array();
+  var i = 0;
+  var action = '';
+  for (i = 0; action = localActions[i]; i++){
+    actionTitles.push(action.title);
+  }
+  for (i = 0; action = globalActions[i]; i++){
+    actionTitles.push(action.title);
+  }
+
+  this.pk_.setCompletionList(actionTitles);
+  this.pk_.updateCompletionField('visible', true, 40, 20);
+};
+
+/**
+ * Gets the global available actions in the current context.
+ * Each action has a "title" member and a "keys" member.
+ * @return {Array} An array of the globally available actions.
+ */
+AxsNav.prototype.getGlobalActions = function() {
+  var globalActions = new Array();
+
+  var action;
+
+  //global list actions
+  for (var i = 0, list; list = this.navArray[i]; i++) {
+    if (list.hotKeys !== '') {
+      action = new Object();
+      action.title = list.title;
+      action.keys = list.hotKeys;
+      globalActions.push(action);
+    }
+  }
+
+  //global targets
+  for (var j = 0, target; target = this.targetsArray[j]; j++) {
+    if (this.isValidTargetAction(target)) {
+      action = new Object();
+      action.title = target.title;
+      action.keys = target.hotkeyStr;
+      globalActions.push(action);
+    }
+  }
+
+  return globalActions;
+};
+
+/**
+ * Gets the locally available actions in the current context.
+ * Each action has a "title" member and a "keys" member.
+ * @return {Array} An array of the locally available actions.
+ */
+AxsNav.prototype.getLocalActions = function() {
+  var localActions = new Array();
+
+  //local targets
+  var currentList = this.currentList();
+  for (var i = 0, target; target = currentList.targets[i]; i++) {
+    if (this.isValidTargetAction(target)) {
+      var action = new Object();
+      action.title = target.title;
+      action.keys = target.hotkeyStr;
+      localActions.push(action);
+    }
+  }
+
+  return localActions;
+};
+
+/**
+ * Initializes the PowerKey instance that presents the valid actions.
+ * This method initializes the PowerKey object with reasonable default values.
+ */
+AxsNav.prototype.defaultInitPowerKeyObj = function() {
+  var parentElement = this.axs_.getActiveDocument().body;
+
+  //handles the selected action
+  var self = this;
+
+  var handler = function(completion, index, elementId, args) {
+                  var localActions = self.getLocalActions();
+                  var globalActions = self.getGlobalActions();
+                  var allActions = localActions.concat(globalActions);
+
+                  var hotkeyStr = allActions[index].keys;
+                  var key = hotkeyStr.split(' ')[0];
+                  var keyCode = -1;
+                  var charCode = -1;
+
+                  if (key == 'LEFT') {
+                    keyCode = 37;
+                  } else if (key == 'UP') {
+                    keyCode = 38;
+                  } else if (key == 'RIGHT') {
+                    keyCode = 39;
+                  } else if (key == 'DOWN') {
+                    keyCode = 40;
+                  } else if (key == 'PGUP') {
+                    keyCode = 33;
+                  } else if (key == 'PGDOWN') {
+                    keyCode = 34;
+                  } else if (key == 'ENTER') {
+                    keyCode = 13;
+                  } else if (key == 'DEL') {
+                    keyCode = 46;
+                  } else {
+                    charCode = key.charCodeAt(0);
+                  }
+
+                  var command = self.getFunctionForKey(keyCode, charCode);
+                  command();
+
+                  self.pk_.cmpTextElement.blur();
+                };
+
+  this.pk_.createCompletionField(parentElement,
+                                 50,
+                                 handler,
+                                 null,
+                                 this.availableActionArray,
+                                 false);
+
+  this.pk_.setCompletionPromptStr(AxsNav.str.SELECT_ACTION);
+  this.pk_.setAutoHideCompletionField(true);
+  PowerKey.setDefaultCSSStyle();
+};
+
+/**
+ * Returns true if the xPath of this target
+ * evaluates to a non empty set of nodes.
+ * @param {Object} target A target object
+ * @return {boolean} Whether the target action is valid
+ */
+AxsNav.prototype.isValidTargetAction = function(target) {
+  var valid = false;
+
+  if (target.hotkeyStr !== '') {
+    var xPath = target.xpath;
+    var rootNode = this.axs_.getActiveDocument().body;
+
+    //Handle relative XPath
+    if (xPath.indexOf('.') === 0) {
+      var currentItem = this.currentItem();
+      if (currentItem) {
+        rootNode = currentItem.elem;
+      }
+    }
+
+    //Find xPaths that return non empty set of nodes
+    var nodes = this.axs_.evalXPath(xPath, rootNode);
+    if (nodes.length > 0) {
+      valid = true;
+    }
+  }
+  return valid;
 };
