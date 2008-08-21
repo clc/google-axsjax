@@ -72,7 +72,7 @@ function pickFromCompiled(scriptsBaseURL){
     else if ((prefix == 'scholar') && (path.indexOf('/scholar') === 0)){
       scriptURL = scriptsBaseURL + 'scholar/comp_scholar.js';
     }
-    else if ((prefix == 'www') ||
+    else if (((prefix == 'www') && (path.length > 1)) ||
              (path.indexOf('/search') === 0) ||
              (path.indexOf('/custom') === 0) ||
              (path.indexOf('/cse') === 0)){
