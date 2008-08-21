@@ -117,4 +117,10 @@ AxsLens.prototype.magnifyText = function(){
   // The default aspect value of Arial is .52
   var fontSizeAdjust = this.multiplier * 0.52;
   this.lens.style.fontSizeAdjust = fontSizeAdjust;
+  var subnodes = this.lens.getElementsByTagName('*');
+  // Force the line-height to normal so that multiline text does
+  // not collide with itself.
+  for (var i=0, node; node = subnodes[i]; i++){
+    node.setAttribute("style","line-height: normal !important");
+  }
 };
