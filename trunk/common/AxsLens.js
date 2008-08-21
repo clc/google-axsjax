@@ -120,7 +120,7 @@ AxsLens.prototype.magnifyText = function(){
   var subnodes = this.lens.getElementsByTagName('*');
   // Force the line-height to normal so that multiline text does
   // not collide with itself.
-  for (var i=0, node; node = subnodes[i]; i++){
-    node.setAttribute("style","line-height: normal !important");
+  for (var i = 0, node; node = subnodes[i]; i++){
+    node.setAttribute('style', 'line-height: normal !important');
   }
 };
