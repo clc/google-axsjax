@@ -28,18 +28,17 @@
 var AxsLens = function(axsJAXObj){
   this.multiplier = 1.5;
 
-  var activeDoc = axsJAXObj.getActiveDocument();
-  this.lens = activeDoc.createElement('span');
+  this.activeDoc = axsJAXObj.getActiveDocument();
+  this.lens = this.activeDoc.createElement('span');
 
   this.lens.style.backgroundColor = '#CCE6FF';
   this.lens.style.borderColor = '#0000CC';
   this.lens.style.borderWidth = 'medium';
   this.lens.style.borderStyle = 'groove';
   this.lens.style.position = 'absolute';
-  this.magnifyText();
 
   this.lens.style.display = 'none';
-  activeDoc.body.appendChild(this.lens);
+  this.activeDoc.body.appendChild(this.lens);
 };
 
 /**
@@ -74,8 +73,7 @@ AxsLens.prototype.view = function(targetNode){
   }
   this.lens.appendChild(targetNode.cloneNode(true));
 
-  this.magnifyText();
-  this.enlargeImages();
+  this.magnify();
 
   this.lens.style.top = top + 'px';
   this.lens.style.left = left + 'px';
@@ -90,8 +88,19 @@ AxsLens.prototype.view = function(targetNode){
  */
 AxsLens.prototype.setMagnification = function(multiplier){
   this.multiplier = multiplier;
+  this.magnify();
+};
+
+/**
+ * Magnifies the lens object by enlarging its text and images.
+ */
+AxsLens.prototype.magnify = function() {
+  //Detach to avoid propagation of events generated during the magnification
+  this.activeDoc.body.removeChild(this.lens);
   this.magnifyText();
   this.enlargeImages();
+  //Attach the lens object back to the document
+  this.activeDoc.body.appendChild(this.lens);
 };
 
 /**
@@ -117,10 +126,12 @@ AxsLens.prototype.magnifyText = function(){
   // The default aspect value of Arial is .52
   var fontSizeAdjust = this.multiplier * 0.52;
   this.lens.style.fontSizeAdjust = fontSizeAdjust;
-  var subnodes = this.lens.getElementsByTagName('*');
+  
   // Force the line-height to normal so that multiline text does
   // not collide with itself.
+  var subnodes = this.lens.getElementsByTagName('*');
   for (var i = 0, node; node = subnodes[i]; i++){
     node.style.setProperty('line-height', 'normal', 'important');
   }
 };
+
