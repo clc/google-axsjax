@@ -19,7 +19,7 @@
       id("res")/div[@class="med"]
     </item>
     <item>
-      id("res")//div[@class="g"]
+      id("res")//*[@class="g"]
     </item>
     <target title="Next page" trigger="listTail">
       id("nn")/..

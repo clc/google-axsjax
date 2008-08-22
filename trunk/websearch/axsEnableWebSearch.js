@@ -97,6 +97,11 @@ axsWebSearch.magSize = 1.5;
  */
 axsWebSearch.axsSoundObj = null;
 
+/**
+ * The PowerKey object that will generate a list of possible actions
+ * @type PowerKey?
+ */
+axsWebSearch.pkObj = null;
 
 
 /**
@@ -136,7 +141,7 @@ axsWebSearch.init = function(){
                   '      id("res")/div[@class="med"]' +
                   '    </item>' +
                   '    <item>' +
-                  '      id("res")//div[@class="g"]' +
+                  '      id("res")//*[@class="g"]' +
                   '    </item>' +
                   '    <target title="Next page" trigger="listTail">' +
                   '      id("nn")/..' +
@@ -198,6 +203,9 @@ axsWebSearch.init = function(){
 
   axsWebSearch.axsSoundObj = new AxsSound(true);
   axsWebSearch.axsNavObj.setSound(axsWebSearch.axsSoundObj);
+  
+  axsWebSearch.pkObj = new PowerKey('', axsWebSearch.axsJAXObj);
+  axsWebSearch.axsNavObj.setPowerKey(axsWebSearch.pkObj, '.');
 
   //Read the first thing on the page.
   //Use a set time out just in case the browser is not entirely ready yet.
