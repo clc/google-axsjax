@@ -119,7 +119,7 @@ AxsNav.prototype.makeItemsArray = function(listNode){
  * Set the PowerKey object used for displaying the valid actions in a
  * given context. The PowerKey auto completion input element is invoked
  * via a shortcutKey.
- * @param {PowerKey} powerKeyObj A PowerKey object
+ * @param {Object} powerKeyObj A PowerKey object
  * @param {string} shortcutKey A key for invoking PowerKey
  */
 AxsNav.prototype.setPowerKey = function(powerKeyObj, shortcutKey) {
@@ -766,7 +766,7 @@ AxsNav.prototype.setUpNavKeys = function(cnrDOM, emptyLists){
 /**
  * Returns a function mapped to a key. 
  * @param {number} keyCode A key code.
- * @param {munber} charCode A char code.
+ * @param {number} charCode A char code.
  * @return {Function?} A function mapped to the keyCode or charCode,
  * undefined if the mapping does not exist.
  */
@@ -927,8 +927,8 @@ AxsNav.prototype.globalHelpString = function() {
   // Make the keys sound nicer when spoken
   helpStr = helpStr.replace('PGUP', AxsNav.str.PGUP);
   helpStr = helpStr.replace('PGDOWN', AxsNav.str.PGDOWN);
-  helpStr = helpStr.replace('ENTER', AxsNav.str.Enter);
-  helpStr = helpStr.replace('DEL', AxsNav.str.Delete);
+  helpStr = helpStr.replace('ENTER', AxsNav.str.ENTER);
+  helpStr = helpStr.replace('DEL', AxsNav.str.DELETE);
   helpStr = helpStr.replace('UP', AxsNav.str.UP);
   helpStr = helpStr.replace('DOWN', AxsNav.str.DOWN);
   helpStr = helpStr.replace('LEFT', AxsNav.str.LEFT);
@@ -966,8 +966,8 @@ AxsNav.prototype.localHelpString = function() {
   // Make the keys sound nicer when spoken
   helpStr = helpStr.replace('PGUP', AxsNav.str.PGUP);
   helpStr = helpStr.replace('PGDOWN', AxsNav.str.PGDOWN);
-  helpStr = helpStr.replace('ENTER', AxsNav.str.Enter);
-  helpStr = helpStr.replace('DEL', AxsNav.str.Delete);
+  helpStr = helpStr.replace('ENTER', AxsNav.str.ENTER);
+  helpStr = helpStr.replace('DEL', AxsNav.str.DELETE);
   helpStr = helpStr.replace('UP', AxsNav.str.UP);
   helpStr = helpStr.replace('DOWN', AxsNav.str.DOWN);
   helpStr = helpStr.replace('LEFT', AxsNav.str.LEFT);
@@ -1175,10 +1175,11 @@ AxsNav.prototype.defaultInitPowerKeyObj = function() {
                     charCode = key.charCodeAt(0);
                   }
 
-                  var command = self.getFunctionForKey(keyCode, charCode);
-                  command();
-
                   self.pk_.cmpTextElement.blur();
+                  var command = self.getFunctionForKey(keyCode, charCode);
+                  if (command){
+                    command();
+                  }
                 };
 
   this.pk_.createCompletionField(parentElement,
@@ -1190,7 +1191,7 @@ AxsNav.prototype.defaultInitPowerKeyObj = function() {
 
   this.pk_.setCompletionPromptStr(AxsNav.str.SELECT_ACTION);
   this.pk_.setAutoHideCompletionField(true);
-  PowerKey.setDefaultCSSStyle();
+  this.pk_.setDefaultCSSStyle();
 };
 
 /**
