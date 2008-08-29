@@ -24,6 +24,102 @@ function generateOutput(){
   output.value = out;
 }
 
+function outputToJson(){
+  var cnrString = document.getElementById('input').value;
+  
+  var cnrJson = new Object();
+  cnrJson.lists = new Array();
+
+  var parser = new DOMParser();
+  var cnrDOM = parser.parseFromString(cnrString, 'text/xml');
+
+  //Build up the navigation lists
+  var lists = cnrDOM.getElementsByTagName('list');
+
+  var i;
+  var listNode;
+  for (i = 0, listNode; listNode = lists[i]; i++){
+    var navList = new Object();
+    navList.title = listNode.getAttribute('title');
+    navList.hotkey = listNode.getAttribute('hotkey');
+    navList.next = listNode.getAttribute('next');
+    navList.prev = listNode.getAttribute('prev');
+    navList.fwd = listNode.getAttribute('fwd');
+    navList.back = listNode.getAttribute('back');
+    navList.onEmpty = listNode.getAttribute('onEmpty');
+    navList.type = listNode.getAttribute('type');
+
+    var j;
+    var entry;
+	var k;
+	var attributes;
+	var length;
+    //Parse items to JSON
+    navList.items = new Array();
+    var cnrItems = listNode.getElementsByTagName('item');
+    for (j = 0; entry = cnrItems[j]; j++){
+      var item = new Object();
+      item.xpath = entry.textContent.replace(/^\s\s*/, '').replace(/\s\s*$/, '');	  
+	  if (entry.attributes instanceof NamedNodeMap){
+	    attributes = entry.attributes;
+	    length = attributes.length;
+		for (k=0; k < length; k++){
+		  var attrib = attributes.item(k);
+		  item[attrib.nodeName] = attrib.value;
+		}
+	  }
+      navList.items.push(item);
+    }
+    //Parse targets to JSON
+    navList.targets = new Array();
+    var cnrTargets = listNode.getElementsByTagName('target');
+    for (j = 0; entry = cnrTargets[j]; j++){
+      var target = new Object();
+      target.xpath = entry.textContent.replace(/^\s\s*/, '').replace(/\s\s*$/, '');
+	  if (entry.attributes instanceof NamedNodeMap){
+	    attributes = entry.attributes;
+	    length = attributes.length;
+		for (k=0; k < length; k++){
+		  var attrib = attributes.item(k);
+		  item[attrib.nodeName] = attrib.value;
+		}
+	  }
+      navList.targets.push(target);
+    }
+    cnrJson.lists.push(navList);
+  }
+
+  //Build up the targets
+  cnrJson.targets = new Array();
+  var currentNode;
+  var cnrNode = cnrDOM.firstChild;
+  for (i = 0, currentNode; currentNode = cnrNode.childNodes[i]; i++){
+    if (currentNode.tagName == 'target'){
+      var target = new Object();
+      target.xpath = currentNode.textContent.replace(/^\s\s*/, '').replace(/\s\s*$/, '');
+	  if (currentNode.attributes instanceof NamedNodeMap){
+	    attributes = currentNode.attributes;
+	    length = attributes.length;
+		for (k=0; k < length; k++){
+		  var attrib = attributes.item(k);
+		  item[attrib.nodeName] = attrib.value;
+		}
+	  }
+      cnrJson.targets.push(target);
+    }
+  }
+
+  //Get the next/prev list keys
+  cnrJson.next = cnrNode.getAttribute('next');
+  cnrJson.prev = cnrNode.getAttribute('prev');
+  
+  var jsonString = cnrJson.toSource();
+  var out = jsonString;
+  
+  var output = document.getElementById('output');
+  output.value = out;
+}
+
 </script>
 
 </head>
@@ -35,7 +131,10 @@ function generateOutput(){
 
 <br/>
 <br/>
-<input type='button' value='Generate the JavaScript string' onclick='generateOutput();' style="width:20%">
+<input type='button' value='Generate JSON' onclick='outputToJson();' style="width:20%">
+<br/>
+<br/>
+<input type='button' value='Reformat the CNR into a JS string' onclick='generateOutput();' style="width:20%">
 <br/>
 <br/>
 
