@@ -68,52 +68,6 @@ AxsNav.str = {
   RIGHT : 'Right'
 };
 
-/**
- * Makes an array of items given a navigation list node and its index.
- * Elements associated with a list will be marked as such.
- * @param {Node} listNode The navigation list node
- * @return {Array} The array of items.
- */
-AxsNav.prototype.makeItemsArray = function(listNode){
-  var itemsArray = new Array();
-  var cnrItems = listNode.getElementsByTagName('item');
-  for (var i = 0, entry; entry = cnrItems[i]; i++){
-    //Do this in a try-catch block since there are multiple
-    //sets of cnrItems and even if one set does not exist as expected,
-    //the other sets should still be available.
-    try{
-      //Strip all leading and trailing spaces from the xpath
-      var xpath = entry.textContent;
-      xpath = xpath.replace(/^\s\s*/, '').replace(/\s\s*$/, '');
-      var htmlElem = this.axs_.getActiveDocument().documentElement;
-      var elems = this.axs_.evalXPath(xpath, htmlElem);
-      var idxStr = entry.getAttribute('index') || '0';
-      var idx = parseInt(idxStr, 10);
-      var count = elems.length - idx;
-      var countStr = entry.getAttribute('count') || '*';
-      if (countStr != '*'){
-        count = parseInt(countStr, 10);
-      }
-      var end = count + idx;
-      var action = entry.getAttribute('action') || null;
-      while (idx < end){
-        var item = new Object();
-        item.action = action;
-        item.elem = elems[idx];
-        if (typeof(item.elem) != 'undefined'){
-          if (typeof(item.elem.AxsNavInfo) == 'undefined'){
-            item.elem.AxsNavInfo = new Object();
-          }
-          item.elem.AxsNavInfo[this.navArray.length] = itemsArray.length;
-          itemsArray.push(item);
-        }
-        idx++;
-      }
-    }
-    catch(err){ }
-  }
-  return itemsArray;
-};
 
 /**
  * Set the PowerKey object used for displaying the valid actions in a
@@ -156,8 +110,8 @@ AxsNav.prototype.validateList = function(navList) {
     if (this.lens_ !== null){
       this.lens_.view(null);
     }
-    navList.items = this.makeItemsArray(navList.cnrNode);
-    navList.targets = this.makeTargetsArray(navList.cnrNode);
+    navList.items = this.makeItemsArray(navList.origListObj);
+    navList.targets = this.makeTargetsArray(navList.origListObj);
     this.navItemIdxs[this.navListIdx] = -1;
   }
   if ((navList.items.length === 0) && (navList.entryTarget === null)){
@@ -275,7 +229,7 @@ AxsNav.prototype.nextItem = function(){
     if (this.lens_ !== null){
       this.lens_.view(null);
     }
-    currentList.items = this.makeItemsArray(currentList.cnrNode);
+    currentList.items = this.makeItemsArray(currentList.origListObj);
     this.navItemIdxs[this.navListIdx] = 0;
     itemIndex = this.navItemIdxs[this.navListIdx];
   }
@@ -341,7 +295,7 @@ AxsNav.prototype.prevItem = function(){
     if (this.lens_ !== null){
       this.lens_.view(null);
     }
-    currentList.items = this.makeItemsArray(currentList.cnrNode);
+    currentList.items = this.makeItemsArray(currentList.origListObj);
     this.navItemIdxs[this.navListIdx] = currentList.items.length;
     itemIndex = this.navItemIdxs[this.navListIdx];
   }
@@ -630,10 +584,10 @@ AxsNav.prototype.assignEmptyMsgKeys = function(keyStr, emptyMsg){
  */
 AxsNav.prototype.assignTargetKeys = function(target, charMap, keyMap){
   var keys = new Array();
-  if (target.hotkeyStr === ''){
+  if (target.hotkey === ''){
     return;
   }
-  keys = target.hotkeyStr.split(' ');
+  keys = target.hotkey.split(' ');
   var self = this;
   this.assignKeysToMethod(keys,
                           charMap,
@@ -656,7 +610,7 @@ AxsNav.prototype.actOnTarget = function(target){
   }
   var elems = this.axs_.evalXPath(xpath, rootNode);
   if (elems.length < 1){
-    this.axs_.speakTextViaNode(target.emptyMsg);
+    this.axs_.speakTextViaNode(target.onEmpty);
   } else {
       var func = this.getCallbackFunction(target.action);
       if (func){
@@ -672,96 +626,6 @@ AxsNav.prototype.actOnTarget = function(target){
   }
 };
 
-
-/**
- * This function attaches the default AxsJAX key handler for navigation.
- * @param {Node} cnrDOM  DOM of the Content Navigation Rule.
- * @param {Array} emptyLists  An array of lists which have zero items.
- */
-
-AxsNav.prototype.setUpNavKeys = function(cnrDOM, emptyLists){
-  var self = this;
-  var cnrNode = cnrDOM.firstChild;
-  var i;
-
-  this.topCharCodeMap = new Object();
-  this.topKeyCodeMap = new Object();
-  this.charCodeMaps = new Array();
-  this.keyCodeMaps = new Array();
-
-  //Acting on global targets
-  var target;
-  for (i = 0, target; target = this.targetsArray[i]; i++){
-    this.assignTargetKeys(target, this.topCharCodeMap, this.topKeyCodeMap);
-  }
-
-  //Moving through lists
-  var keys = new Array();
-  this.nextListKeys = cnrNode.getAttribute('next') || '';
-  if (this.nextListKeys !== ''){
-    keys = this.nextListKeys.split(' ');
-  }
-  this.assignKeysToMethod(keys,
-                          this.topCharCodeMap,
-                          this.topKeyCodeMap,
-                          function(){
-                            self.nextList();
-                            self.doListEntryActions();
-                          });
-
-  keys = new Array();
-  this.prevListKeys = cnrNode.getAttribute('prev') || '';
-  if (this.prevListKeys !== ''){
-    keys = this.prevListKeys.split(' ');
-  }
-  this.assignKeysToMethod(keys,
-                          this.topCharCodeMap,
-                          this.topKeyCodeMap,
-                          function(){
-                            self.prevList();
-                            self.doListEntryActions();
-                          });
-
-
-  //Moving through items and handling per-list targets
-  var list;
-  for (i = 0, list; list = this.navArray[i]; i++){
-    var charMap = new Object();
-    var keyMap = new Object();
-    this.charCodeMaps.push(charMap);
-    this.keyCodeMaps.push(keyMap);
-    this.assignItemKeys(list.nextKeys, i, 'next');
-    this.assignItemKeys(list.prevKeys, i, 'prev');
-    this.assignItemKeys(list.fwdKeys, i, 'fwd');
-    this.assignItemKeys(list.backKeys, i, 'back');
-    this.assignHotKeys(list.hotKeys, i, list.emptyMsg);
-    var j;
-    for (j = 0, target; target = list.targets[j]; j++){
-      this.assignTargetKeys(target, charMap, keyMap);
-    }
-  }
-
-  //Dealing with empty lists with hotkeys
-  var emptyList;
-  for (i = 0, emptyList; emptyList = emptyLists[i]; i++){
-    this.assignEmptyMsgKeys(emptyList.hotKeys, emptyList.emptyMsg);
-  }
-
-  this.keyHandler = function(evt){
-                     //None of these commands involve Ctrl.
-                     //If Ctrl is held, it must be for some AT.
-                     if (evt.ctrlKey) return true;
-                     if (self.axs_.inputFocused) return true;
-
-                     var command = self.getFunctionForKey(evt.keyCode,
-                                                          evt.charCode);
-                     if (command) {
-                       return command();
-                     }
-                   };
-
-  document.addEventListener('keypress', this.keyHandler, true);
-};
 
 /**
  * Returns a function mapped to a key. 
@@ -785,28 +649,6 @@ AxsNav.prototype.getFunctionForKey = function(keyCode, charCode) {
   return command;
 };
 
-/**
- * Returns an array of target objects for the given <list> node
- * @param {Object} listNode  A <list> node
- * @return {Array} An array of target objects
- */
-AxsNav.prototype.makeTargetsArray = function(listNode){
-  var targetsArray = new Array();
-  var cnrTargets = listNode.getElementsByTagName('target');
-  for (var i = 0, entry; entry = cnrTargets[i]; i++){
-    var target = new Object();
-    //Strip all leading and trailing spaces from the xpath
-    target.xpath = entry.textContent;
-    target.xpath = target.xpath.replace(/^\s\s*/, '').replace(/\s\s*$/, '');
-    target.title = entry.getAttribute('title') || '';
-    target.trigger = entry.getAttribute('trigger') || 'key';
-    target.hotkeyStr = entry.getAttribute('hotkey') || '';
-    target.action = entry.getAttribute('action') || 'click';
-    target.emptyMsg = entry.getAttribute('onEmpty') || '';
-    targetsArray.push(target);
-  }
-  return targetsArray;
-};
 
 /**
  * Builds up the navigation system of lists of items.
@@ -819,91 +661,108 @@ AxsNav.prototype.makeTargetsArray = function(listNode){
  *                                A custom navigation method provided by
  *                                the caller. This navigation method will be
  *                                given the DOM created from the cnrString, the
- *                                navigation array of lists of items,
- *                                and an array of all the lists which had
- *                                zero items. If this is null, the default
- *                                AxsJAX nav handler will be used.
+ *                                navigation array of lists of items, an array
+ *                                of all the lists which had zero items, and an
+ *                                an array of targets. If this is null, the
+ *                                default AxsJAX nav handler will be used.
  */
 AxsNav.prototype.navInit = function(cnrString, opt_customNavMethod){
+  var cnrJson = new Object();
+  cnrJson.lists = new Array();
+
   var parser = new DOMParser();
   var cnrDOM = parser.parseFromString(cnrString, 'text/xml');
 
   //Build up the navigation lists
   var lists = cnrDOM.getElementsByTagName('list');
-  this.navArray = new Array();
-  this.navListIdx = 0;
-  this.navItemIdxs = new Array();
-
-  var emptyLists = new Array();
 
   var i;
-  var currentList;
-  for (i = 0, currentList; currentList = lists[i]; i++){
+  var listNode;
+  for (i = 0, listNode; listNode = lists[i]; i++){
     var navList = new Object();
-    navList.cnrNode = currentList;
-    navList.title = currentList.getAttribute('title') || '';
-    navList.hotKeys = currentList.getAttribute('hotkey') || '';
-    navList.nextKeys = currentList.getAttribute('next') || '';
-    navList.prevKeys = currentList.getAttribute('prev') || '';
-    navList.fwdKeys = currentList.getAttribute('fwd') || '';
-    navList.backKeys = currentList.getAttribute('back') || '';
-    navList.emptyMsg = currentList.getAttribute('onEmpty') || '';
-    navList.type = currentList.getAttribute('type') || '';
-    navList.tailTarget = null;
-    navList.headTarget = null;
-    navList.entryTarget = null;
-    navList.items = this.makeItemsArray(currentList);
-    navList.targets = this.makeTargetsArray(currentList);
-    for (var j = 0, listTarget; listTarget = navList.targets[j]; j++){
-      if (listTarget.trigger == 'listTail'){
-        navList.tailTarget = listTarget;
-      } else if (listTarget.trigger == 'listHead'){
-        navList.headTarget = listTarget;
-      } else if (listTarget.trigger == 'listEntry'){
-        navList.entryTarget = listTarget;
+    navList.title = listNode.getAttribute('title');
+    navList.hotkey = listNode.getAttribute('hotkey');
+    navList.next = listNode.getAttribute('next');
+    navList.prev = listNode.getAttribute('prev');
+    navList.fwd = listNode.getAttribute('fwd');
+    navList.back = listNode.getAttribute('back');
+    navList.onEmpty = listNode.getAttribute('onEmpty');
+    navList.type = listNode.getAttribute('type');
+
+    var j;
+    var entry;
+    var k;
+    var attributes;
+    var length;
+    //Parse items to JSON
+    navList.items = new Array();
+    var cnrItems = listNode.getElementsByTagName('item');
+    for (j = 0; entry = cnrItems[j]; j++){
+      var item = new Object();
+      item.xpath = entry.textContent;
+      if (entry.attributes instanceof NamedNodeMap){
+        attributes = entry.attributes;
+        length = attributes.length;
+        for (k = 0; k < length; k++){
+          var attrib = attributes.item(k);
+          item[attrib.nodeName] = attrib.value;
+        }
       }
+      navList.items.push(item);
     }
-    if (navList.items.length > 0 || navList.type == 'dynamic'){
-      //Only add nav lists that have content to the array
-      this.navArray.push(navList);
-      this.navItemIdxs.push(-1);
-    } else if (navList.hotKeys !== ''){
-      //Record empty nav lists if the user can jump to them directly
-      emptyLists.push(navList);
+    //Parse targets to JSON
+    navList.targets = new Array();
+    var cnrTargets = listNode.getElementsByTagName('target');
+    for (j = 0; entry = cnrTargets[j]; j++){
+      var target = new Object();
+      target.xpath = entry.textContent;
+      if (entry.attributes instanceof NamedNodeMap){
+        attributes = entry.attributes;
+        length = attributes.length;
+        for (k = 0; k < length; k++){
+          var attrib = attributes.item(k);
+          item[attrib.nodeName] = attrib.value;
+        }
+      }
+      navList.targets.push(target);
     }
+    cnrJson.lists.push(navList);
   }
 
   //Build up the targets
-  var targets = new Array();
-  this.targetsArray = new Array();
-  this.targetsIdx = 0;
+  cnrJson.targets = new Array();
   var currentNode;
   var cnrNode = cnrDOM.firstChild;
   for (i = 0, currentNode; currentNode = cnrNode.childNodes[i]; i++){
     if (currentNode.tagName == 'target'){
       var target = new Object();
-      //Strip all leading and trailing spaces from the xpath
       target.xpath = currentNode.textContent;
-      target.xpath = target.xpath.replace(/^\s\s*/, '').replace(/\s\s*$/, '');
-      target.title = currentNode.getAttribute('title') || '';
-      target.trigger = currentNode.getAttribute('trigger') || 'key';
-      target.hotkeyStr = currentNode.getAttribute('hotkey') || '';
-      target.action = currentNode.getAttribute('action') || 'click';
-      target.emptyMsg = currentNode.getAttribute('onEmpty') || '';
-      this.targetsArray.push(target);
+      if (currentNode.attributes instanceof NamedNodeMap){
+        attributes = currentNode.attributes;
+        length = attributes.length;
+        for (k = 0; k < length; k++){
+          var attrib = attributes.item(k);
+          item[attrib.nodeName] = attrib.value;
+        }
+      }
+      cnrJson.targets.push(target);
     }
   }
 
-  //Remove the previous event listener if there was one
-  if (this.keyHandler !== null){
-    document.removeEventListener('keypress', this.keyHandler, true);
-  }
-  //Bind lists and targets to keys if there is no custom handler specified
+  //Get the next/prev list keys
+  cnrJson.next = cnrNode.getAttribute('next');
+  cnrJson.prev = cnrNode.getAttribute('prev');
+
   if ((opt_customNavMethod === null) ||
       (typeof(opt_customNavMethod) == 'undefined')){
-    this.setUpNavKeys(cnrDOM, emptyLists);
+    this.navInitJson(cnrJson, opt_customNavMethod);
   } else {
-    opt_customNavMethod(cnrDOM, this.navArray, emptyLists, this.targetsArray);
+    //Wrapper function that will invoke the user's opt_customNavMethod
+    //This will be called when navInitJson is done processing
+    var func = new function(dummyJson, navArray, emptyLists, targetsArray){
+          opt_customNavMethod(cnrNode, navArray, emptyLists, targetsArray);
+        }
+    this.navInitJson(cnrJson, func);
   }
 };
 
@@ -1105,7 +964,7 @@ AxsNav.prototype.getGlobalActions = function() {
     if (this.isValidTargetAction(target)) {
       action = new Object();
       action.title = target.title;
-      action.keys = target.hotkeyStr;
+      action.keys = target.hotkey;
       globalActions.push(action);
     }
   }
@@ -1127,7 +986,7 @@ AxsNav.prototype.getLocalActions = function() {
     if (this.isValidTargetAction(target)) {
       var action = new Object();
       action.title = target.title;
-      action.keys = target.hotkeyStr;
+      action.keys = target.hotkey;
       localActions.push(action);
     }
   }
@@ -1203,7 +1062,7 @@ AxsNav.prototype.defaultInitPowerKeyObj = function() {
 AxsNav.prototype.isValidTargetAction = function(target) {
   var valid = false;
 
-  if (target.hotkeyStr !== '') {
+  if (target.hotkey !== '') {
     var xPath = target.xpath;
     var rootNode = this.axs_.getActiveDocument().body;
 
@@ -1222,4 +1081,259 @@ AxsNav.prototype.isValidTargetAction = function(target) {
     }
   }
   return valid;
+};
+
+
+/**
+ * Builds up the navigation system of lists of items.
+ * This system uses the idea of multiple cursors and the visitor pattern.
+ *
+ * @param {Object} cnrJson  The CNR as a JSON
+ * @notypecheck {Function?} opt_customNavMethod
+ *                                A custom navigation method provided by
+ *                                the caller. This navigation method will be
+ *                                given the original cnrJson, the navigation
+ *                                array of lists of items, an array of all the
+                                  lists which had zero items, and an array of
+ *                                targets. If this is null, the default
+ *                                AxsJAX nav handler will be used.
+ */
+AxsNav.prototype.navInitJson = function(cnrJson, opt_customNavMethod){
+  this.navArray = new Array();
+  this.navListIdx = 0;
+  this.navItemIdxs = new Array();
+
+  var emptyLists = new Array();
+
+  var i;
+  var currentList;
+  for (i = 0, currentList; currentList = cnrJson.lists[i]; i++){
+    var navList = new Object();
+    navList.cnrNode = null;
+    navList.origListObj = currentList;
+    navList.title = currentList.title || '';
+    navList.hotKeys = currentList.hotkey || '';
+    navList.nextKeys = currentList.next || '';
+    navList.prevKeys = currentList.prev || '';
+    navList.fwdKeys = currentList.fwd || '';
+    navList.backKeys = currentList.back || '';
+    navList.onEmpty = currentList.onEmpty || '';
+    navList.type = currentList.type || '';
+    navList.tailTarget = null;
+    navList.headTarget = null;
+    navList.entryTarget = null;
+    navList.items = this.makeItemsArray(currentList);
+    navList.targets = this.makeTargetsArray(currentList);
+    for (var j = 0, listTarget; listTarget = navList.targets[j]; j++){
+      if (listTarget.trigger == 'listTail'){
+        navList.tailTarget = listTarget;
+      } else if (listTarget.trigger == 'listHead'){
+        navList.headTarget = listTarget;
+      } else if (listTarget.trigger == 'listEntry'){
+        navList.entryTarget = listTarget;
+      }
+    }
+    if (navList.items.length > 0 || navList.type == 'dynamic'){
+      //Only add nav lists that have content to the array
+      this.navArray.push(navList);
+      this.navItemIdxs.push(-1);
+    } else if (navList.hotKeys !== ''){
+      //Record empty nav lists if the user can jump to them directly
+      emptyLists.push(navList);
+    }
+  }
+
+  //Build up the targets
+  var targets = new Array();
+  this.targetsArray = new Array();
+  this.targetsIdx = 0;
+  var currentTarget;
+  if (cnrJson.targets){
+    for (i = 0, currentTarget; currentTarget = cnrJson.targets[i]; i++){
+      var target = new Object();
+      //Strip all leading and trailing spaces from the xpath
+      target.xpath = currentTarget.xpath;
+      target.xpath = target.xpath.replace(/^\s\s*/, '').replace(/\s\s*$/, '');
+      target.title = currentTarget.title || '';
+      target.trigger = currentTarget.trigger || 'key';
+      target.hotkey = currentTarget.hotkey || '';
+      target.action = currentTarget.action || 'click';
+      target.onEmpty = currentTarget.onEmpty || '';
+      this.targetsArray.push(target);
+    }
+  }
+
+  //Remove the previous event listener if there was one
+  if (this.keyHandler !== null){
+    document.removeEventListener('keypress', this.keyHandler, true);
+  }
+  //Bind lists and targets to keys if there is no custom handler specified
+  if ((opt_customNavMethod === null) ||
+      (typeof(opt_customNavMethod) == 'undefined')){
+    this.setUpNavKeys(cnrJson, emptyLists);
+  } else {
+    opt_customNavMethod(cnrJson, this.navArray, emptyLists, this.targetsArray);
+  }
+};
+
+
+/**
+ * Makes an array of items given a navigation list node and its index.
+ * Elements associated with a list will be marked as such.
+ * @param {Object} jsonListObj The navigation list node
+ * @return {Array} The array of items.
+ */
+AxsNav.prototype.makeItemsArray = function(jsonListObj){
+  var itemsArray = new Array();
+  if (!jsonListObj.items){
+    return itemsArray;
+  }
+  for (var i = 0, entry; entry = jsonListObj.items[i]; i++){
+    //Do this in a try-catch block since there are multiple
+    //sets of items and even if one set does not exist as expected,
+    //the other sets should still be available.
+    try{
+      //Strip all leading and trailing spaces from the xpath
+      var xpath = entry.xpath.replace(/^\s\s*/, '').replace(/\s\s*$/, '');
+      var htmlElem = this.axs_.getActiveDocument().documentElement;
+      var elems = this.axs_.evalXPath(xpath, htmlElem);
+      var idxStr = entry.index || '0';
+      var idx = parseInt(idxStr, 10);
+      var count = elems.length - idx;
+      var countStr = entry.count || '*';
+      if (countStr != '*'){
+        count = parseInt(countStr, 10);
+      }
+      var end = count + idx;
+      var action = entry.action || null;
+      while (idx < end){
+        var item = new Object();
+        item.action = action;
+        item.elem = elems[idx];
+        if (typeof(item.elem) != 'undefined'){
+          if (typeof(item.elem.AxsNavInfo) == 'undefined'){
+            item.elem.AxsNavInfo = new Object();
+          }
+          item.elem.AxsNavInfo[this.navArray.length] = itemsArray.length;
+          itemsArray.push(item);
+        }
+        idx++;
+      }
+    }
+    catch(err){ }
+  }
+  return itemsArray;
+};
+
+/**
+ * Returns an array of target objects for the given <list> node
+ * @param {Object} jsonListObj  A <list> node
+ * @return {Array} An array of target objects
+ */
+AxsNav.prototype.makeTargetsArray = function(jsonListObj){
+  var targetsArray = new Array();
+  if (!jsonListObj.targets){
+    return targetsArray;
+  }
+  for (var i = 0, entry; entry = jsonListObj.targets[i]; i++){
+    var target = new Object();
+    //Strip all leading and trailing spaces from the xpath
+    target.xpath = entry.xpath.replace(/^\s\s*/, '').replace(/\s\s*$/, '');
+    target.title = entry.title || '';
+    target.trigger = entry.trigger || 'key';
+    target.hotkey = entry.hotkey || '';
+    target.action = entry.action || 'click';
+    target.onEmpty = entry.onEmpty || '';
+    targetsArray.push(target);
+  }
+  return targetsArray;
+};
+
+
+/**
+ * This function attaches the default AxsJAX key handler for navigation.
+ * @param {Object} cnrJson  The CNR as a JSON
+ * @param {Array} emptyLists  An array of lists which have zero items.
+ */
+AxsNav.prototype.setUpNavKeys = function(cnrJson, emptyLists){
+  var self = this;
+  var i;
+
+  this.topCharCodeMap = new Object();
+  this.topKeyCodeMap = new Object();
+  this.charCodeMaps = new Array();
+  this.keyCodeMaps = new Array();
+
+  //Acting on global targets
+  var target;
+  for (i = 0, target; target = this.targetsArray[i]; i++){
+    this.assignTargetKeys(target, this.topCharCodeMap, this.topKeyCodeMap);
+  }
+
+  //Moving through lists
+  var keys = new Array();
+  this.nextListKeys = cnrJson.next || '';
+  if (this.nextListKeys !== ''){
+    keys = this.nextListKeys.split(' ');
+  }
+  this.assignKeysToMethod(keys,
+                          this.topCharCodeMap,
+                          this.topKeyCodeMap,
+                          function(){
+                            self.nextList();
+                            self.doListEntryActions();
+                          });
+
+  keys = new Array();
+  this.prevListKeys = cnrJson.prev || '';
+  if (this.prevListKeys !== ''){
+    keys = this.prevListKeys.split(' ');
+  }
+  this.assignKeysToMethod(keys,
+                          this.topCharCodeMap,
+                          this.topKeyCodeMap,
+                          function(){
+                            self.prevList();
+                            self.doListEntryActions();
+                          });
+
+
+  //Moving through items and handling per-list targets
+  var list;
+  for (i = 0, list; list = this.navArray[i]; i++){
+    var charMap = new Object();
+    var keyMap = new Object();
+    this.charCodeMaps.push(charMap);
+    this.keyCodeMaps.push(keyMap);
+    this.assignItemKeys(list.nextKeys, i, 'next');
+    this.assignItemKeys(list.prevKeys, i, 'prev');
+    this.assignItemKeys(list.fwdKeys, i, 'fwd');
+    this.assignItemKeys(list.backKeys, i, 'back');
+    this.assignHotKeys(list.hotKeys, i, list.onEmpty);
+    var j;
+    for (j = 0, target; target = list.targets[j]; j++){
+      this.assignTargetKeys(target, charMap, keyMap);
+    }
+  }
+
+  //Dealing with empty lists with hotkeys
+  var emptyList;
+  for (i = 0, emptyList; emptyList = emptyLists[i]; i++){
+    this.assignEmptyMsgKeys(emptyList.hotKeys, emptyList.onEmpty);
+  }
+
+  this.keyHandler = function(evt){
+                     //None of these commands involve Ctrl.
+                     //If Ctrl is held, it must be for some AT.
+                     if (evt.ctrlKey) return true;
+                     if (self.axs_.inputFocused) return true;
+
+                     var command = self.getFunctionForKey(evt.keyCode,
+                                                          evt.charCode);
+                     if (command) {
+                       return command();
+                     }
+                   };
+
+  document.addEventListener('keypress', this.keyHandler, true);
 };
