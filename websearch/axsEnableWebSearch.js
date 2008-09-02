@@ -98,13 +98,6 @@ axsWebSearch.magSize = 1.5;
 axsWebSearch.axsSoundObj = null;
 
 /**
- * The PowerKey object that will generate a list of possible actions
- * @type PowerKey?
- */
-axsWebSearch.pkObj = null;
-
-
-/**
  * Initializes the web search script by starting up the AxsNav object
  * and attaching keyboard handlers. 
  */
@@ -115,85 +108,143 @@ axsWebSearch.init = function(){
   //Add event listeners
   document.addEventListener('keypress', axsWebSearch.extraKeyboardNavHandler,
                              true);
+                             
+  var cnrJson = ({
+    lists: [{
+      title: "One Box",
+      hotkey: "1",
+      next: "DOWN j",
+      prev: "UP k",
+      fwd: null,
+      back: null,
+      onEmpty: "There is no one box on this page.",
+      type: null,
+      items: [{
+        xpath: "id(\"res\")//div[contains(@class,\"rbt\")]",
+        count: "1"
+      },
+      {
+        xpath: "id(\"res\")/div[@class=\"e\"]/table[not(contains(@id,\"brs\"))]/..",
+        count: "1"
+      },
+      {
+        xpath: "id(\"res\")/p[*]",
+        count: "1",
+        comment: "Use a [*] here since some one boxes have an extra garbage node that is empty at the start."
+      },
+      {
+        xpath: "//td/h2[@class=\"r\"]/..",
+        count: "1"
+      }],
+      targets: []
+    },
+    {
+      title: "Results",
+      hotkey: "n",
+      next: "DOWN j",
+      prev: "UP k",
+      fwd: "n",
+      back: "p",
+      onEmpty: null,
+      type: null,
+      items: [{
+        xpath: "id(\"res\")/div[@class=\"med\"]",
+        count: "1"
+      },
+      {
+        xpath: "id(\"res\")//*[@class=\"g\"]"
+      }],
+      targets: [{
+        xpath: "id(\"nn\")/..",
+        title: "Next page",
+        trigger: "listTail"
+      },
+      {
+        xpath: "id(\"np\")/..",
+        title: "Prev page",
+        trigger: "listHead"
+      }]
+    },
+    {
+      title: "Sponsored Links",
+      hotkey: "a",
+      next: "DOWN j",
+      prev: "UP k",
+      fwd: null,
+      back: null,
+      onEmpty: "There are no sponsored links on this page.",
+      type: null,
+      items: [{
+        xpath: "id(\"tads\")//li"
+      },
+      {
+        xpath: "id(\"mbEnd\")//li"
+      }],
+      targets: []
+    },
+    {
+      title: "Related Searches",
+      hotkey: "s",
+      next: "DOWN j",
+      prev: "UP k",
+      fwd: null,
+      back: null,
+      onEmpty: "There are no related searches.",
+      type: null,
+      items: [{
+        xpath: "id(\"brs\")//a/b/.."
+      }],
+      targets: []
+    },
+    {
+      title: "Alternate Search Categories",
+      hotkey: "c",
+      next: "DOWN j",
+      prev: "UP k",
+      fwd: null,
+      back: null,
+      onEmpty: "There are no other categories to search within.",
+      type: null,
+      items: [{
+        xpath: "id(\"prs\")/a"
+      }],
+      targets: []
+    },
+    {
+      title: "Google Services",
+      hotkey: "g",
+      next: "DOWN j",
+      prev: "UP k",
+      fwd: null,
+      back: null,
+      onEmpty: null,
+      type: null,
+      items: [{
+        xpath: "id(\"gbar\")//a[@class=\"gb1\"]"
+      },
+      {
+        xpath: "id(\"gbar\")//a[@class=\"gb2\"]"
+      },
+      {
+        xpath: "id(\"gb\")/a"
+      }],
+      targets: []
+    }],
+    targets: [{
+      xpath: "id(\"nn\")/..",
+      title: "Next page",
+      hotkey: "PGDOWN"
+    },
+    {
+      xpath: "id(\"np\")/..",
+      title: "Previous page",
+      hotkey: "PGUP"
+    }],
+    next: "RIGHT l",
+    prev: "LEFT h"
+  });
 
-  var cnrString = '<cnr next="RIGHT l" prev="LEFT h">' +
-                  '  <list title="One Box" hotkey="1" next="DOWN j" prev="UP' +
-                  ' k" onEmpty="There is no one box on this page.">' +
-                  '    <item count="1">' +
-                  '      id("res")//div[contains(@class,"rbt")]' +
-                  '    </item>   ' +
-                  '    <item count="1">' +
-                  '      id("res")/div[@class="e"]/table[not(contains(@id,"b' +
-                  'rs"))]/..' +
-                  '    </item>          ' +
-                  '    <item count="1" comment="Use a [*] here since some on' +
-                  'e boxes have an extra garbage node that is empty at the st' +
-                  'art.">' +
-                  '      id("res")/p[*]' +
-                  '    </item>         ' +
-                  '    <item count="1">' +
-                  '      //td/h2[@class="r"]/..' +
-                  '    </item>                 ' +
-                  '  </list>' +
-                  '  <list title="Results" hotkey="n" next="DOWN j" prev="UP' +
-                  ' k" fwd="n" back="p">' +
-                  '    <item count="1">' +
-                  '      id("res")/div[@class="med"]' +
-                  '    </item>' +
-                  '    <item>' +
-                  '      id("res")//*[@class="g"]' +
-                  '    </item>' +
-                  '    <target title="Next page" trigger="listTail">' +
-                  '      id("nn")/..' +
-                  '    </target>' +
-                  '    <target title="Prev page" trigger="listHead">' +
-                  '      id("np")/..' +
-                  '    </target>' +
-                  '  </list>' +
-                  '  <list title="Sponsored Links" hotkey="a" next="DOWN j" ' +
-                  'prev="UP k" onEmpty="There are no sponsored links on this ' +
-                  'page.">' +
-                  '    <item>' +
-                  '      id("tads")//li' +
-                  '    </item>' +
-                  '    <item>' +
-                  '      id("mbEnd")//li' +
-                  '    </item>' +
-                  '  </list>' +
-                  '  <list title="Related Searches" hotkey="s" next="DOWN j"' +
-                  ' prev="UP k" onEmpty="There are no related searches.">' +
-                  '    <item>' +
-                  '      id("brs")//a/b/..' +
-                  '    </item>' +
-                  '  </list>' +
-                  '  <list title="Alternate Search Categories" hotkey="c" ne' +
-                  'xt="DOWN j" prev="UP k" onEmpty="There are no other catego' +
-                  'ries to search within.">' +
-                  '    <item>' +
-                  '      id("prs")/a' +
-                  '    </item>' +
-                  '  </list>  ' +
-                  '  <list title="Google Services" hotkey="g" next="DOWN j" ' +
-                  'prev="UP k">' +
-                  '    <item>' +
-                  '      id("gbar")//a[@class="gb1"]' +
-                  '    </item>' +
-                  '    <item>' +
-                  '      id("gbar")//a[@class="gb2"]' +
-                  '    </item>' +
-                  '    <item>' +
-                  '      id("gb")/a' +
-                  '    </item>' +
-                  '  </list>' +
-                  '  <target title="Next page" hotkey="PGDOWN">' +
-                  '    id("nn")/..' +
-                  '  </target>' +
-                  '  <target title="Previous page" hotkey="PGUP">' +
-                  '    id("np")/..' +
-                  '  </target>' +
-                  '</cnr>';
-
-  axsWebSearch.axsNavObj.navInit(cnrString, null);
+  axsWebSearch.axsNavObj.navInitJson(cnrJson, null);
   axsWebSearch.HELP_STRING_POST = axsWebSearch.axsNavObj.globalHelpString() +
                                   axsWebSearch.HELP_STRING_POST;
 
@@ -203,9 +254,6 @@ axsWebSearch.init = function(){
 
   axsWebSearch.axsSoundObj = new AxsSound(true);
   axsWebSearch.axsNavObj.setSound(axsWebSearch.axsSoundObj);
-  
-  axsWebSearch.pkObj = new PowerKey('', axsWebSearch.axsJAXObj);
-  axsWebSearch.axsNavObj.setPowerKey(axsWebSearch.pkObj, '.');
 
   //Read the first thing on the page.
   //Use a set time out just in case the browser is not entirely ready yet.

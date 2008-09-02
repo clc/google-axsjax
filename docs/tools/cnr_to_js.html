@@ -54,20 +54,20 @@ function outputToJson(){
 	var k;
 	var attributes;
 	var length;
-    //Parse items to JSON
-    navList.items = new Array();
-    var cnrItems = listNode.getElementsByTagName('item');
-    for (j = 0; entry = cnrItems[j]; j++){
-      var item = new Object();
-      item.xpath = entry.textContent.replace(/^\s\s*/, '').replace(/\s\s*$/, '');	  
+  //Parse items to JSON
+  navList.items = new Array();
+  var cnrItems = listNode.getElementsByTagName('item');
+  for (j = 0; entry = cnrItems[j]; j++){
+    var item = new Object();
+    item.xpath = entry.textContent.replace(/^\s\s*/, '').replace(/\s\s*$/, '');	  
 	  if (entry.attributes instanceof NamedNodeMap){
 	    attributes = entry.attributes;
-	    length = attributes.length;
-		for (k=0; k < length; k++){
-		  var attrib = attributes.item(k);
-		  item[attrib.nodeName] = attrib.value;
-		}
-	  }
+      length = attributes.length;
+      for (k=0; k < length; k++){
+	      var attrib = attributes.item(k);
+		      item[attrib.nodeName] = attrib.value;
+		    }
+	    }
       navList.items.push(item);
     }
     //Parse targets to JSON
@@ -76,14 +76,14 @@ function outputToJson(){
     for (j = 0; entry = cnrTargets[j]; j++){
       var target = new Object();
       target.xpath = entry.textContent.replace(/^\s\s*/, '').replace(/\s\s*$/, '');
-	  if (entry.attributes instanceof NamedNodeMap){
-	    attributes = entry.attributes;
-	    length = attributes.length;
-		for (k=0; k < length; k++){
-		  var attrib = attributes.item(k);
-		  item[attrib.nodeName] = attrib.value;
-		}
-	  }
+	    if (entry.attributes instanceof NamedNodeMap){
+	      attributes = entry.attributes;
+	      length = attributes.length;
+  	 	  for (k=0; k < length; k++){
+		      var attrib = attributes.item(k);
+		      target[attrib.nodeName] = attrib.value;
+		    }
+	    }
       navList.targets.push(target);
     }
     cnrJson.lists.push(navList);
@@ -97,14 +97,14 @@ function outputToJson(){
     if (currentNode.tagName == 'target'){
       var target = new Object();
       target.xpath = currentNode.textContent.replace(/^\s\s*/, '').replace(/\s\s*$/, '');
-	  if (currentNode.attributes instanceof NamedNodeMap){
-	    attributes = currentNode.attributes;
-	    length = attributes.length;
-		for (k=0; k < length; k++){
-		  var attrib = attributes.item(k);
-		  item[attrib.nodeName] = attrib.value;
-		}
-	  }
+	    if (currentNode.attributes instanceof NamedNodeMap){
+	      attributes = currentNode.attributes;
+	      length = attributes.length;
+ 		    for (k=0; k < length; k++){
+		      var attrib = attributes.item(k);
+		      target[attrib.nodeName] = attrib.value;
+		    }
+	    }
       cnrJson.targets.push(target);
     }
   }
