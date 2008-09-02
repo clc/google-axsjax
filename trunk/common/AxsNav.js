@@ -721,7 +721,7 @@ AxsNav.prototype.navInit = function(cnrString, opt_customNavMethod){
         length = attributes.length;
         for (k = 0; k < length; k++){
           var attrib = attributes.item(k);
-          item[attrib.nodeName] = attrib.value;
+          target[attrib.nodeName] = attrib.value;
         }
       }
       navList.targets.push(target);
@@ -742,7 +742,7 @@ AxsNav.prototype.navInit = function(cnrString, opt_customNavMethod){
         length = attributes.length;
         for (k = 0; k < length; k++){
           var attrib = attributes.item(k);
-          item[attrib.nodeName] = attrib.value;
+          target[attrib.nodeName] = attrib.value;
         }
       }
       cnrJson.targets.push(target);
