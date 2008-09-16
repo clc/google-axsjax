@@ -61,6 +61,7 @@ AxsNav.str = {
   PGUP : 'Page up',
   PGDOWN : 'Page down',
   ENTER : 'Enter',
+  ESC : 'Escape',
   DEL : 'Delete',
   UP : 'Up',
   DOWN : 'Down',
@@ -416,6 +417,11 @@ AxsNav.prototype.actOnItem = function(item){
         } else {
           doAction();
         }
+  } else {
+    var currentList = this.navArray[this.navListIdx];
+    if (currentList.type == 'dynamic'){
+      this.axs_.speakTextViaNode(currentList.onEmpty);
+    }
   }
 };
 
@@ -451,6 +457,8 @@ AxsNav.prototype.assignKeysToMethod = function(keyArray,
       keyMap[34] = method;
     } else if (key == 'ENTER'){
       keyMap[13] = method;
+    } else if (key == 'ESC'){
+      keyMap[27] = method;
     } else if (key == 'DEL'){
       keyMap[46] = method;
     } else {

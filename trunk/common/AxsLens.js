@@ -26,7 +26,9 @@
  * @constructor
  */
 var AxsLens = function(axsJAXObj){
+  this.axsJAXObj = axsJAXObj;
   this.multiplier = 1.5;
+  this.padding = -1;
 
   this.activeDoc = axsJAXObj.getActiveDocument();
   this.lens = this.activeDoc.createElement('span');
@@ -99,8 +101,34 @@ AxsLens.prototype.magnify = function() {
   this.activeDoc.body.removeChild(this.lens);
   this.magnifyText();
   this.enlargeImages();
+  this.addPadding();
   //Attach the lens object back to the document
   this.activeDoc.body.appendChild(this.lens);
+};
+
+/**
+ * Sets the padding in pixels between the magnified nodes.
+ * Setting this to -1 will leave the padding as it was on the original element.
+ * @param {Number} numberOfPixels The padding value to apply (in pixels)
+ */
+AxsLens.prototype.setPadding = function(numberOfPixels) {
+  this.padding = numberOfPixels;
+};
+
+/**
+ * Adds padding to the leaf-level children of the lens.
+ */
+AxsLens.prototype.addPadding = function() {
+  if (this.padding < 0){
+    return;
+  }
+  //Get all leafs of the lens
+  var xPath = '//*[not(.//*)]';
+  var leafNodes = this.axsJAXObj.evalXPath(xPath, this.lens);
+
+  for (var i = 0, leafNode; leafNode = leafNodes[i]; i++) {
+    leafNode.style.padding = this.padding + 'px';
+  }
 };
 
 /**
@@ -126,7 +154,7 @@ AxsLens.prototype.magnifyText = function(){
   // The default aspect value of Arial is .52
   var fontSizeAdjust = this.multiplier * 0.52;
   this.lens.style.fontSizeAdjust = fontSizeAdjust;
-  
+
   // Force the line-height to normal so that multiline text does
   // not collide with itself.
   var subnodes = this.lens.getElementsByTagName('*');
@@ -134,4 +162,3 @@ AxsLens.prototype.magnifyText = function(){
     node.style.setProperty('line-height', 'normal', 'important');
   }
 };
-
