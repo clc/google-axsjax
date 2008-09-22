@@ -164,6 +164,7 @@ axsSkel.charCodeMap = {
          axsSkel.axsLensObj.setMagnification(axsSkel.magSize);
          return false;
        },
+  // ? (question mark)
   63 : function() {
          var helpStr = axsSkel.HELP +
                        axsSkel.axsNavObj.localHelpString() +
