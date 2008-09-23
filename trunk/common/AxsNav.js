@@ -113,7 +113,19 @@ AxsNav.prototype.validateList = function(navList) {
     }
     navList.items = this.makeItemsArray(navList.origListObj);
     navList.targets = this.makeTargetsArray(navList.origListObj);
-    this.navItemIdxs[this.navListIdx] = -1;
+    // Reset the nav index of the list being validated.
+    // Most of the time, the list being validated is the same
+    // as the current list.
+    if (this.navArray[this.navListIdx] === navList){
+      this.navItemIdxs[this.navListIdx] = -1;
+    } else {
+      for (var i = 0, tempList; tempList = this.navArray[i]; i++) {
+        if (tempList === navList){
+          this.navItemIdxs[i] = -1;
+          break;
+        }
+      }
+    }
   }
   if ((navList.items.length === 0) && (navList.entryTarget === null)){
     valid = false;
