@@ -35,12 +35,6 @@ var PowerKey = function(context, axsJAX) {
   this.cmpTextElement = null;
 
   /**
-   * Element showing the PowerKey message/status string.
-   * @type {Element?}
-   */
-  this.statusElement = null;
-
-  /**
    * The div element for the page-wide background of the completion field.
    * @type {Element?}
    * @private
@@ -177,6 +171,7 @@ PowerKey.RIGHT_TRIMMABLE = /(\s|\r|\n)+$/;
  * default handler if the action map is provided.
  * @param {Element?} target The element to attach the event listerner to.
  * @param {string} event The event to listen for.
+ * @notypecheck {Function?} handler.
  * @param {Function?} handler The event handler.
  * @param {Object?} actionMap The HashMap which provides a context-based
  *     mapping from keys to functions.
@@ -229,7 +224,7 @@ PowerKey.prototype.detachHandler = function(target, event, handler) {
  * @param {number} size The size of the completion text field in # of 
  *     characters.
  * @param {Function?} handler The completion handler.
- *     handler = function(completion, index, elementId, args) {}
+ *     handler = function(completion, index, elementId, args) {}.
  * @param {Object?} actionMap The object consisting of completion strings as
  *     keys and functions as values.
  * @param {Array?} completionList The array of completions.
@@ -503,49 +498,6 @@ PowerKey.prototype.setCompletionFieldStyle = function(textColor,
 
 
 /**
- * Creates a floating element for displaying various PowerKey messages.
- * @param {Element} parent The element whose child this element will be.
- */
-PowerKey.prototype.createStatusElement = function(parent) {
-  if (!parent) {
-    return;
-  }
-  // If the status element already exists, remove it and create a new one.
-  if (this.statusElement) {
-    this.statusElement.parentNode.removeChild(this.statusElement);
-  }
-  var statusId, statusTxtId, oldStatusNode = null;
-  do {
-    statusId = 'statusNode_' + Math.floor(Math.random() * 1001);
-    statusTxtId = 'txt_' + statusId;
-    oldStatusNode = document.getElementById(statusId);
-  } while (oldStatusNode);
-
-  var statusNode = document.createElement('div');
-  statusNode.id = statusId;
-  statusNode.setAttribute('class', 'pkHiddenStatus');
-  statusNode.style.position = 'absolute';
-
-  var txtNode = document.createElement('div');
-  txtNode.id = statusTxtId;
-  txtNode.setAttribute('class', 'pkOpaqueStatusText');
-
-  statusNode.appendChild(txtNode);
-
-  parent.appendChild(statusNode);
-  this.statusElement = statusNode;
-  this.statusTxtElement = txtNode;
-
-  if (PowerKey.isGecko) {
-    this.statusTxtElement.textContent = '';
-  }
-  else if (PowerKey.isIE) {
-    this.statusTxtElement.innerText = '';
-  }
-};
-
-
-/**
  * Updates the completion field element with the new visibility status
  * and location parameters.
  * @param {string} status Indicates whether the completion field should be
@@ -600,62 +552,12 @@ PowerKey.prototype.updateCompletionField = function(status,
 
 
 /**
- * Updates the status element with the new display text, visibility status
- * and location parameters.
- * @param {string} text The new display text.
- * @param {string} status Indicates whether the status element should be
- *     made 'visible' or 'hidden'.
- * @param {boolean} opt_resize Indicates whether resizing is necessary.
- * @param {number} opt_top The y-coordinate pixel location of the top
- *     border of the element.
- * @param {number} opt_left The x-coordinate pixel location of the left
- *     border of the element.
- */
-PowerKey.prototype.updateStatusElement = function(text,
-                                                  status,
-                                                  opt_resize,
-                                                  opt_top,
-                                                  opt_left) {
-  if (text) {
-    if (PowerKey.isGecko) {
-      this.statusTxtElement.textContent = text;
-    }
-    else if (PowerKey.isIE) {
-      this.statusTxtElement.innerText = text;
-    }
-  }
-  if (status) {
-    if (status == 'visible') {
-      this.statusElement.className = 'pkVisibleStatus';
-      if (this.axsJAX_ && PowerKey.isGecko) {
-        this.axsJAX_.speakNode(this.statusElement);
-      }
-    }
-    else if (status == 'hidden') {
-      this.statusElement.className = 'pkHiddenStatus';
-    }
-  }
-  if (opt_resize) {
-    var viewportSz = PowerKey.getViewportSize();
-    if (!opt_top) {
-      opt_top = viewportSz.height - this.statusElement.offsetHeight;
-    }
-    if (!opt_left) {
-      opt_left = 0;
-    }
-    this.statusElement.style.top = opt_top;
-    this.statusElement.style.left = opt_left;
-  }
-};
-
-
-/**
  * Creates the list of completions from the text content of the elements
  * obtained from the xpath which satisfy the function func.
  * @param {string} tags The tags to be selected.
  * @param {Function} func Only those elements are considered for which
  *     this function returns true.
- * @param {Function} getText Function to get text for this list element.
+ * @param {Function?} getText Function to get text for this list element.
  * @param {boolean} newList If this is true, all entries in idMap
  *     are erased, and a new mapping of completions and IDs is created.
  * @return {Array} The array of completion strings.
@@ -725,7 +627,7 @@ PowerKey.prototype.onPageResize_ = function(evt) {
  * @param {Object} actionMap The object consisting of completion strings as
  *     keys and functions as values.
  * @param {Function?} handler The completion handler.
- *     handler = function(completion, index, elementId, args) {}
+ *     handler = function(completion, index, elementId, args) {}.
  * @private
  */
 PowerKey.prototype.handleCompletionKeyUp_ = function(evt,
@@ -1106,7 +1008,7 @@ PowerKey.DefaultHandler.prototype.handler =
 /**
  * A class to store the height and width of the viewport.
  * @param {number} width The width of the browser viewport.
- * @param {number} height The height of the browser viewport,
+ * @param {number} height The height of the browser viewport.
  * @constructor
  */
 PowerKey.ViewportSize = function(width, height) {
@@ -1226,9 +1128,6 @@ PowerKey.cssStr =
   'line-height: 1.2em; z-index: 10001; background-color: #000000; ' +
   'padding: 2px; color: #fff; font-family: Arial, Sans-serif; ' +
   'font-size: 20px; filter: alpha(opacity=80); -moz-opacity: .80;}' +
-'.pkOpaqueStatusText { background-color: transparent; ' +
-  'font-family: Arial, Helvetica, sans-serif; font-size: 30px; ' +
-  'color: #fff;}' +
 '.pkOpaqueCompletionText {border-style: none; background-color:transparent; ' +
   'font-family: Arial, Helvetica, sans-serif; font-size: 35px; ' +
   'font-weight: bold; color: #fff; width: 1000px; height: 50px;}' +
