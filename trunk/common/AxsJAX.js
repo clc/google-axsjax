@@ -85,7 +85,7 @@ var AxsJAX = function(useTabKeyFix){
  * not be referenced by its ID from the parent document. Thus activedescendant
  * will not work. The solution is to use setActiveParent to set the active
  * parent that AxsJAX is using to the child iframe's document.body.
- * @param {Node} targetNode The HTML node to be used as the active parent
+ * @param {Node} targetNode The HTML node to be used as the active parent.
  */
 AxsJAX.prototype.setActiveParent = function(targetNode){
   this.activeParent = targetNode;
@@ -104,7 +104,7 @@ AxsJAX.prototype.setActiveParent = function(targetNode){
 
 /**
  * Gets the document for the active parent.
- * @return {Node} The document that is the ancestor for the active parent
+ * @return {Node} The document that is the ancestor for the active parent.
  */
 AxsJAX.prototype.getActiveDocument = function(){
   var activeDoc = this.activeParent;
@@ -127,7 +127,7 @@ AxsJAX.prototype.getActiveDocument = function(){
  * to mirror the visual indication that a node is the current node
  * by speaking its contents as soon as as it becomes the current node.
  * @param {Node} targetNode The HTML node to be spoken.
- * @param {boolean} opt_noFocusChange  Specify if focus must move to targetNode
+ * @param {boolean} opt_noFocusChange  Specify if focus must move to targetNode.
  */
 AxsJAX.prototype.speakNode = function(targetNode, opt_noFocusChange){
   if (!targetNode.id){
@@ -258,6 +258,9 @@ AxsJAX.prototype.speakTextViaNode = function(textString, opt_anchorNode){
     window.setTimeout(function(){pixelNode.blur();pixelNode.focus();}, 0);
   } else {
     pixelNode = activeDoc.getElementById(pixelId);
+    if (pixelNode && (pixelNode.alt == textString)){
+      textString = textString + ' ';
+    }
     if (!pixelNode){
       pixelNode = activeDoc.createElement('img');
       pixelNode.id = pixelId;
@@ -432,7 +435,7 @@ AxsJAX.prototype.markPosition = function(targetNode){
  *         myAxsJAXObj.tabKeyHandler(event,myAxsJAXObj);
  *       },
  *       true);
- * @param {Event} evt The event
+ * @param {Event} evt The event.
  * @param {Object} selfRef The AxsJAX object. A self reference is needed here
  *                         since this in an event handler does NOT refer to the
  *                         AxsJAX object.
@@ -466,9 +469,9 @@ AxsJAX.prototype.goTo = function(targetNode){
  * Sets the attribute of the targetNode to the value.
  * Use this rather than a direct set attribute to abstract away ARIA
  * naming changes.
- * @param {Node} targetNode The HTML node to have the attribute set on
+ * @param {Node} targetNode The HTML node to have the attribute set on.
  * @param {string} attribute The attribute to set.
- * @param {string} value The value the attribute should be set to.
+ * @param {string?} value The value the attribute should be set to.
  */
 AxsJAX.prototype.setAttributeOf = function(targetNode, attribute, value){
   if (!targetNode){
@@ -496,9 +499,9 @@ AxsJAX.prototype.setAttributeOf = function(targetNode, attribute, value){
  * Gets the attribute of the targetNode.
  * Use this rather than a direct get attribute to abstract away ARIA
  * naming changes.
- * @param {Node} targetNode The HTML node to get the attribute of
- * @param {string} attribute The attribute to get the value of
- * @return {string} The value of the attribute of the targetNode
+ * @param {Node} targetNode The HTML node to get the attribute of.
+ * @param {string} attribute The attribute to get the value of.
+ * @return {string} The value of the attribute of the targetNode.
  */
 AxsJAX.prototype.getAttributeOf = function(targetNode, attribute){
   return targetNode.getAttribute(attribute);
@@ -508,8 +511,8 @@ AxsJAX.prototype.getAttributeOf = function(targetNode, attribute){
  * Removes the attribute of the targetNode.
  * Use this rather than a direct remove attribute to abstract away ARIA
  * naming changes.
- * @param {Node} targetNode The HTML node to remove the attribute from
- * @param {string} attribute The attribute to be removed
+ * @param {Node} targetNode The HTML node to remove the attribute from.
+ * @param {string} attribute The attribute to be removed.
  */
 AxsJAX.prototype.removeAttributeOf = function(targetNode, attribute){
   if (targetNode && targetNode.removeAttribute){
@@ -521,7 +524,7 @@ AxsJAX.prototype.removeAttributeOf = function(targetNode, attribute){
  * Sets the location of the active document. This will force
  * assistive technologies that use a browse vs forms mode system
  * to be synced to the targetNode.
- * @param {Node} targetNode The HTML node to force the AT to sync to
+ * @param {Node} targetNode The HTML node to force the AT to sync to.
  */
 AxsJAX.prototype.forceATSync = function(targetNode){
   var id = this.assignId(targetNode);
@@ -539,9 +542,9 @@ AxsJAX.prototype.forceATSync = function(targetNode){
  * that match. The code for this function was taken from Mihai Parparita's GMail
  * Macros Greasemonkey Script.
  * http://gmail-greasemonkey.googlecode.com/svn/trunk/scripts/gmail-new-macros.user.js
- * @param {string} expression The XPath expression to evaluate
- * @param {Node} rootNode The HTML node to start evaluating the XPath from
- * @return {Array} The array of children nodes that match
+ * @param {string} expression The XPath expression to evaluate.
+ * @param {Node} rootNode The HTML node to start evaluating the XPath from.
+ * @return {Array} The array of children nodes that match.
  */
 AxsJAX.prototype.evalXPath = function(expression, rootNode) {
   try {

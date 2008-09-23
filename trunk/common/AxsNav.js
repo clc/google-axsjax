@@ -74,8 +74,8 @@ AxsNav.str = {
  * Set the PowerKey object used for displaying the valid actions in a
  * given context. The PowerKey auto completion input element is invoked
  * via a shortcutKey.
- * @param {Object} powerKeyObj A PowerKey object
- * @param {string} shortcutKey A key for invoking PowerKey
+ * @param {Object} powerKeyObj A PowerKey object.
+ * @param {string} shortcutKey A key for invoking PowerKey.
  */
 AxsNav.prototype.setPowerKey = function(powerKeyObj, shortcutKey) {
   if (shortcutKey) {
@@ -353,7 +353,7 @@ AxsNav.prototype.currentItem = function(){
 /**
  * Returns the callback function if the action is a valid callback;
  * returns null otherwise.
- * @param {String?} actionString The action string for an item or target
+ * @param {String?} actionString The action string for an item or target.
  * @return {Function?} The callback function if there is a valid one.
  */
 AxsNav.prototype.getCallbackFunction = function(actionString){
@@ -430,13 +430,13 @@ AxsNav.prototype.actOnItem = function(item){
  * char and key map.
  *
  * @param {Array} keyArray  Array of keys that will be associated with the
- *                          method
+ *                          method.
  *
- * @param {Object} charMap  Dictionary that maps character codes to methods
+ * @param {Object} charMap  Dictionary that maps character codes to methods.
  *
- * @param {Object} keyMap  Dictionary that maps key codes to methods
+ * @param {Object} keyMap  Dictionary that maps key codes to methods.
  *
- * @param {Function} method  Method to be be associated with the array of keys
+ * @param {Function} method  Method to be be associated with the array of keys.
  */
 AxsNav.prototype.assignKeysToMethod = function(keyArray, 
                                                charMap, 
@@ -477,7 +477,7 @@ AxsNav.prototype.assignKeysToMethod = function(keyArray,
  * @param {number} navListIdx  Index of the list that these keypresses are
  *                             associated with.
  *
- * @param {string}  navTaskStr  "next","prev","fwd","back"
+ * @param {string}  navTaskStr  "next","prev","fwd","back".
  */
 AxsNav.prototype.assignItemKeys = function(keyStr, navListIdx, navTaskStr){
   var keys = new Array();
@@ -586,9 +586,9 @@ AxsNav.prototype.assignEmptyMsgKeys = function(keyStr, emptyMsg){
  * This mapping is active all the time, regardless of which navList
  * the user is in.
  *
- * @param {Object} target  Target object created from the <target> element
- * @param {Object} charMap  Dictionary that maps character codes to methods
- * @param {Object} keyMap  Dictionary that maps key codes to methods
+ * @param {Object} target  Target object created from the <target> element.
+ * @param {Object} charMap  Dictionary that maps character codes to methods.
+ * @param {Object} keyMap  Dictionary that maps key codes to methods.
  */
 AxsNav.prototype.assignTargetKeys = function(target, charMap, keyMap){
   var keys = new Array();
@@ -664,15 +664,17 @@ AxsNav.prototype.getFunctionForKey = function(keyCode, charCode) {
  *
  * @param {string} cnrString  An XML string that contains the information needed
  *                            to build up the content navigation rule.
+ *                            
+ * @notypecheck {Function?} opt_customNavMethod.
  *
- * @notypecheck {Function?} opt_customNavMethod
- *                                A custom navigation method provided by
- *                                the caller. This navigation method will be
- *                                given the DOM created from the cnrString, the
- *                                navigation array of lists of items, an array
- *                                of all the lists which had zero items, and an
- *                                an array of targets. If this is null, the
- *                                default AxsJAX nav handler will be used.
+ * @param {Function?} opt_customNavMethod A custom navigation 
+ *                             method provided by the caller. This navigation 
+ *                             method will be given the DOM created from the
+ *                             cnrString, the navigation array of lists of 
+ *                             items, an array of all the lists which had zero
+ *                             items, and an an array of targets. If this is
+ *                             null, the default AxsJAX nav handler will be 
+ *                             used.
  */
 AxsNav.prototype.navInit = function(cnrString, opt_customNavMethod){
   var cnrJson = new Object();
@@ -1038,6 +1040,8 @@ AxsNav.prototype.defaultInitPowerKeyObj = function() {
                     keyCode = 13;
                   } else if (key == 'DEL') {
                     keyCode = 46;
+                  } else if (key == 'ESC') {
+                    keyCode = 27;
                   } else {
                     charCode = key.charCodeAt(0);
                   }
@@ -1062,10 +1066,10 @@ AxsNav.prototype.defaultInitPowerKeyObj = function() {
 };
 
 /**
- * Returns true if the xPath of this target
+ * Returns true if the xPath of this target.
  * evaluates to a non empty set of nodes.
- * @param {Object} target A target object
- * @return {boolean} Whether the target action is valid
+ * @param {Object} target A target object.
+ * @return {boolean} Whether the target action is valid.
  */
 AxsNav.prototype.isValidTargetAction = function(target) {
   var valid = false;
@@ -1096,15 +1100,17 @@ AxsNav.prototype.isValidTargetAction = function(target) {
  * Builds up the navigation system of lists of items.
  * This system uses the idea of multiple cursors and the visitor pattern.
  *
- * @param {Object} cnrJson  The CNR as a JSON
- * @notypecheck {Function?} opt_customNavMethod
- *                                A custom navigation method provided by
- *                                the caller. This navigation method will be
- *                                given the original cnrJson, the navigation
- *                                array of lists of items, an array of all the
-                                  lists which had zero items, and an array of
- *                                targets. If this is null, the default
- *                                AxsJAX nav handler will be used.
+ * @param {Object} cnrJson  The CNR as a JSON.
+ *
+ * @notypecheck {Function?} opt_customNavMethod.
+ * 
+ * @param {Function?} opt_customNavMethod A custom navigation 
+ *                              method provided by the caller. This navigation
+ *                              method will be given the original cnrJson, the 
+ *                              navigation array of lists of items, an array of
+ *                              all the lists which had zero items, and an array
+ *                              of targets. If this is null, the default AxsJAX
+ *                              nav handler will be used.
  */
 AxsNav.prototype.navInitJson = function(cnrJson, opt_customNavMethod){
   this.navArray = new Array();
@@ -1188,7 +1194,7 @@ AxsNav.prototype.navInitJson = function(cnrJson, opt_customNavMethod){
 /**
  * Makes an array of items given a navigation list node and its index.
  * Elements associated with a list will be marked as such.
- * @param {Object} jsonListObj The navigation list node
+ * @param {Object} jsonListObj The navigation list node.
  * @return {Array} The array of items.
  */
 AxsNav.prototype.makeItemsArray = function(jsonListObj){
@@ -1234,9 +1240,9 @@ AxsNav.prototype.makeItemsArray = function(jsonListObj){
 };
 
 /**
- * Returns an array of target objects for the given <list> node
- * @param {Object} jsonListObj  A <list> node
- * @return {Array} An array of target objects
+ * Returns an array of target objects for the given <list> node.
+ * @param {Object} jsonListObj  A <list> node.
+ * @return {Array} An array of target objects.
  */
 AxsNav.prototype.makeTargetsArray = function(jsonListObj){
   var targetsArray = new Array();
@@ -1260,7 +1266,7 @@ AxsNav.prototype.makeTargetsArray = function(jsonListObj){
 
 /**
  * This function attaches the default AxsJAX key handler for navigation.
- * @param {Object} cnrJson  The CNR as a JSON
+ * @param {Object} cnrJson  The CNR as a JSON.
  * @param {Array} emptyLists  An array of lists which have zero items.
  */
 AxsNav.prototype.setUpNavKeys = function(cnrJson, emptyLists){
