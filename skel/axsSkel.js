@@ -90,11 +90,11 @@ axsSkel.init = function(){
   axsSkel.axsLensObj = new AxsLens(axsSkel.axsJAXObj);
   axsSkel.axsNavObj.setLens(axsSkel.axsLensObj);
   axsSkel.axsLensObj.setMagnification(axsSkel.magSize);
-  
+
   axsSkel.axsSoundObj = new AxsSound(true);
   axsSkel.axsNavObj.setSound(axsSkel.axsSoundObj);
-  
-  axsSkel.pkObj = new PowerKey('available actions', axsSkel.axsJAXObj);  
+
+  axsSkel.pkObj = new PowerKey('available actions', axsSkel.axsJAXObj);
   axsSkel.axsNavObj.setPowerKey(axsSkel.pkObj, '.');
 
   //Delete the next line when you are done with your script.
@@ -103,7 +103,7 @@ axsSkel.init = function(){
 
 /**
  * Handler for DOMNodeInserted events. 
- * @param {Object} evt A DOMNodeInserted event
+ * @param {Object} evt A DOMNodeInserted event.
  */
 axsSkel.nodeInsertedHandler = function(evt){
   var target = evt.target;
@@ -113,7 +113,7 @@ axsSkel.nodeInsertedHandler = function(evt){
 
 /**
  * Handler for DOMAttrModified events. 
- * @param {Object} evt A DOMAttrModified event
+ * @param {Object} evt A DOMAttrModified event.
  */
 axsSkel.attrModifiedHandler = function(evt){
   var attrib = evt.attrName;
@@ -126,7 +126,7 @@ axsSkel.attrModifiedHandler = function(evt){
 
 /**
  * Handler for key events. 
- * @param {Object} evt A keypress event
+ * @param {Object} evt A keypress event.
  * @return {boolean} If true, the event should be propagated.
  */
 axsSkel.keyHandler = function(evt){
