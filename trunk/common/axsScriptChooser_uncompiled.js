@@ -159,7 +159,21 @@ function pickScript(){
     scriptsArray.push(sndLib);
     shouldInsertScripts = true;
   }
-
+  else if (currentURL.indexOf('http://www.orkut.com') === 0){
+    theScript.src = baseURL + 'orkut/axsEnableOrkut.js';
+    scriptsArray.push(navLib);
+    scriptsArray.push(lensLib);
+    scriptsArray.push(sndLib);
+    shouldInsertScripts = true;
+  }
+  else if (currentURL.indexOf('craigslist.org/forums/') != -1){
+    theScript.src = baseURL + 'www.craigslist.org/axsEnableCraigslistForums.js';
+    scriptsArray.push(navLib);
+    scriptsArray.push(lensLib);
+    scriptsArray.push(sndLib);
+    scriptsArray.push(pkLib);
+    shouldInsertScripts = true;
+  }
   if (shouldInsertScripts){
     scriptsArray.push(theScript);
     for (var i = 0, script; script = scriptsArray[i]; i++){
