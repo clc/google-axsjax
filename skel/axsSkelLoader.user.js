@@ -25,11 +25,15 @@ lensLib.src = 'http://google-axsjax.googlecode.com/svn/trunk/common/AxsLens.js';
 var sndLib = document.createElement('script');
 sndLib.type = 'text/javascript';
 sndLib.src = 'http://google-axsjax.googlecode.com/svn/trunk/common/AxsSound.js';
+var pkLib = document.createElement('script');  
+pkLib.type = 'text/javascript';
+pkLib.src = 'http://google-axsjax.googlecode.com/svn/trunk/common/PowerKey.js';  
 			
 document.getElementsByTagName('head')[0].appendChild(theLib);
 document.getElementsByTagName('head')[0].appendChild(navLib);
 document.getElementsByTagName('head')[0].appendChild(lensLib);
 document.getElementsByTagName('head')[0].appendChild(sndLib);
+document.getElementsByTagName('head')[0].appendChild(pkLib);
 
 
 var myScript = document.createElement('script');
