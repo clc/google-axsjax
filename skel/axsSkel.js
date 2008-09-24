@@ -44,16 +44,22 @@ axsSkel.axsJAXObj = null;
 axsSkel.axsNavObj = null;
 
 /**
- * The AxsLens object that will magnify content.
- * @type AxsLens?
- */
-axsSkel.axsLensObj = null;
-
-/**
  * The AxsSound object that will play earcons
  * @type AxsSound?
  */
 axsSkel.axsSoundObj = null;
+
+/**
+ * The PowerKey object that will provide a quick search
+ * @type PowerKey?
+ */
+axsSkel.pkObj = null;
+
+/**
+ * The AxsLens object that will magnify content.
+ * @type AxsLens?
+ */
+axsSkel.axsLensObj = null;
 
 /**
  * The magnification factor for the AxsLens object.
@@ -84,8 +90,12 @@ axsSkel.init = function(){
   axsSkel.axsLensObj = new AxsLens(axsSkel.axsJAXObj);
   axsSkel.axsNavObj.setLens(axsSkel.axsLensObj);
   axsSkel.axsLensObj.setMagnification(axsSkel.magSize);
+  
   axsSkel.axsSoundObj = new AxsSound(true);
   axsSkel.axsNavObj.setSound(axsSkel.axsSoundObj);
+  
+  axsSkel.pkObj = new PowerKey('available actions', axsSkel.axsJAXObj);  
+  axsSkel.axsNavObj.setPowerKey(axsSkel.pkObj, '.');
 
   //Delete the next line when you are done with your script.
   alert('AxsSkel loaded and initialized!');
