@@ -32,12 +32,10 @@ axsFinance.HELP = 'The following shortcut keys are available. ';
  * Strings for enhancing the presentation
  */
 axsFinance.str = {
-  BIO : 'Bio',
-  GT : '>',
   OR : 'or',
   STATUS : '. Status',
-  PRICE : ' Price ',
-  DATE : ' Date ',
+  RATE : 'Rate',
+  DATE : 'Date',
   UP : ' up by ',
   UP_ABBR : '+',
   DOWN : ' down by ',
@@ -48,36 +46,10 @@ axsFinance.str = {
   MLN_ABBR : 'M',
   BLN : ' billion',
   BLN_ABBR : 'B',
-  EXCHANGE : 'Traded on',
-  SYMBOL : 'Symbol',
-  LAST_TRADE : 'Last trade',
   CHANGE : 'Change',
   MKT_CAP : 'Market cap',
-  DELAY : ' Note that the last trade is delayed ' +
-    'up to 20 minutes. ',
-  USD : 'US dollars',
-  TTM : 'TTM',
-  TTM_SPACES : 'T T M',
   EXAMPLE : 'Example',
   DEFINITION : 'Definition',
-
-  //Strings for stock exchanges
-  NYSE : 'New York Stock Exchange',
-  NYSE_ABBR : 'NYSE',
-  NASDAQ : 'NASDAQ Stock Market',
-  NASDAQ_ABBR : 'NASDAQ',
-  LON : 'London Stock Exchange',
-  LON_ABBR : 'LON',
-  OTC : 'Over the counter',
-  OTC_ABBR : 'OTC',
-  AMEX : 'American Stock Exchange',
-  AMEX_ABBR : 'AMEX',
-  EPA : 'Euronext Paris Stock Exchange',
-  EPA_ABBR : 'EPA',
-  ASX : 'Australian Securities Exchange',
-  ASX_ABBR : 'ASX',
-  UNDEFINED_ABBR : '-',
-  UNDEFINED : 'undefined',
 
   //Strings for market data
   MKT_CAP : 'Market cap',
@@ -110,46 +82,15 @@ axsFinance.QUOTE_XPATH = "id('md')//span[@class='pr']/..";
  * Array for building a sentence for the 'Data description' section
  * @type Array
  */
-axsFinance.marketDataDescArray = new Array(axsFinance.str.PRICE,
+axsFinance.marketDataDescArray = new Array(axsFinance.str.RATE,
                                           axsFinance.str.CHANGE,
                                           axsFinance.str.OR,
                                           axsFinance.str.DATE);
-/**
- * Array for building a sentence for the Related companies section  
- * @type Array
- */
-axsFinance.relatedCompaniesDescArray = new Array('',
-                                                axsFinance.str.EXCHANGE,
-                                                axsFinance.str.SYMBOL,
-                                                axsFinance.str.LAST_TRADE,
-                                                axsFinance.str.CHANGE,
-                                                axsFinance.str.OR,
-                                                axsFinance.str.MKT_CAP,
-                                                axsFinance.str.USD);
-/**
- * Array for building a sentence for the 'Financials' section
- * @type Array
- */
-axsFinance.financialsDescArray = new Array();
-
-/**
- * Array for building a sentence for the 'Ratios and Stats' section
- * @type Array
- */
-axsFinance.ratAndStatDescArray = new Array();
 
 /**
  * Map from abbreviated phrases to expanded phrases
  */
 axsFinance.phrasesMap = new Object();
-axsFinance.phrasesMap[axsFinance.str.TTM] = axsFinance.str.WEEKS;
-axsFinance.phrasesMap[axsFinance.str.NYSE_ABBR] = axsFinance.str.NYSE;
-axsFinance.phrasesMap[axsFinance.str.NASDAQ_ABBR] = axsFinance.str.NASDAQ;
-axsFinance.phrasesMap[axsFinance.str.LON_ABBR] = axsFinance.str.LON;
-axsFinance.phrasesMap[axsFinance.str.OTC_ABBR] = axsFinance.str.OTC;
-axsFinance.phrasesMap[axsFinance.str.AMEX_ABBR] = axsFinance.str.AMEX;
-axsFinance.phrasesMap[axsFinance.str.EPA_ABBR] = axsFinance.str.EPA;
-axsFinance.phrasesMap[axsFinance.str.ASX_ABBR] = axsFinance.str.ASX;
 axsFinance.phrasesMap[axsFinance.str.MKT_CAP_ABBR] = axsFinance.str.MKT_CAP;
 axsFinance.phrasesMap[axsFinance.str.WEEKS_ABBR] = axsFinance.str.WEEKS;
 axsFinance.phrasesMap[axsFinance.str.NA_ABBR] = axsFinance.str.NA;
@@ -159,7 +100,6 @@ axsFinance.phrasesMap[axsFinance.str.VOL_ABBR] = axsFinance.str.VOL;
 axsFinance.phrasesMap[axsFinance.str.AVG_VOL_ABBR] = axsFinance.str.AVG_VOL;
 axsFinance.phrasesMap[axsFinance.str.INST_OWN_ABBR] = axsFinance.str.INST_OWN;
 axsFinance.phrasesMap[axsFinance.str.EPS_ABBR] = axsFinance.str.EPS;
-axsFinance.phrasesMap[axsFinance.str.UNDEFINED_ABBR] = axsFinance.str.UNDEFINED;
 
 /**
  * Map from prefix characters to strings 
@@ -187,14 +127,14 @@ axsFinance.CNR = '<cnr next="RIGHT l" prev="LEFT h">' +
     '' +
     '  <target title="Read current quote" hotkey="q"' +
     '      action="CALL:axsFinance.readCurrentQuote">' +
-    '    /html' +
+    '    /html"]' +
     '  </target>' +
     '' +
     '  <list title="Market data" next="DOWN j" prev="UP k" fwd' +
     '="n" back="p">' +
     '' +
     '    <item action="CALL:axsFinance.readCurrentQuote">' +
-    '      /html' +
+    '      id("md")//span[@class="pr"]/..' +
     '    </item>' +
     '' +
     '    <item action="CALL:axsFinance.readMarketDataItem">' +
@@ -298,24 +238,6 @@ axsFinance.CNR = '<cnr next="RIGHT l" prev="LEFT h">' +
     '' +
     '  </list>' +
     '' +
-    '  <list title="Related companies" next="DOWN j" prev="UP ' +
-    'k" fwd="n"' +
-    '      back="p">' +
-    '' +
-    '    <item action="CALL:axsFinance.readRelCompDesc">' +
-    '      id("related")//tbody//tr' +
-    '    </item>' +
-    '' +
-    '    <target title="Go to link" hotkey="ENTER">' +
-    '       .//a' +
-    '    </target>' +
-    '' +
-    '    <target title="Go to section" trigger="listEntry">' +
-    '      id("related")/div[@class="hdg"]' +
-    '    </target>' +
-    '' +
-    '  </list>' +
-    '' +
     '  <list title="Discussions" next="DOWN j" prev="UP k" fwd' +
     '="n" back="p">' +
     '' +
@@ -329,217 +251,6 @@ axsFinance.CNR = '<cnr next="RIGHT l" prev="LEFT h">' +
     '' +
     '    <target title="Go to section" trigger="listEntry">' +
     '      id("groups")/div[@class="hdg"]' +
-    '    </target>' +
-    '' +
-    '  </list>' +
-    '' +
-    '  <list title="Blog posts" next="DOWN j" prev="UP k" fwd=' +
-    '"n" back="p">' +
-    '' +
-    '    <item>' +
-    '      id("blogs")//div[@class="item"]' +
-    '    </item>' +
-    '' +
-    '    <target title="Go to link" hotkey="ENTER" onEmpty="No' +
-    ' ' +
-    '        link available.">' +
-    '      .//a' +
-    '    </target>' +
-    '' +
-    '    <target title="Go to section" trigger="listEntry">' +
-    '      id("blogs")/div[@class="hdg"]' +
-    '    </target>' +
-    '' +
-    '  </list>' +
-    '' +
-    '  <list title="Events" next="DOWN j" prev="UP k" fwd="n" ' +
-    'back="p">' +
-    '' +
-    '    <item action="CALL:axsFinance.readEventsDesc">' +
-    '      id("events")//tr' +
-    '    </item>' +
-    '' +
-    '    <item>' +
-    '      id("events")/following-sibling::*//a' +
-    '    </item>' +
-    '' +
-    '    <target title="Go to section" trigger="listEntry">' +
-    '      id("blogs")/following-sibling::div[@class="content"' +
-    ']' +
-    '        /div[@class="hdg"]' +
-    '    </target>' +
-    '' +
-    '    <target title="Go to link" hotkey="ENTER" onEmpty="No' +
-    '        link available.">' +
-    '      .//descendant-or-self::a' +
-    '    </target>' +
-    '' +
-    '  </list>' +
-    '' +
-    '  <list title="Summary" next="DOWN j" prev="UP k" fwd="n"' +
-    ' back="p">' +
-    '' +
-    '    <item action="CALL:axsFinance.readSummaryTextCompDesc"' +
-    '>' +
-    '      id("summary")//div[@class="item companySummary"]' +
-    '    </item>' +
-    '' +
-    '    <item>' +
-    '      id("summary")//div[@class="content"]//td[1]' +
-    '    </item>' +
-    '' +
-    '    <item action="CALL:axsFinance.readSummarylinksCompDesc' +
-    '">' +
-    '      id("summary")//div[@class="content"]//a[contains(@i' +
-    'd,"fs-")]' +
-    '    </item>' +
-    '' +
-    '    <target title="Go to link" hotkey="ENTER" onEmpty="No' +
-    '        link available.">' +
-    '      .//descendant-or-self::a' +
-    '    </target>' +
-    '' +
-    '    <target title="Go to section" trigger="listEntry">' +
-    '      id("summary")/div[@class="hdg"]' +
-    '    </target>' +
-    '' +
-    '  </list>' +
-    '' +
-    '  <list title="Income statement in millions of US dollars' +
-    '"' +
-    '      next="DOWN j" prev="UP k" fwd="n" back="p">' +
-    '    <item index="1" count="4"' +
-    '        action="CALL:axsFinance.readFinancialCompDesc">' +
-    '      id("fd")//tr' +
-    '    </item>' +
-    '' +
-    '    <target title="Income statement section" trigger="lis' +
-    'tEntry">' +
-    '      id("fd")//tr[1]//td[1]axsFinance.str.BIO' +
-    '    </target>' +
-    '' +
-    '    <target title="Go to link" hotkey="ENTER">' +
-    '      ./../tr[1]//a' +
-    '    </target>' +
-    '' +
-    '    <target title="Go to section" trigger="listEntry">' +
-    '      id("fd")//tr[1][//a]' +
-    '    </target>' +
-    '' +
-    '  </list> ' +
-    '' +
-    '  <list title="Balance sheet in millions of US dollars"' +
-    '      next="DOWN j" prev="UP k" fwd="n" back="p">' +
-    '' +
-    '    <item index="7" count="5"' +
-    '        action="CALL:axsFinance.readFinancialCompDesc">' +
-    '      id("fd")//tr' +
-    '    </item>' +
-    '' +
-    '    <target title="Go to link" hotkey="ENTER">' +
-    '      ./../tr[6]//a' +
-    '    </target>' +
-    '' +
-    '    <target title="Go to section" trigger="listEntry">' +
-    '      id("fd")//tr[6][//a]' +
-    '    </target>' +
-    '' +
-    '  </list>' +
-    '' +
-    '  <list title="Cash flow in millions of US dollars" next=' +
-    '"DOWN j" ' +
-    '      prev="UP k" fwd="n" back="p">' +
-    '' +
-    '    <item index="12" count="5"' +
-    '        action="CALL:axsFinance.readFinancialCompDesc">' +
-    '      id("fd")//tr' +
-    '    </item>' +
-    '' +
-    '    <target title="Go to link" hotkey="ENTER">' +
-    '      ./../tr[12]//a' +
-    '    </target>' +
-    '' +
-    '    <target title="Go to section" trigger="listEntry">' +
-    '      id("fd")//tr[12][//a]' +
-    '    </target>' +
-    '' +
-    '  </list>' +
-    '' +
-    '  <list title="Key statistics and ratios" next="DOWN j" p' +
-    'rev="UP k"' +
-    '      fwd="n" back="p">' +
-    '' +
-    '    <item action="CALL:axsFinance.readRatAndStatsCompDesc"' +
-    '>' +
-    '      id("keyratios")//tr[@class]' +
-    '    </item>' +
-    '' +
-    '    <item>' +
-    '      id("keyratios")//a' +
-    '    </item>' +
-    '' +
-    '    <target title="More ratios" hotkey="ENTER"' +
-    '        onEmpty="No link available.">' +
-    '      .' +
-    '    </target>' +
-    '' +
-    '    <target title="Go to section" trigger="listEntry">' +
-    '      id("keyratios")/div[@class="hdg"]' +
-    '    </target>' +
-    '' +
-    '  </list>' +
-    '' +
-    '  <list title="More resources" next="DOWN j" prev="UP k"' +
-    '      fwd="n" back="p">' +
-    '' +
-    '    <item>' +
-    '      id("m-analyst")/.. | id("m-sec")/.. | id("m-hold")/' +
-    '.. |' +
-    '          id("m-options")/.. | id("m-research")/.. |' +
-    '          id("m-wiki")/.. | id("m-transcripts")/..' +
-    '    </item>' +
-    '' +
-    '    <target title="Go to link" hotkey="ENTER">' +
-    '      .//a' +
-    '    </target>' +
-    '' +
-    '    <target title="Go to section" trigger="listEntry" >' +
-    '      id("keyratios")/following-sibling::div[@class="hdg"' +
-    ']' +
-    '    </target>' +
-    '' +
-    '  </list>' +
-    '' +
-    '  <list title="Officers and directors" next="DOWN j"' +
-    '      prev="UP k" fwd="n" back="p">' +
-    '' +
-    '    <item action="CALL:axsFinance.readManagementDescriptio' +
-    'n">' +
-    '      id("management")//tr[not(@id="hide") and @id]' +
-    '    </item>' +
-    '' +
-    '    <item>' +
-    '      id("management")//td/a' +
-    '    </item>' +
-    '' +
-    '    <target title="Biography and compensation" hotkey="b"' +
-    '>' +
-    '      .//following-sibling::tr[1]//a[@class="e-p"]' +
-    '    </target>' +
-    '' +
-    '    <target title="Trading activity" hotkey="t" onEmpty="' +
-    'No trading' +
-    '        activity available.">' +
-    '      .//following-sibling::tr[1]//a[@class="e-t"]' +
-    '    </target>' +
-    '' +
-    '    <target title="Go to link" hotkey="ENTER"' +
-    '        onEmpty="No link available.">' +
-    '      .' +
-    '    </target>' +
-    '' +
-    '    <target title="Go to section" trigger="listEntry">' +
-    '      id("mgmtdiv")' +
     '    </target>' +
     '' +
     '  </list>' +
@@ -634,10 +345,6 @@ axsFinance.init = function() {
   var func = axsFinance.DOMNodeInsertedEventDispatch;
   document.addEventListener('DOMNodeInserted', func, true);
 
-  //Table columns are static for the page but change over time
-  axsFinance.populateFinancialsDescArray();
-  axsFinance.populateRatAndStatDescArray();
-
   //Handle the focus in the search box performed by the page script during init
   var searchBox = document.getElementById('searchbox');
   searchBox.addEventListener('focus', axsFinance.searchBoxKeyHandler, false);
@@ -672,7 +379,7 @@ axsFinance.DOMSubtreeModifiedEventDispatch = function(evt) {
 axsFinance.announceAutoCompletionValueEventHandler = function(evt) {
   var target = evt.target;
   for (var i = 0, child; child = target.childNodes[i]; i++){
-    if (child.className == 'selected'){
+    if (child.className == 'selected') {
       axsFinance.axsJAXObj.speakNode(child);
       return;
     }
@@ -703,7 +410,9 @@ axsFinance.DOMNodeInsertedEventDispatch = function(evt) {
   var target = evt.target;
 
   if (target.parentNode.parentNode.parentNode.id == 'scrollingListTd') {
+
     axsFinance.refreshNewsBlogsFeedsListEventHandler(evt);
+
   }
 };
 
@@ -746,62 +455,6 @@ axsFinance.speakIntroduction = function() {
     text = text + axsFinance.parseCurrentQuote(quoteElems[0]);
 
     axsFinance.speakAndGo(quoteElems[0], text);
-};
-
-/**
- * Populates the array used for building a sentence for presenting the
- * 'Balance sheet in millions of US dollars', Cash flow in millions
- * of US dollars' lists (Financial section). 
- * NOTE: The array is built dynamically since the captions of the Financials
- * table vary over time.
- */
-axsFinance.populateFinancialsDescArray = function() {
-  var xpath = 'id("fd")//tr[1]';
-  var elements = axsFinance.axsJAXObj.evalXPath(xpath, document.body);
-  var tableRow = elements[0];
-  var currentCaption = tableRow.childNodes[3].textContent;
-  currentCaption = currentCaption.replace('(', ' ').replace(')', ' ');
-  currentCaption = axsFinance.normalizeString(currentCaption) + ', ';
-  var oneYearOldCaption = tableRow.childNodes[5].textContent;
-  oneYearOldCaption = oneYearOldCaption.replace('(', ' ').replace(')', ' ');
-  oneYearOldCaption = axsFinance.normalizeString(oneYearOldCaption) + ', ';
-  var twoYearsOldCaption = tableRow.childNodes[7].textContent;
-  twoYearsOldCaption = twoYearsOldCaption.replace('(', ' ').replace(')', ' ');
-  twoYearsOldCaption = axsFinance.normalizeString(twoYearsOldCaption) + ', ';
-
-  axsFinance.financialsDescArray = new Array('',
-                                            currentCaption,
-                                            oneYearOldCaption,
-                                            twoYearsOldCaption);
-};
-
-/**
- * Populates the array used for building a sentence for presenting the
- * 'Key statistics and ratios' list section (Key Stats & Ratios). 
- * NOTE: The array is built dynamically since the captions of the 'Key Stats & 
- * Ratios' table vary over time.
- */
-axsFinance.populateRatAndStatDescArray = function() {
-  var xpath = 'id("keyratios")//tr[1]';
-  var elements = axsFinance.axsJAXObj.evalXPath(xpath, document.body);
-  var tableRow = elements[0];
-  var currentCaption = tableRow.childNodes[3].textContent;
-  currentCaption = currentCaption.replace('(', ' ').replace(')', ' ');
-  currentCaption = axsFinance.normalizeString(currentCaption) + ', ';
-  var oneYearCaption = tableRow.childNodes[5].textContent;
-  oneYearCaption = oneYearCaption.replace('(', ' ').replace(')', ' ');
-  oneYearCaption = axsFinance.normalizeString(oneYearCaption) + ', ';
-  var twoYearsCaption = tableRow.childNodes[7].textContent;
-  twoYearsCaption = twoYearsCaption.replace('(', ' ').replace(')', ' ');
-  twoYearsCaption = axsFinance.normalizeString(twoYearsCaption) + ', ';
-  if (twoYearsCaption.indexOf(axsFinance.str.TTM) != -1) {
-    twoYearsCaption = twoYearsCaption.replace(axsFinance.str.TTM,
-                                              axsFinance.str.TTM_SPACES);
-  }
-  axsFinance.ratAndStatDescArray = new Array('',
-                                            currentCaption,
-                                            oneYearCaption,
-                                            twoYearsCaption);
 };
 
 /**
@@ -958,176 +611,6 @@ axsFinance.focusOnSearchBox = function(item) {
   element.title = 'Search box';
   element.focus();
   element.select();
-};
-
-/**
- * Callback handler for reading the 'Related companies' list.
- * @param {Object} item A wrapper for the current DOM node.
- */
-axsFinance.readRelCompDesc = function(item) {
-  var element = item.elem;
-  var rowColumns = element.childNodes;
-  var companyName = axsFinance.normalizeString(rowColumns[1].textContent);
-  var exchange = axsFinance.normalizeString(rowColumns[5].textContent);
-  var exchangeFullName = axsFinance.phrasesMap[exchange];
-  if (exchangeFullName !== undefined) {
-    exchange = exchangeFullName;
-  }
-  var symbol = axsFinance.normalizeString(rowColumns[7].textContent);
-  symbol = axsFinance.addSpaceBetweenChars(symbol);
-  var lastTrade = axsFinance.normalizeString(rowColumns[9].textContent);
-  var note = '';
-  if (rowColumns[11].textContent.indexOf('*') != -1) {
-    note = axsFinance.str.DELAY;
-  }
-  var index = rowColumns[13].textContent.indexOf('(');
-  var absoluteChange = rowColumns[13].textContent.substring(0, index);
-  absoluteChange = axsFinance.parseSpecChrsAndTkns(absoluteChange);
-  var relativeChange = rowColumns[13].textContent.substring(index);
-  relativeChange = axsFinance.parseSpecChrsAndTkns(relativeChange);
-  var marketCap = axsFinance.parseSpecChrsAndTkns(rowColumns[15].textContent);
-  var docTextPhrases = new Array(companyName,
-                                 exchange,
-                                 symbol,
-                                 lastTrade,
-                                 absoluteChange,
-                                 relativeChange,
-                                 marketCap,
-                                 note);
-  var rowText = axsFinance.buildTableRowText(docTextPhrases,
-      axsFinance.relatedCompaniesDescArray);
-  axsFinance.speakAndGo(element, rowText);
-};
-
-/**
- * Callback handler for reading the 'Income statement in millions of
- * US dollars', 'Balance sheet in millions of US dollars', Cash flow in
- * millions of US dollars' lists.
- * @param {Object} item A wrapper for the current DOM node.
- */
-axsFinance.readFinancialCompDesc = function(item) {
-  var element = item.elem;
-
-  var metricName = element.childNodes[1].textContent;
-  metricName = axsFinance.parseSpecChrsAndTkns(metricName) + ', ';
-
-  var currentValue = element.childNodes[3].textContent;
-  currentValue = axsFinance.parseSpecChrsAndTkns(currentValue) + ', ';
-
-  var oneYearValue = element.childNodes[5].textContent;
-  oneYearValue = axsFinance.parseSpecChrsAndTkns(oneYearValue) + ', ';
-
-  var twoYearsValue = element.childNodes[7].textContent;
-  twoYearsValue = axsFinance.parseSpecChrsAndTkns(twoYearsValue) + ', ';
-
-  var columnsText = new Array(metricName,
-                              currentValue,
-                              oneYearValue,
-                              twoYearsValue);
-
-  var rowText = axsFinance.buildTableRowText(columnsText,
-                                             axsFinance.financialsDescArray);
-
-  axsFinance.speakAndGo(element, rowText);
-};
-
-/**
- * Callback handler for reading the 'Key ratios and Stats' list.
- * @param {Object} item A wrapper for the current DOM node.
- */
-axsFinance.readRatAndStatsCompDesc = function(item) {
-  var element = item.elem;
-  var metricName = element.childNodes[1].textContent;
-  metricName = axsFinance.parseSpecChrsAndTkns(metricName) + ', ';
-  var currentValue = element.childNodes[3].textContent;
-  currentValue = axsFinance.parseSpecChrsAndTkns(currentValue) + ', ';
-  var oneYearValue = element.childNodes[5].textContent;
-  oneYearValue = axsFinance.parseSpecChrsAndTkns(oneYearValue) + ', ';
-  var twoYearsValue = element.childNodes[7].textContent;
-  twoYearsValue = axsFinance.parseSpecChrsAndTkns(twoYearsValue) + ', ';
-
-  var columnsText = new Array(metricName,
-                              currentValue,
-                              oneYearValue,
-                              twoYearsValue);
-
-  var rowText = axsFinance.buildTableRowText(columnsText,
-                                         axsFinance.ratAndStatDescArray);
-
-  axsFinance.speakAndGo(element, rowText);
-};
-
-/**
- * Callback handler for reading the names and information of the people
- * in the 'Officers and directors' list.
- * @param {Object} item A wrapper for the current DOM node.
- */
-axsFinance.readManagementDescription = function(item) {
-  var element = item.elem;
-  var personName = element.childNodes[1].textContent;
-  personName = personName.replace(axsFinance.str.GT, '');
-  personName = axsFinance.normalizeString(personName);
-  var position = element.childNodes[3].textContent;
-  var info = element.nextSibling.nextSibling.textContent;
-  var index = info.indexOf(axsFinance.str.BIO);
-  info = info.substring(0, index);
-  info = axsFinance.normalizeString(info);
-  var columnsText = new Array(personName, position, info);
-  var rowText = axsFinance.buildTableRowText(columnsText, null);
-  axsFinance.speakAndGo(element, rowText);
-};
-
-/**
- * Callback handler for reading the events in the 'Events' list.
- * @param {Object} item A wrapper for the current DOM node.
- */
-axsFinance.readEventsDesc = function(item) {
-  var element = item.elem;
-  var text = '';
-  var dateAndTime = element.childNodes[1].textContent;
-  dateAndTime = axsFinance.normalizeString(dateAndTime);
-  var eventName = element.childNodes[3].childNodes[0].textContent;
-  eventName = axsFinance.normalizeString(eventName);
-  text = dateAndTime + ', ' + eventName;
-  axsFinance.speakAndGo(element, text);
-};
-
-/**
- * Callback handler for reading the company web site links in the 'Summary' 
- * list.
- * @param {Object} item A wrapper for the current DOM node.
- */
-axsFinance.readSummarylinksCompDesc = function(item) {
-  var element = item.elem;
-  var text = axsFinance.normalizeString(element.textContent);
-  axsFinance.speakAndGo(element, text);
-};
-
-/**
- * Callback handler for reading the company description in the 'Summary' list.
- * @param {Object} item A wrapper for the current DOM node.
- */
-axsFinance.readSummaryTextCompDesc = function(item) {
-  var element = item.elem;
-  var text = element.childNodes[0].textContent;
-  axsFinance.speakAndGo(element, text);
-};
-
-/**
- * Adds white spaces between the characters of a string
- * @param {string} text The processed text.
- * @return {string} The processed text with white spaces added between its 
- * characters.
- */
-axsFinance.addSpaceBetweenChars = function(text) {
-  var textWithSpaces = '';
-  for (var i = 0; i < text.length; i++) {
-    textWithSpaces = textWithSpaces + text.charAt(i);
-    if (i < text.length - 1) {
-      textWithSpaces = textWithSpaces + ' ';
-    }
-  }
-  return textWithSpaces;
 };
 
 /**

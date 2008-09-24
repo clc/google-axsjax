@@ -1,0 +1,87 @@
+<cnr next="RIGHT l" prev="LEFT h">
+  
+  <target title="Go to the results section" hotkey="s"
+      action="CALL:axsFinance.setActiveAxsNavObjRes">
+    /html
+  </target>
+  
+  <target title="Open add criteria wizard" hotkey="w"
+      action="CALL:axsFinance.setActiveAxsNavObjWiz">
+    /html
+  </target>
+  
+  <target title="Reset to default criteria" hotkey="d">
+    id("action_links")//a[not(@class)]
+  </target>
+  
+  <list title="Criteria list" next="DOWN j" prev="UP k"
+      fwd="n" back="p" type="dynamic">
+  
+    <item action="CALL:axsFinance.readCriteriaDesc">
+      id("criteria_rows_tbody")/tr[not(.//b)]
+    </item>
+  
+    <target title="Load CNR and go to section" trigger="listEntry"
+        action="CALL:axsFinance.refreshStockCriteriaCNRAndAnnounceList">
+      id("criteria_rows")
+    </target>
+  
+    <target title="Delete criteria" hotkey="DEL"
+        onEmpty="This element is not a criteria"
+        action="CALL:axsFinance.removeCriteria">
+      .//img[not(@id) and @class="activelink"]
+    </target>
+  
+    <target title="Edit criteria" hotkey="ENTER"
+        onEmpty="This element is not a criteria"
+        action="CALL:axsFinance.focusOnCriteriaRangeInput">
+      /html
+    </target>
+  
+    <target title="Explain criteria" hotkey="e"
+        onEmpty="This element is not a criteria and has no explanation"
+        action="CALL:axsFinance.readCriteriaHelp">
+      .//img[@id and @class="activelink"]/..
+    </target>
+  
+  </list>
+  
+  <list title="Sector" next="DOWN j" prev="UP k" fwd="n"
+      back="p" type="dynamic">
+  
+    <item action="CALL:axsFinance.readDropDownListItem">
+      id("sectorselect")//option
+    </item>
+  
+    <target title="Focus on sector" trigger="listEntry"
+        action="CALL:axsFinance.focusOnDropDownList">
+      id("sectorselect")
+    </target>
+  
+    <target title="Select sector" hotkey="ENTER"
+        action="CALL:axsFinance.selectDropDownListOption">
+      /html
+    </target>
+  
+  </list>
+  
+  <list title="Exchange" next="DOWN j" prev="UP k" fwd="n"
+      back="p" type="dynamic">
+  
+    <item action="CALL:axsFinance.readDropDownListItem">
+      id("exchangeselect")//option
+    </item>
+  
+    <target title="Focus on exchange" trigger="listEntry"
+        action="CALL:axsFinance.focusOnDropDownList">
+      id("exchangeselect")
+    </target>
+  
+    <target title="Select exchange" hotkey="ENTER"
+        action="CALL:axsFinance.selectDropDownListOption">
+      /html
+     </target>
+  
+  </list>
+  
+</cnr>

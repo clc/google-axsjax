@@ -1,0 +1,132 @@
+<cnr next="RIGHT l" prev="LEFT h">
+
+  <target title="Stock screener" hotkey="s">
+    //a[@href="/finance/stockscreener"]
+  </target>
+
+  <target title="Read current quote" hotkey="q"
+      action="CALL:axsFinance.readCurrentQuote">
+    /html"]
+  </target>
+
+  <list title="Market data" next="DOWN j" prev="UP k" fwd="n" back="p">
+
+    <item action="CALL:axsFinance.readCurrentQuote">
+      id("md")//span[@class="pr"]/..
+    </item>
+
+    <item action="CALL:axsFinance.readMarketDataItem">
+      id("md")//tr/td[@class="key"]
+    </item>
+
+    <item action="CALL:axsFinance.readAfterHours">
+      id("md")//tr//nobr
+    </item>
+
+    <target title="Go to section" trigger="listEntry">
+      id("companyheader")
+    </target>
+
+  </list>
+
+  <list title="News" next="DOWN j" prev="UP k" fwd="n" back="p" type="dynamic">
+
+    <item action="CALL:axsFinance.readNewsDesc">
+      id("newsmovingdiv")//div[@class="inner"]//tbody
+    </item>
+
+    <item>
+      id("older_news_link")//following-sibling::a[not(./img)]
+    </item>
+
+    <target title="Go to link" hotkey="ENTER">
+      .//ancestor-or-self::a
+    </target>
+
+    <target title="Related articles" hotkey="r" onEmpty="No related
+        articles available">
+      .//a[@class="g bld" or @class="rl" or @class="rg"]
+    </target>
+
+    <target title="Go to section" trigger="listEntry">
+      //li/a[text()="News"]
+    </target>
+
+  </list>
+
+  <list title="Blogs" next="DOWN j" prev="UP k" fwd="n"
+      back="p" type="dynamic">
+
+    <item action="CALL:axsFinance.readBlogsDesc">
+      //div[@class="rss-item"]
+    </item>
+
+    <target title="Go to blog" hotkey="ENTER">
+      .//a[./img[@class="rssSprite"]]
+    </target>
+
+    <target title="Go to section" trigger="listEntry">
+      //li/a[text()="Blogs"]
+    </target>
+
+  </list>
+
+  <list title="Feeds" next="DOWN j" prev="UP k" fwd="n"
+      back="p" type="dynamic">
+
+    <item action="CALL:axsFinance.readFeedExampleDesc">
+      //div[./div[contains(@id, "rss-feed-item-snippet")]
+          and not(.//b)]
+    </item>
+
+    <item action="CALL:axsFinance.readFeedSearchResDesc">
+      //div[./div[contains(@id, "rss-feed-item-snippet")]
+         and .//b]
+    </item>
+
+    <item action="CALL:axsFinance.readBlogsDesc">
+      //div[@id="plot_feed_div_cont"]//
+          div[@class="rss-item"]
+    </item>
+
+    <target title="Go to feed source" hotkey="g">
+      .//a[@class="g"]
+    </target>
+
+    <target title="Try this example" hotkey="t">
+      .//a[not(@class)]
+    </target>
+
+    <target title="Go to feed" hotkey="ENTER"
+        onEmpty="The current item is not a feed">
+      .//a[./img[@class="rssSprite"]]
+    </target>
+
+    <target title="Feed search" hotkey="s"
+        action="CALL:axsFinance.focusOnSearchBox">
+      id("rss_query_box")
+    </target>
+
+    <target title="Go to section" trigger="listEntry">
+      //li/a[contains(text(), "Feeds")]
+    </target>
+
+  </list>
+
+  <list title="Discussions" next="DOWN j" prev="UP k" fwd="n" back="p">
+
+    <item>
+      id("groups")//div[@class="item"]
+    </item>
+
+    <target title="Go to link" hotkey="ENTER">
+      .//a
+    </target>
+
+    <target title="Go to section" trigger="listEntry">
+      id("groups")/div[@class="hdg"]
+    </target>
+
+  </list>
+
+  </cnr>

@@ -1,0 +1,82 @@
+<!-- The CNR for the Results section is generated dynamically since
+     the number, order, and type of columns in the section is determined
+     from the criteria selected by the user in the Criteria section. 
+     The top and bottom sections of the CNR are prepended and appended 
+     to a body which is generated from a template that is repeated and 
+     populated for each result column. 
+-->
+
+<!--  TOP 
+<cnr next="RIGHT l" prev="LEFT h"> \n
+
+  <target title="Go to the criteria section" hotkey="s"
+    action="CALL:axsFinance.setActiveAxsNavObjCrit">
+    /html
+  </target>
+
+  <target title="Open add criteria wizard" hotkey="w"
+      action="CALL:axsFinance.setActiveAxsNavObjWiz">
+    /html
+  </target>
+
+  <target title="Search for row by company name" hotkey="f"
+    action="CALL:axsFinance.goToRow">
+    /html
+  </target>
+
+  <target title="Search for a criteria" hotkey="c"
+    action="CALL:axsFinance.goToColumn">
+    /html
+  </target>
+
+  <target title="Search for a criteria value" hotkey="v"
+    action="CALL:axsFinance.goToValueInColumn">
+    /html
+  </target>
+
+  <target title="Search criteria by value" hotkey="z"
+    action="CALL:axsFinance.goToValueInRow">
+    /html
+  </target>;
+-->
+
+<!-- BODY -template
+  <list title="{0}" fwd="DOWN j n" back="UP k p" type="dynamic">
+
+    <item action="CALL:axsFinance.readResultCellValue">
+      id("searchresults")/table[@class="results innermargin"]//tr/td[{1}]
+          [not(@class="top_row") and not(@class="bottom_row")]
+    </item>
+
+    <target title="Go to section" trigger="listEntry"
+        action="CALL:axsFinance.readResultCellValueListEntry">
+      id("criteria_rows")
+    </target>
+
+    <target title="Go to link" hotkey="ENTER" onEmpty="No link available">
+      .//a
+    </target>
+
+    <target title="Next page" trigger="listTail"
+        action="CALL:axsFinance.wrapAround">
+      id("searchresults")//td[position() > 1]//span[@class="navb"]/.. 
+          | //div[@class="footerLinks"]
+    </target>
+
+    <target title="Previous page" trigger="listHead"
+        action="CALL:axsFinance.wrapAround">
+      id("searchresults")//td[1]//span[@class="navb"]/..
+          | //div[@class="footerLinks"]
+    </target>
+
+    <target title="Reverse sorting order" hotkey="r"
+        onEmpty="This column is not sortable">
+      id("searchresults")//td[{1}]/a[@class="activelink"]
+    </target>
+
+  </list>
+-->
+
+<!-- BOTTOM  
+</cnr>
+-->
