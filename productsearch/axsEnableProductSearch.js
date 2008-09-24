@@ -79,7 +79,7 @@ axsProductSearch.axsSoundObj = null;
 axsProductSearch.magSize = 1.5;
 
 /**
- * Initializes the script
+ * Initializes the script.
  */
 axsProductSearch.init = function(){
   axsProductSearch.axsJAXObj = new AxsJAX(true);
@@ -97,13 +97,13 @@ axsProductSearch.init = function(){
                   '      /html/body/table[3]/tbody/tr[not(@class)]' +
                   '    </item>' +
                   '    <target title="Next page" trigger="listTail">' +
-                  '      //img[contains(@src,"nav_next.gif")]/..' +
+                  '      id("nn")/..' +
                   '    </target>' +
                   '    <target title="Previous page" trigger="listHead">' +
-                  '      //img[contains(@src,"G_oogle_arrow.gif")]/..' +
+                  '      id("np")/..' +
                   '    </target>	' +
                   '    <target title="Go to result" hotkey="ENTER">' +
-                  '      ./td[contains(@class,"ps-rcont")]/a' +
+                  '      ./td[contains(@class,"ps-rcont")]//a' +
                   '    </target>' +
                   '  </list>' +
                   '  <list title="Sponsored links" next="DOWN j" prev="UP k"' +
@@ -210,7 +210,7 @@ axsProductSearch.readFirstResult = function(){
 /**
  * Speaks the given CNR item in an intelligent way by reformatting 
  * the text for spoken output.
- * @param {Object} item The CNR item which is a result
+ * @param {Object} item The CNR item which is a result.
  */
 axsProductSearch.speakResult = function(item){
   var resultRow = item.elem;
@@ -235,19 +235,19 @@ axsProductSearch.speakResult = function(item){
 
 /**
  * Given a results row, returns the title of the product.
- * @param {Node} resultRow The row that contains the result
- * @return {string} The title
+ * @param {Node} resultRow The row that contains the result.
+ * @return {string} The title.
  */
 axsProductSearch.getTitle = function(resultRow){
-  var titleXPath = './td/a[text()]';
+  var titleXPath = './/h2/a';
   var title = axsProductSearch.axsJAXObj.evalXPath(titleXPath, resultRow)[0];
   return title.textContent;
 };
 
 /**
  * Given a results row, returns the description of the product.
- * @param {Node} resultRow The row that contains the result
- * @return {string} The description
+ * @param {Node} resultRow The row that contains the result.
+ * @return {string} The description.
  */
 axsProductSearch.getDesc = function(resultRow){
   var desc = axsProductSearch.axsJAXObj.evalXPath('.//font', resultRow)[0];
@@ -269,8 +269,8 @@ axsProductSearch.getDesc = function(resultRow){
 
 /**
  * Given a results row, returns the price of the product.
- * @param {Node} resultRow The row that contains the result
- * @return {string} The price
+ * @param {Node} resultRow The row that contains the result.
+ * @return {string} The price.
  */
 axsProductSearch.getPrice = function(resultRow){
   var priceXPath = ".//b[contains(@class,'ps-larger-t')]";
@@ -282,8 +282,8 @@ axsProductSearch.getPrice = function(resultRow){
  * Given a results row, generates a string states either how many stores 
  * are selling this product or the one store that is selling it. Which string
  * gets generated depends on what is there.
- * @param {Node} resultRow The row that contains the result
- * @return {string} The seller information
+ * @param {Node} resultRow The row that contains the result.
+ * @return {string} The seller information.
  */
 axsProductSearch.getSeller = function(resultRow){
   var sellerXPath = './/nobr/a';
@@ -301,7 +301,7 @@ axsProductSearch.getSeller = function(resultRow){
 /**
  * Given a results row, generates a string that states the number of ratings 
  * and the average rating.
- * @param {Node} resultRow The row that contains the result
+ * @param {Node} resultRow The row that contains the result.
  * @return {string} The number of raters and the averaged rating.
  */
 axsProductSearch.getRatings = function(resultRow){
@@ -322,7 +322,7 @@ axsProductSearch.getRatings = function(resultRow){
 /**
  * Given a results row, generates a string that says Google Checkout is 
  * available if it is available.
- * @param {Node} resultRow The row that contains the result
+ * @param {Node} resultRow The row that contains the result.
  * @return {string?} Returns the ACCEPTS_CHECKOUT_STRING if checkout is 
  *                   accepted; otherwise, returns an empty string.
  */
@@ -390,8 +390,8 @@ axsProductSearch.formatAdAreaSide = function(){
 
 /**
  * Provides keyboard handling
- * @param {Object} evt A keypress event
- * @return {boolean} Indicates whether the keypress was handled
+ * @param {Object} evt A keypress event.
+ * @return {boolean} Indicates whether the keypress was handled.
  */
 axsProductSearch.keyHandler = function(evt){
   //If Ctrl is held, it must be for some AT. 
@@ -431,6 +431,18 @@ axsProductSearch.charCodeMap = {
          document.getElementsByName('q')[0].select();
          return false;
        },
+  // - (minus symbol)
+  45 : function() {
+         axsProductSearch.magSize -= 0.10;
+         axsProductSearch.axsLensObj.setMagnification(axsProductSearch.magSize);
+         return false;
+       },
+  // = (equal symbol)
+  61 : function() {
+         axsProductSearch.magSize += 0.10;
+         axsProductSearch.axsLensObj.setMagnification(axsProductSearch.magSize);
+         return false;
+       },
   // ? (question mark)
   63 : function() {
          var helpStr = axsProductSearch.HELP +
@@ -441,4 +453,4 @@ axsProductSearch.charCodeMap = {
        }
 };
 
-axsProductSearch.init();
+window.addEventListener('load', axsProductSearch.init, true);

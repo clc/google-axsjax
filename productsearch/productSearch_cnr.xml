@@ -4,13 +4,13 @@
       /html/body/table[3]/tbody/tr[not(@class)]
     </item>
     <target title="Next page" trigger="listTail">
-      //img[contains(@src,"nav_next.gif")]/..
+      id("nn")/..
     </target>
     <target title="Previous page" trigger="listHead">
-      //img[contains(@src,"G_oogle_arrow.gif")]/..
+      id("np")/..
     </target>	
     <target title="Go to result" hotkey="ENTER">
-      ./td[contains(@class,"ps-rcont")]/a
+      ./td[contains(@class,"ps-rcont")]//a
     </target>
   </list>
   <list title="Sponsored links" next="DOWN j" prev="UP k" hotkey="a">
