@@ -108,140 +108,140 @@ axsWebSearch.init = function(){
   //Add event listeners
   document.addEventListener('keypress', axsWebSearch.extraKeyboardNavHandler,
                              true);
-                             
+
   var cnrJson = ({
     lists: [{
-      title: "One Box",
-      hotkey: "1",
-      next: "DOWN j",
-      prev: "UP k",
+      title: 'One Box',
+      hotkey: '1',
+      next: 'DOWN j',
+      prev: 'UP k',
       fwd: null,
       back: null,
-      onEmpty: "There is no one box on this page.",
+      onEmpty: 'There is no one box on this page.',
       type: null,
       items: [{
-        xpath: "id(\"res\")//div[contains(@class,\"rbt\")]",
-        count: "1"
+        xpath: 'id("res")//div[contains(@class,"rbt")]',
+        count: '1'
       },
       {
-        xpath: "id(\"res\")/div[@class=\"e\"]/table[not(contains(@id,\"brs\"))]/..",
-        count: "1"
+        xpath: 'id("res")/div[@class="e"]/table[not(contains(@id,"brs"))]/..',
+        count: '1'
       },
       {
-        xpath: "id(\"res\")/p[*]",
-        count: "1",
-        comment: "Use a [*] here since some one boxes have an extra garbage node that is empty at the start."
+        xpath: 'id("res")/p[*]',
+        count: '1',
+        comment: 'Use [*] since some one boxes have an extra node at the start.'
       },
       {
-        xpath: "//td/h2[@class=\"r\"]/..",
-        count: "1"
+        xpath: '//td/h2[@class="r"]/..',
+        count: '1'
       }],
       targets: []
     },
     {
-      title: "Results",
-      hotkey: "n",
-      next: "DOWN j",
-      prev: "UP k",
-      fwd: "n",
-      back: "p",
+      title: 'Results',
+      hotkey: 'n',
+      next: 'DOWN j',
+      prev: 'UP k',
+      fwd: 'n',
+      back: 'p',
       onEmpty: null,
       type: null,
       items: [{
-        xpath: "id(\"res\")/div[@class=\"med\"]",
-        count: "1"
+        xpath: 'id("res")/div[@class="med"]',
+        count: '1'
       },
       {
-        xpath: "id(\"res\")//*[@class=\"g\"]"
+        xpath: 'id("res")//*[@class="g"]'
       }],
       targets: [{
-        xpath: "id(\"nn\")/..",
-        title: "Next page",
-        trigger: "listTail"
+        xpath: 'id("nn")/..',
+        title: 'Next page',
+        trigger: 'listTail'
       },
       {
-        xpath: "id(\"np\")/..",
-        title: "Prev page",
-        trigger: "listHead"
+        xpath: 'id("np")/..',
+        title: 'Prev page',
+        trigger: 'listHead'
       }]
     },
     {
-      title: "Sponsored Links",
-      hotkey: "a",
-      next: "DOWN j",
-      prev: "UP k",
+      title: 'Sponsored Links',
+      hotkey: 'a',
+      next: 'DOWN j',
+      prev: 'UP k',
       fwd: null,
       back: null,
-      onEmpty: "There are no sponsored links on this page.",
+      onEmpty: 'There are no sponsored links on this page.',
       type: null,
       items: [{
-        xpath: "id(\"tads\")//li"
+        xpath: 'id("tads")//li'
       },
       {
-        xpath: "id(\"mbEnd\")//li"
+        xpath: 'id("mbEnd")//li'
       }],
       targets: []
     },
     {
-      title: "Related Searches",
-      hotkey: "s",
-      next: "DOWN j",
-      prev: "UP k",
+      title: 'Related Searches',
+      hotkey: 's',
+      next: 'DOWN j',
+      prev: 'UP k',
       fwd: null,
       back: null,
-      onEmpty: "There are no related searches.",
+      onEmpty: 'There are no related searches.',
       type: null,
       items: [{
-        xpath: "id(\"brs\")//a/b/.."
+        xpath: 'id("brs")//a/b/..'
       }],
       targets: []
     },
     {
-      title: "Alternate Search Categories",
-      hotkey: "c",
-      next: "DOWN j",
-      prev: "UP k",
+      title: 'Alternate Search Categories',
+      hotkey: 'c',
+      next: 'DOWN j',
+      prev: 'UP k',
       fwd: null,
       back: null,
-      onEmpty: "There are no other categories to search within.",
+      onEmpty: 'There are no other categories to search within.',
       type: null,
       items: [{
-        xpath: "id(\"prs\")/a"
+        xpath: 'id("prs")/a'
       }],
       targets: []
     },
     {
-      title: "Google Services",
-      hotkey: "g",
-      next: "DOWN j",
-      prev: "UP k",
+      title: 'Google Services',
+      hotkey: 'g',
+      next: 'DOWN j',
+      prev: 'UP k',
       fwd: null,
       back: null,
       onEmpty: null,
       type: null,
       items: [{
-        xpath: "id(\"gbar\")//a[@class=\"gb1\"]"
+        xpath: 'id("gbar")//a[@class="gb1"]'
       },
       {
-        xpath: "id(\"gbar\")//a[@class=\"gb2\"]"
+        xpath: 'id("gbar")//a[@class="gb2"]'
       },
       {
-        xpath: "id(\"gb\")/a"
+        xpath: 'id("gb")/a'
       }],
       targets: []
     }],
     targets: [{
-      xpath: "id(\"nn\")/..",
-      title: "Next page",
-      hotkey: "PGDOWN"
+      xpath: 'id("nn")/..',
+      title: 'Next page',
+      hotkey: 'PGDOWN'
     },
     {
-      xpath: "id(\"np\")/..",
-      title: "Previous page",
-      hotkey: "PGUP"
+      xpath: 'id("np")/..',
+      title: 'Previous page',
+      hotkey: 'PGUP'
     }],
-    next: "RIGHT l",
-    prev: "LEFT h"
+    next: 'RIGHT l',
+    prev: 'LEFT h'
   });
 
   axsWebSearch.axsNavObj.navInitJson(cnrJson, null);
