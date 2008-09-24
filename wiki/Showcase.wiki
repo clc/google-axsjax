@@ -25,3 +25,7 @@ access-enabled using AxsJAX. [http://google-axsjax.googlecode.com/svn/trunk/docs
   * [http://www.amazon.com/ www.Amazon.com] By Fabio Canache
 
   * [http://www.weather.com/ www.Weather.com] By Reema Sardana
+
+  * [http://www.orkut.com/ Orkut] By Reema Sardana
+
+  * [http://www.craigslist.org/forums/ Craigslist Forums] By Kristiyan Dzhamalov
