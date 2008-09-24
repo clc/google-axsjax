@@ -166,7 +166,7 @@ function pickScript(){
     scriptsArray.push(sndLib);
     shouldInsertScripts = true;
   }
-  else if (currentURL.indexOf('craigslist.org/forums/') != -1){
+  else if (currentURL.indexOf('craigslist.org/forums') != -1){
     theScript.src = baseURL + 'www.craigslist.org/axsEnableCraigslistForums.js';
     scriptsArray.push(navLib);
     scriptsArray.push(lensLib);
