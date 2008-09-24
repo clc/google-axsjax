@@ -1,0 +1,84 @@
+<cnr next="RIGHT l" prev="LEFT h">
+
+   <target title="Go to the companies section" hotkey="s"
+       action="CALL:axsFinance.setActiveCompaniesSection">
+     /html
+   </target>
+
+   <list title="News" next="DOWN j" prev="UP k" fwd="n"
+       back="p">
+
+     <item action="CALL:axsFinance.readNews">
+       //tr[contains(@class, "news")]//tbody//tr[1]
+     </item>
+
+     <target title="Go to link" hotkey="ENTER">
+       .//a
+     </target>
+
+     <target title="Related articles" hotkey="r" onEmpty="No
+        related articles">
+       .//a[@class="rg"]
+     </target>
+
+     <target title="View all news" hotkey="a">
+       id("news")/tbody/tr[not(@class)]//a
+     </target>
+
+   </list>
+
+   <list title="Top movers gainers" next="DOWN j" prev="UP k" fwd="n"
+       back="p">
+
+   <item action="CALL:axsFinance.readTopMover">
+     //table[@class="topmovers"]//tr[.//a and not(./preceding-sibling
+         ::tr[@class="beginsec"])]
+   </item>
+
+   <target title="Stock screener for this company" hotkey="ENTER">
+     .//a
+   </target>
+
+   </list>
+
+   <list title="Top movers losers" next="DOWN j" prev="UP k" fwd="n"
+       back="p">
+
+     <item action="CALL:axsFinance.readTopMover">
+       //table[@class="topmovers"]//tr[.//span[@class="chr"]]
+     </item>
+
+     <target title="Stock screener for this company" hotkey="ENTER">
+       .//a
+     </target>
+
+   </list>
+
+   <list title="Top movers most active" next="DOWN j" prev="UP k"
+       fwd="n" back="p">
+
+     <item action="CALL:axsFinance.readTopMover">
+       //table[@class="topmovers"]//tr[.//a and not(./following-sibling
+           ::tr[@class="beginsec"])]
+     </item>
+
+     <target title="Stock screener for this company" hotkey="ENTER">
+       .//a
+     </target>
+
+   </list>
+
+   <list title="Subcategories" next="DOWN j" prev="UP k" fwd="n"
+       back="p">
+
+     <item>
+       id("subcategory")//a
+     </item>
+
+     <target title="Stock screener for this company" hotkey="ENTER">
+       .
+     </target>
+
+   </list>
+
+ </cnr>

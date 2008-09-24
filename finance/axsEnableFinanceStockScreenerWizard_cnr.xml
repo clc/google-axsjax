@@ -1,0 +1,187 @@
+<cnr next="RIGHT l" prev="LEFT h">
+ 
+   <target title="Close add criteria wizard" hotkey="w"
+       action="CALL:axsFinance.setActiveAxsNavObjCrit">
+     /html
+   </target>
+ 
+   <list title="Popular criteria" next="DOWN j" prev="UP k"
+       fwd="n" back="p" type="dynamic">
+ 
+     <item action="CALL:axsFinance.readCriteriaExplanation">
+       id("popular")//a
+     </item>
+ 
+     <target title="Load CNR and go to section"
+         trigger="listEntry"
+         action="CALL:axsFinance.readCurrentCriteriaList">
+       //table[@class="searchtabs"]//tr[1]//a
+     </target>
+ 
+     <target title="Add selected criteria" hotkey="ENTER"
+         action="CALL:axsFinance.addCriteria">
+       id("criteria_button")/button
+     </target>
+ 
+   </list>
+ 
+   <list title="Price criteria" next="DOWN j"
+       prev="UP k" fwd="n" back="p" type="dynamic">
+ 
+     <item action="CALL:axsFinance.readCriteriaExplanation">
+       id("price")//a
+     </item>
+ 
+     <target title="Load CNR and go to section"
+         trigger="listEntry"
+         action="CALL:axsFinance.readCurrentCriteriaList">
+       //table[@class="searchtabs"]//tr[2]//a
+     </target>
+ 
+     <target title="Add selected criteria" hotkey="ENTER"
+         action="CALL:axsFinance.addCriteria">
+       id("criteria_button")/button
+     </target>
+ 
+   </list>
+ 
+   <list title="Volume criteria" next="DOWN j" prev="UP k"
+       fwd="n" back="p" type="dynamic">
+ 
+     <item action="CALL:axsFinance.readCriteriaExplanation">
+       id("volume")//a
+     </item>
+ 
+     <target title="Load CNR and go to section"
+         trigger="listEntry"
+         action="CALL:axsFinance.readCurrentCriteriaList">
+       //table[@class="searchtabs"]//tr[3]//a
+     </target>
+ 
+     <target title="Add selected criteria" hotkey="ENTER"
+         action="CALL:axsFinance.addCriteria">
+       id("criteria_button")/button
+     </target>
+ 
+   </list>
+ 
+   <list title="Valuation criteria" next="DOWN j"
+       prev="UP k" fwd="n" back="p" type="dynamic">
+ 
+     <item action="CALL:axsFinance.readCriteriaExplanation">
+       id("valuation")//a
+     </item>
+ 
+     <target title="Load CNR and go to section"
+         trigger="listEntry"
+         action="CALL:axsFinance.readCurrentCriteriaList">
+       //table[@class="searchtabs"]//tr[4]//a
+     </target>
+ 
+     <target title="Add selected criteria" hotkey="ENTER"
+         action="CALL:axsFinance.addCriteria">
+       id("criteria_button")/button
+     </target>
+ 
+   </list>
+ 
+   <list title="Dividend criteria" next="DOWN j"
+       prev="UP k" fwd="n" back="p" type="dynamic">
+ 
+     <item action="CALL:axsFinance.readCriteriaExplanation">
+       id("dividend")//a
+     </item>
+ 
+     <target title="Load CNR and go to section"
+         trigger="listEntry"
+         action="CALL:axsFinance.readCurrentCriteriaList">
+       //table[@class="searchtabs"]//tr[5]//a
+     </target>
+ 
+     <target title="Add selected criteria" hotkey="ENTER"
+         action="CALL:axsFinance.addCriteria">
+       id("criteria_button")/button
+     </target>
+ 
+   </list>
+ 
+   <list title="Balance sheet criteria" next="DOWN j"
+       prev="UP k" fwd="n" back="p" type="dynamic">
+ 
+     <item action="CALL:axsFinance.readCriteriaExplanation">
+       id("balancesheetratios")//a
+     </item>
+ 
+     <target title="Load CNR and go to section"
+         trigger="listEntry"
+         action="CALL:axsFinance.readCurrentCriteriaList">
+       //table[@class="searchtabs"]//tr[6]//a
+     </target>
+ 
+     <target title="Add selected criteria" hotkey="ENTER"
+       action="CALL:axsFinance.addCriteria">
+     id("criteria_button")/button
+     </target>
+ 
+   </list>
+ 
+   <list title="Stock metrics criteria" next="DOWN j"
+       prev="UP k" fwd="n" back="p" type="dynamic">
+ 
+     <item action="CALL:axsFinance.readCriteriaExplanation">
+       id("stockmetrics")//a
+     </item>
+ 
+     <target title="Load CNR and go to section" trigger="listEntry"
+         action="CALL:axsFinance.readCurrentCriteriaList">
+       //table[@class="searchtabs"]//tr[7]//a
+     </target>
+ 
+     <target title="Add selected criteria" hotkey="ENTER"
+         action="CALL:axsFinance.addCriteria">
+       id("criteria_button")/button
+     </target>
+ 
+   </list>
+ 
+   <list title="Margins criteria" next="DOWN j" prev="UP k"
+       fwd="n" back="p" type="dynamic">
+ 
+     <item action="CALL:axsFinance.readCriteriaExplanation">
+       id("margins")//a
+     </item>
+ 
+     <target title="Load CNR and go to section"
+         trigger="listEntry"
+         action="CALL:axsFinance.readCurrentCriteriaList">
+       //table[@class="searchtabs"]//tr[8]//a
+     </target>
+ 
+     <target title="Add selected criteria" hotkey="ENTER"
+          action="CALL:axsFinance.addCriteria">
+       id("criteria_button")/button
+     </target>
+ 
+   </list>
+ 
+   <list title="Growth criteria" next="DOWN j" prev="UP k" fwd="n"
+       back="p" type="dynamic">
+ 
+     <item action="CALL:axsFinance.readCriteriaExplanation">
+       id("growth")//a
+     </item>
+ 
+     <target title="Load CNR and go to section"
+         trigger="listEntry"
+         action="CALL:axsFinance.readCurrentCriteriaList">
+       //table[@class="searchtabs"]//tr[9]//a
+     </target>
+ 
+     <target title="Add selected criteria" hotkey="ENTER"
+         action="CALL:axsFinance.addCriteria">
+       id("criteria_button")/button
+     </target>
+ 
+   </list>
+ 
+</cnr>
