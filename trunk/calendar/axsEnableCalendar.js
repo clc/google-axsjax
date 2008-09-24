@@ -135,7 +135,7 @@ axsCal.domInsertionHandler = function(evt){
 
 /* Functions for working with the Calendars List */
 axsCal.getCalendars = function(){
-  var rootNode = document.getElementById('calendars_fav');
+  var rootNode = document.getElementById('calendars');
   var xpath = "//div[@class='calListRow']";
   axsCal.calendarsArray = axsCal.axsJAXObj.evalXPath(xpath, rootNode);
 };
@@ -344,11 +344,12 @@ axsCal.keyHandler = function(evt){
 
   if (axsCal.axsJAXObj.inputFocused) return true;
 
-  var command = null;
+  var command = function(){return true;};
 
   if (axsCal.currentArea === axsCal.AREAS.CALENDAR_LIST){
-    command =  axsCal.keyCodeMapCL[evt.keyCode] ||
-               axsCal.charCodeMapCL[evt.charCode];
+    command = axsCal.keyCodeMapCL[evt.keyCode] ||
+              axsCal.charCodeMapCL[evt.charCode] || 
+              function(){return true;};
   }
   if (command)  return  command();
 
