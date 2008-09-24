@@ -25,21 +25,20 @@ lensLib.src = 'http://google-axsjax.googlecode.com/svn/trunk/common/AxsLens.js';
 var sndLib = document.createElement('script');
 sndLib.type = 'text/javascript';
 sndLib.src = 'http://google-axsjax.googlecode.com/svn/trunk/common/AxsSound.js';
-var pkLib = document.createElement('script');  
+var pkLib = document.createElement('script');
 pkLib.type = 'text/javascript';
-pkLib.src = 'http://google-axsjax.googlecode.com/svn/trunk/common/PowerKey.js';  
-			
+pkLib.src = 'http://google-axsjax.googlecode.com/svn/trunk/common/PowerKey.js';
+
 document.getElementsByTagName('head')[0].appendChild(theLib);
 document.getElementsByTagName('head')[0].appendChild(navLib);
 document.getElementsByTagName('head')[0].appendChild(lensLib);
 document.getElementsByTagName('head')[0].appendChild(sndLib);
 document.getElementsByTagName('head')[0].appendChild(pkLib);
 
-
 var myScript = document.createElement('script');
 myScript.type = 'text/javascript';
 
-/* Modify this line to match where you have the script that you are working on */
+/* Modify this line to match where you have the script you are working on */
 myScript.src = 'http://127.0.0.1:4001/axsSkel.js';
 
 document.getElementsByTagName('head')[0].appendChild(myScript);
