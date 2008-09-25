@@ -119,10 +119,10 @@ function pickScript(){
       scriptsArray.push(pkLib);
       shouldInsertScripts = true;
     }
-    else if (((prefix == 'www') && (path.length > 1)) ||
-             (path.indexOf('/search') === 0) ||
-             (path.indexOf('/custom') === 0) ||
-             (path.indexOf('/cse') === 0)){
+    else if (((prefix == 'www') && (path.length > 1)) &&
+             ((path.indexOf('/search') === 0) ||
+              (path.indexOf('/custom') === 0) ||
+              (path.indexOf('/cse') === 0))){
       theScript.src = baseURL + 'websearch/axsEnableWebSearch.js';
       scriptsArray.push(navLib);
       scriptsArray.push(lensLib);
