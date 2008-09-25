@@ -174,6 +174,15 @@ function pickScript(){
     scriptsArray.push(pkLib);
     shouldInsertScripts = true;
   }
+  else if (currentURL.indexOf('craigslist.org/about/sites') != -1){
+    theScript.src = baseURL + 'www.craigslist.org/axsEnableCraigslistHome.js';
+    scriptsArray.push(navLib);
+    scriptsArray.push(lensLib);
+    scriptsArray.push(sndLib);
+    scriptsArray.push(pkLib);
+    shouldInsertScripts = true;
+  }
+  
   if (shouldInsertScripts){
     scriptsArray.push(theScript);
     for (var i = 0, script; script = scriptsArray[i]; i++){
