@@ -28,4 +28,6 @@ access-enabled using AxsJAX. [http://google-axsjax.googlecode.com/svn/trunk/docs
 
   * [http://www.orkut.com/ Orkut] By Reema Sardana
 
-  * [http://www.craigslist.org/forums/ Craigslist Forums] By Kristiyan Dzhamalov
+  * Craigslist
+    * [http://www.craigslist.org/about/sites Craigslist Homepage] By Borislav R. Ganov
+    * [http://www.craigslist.org/forums/ Craigslist Forums] By Kristiyan Dzhamalov
