@@ -179,6 +179,14 @@ function pickFromUncompiled(scriptsBaseURL){
     scriptsArray.push(pkLib);
     shouldInsertScripts = true;
   }
+  else if (currentURL.indexOf('http://geo.craigslist.org/iso') === 0){
+    theScript.src = baseURL + 'www.craigslist.org/axsEnableCraigslistHomeGeo.js';
+    scriptsArray.push(navLib);
+    scriptsArray.push(lensLib);
+    scriptsArray.push(sndLib);
+    scriptsArray.push(pkLib);
+    shouldInsertScripts = true;
+  }
 
   if (shouldInsertScripts){
     scriptsArray.push(theScript);
