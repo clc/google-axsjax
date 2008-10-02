@@ -33,6 +33,7 @@ function pickScript(){
 
 function pickFromCompiled(scriptsBaseURL){
   var scriptURL = '';
+  var currentURL = document.baseURI;
   if (urlIsGoogle()){
     var path = document.location.pathname;
     var prefix = document.location.host;
@@ -47,13 +48,21 @@ function pickFromCompiled(scriptsBaseURL){
     else if ((prefix == 'images') && (path.indexOf('/images') === 0)){
       scriptURL = scriptsBaseURL + 'imagesearch/comp_imagesearch.js';
     }
-    else if ((prefix == 'finance') && (path.indexOf('/finance') === 0)){
-      if (path.indexOf('stockscreener') > 0) {
+    else if ((prefix == 'finance') && (path.indexOf('/finance') === 0 )){
+      if (path == '/finance/stockscreener') { 
         scriptURL = scriptsBaseURL + 'finance/comp_financeStockScreener.js';
-      } else if (search.indexOf('?') === 0) {
-        scriptURL = scriptsBaseURL + 'finance/comp_financeQuotes.js';
-      } else {
+      } else if (currentURL.indexOf('?') == - 1) {
         scriptURL = scriptsBaseURL + 'finance/comp_financeHome.js';
+      } else if (currentURL.indexOf('catid=') > -1) {
+        scriptURL = scriptsBaseURL + 'finance/comp_financeSector.js';
+      } else if (currentURL.indexOf('fstype=') > -1) {
+        scriptURL = scriptsBaseURL + 'finance/comp_financeStatement.js';
+      } else if (currentURL.indexOf('q=') > -1 && currentURL.lastIndexOf(':') > 30) {
+        scriptURL = scriptsBaseURL + 'finance/comp_financeQuotes.js';
+      } else if (currentURL.indexOf('cid=') > -1){
+        scriptURL = scriptsBaseURL + 'finance/comp_financeIndex.js';
+      } else if (path.indexOf('/converter') === -1){
+        scriptURL = scriptsBaseURL + 'finance/comp_financeCurrency.js';
       }
     }
     else if (prefix == 'mail'){
