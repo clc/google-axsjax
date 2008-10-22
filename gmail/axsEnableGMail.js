@@ -28,7 +28,7 @@ var axsGMail = {};
  * @type {Object}
  */
 axsGMail.CLASS = {
-  KEYBOARD_SHORTCUTS_HELP : 'ou5Ep',      //Keyboard shortcuts help screen
+  CSS_SHORTCUTS_HELP_POPUP_ : 'zeeTme',      //Keyboard shortcuts help screen
   AUTOCOMPLETE_INACTIVE : 'ac-row',      //Contacts list
   AUTOCOMPLETE_ACTIVE : 'ac-row active',  
   LAYOUT_COMPONENT_ : 'XoqCub', // The chat window has this class
@@ -331,8 +331,13 @@ axsGMail.canvas_extraKeyboardNavHandler = function(evt){
   
   if (evt.charCode == 76){      // L
     axsGMail.quickNavNode.getElementsByTagName('SELECT')[0].focus();
+    return true;
   }
-  
+  if (evt.charCode == 63){      // ?
+    window.setTimeout(function(){axsGMail.axsJAXObj.speakTextViaNode(axsGMail.HELP_STRING);},0);
+    return true;
+  }
+
   var currentView = axsGMail.gMonkeyObj.getActiveViewType();
 
   if (currentView == 'tl'){
@@ -401,9 +406,7 @@ axsGMail.domAttrModifiedHandler = function(evt){
  * @param {Object} evt A DOM node insertion
  */
 axsGMail.domInsertionHandler = function(evt){
-  if (evt.target.class = axsGMail.CLASS.KEYBOARD_SHORTCUTS_HELP){  
-    axsGMail.axsJAXObj.speakTextViaNode(axsGMail.HELP_STRING);
-  } else if (axsGMail.gMonkeyObj.getActiveViewType() == 'tl'){
+  if (axsGMail.gMonkeyObj.getActiveViewType() == 'tl'){
     axsGMail.TL_domInsertionHandler(evt);
   }
 };
