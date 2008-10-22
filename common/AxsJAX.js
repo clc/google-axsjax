@@ -35,32 +35,10 @@ var AxsJAX = function(useTabKeyFix){
   this.inputFocused = false;
 
   var self = this;
-  //Monitor focus and blur
-  //These return "true" so that any page actions based on
-  //focus and blur will still occur.
-  var focusHandler = function(evt){
-                       self.lastFocusedNode = evt.target;
-                       if ((evt.target.tagName == 'INPUT') ||
-                           (evt.target.tagName == 'SELECT') ||
-                           (evt.target.tagName == 'TEXTAREA')){
-                         self.inputFocused = true;
-                       }
-                       return true;
-                     };
-  document.addEventListener('focus', focusHandler, true);
+  this.activeParent = document.body;
 
-  var blurHandler = function(evt){
-                      self.removeAttributeOf(self.lastFocusedNode,
-                                             'aria-activedescendant');
-                      self.lastFocusedNode = null;
-                      if ((evt.target.tagName == 'INPUT') ||
-                          (evt.target.tagName == 'SELECT') ||
-                          (evt.target.tagName == 'TEXTAREA')){
-                        self.inputFocused = false;
-                      }
-                      return true;
-                    };
-  document.addEventListener('blur', blurHandler, true);
+  //Monitor focus and blur
+  this.addFocusBlurMonitors();
 
   //Activate the tab key fix if needed
   if (useTabKeyFix){
@@ -73,7 +51,42 @@ var AxsJAX = function(useTabKeyFix){
     // Record in a custom DOM property:
     document.body.AXSJAX_TABKEYFIX_ADDED = true;
   }
-  this.activeParent = document.body;
+};
+
+
+/**
+ * Adds focus/blur handlers to the current active document.
+ * This should be invoked when AxsJAX is first initialized and
+ * when a new active document has been set.
+ */
+AxsJAX.prototype.addFocusBlurMonitors = function(){
+  var activeDoc = this.getActiveDocument();
+  var self = this;
+  //These return "true" so that any page actions based on
+  //focus and blur will still occur.
+  var focusHandler = function(evt){
+                       self.lastFocusedNode = evt.target;
+                       if ((evt.target.tagName == 'INPUT') ||
+                           (evt.target.tagName == 'SELECT') ||
+                           (evt.target.tagName == 'TEXTAREA')){
+                         self.inputFocused = true;
+                       }
+                       return true;
+                     };
+  activeDoc.addEventListener('focus', focusHandler, true);
+
+  var blurHandler = function(evt){
+                      self.removeAttributeOf(self.lastFocusedNode,
+                                             'aria-activedescendant');
+                      self.lastFocusedNode = null;
+                      if ((evt.target.tagName == 'INPUT') ||
+                          (evt.target.tagName == 'SELECT') ||
+                          (evt.target.tagName == 'TEXTAREA')){
+                        self.inputFocused = false;
+                      }
+                      return true;
+                    };
+  activeDoc.addEventListener('blur', blurHandler, true);
 };
 
 
@@ -99,6 +112,7 @@ AxsJAX.prototype.setActiveParent = function(targetNode){
                                true);
     activeDoc.body.AXSJAX_TABKEYFIX_ADDED = true;
   }
+  this.addFocusBlurMonitors();
 };
 
 
