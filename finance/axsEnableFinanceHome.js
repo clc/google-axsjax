@@ -127,6 +127,10 @@ axsFinance.CNR = '<cnr next="RIGHT l" prev="LEFT h">' +
     '  <target title="Stock screener" hotkey="s">' +
     '    //a[@href="/finance/stockscreener"]' +
     '  </target>' +
+    ''+
+    '  <target title="Portfolios" hotkey="o">' +
+    '    id("guser")//a[text()="Portfolios"]' +
+    '  </target>' +
     '' +
     '  <list title="Market summary" next="DOWN j" prev="UP k"' +
     '      fwd="n" back="p">' +
@@ -139,9 +143,14 @@ axsFinance.CNR = '<cnr next="RIGHT l" prev="LEFT h">' +
     '    </item>' +
     '' +
     '    <item index="1">' +
-    '      id("home-main")//div[contains(@class, "news major")' +
-    ']//a' +
+    '      id("home-main")//div[contains(@class, "news major")]' +
+    '          //a[not(@class="more-rel")]' +
     '    </item>' +
+    '' +
+    '    <target title="Related articles"  hotkey="r"' +
+    '        onEmpty="No related articles available.">' +
+    '      //div[contains(@class, "news major")]//a[@class="more-rel"]' +
+    '    </target>' +
     '' +
     '  </list>' +
     '' +
@@ -159,16 +168,14 @@ axsFinance.CNR = '<cnr next="RIGHT l" prev="LEFT h">' +
     ' k"' +
     '      fwd="n" back="p">' +
     '' +
-    '    <item action="CALL:axsFinance.readMktTopStAndPortfRel' +
-    'TopStDesc">' +
-    '      id("market-news")//span[*]/a[not(@class)] |' +
-    '          id("market-news")/div/div[*]/a' +
+    '    <item action="CALL:axsFinance.readMktTopStAndPortfRelTopStDesc">' +
+    '      id("market-news")//span[@class="name"]//a' +
     '    </item>' +
     '' +
     '    <target title="Related articles"  hotkey="r"' +
     '        onEmpty="No related articles available.">' +
-    '      ./../following-sibling::div[@class="g-section' +
-    '          g-tpl-65 sfe-break-bottom" or' +
+    '      ./../following-sibling::div' +
+    '          [@class="g-section g-tpl-65 sfe-break-bottom" or' +
     '          @class="byline sfe-break-bottom"]' +
     '          [1]/descendant::a[@class="more-rel"]' +
     '    </target>' +
@@ -178,6 +185,11 @@ axsFinance.CNR = '<cnr next="RIGHT l" prev="LEFT h">' +
     '      id("market-news-title")' +
     '    </target>' +
     '' +
+    '    <target title="View all daily news"  hotkey="a"' +
+    '        onEmpty="No more daily news">' +
+    '      id("market-news")//a[contains(text(), "View all of today")]' +
+    '    </target>' +
+    '' +
     '  </list>' +
     '' +
     '  <list title="Portfolio related top stories"' +
@@ -185,10 +197,10 @@ axsFinance.CNR = '<cnr next="RIGHT l" prev="LEFT h">' +
     '' +
     '    <item action="CALL:axsFinance.readMktTopStAndPortfRel' +
     'TopStDesc">' +
-    '      id("portfolio-news")//span[*]/a[not(@class)]' +
+    '       id("portfolio-news")//span[@class="name"]//a' +
     '    </item>' +
     '' +
-    '    <target title="Related articles"  hotkey="r"' +
+    '    <target title="Related articles" hotkey="r"' +
     '        onEmpty="No related articles available.">' +
     '      ./../following-sibling::div[@class="sfe-break-botto' +
     'm" or' +
@@ -201,6 +213,12 @@ axsFinance.CNR = '<cnr next="RIGHT l" prev="LEFT h">' +
     '      id("portfolio-news-title")' +
     '    </target>' +
     '' +
+    '    <target title="View all daily news"  hotkey="a"' +
+    '        onEmpty="No more daily news">' +
+    '      id("portfolio-news-title")//a[contains(text(), ' +
+    '"View all of today")]' +
+    '    </target>' +
+    '' +
     '  </list>' +
     '' +
     '  <list title="Video top stories" next="DOWN j" prev="UP ' +
@@ -208,12 +226,17 @@ axsFinance.CNR = '<cnr next="RIGHT l" prev="LEFT h">' +
     '      back="p" type="dynamic">' +
     '' +
     '    <item action="CALL:axsFinance.readVideoDesc">' +
-    '      id("video-news")//a' +
+    '      id("video-news")//a[@class]' +
     '    </item>' +
     '' +
     '    <target title = "Video top stories" trigger="listEntr' +
     'y">' +
     '      id("video-news-title")' +
+    '    </target>' +
+    '' +
+    '    <target title="More finance videos on Google video"  hotkey="a"' +
+    '        onEmpty="No more finance videos">' +
+    '      id("video-news")//a[not(@class)]' +
     '    </target>' +
     '' +
     '  </list>' +
@@ -418,7 +441,7 @@ axsFinance.init = function(){
  * Handles the DOMSubtreeModified event. 
  * This event happens when the selected node for the 
  * auto-complete search box changes.
- * @param {Event} evt The DOMSubtreeModified event
+ * @param {Event} evt The DOMSubtreeModified event.
  */
 axsFinance.DOMSubtreeModifiedHandler = function(evt){
   var attrib = evt.attrName;
@@ -466,7 +489,7 @@ axsFinance.handleMarketSummaryDescription = function(item) {
 
 /**
  * Speaks a text and positions the screen to an element.
- * @param {Node} element DOM node 
+ * @param {Node} element DOM node.
  * @param {string} text The text to be spoken. 
  * characters.
  */
@@ -511,8 +534,8 @@ axsFinance.readTableRowIndicesAndCurrencies = function(item) {
 
 /**
  * Handles the focus event of the search box. Avoids focusing of
- * this element performed by the page scripts
- * @param {Event} evt The focus event
+ * this element performed by the page scripts.
+ * @param {Event} evt The focus event.
  */
 axsFinance.searchBoxKeyHandler = function(evt) {
   if (!axsFinance.searchBoxFocusEnabled) {
@@ -584,8 +607,10 @@ axsFinance.readTableRowRecentQuotesDesc = function(item) {
 
   var symbol = element.getElementsByClassName('symbol')[0].textContent;
   var price = element.getElementsByClassName('price')[0].textContent;
-  price = axsFinance.parseSpecialChars(price);
   var changes = element.getElementsByClassName('chg');
+  if (changes.length === 0) {
+    changes = element.getElementsByClassName('chr');
+  }
   var absoluteChange = axsFinance.parseSpecialChars(changes[0].textContent);
   var relativeChange = axsFinance.parseSpecialChars(changes[1].textContent);
   var marketCap = element.getElementsByClassName('mktCap')[0].textContent;
@@ -710,7 +735,7 @@ axsFinance.getTableRowContentArray = function(item) {
   var company = columns[1].textContent;
   //due to inconsistency in http://finance.google.com/finance
   var absoluteChange = columns[4].textContent;
-  if (absoluteChange.charAt(0) != '-') {
+  if (absoluteChange.charAt(0) != '-' && columns[4].className == 'change chg') {
     absoluteChange = '+' + absoluteChange;
   }
   absoluteChange = axsFinance.parseSpecialChars(absoluteChange);
@@ -751,7 +776,7 @@ axsFinance.buildTableRowText = function(textContents, columnDescriptors) {
 /**
  * Replaces phrases (i.e. the entire text), tokens (i.e. words), and symbols
  * (i.e. characters) of the processed text with predefined values (mappings).
- * @param {string} text The text to be processed
+ * @param {string} text The text to be processed.
  * @return {string} The text with replaced phrases/tokens/symbols.
  */
 axsFinance.parseSpecialChars = function(text) {
@@ -814,7 +839,7 @@ axsFinance.normalizeString = function(text) {
 /**
  * Handler for key events. 'ESC' unfocuses the current focused element and
  * 'ENTER' goes to a link.
- * @param {Event} evt A keypress event
+ * @param {Event} evt A keypress event.
  * @return {boolean} If true, the event should be propagated.
  */
 axsFinance.keyHandler = function(evt) {
@@ -849,19 +874,31 @@ axsFinance.charCodeMap = {
   // Map additional keyboard behavior that involves char codes here
   // / (slash symbol)
   47 : function() {
-       axsFinance.searchBoxFocusEnabled = true;
-       document.getElementById('searchbox').focus();
-       document.getElementById('searchbox').select();
-       return false;
-     },
+         axsFinance.searchBoxFocusEnabled = true;
+         document.getElementById('searchbox').focus();
+         document.getElementById('searchbox').select();
+         return false;
+       },
   // ? (question mark)
   63 : function() {
-       var helpStr = axsFinance.str.HELP +
-                     axsFinance.axsNavObj.localHelpString() +
-                     axsFinance.axsNavObj.globalHelpString();
-       axsFinance.axsJAXObj.speakTextViaNode(helpStr);
-       return false;
-    }
+         var helpStr = axsFinance.str.HELP +
+                       axsFinance.axsNavObj.localHelpString() +
+                       axsFinance.axsNavObj.globalHelpString();
+         axsFinance.axsJAXObj.speakTextViaNode(helpStr);
+         return false;
+       },
+  // - (minus symbol)
+  45 : function() {
+         axsFinance.magSize -= 0.10;
+         axsFinance.axsLensObj.setMagnification(axsFinance.magSize);
+         return false;
+       },
+  // = (equal symbol)
+  61 : function() {
+         axsFinance.magSize += 0.10;
+         axsFinance.axsLensObj.setMagnification(axsFinance.magSize);
+         return false;
+       }
 };
 
 //Run the initialization routine of the script

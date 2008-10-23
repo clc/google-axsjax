@@ -530,7 +530,7 @@ axsFinance.tabAndShiftTabWrapEventHandler = function(evt) {
 
 /**
  * Speaks a text and positions the screen to an element.
- * @param {Node} element DOM node 
+ * @param {Node} element DOM node.
  * @param {string} text The text to be spoken.
  * characters.
  */
@@ -562,7 +562,7 @@ axsFinance.addSpaceBetweenChars = function(text) {
  * Replaces phrases (i.e. the entire text), tokens (i.e. words), and symbols
  * (i.e. characters) of the processed text with predefined values (mappings).
  * built by alternating a phrase and a column content.
- * @param {string} text The text to be processed
+ * @param {string} text The text to be processed.
  * @return {string} The text with replaced phrases/tokens/symbols.
  */
 axsFinance.parseSpecChrsAndTkns = function(text) {
@@ -631,7 +631,7 @@ axsFinance.normalizeString = function(text) {
 /**
  * Handler for key events. 'ESC' unfocuses the current focused element and
  * 'q' reads (speaks) the current quote.
- * @param {Event} evt A keypress event
+ * @param {Event} evt A keypress event.
  * @return {boolean} If true, indicates that the event should be propagated.
  */
 axsFinance.keyHandler = function(evt) {
@@ -679,12 +679,24 @@ axsFinance.charCodeMap = {
      },
   // ? (question mark)
   63 : function() {
-       var helpStr = axsFinance.HELP +
-                     axsFinance.axsNavObj.localHelpString() +
-                     axsFinance.axsNavObj.globalHelpString();
-       axsFinance.axsJAXObj.speakTextViaNode(helpStr);
-       return false;
-    }
+         var helpStr = axsFinance.HELP +
+                       axsFinance.axsNavObj.localHelpString() +
+                       axsFinance.axsNavObj.globalHelpString();
+         axsFinance.axsJAXObj.speakTextViaNode(helpStr);
+         return false;
+      },
+  // - (minus symbol)
+   45 : function() {
+          axsFinance.magSize -= 0.10;
+          axsFinance.axsLensObj.setMagnification(axsFinance.magSize);
+          return false;
+        },
+   // = (equal symbol)
+   61 : function() {
+          axsFinance.magSize += 0.10;
+          axsFinance.axsLensObj.setMagnification(axsFinance.magSize);
+          return false;
+        }
 };
 
 //Run the initialization routine of the script

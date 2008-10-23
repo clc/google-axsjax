@@ -22,6 +22,13 @@
 // create namespace
 var axsFinance = {};
 
+/**
+ * Enumeration for the possible repositioning options upon a list refresh.
+ */
+axsFinance.refreshMode = {
+  GO_TOP : 0,
+  GO_BOTTOM : 1
+};
 
 /**
  * Object that contains all string literal used for enhancing the presentation
@@ -152,13 +159,13 @@ axsFinance.RESULTS_CNR_BODY = '<list title="{0}" fwd="DOWN j n" ' +
     '</target>' +
 
     '<target title="Next page" trigger="listTail" ' +
-        'action="CALL:axsFinance.wrapAround">' +
+        'action="CALL:axsFinance.goToNextPreviousResulstsPageGoTop">' +
       'id("searchresults")//td[position() > 1]//span[@class="navb"]/..  ' +
           '| //div[@class="footerLinks"]' +
     '</target>' +
 
     '<target title="Previous page" trigger="listHead" ' +
-        'action="CALL:axsFinance.wrapAround">' +
+        'action="CALL:axsFinance.goToNextPreviousResulstsPageGoBottom">' +
         'id("searchresults")//td[1]//span[@class="navb"]/.. ' +
         '| //div[@class="footerLinks"]' +
     '</target>' +
@@ -313,26 +320,6 @@ axsFinance.WIZARD_CNR = '<cnr next="RIGHT l" prev="LEFT h">' +
 
     '</list>' +
 
-    '<list title="Volume criteria" next="DOWN j" prev="UP k" ' +
-        'fwd="n" back="p" type="dynamic">' +
-
-      '<item action="CALL:axsFinance.readCriteriaExplanation">' +
-        'id("volume")//a' +
-      '</item>' +
-
-      '<target title="Load CNR and go to section" ' +
-          'trigger="listEntry" ' +
-          'action="CALL:axsFinance.readCurrentCriteriaList">' +
-        '//table[@class="searchtabs"]//tr[3]//a' +
-      '</target>' +
-
-      '<target title="Add selected criteria" hotkey="ENTER" ' +
-          'action="CALL:axsFinance.addCriteria">' +
-        'id("criteria_button")/button' +
-      '</target>' +
-
-    '</list>' +
-
     '<list title="Valuation criteria" next="DOWN j" ' +
         'prev="UP k" fwd="n" back="p" type="dynamic">' +
 
@@ -342,7 +329,7 @@ axsFinance.WIZARD_CNR = '<cnr next="RIGHT l" prev="LEFT h">' +
 
       '<target title="Load CNR and go to section" trigger="listEntry" ' +
           'action="CALL:axsFinance.readCurrentCriteriaList">' +
-        '//table[@class="searchtabs"]//tr[4]//a' +
+        '//table[@class="searchtabs"]//tr[3]//a' +
       '</target>' +
 
       '<target title="Add selected criteria" hotkey="ENTER" ' +
@@ -362,7 +349,7 @@ axsFinance.WIZARD_CNR = '<cnr next="RIGHT l" prev="LEFT h">' +
       '<target title="Load CNR and go to section" ' +
           'trigger="listEntry" ' +
           'action="CALL:axsFinance.readCurrentCriteriaList">' +
-        '//table[@class="searchtabs"]//tr[5]//a' +
+        '//table[@class="searchtabs"]//tr[4]//a' +
       '</target>' +
 
       '<target title="Add selected criteria" hotkey="ENTER" ' +
@@ -372,17 +359,17 @@ axsFinance.WIZARD_CNR = '<cnr next="RIGHT l" prev="LEFT h">' +
 
     '</list>' +
 
-    '<list title="Balance sheet criteria" next="DOWN j" ' +
+    '<list title="Financial ratios criteria" next="DOWN j" ' +
         'prev="UP k" fwd="n" back="p" type="dynamic">' +
 
       '<item action="CALL:axsFinance.readCriteriaExplanation">' +
-        'id("balancesheetratios")//a' +
+        'id("financialratios")//a' +
       '</item>' +
 
       '<target title="Load CNR and go to section" ' +
           'trigger="listEntry" ' +
           'action="CALL:axsFinance.readCurrentCriteriaList">' +
-        '//table[@class="searchtabs"]//tr[6]//a' +
+        '//table[@class="searchtabs"]//tr[5]//a' +
       '</target>' +
 
       '<target title="Add selected criteria" hotkey="ENTER" ' +
@@ -401,7 +388,7 @@ axsFinance.WIZARD_CNR = '<cnr next="RIGHT l" prev="LEFT h">' +
 
       '<target title="Load CNR and go to section" trigger="listEntry" ' +
           'action="CALL:axsFinance.readCurrentCriteriaList">' +
-        '//table[@class="searchtabs"]//tr[7]//a' +
+        '//table[@class="searchtabs"]//tr[6]//a' +
       '</target>' +
 
       '<target title="Add selected criteria" hotkey="ENTER" ' +
@@ -421,7 +408,7 @@ axsFinance.WIZARD_CNR = '<cnr next="RIGHT l" prev="LEFT h">' +
       '<target title="Load CNR and go to section" ' +
           'trigger="listEntry" ' +
           'action="CALL:axsFinance.readCurrentCriteriaList">' +
-        '//table[@class="searchtabs"]//tr[8]//a' +
+        '//table[@class="searchtabs"]//tr[7]//a' +
       '</target>' +
 
       '<target title="Add selected criteria" hotkey="ENTER" ' +
@@ -441,7 +428,7 @@ axsFinance.WIZARD_CNR = '<cnr next="RIGHT l" prev="LEFT h">' +
       '<target title="Load CNR and go to section" ' +
           'trigger="listEntry" ' +
           'action="CALL:axsFinance.readCurrentCriteriaList">' +
-        '//table[@class="searchtabs"]//tr[9]//a' +
+        '//table[@class="searchtabs"]//tr[8]//a' +
       '</target>' +
 
       '<target title="Add selected criteria" hotkey="ENTER" ' +
@@ -663,6 +650,7 @@ axsFinance.initAxsJAX = function() {
   axsFinance.axsNavObjRes.setLens(axsFinance.axsLensObj);
   axsFinance.buildAndLoadResultCNRAndPowerKey(false);
   axsFinance.axsNavObjRes.setSound(axsFinance.axsSoundObj);
+  //PowerKey not initialized here with purpose
   axsFinance.axsNavObjRes.disableNavKeys();
 
   //Set the active AxsNav object
@@ -717,7 +705,7 @@ axsFinance.removeDefaultFocus = function() {
  * Handler for added and removed nodes in the document. If the node,
  * source of the event, is mapped to a function, the function is
  * executed. Otherwise, no action is taken.
- * @param {Event} evt DOMNodeRemoved or DOMNodeInserted event
+ * @param {Event} evt DOMNodeRemoved or DOMNodeInserted event.
  */
 axsFinance.criteriaRowInsertedEventHandler = function(evt) {
   var target = evt.target;
@@ -759,7 +747,7 @@ axsFinance.instrumentCriteriaRow = function(criteriaRow) {
  * Handler for the focus event of the main edit field of the criteria.
  * Needed for avoiding reading of the first input field upon the page
  * initialization.
- * @param {Event} evt A focus event
+ * @param {Event} evt A focus event.
  */
 axsFinance.focusEventHandler = function(evt) {
   if (!axsFinance.initComplete) {
@@ -773,7 +761,7 @@ axsFinance.focusEventHandler = function(evt) {
  * Handles the DOMSubtreeModified event.
  * This event happens when the selected node for the
  * auto-complete search box changes.
- * @param {Event} evt The DOMSubtreeModified event
+ * @param {Event} evt The DOMSubtreeModified event.
  */
 axsFinance.DOMSubtreeModifiedEventDispatch = function(evt) {
   var target = evt.target;
@@ -795,8 +783,6 @@ axsFinance.DOMSubtreeModifiedEventDispatch = function(evt) {
  * @param {Event?} evt A DOMSubtreeModified event.
  */
 axsFinance.searchCriteriaEventHandler = function(evt) {
-  //TODO: 
-  axsFinance.axsNavObjCrit.navInit(axsFinance.CRITERIA_CNR, null);
   axsFinance.refreshStockCriteria();
 };
 
@@ -887,8 +873,12 @@ axsFinance.autoCompletionEventHandler = function(evt) {
  * presentation for people with reduced vision.
  */
 axsFinance.customizeStyleSheets = function() {
-  var cssRule = document.styleSheets[0].cssRules[36];
-  cssRule.style.font = '30px arial';
+  var cssRules = document.styleSheets[0].cssRules;
+  for (var j = 0, cssRule; cssRule = cssRules[j]; j++) {
+    if (cssRule.selectorText == '.field_input_hover') {
+      cssRule.style.font = '30px arial';
+    }
+  }
 };
 
 /**
@@ -945,17 +935,15 @@ axsFinance.refreshStockCriteria = function() {
  */
 axsFinance.addCriteria = function(item) {
   var element = item.elem;
-
   //The button is not disabled and made invisible but is moved to (0, 0)
-  var text = axsFinance.str.CRIT_ALREADY_ADDED;
   if (element.offsetTop > 0) {
     axsFinance.axsJAXObj.clickElem(element, false);
     axsFinance.searchCriteriaModified = true;
-
-    axsFinance.axsJAXObj.speakTextViaNode('');
-    text = axsFinance.str.CRIT_ADDED;
+    var text = axsFinance.str.CRIT_ADDED;
+    axsFinance.messageBuffer = axsFinance.messageBuffer + ' ' + text;
+  } else {
+    axsFinance.axsJAXObj.speakTextViaNode(axsFinance.str.CRIT_ALREADY_ADDED);
   }
-  axsFinance.messageBuffer = axsFinance.messageBuffer + ' ' + text;
 };
 
 /**
@@ -1076,7 +1064,7 @@ axsFinance.readCurrentCriteriaList = function(item) {
 
   var element = item.elem;
   axsFinance.axsJAXObj.clickElem(element, false);
-  var listTitle = axsFinance.axsNavObjCrit.currentList().title;
+  var listTitle = axsFinance.activeAxsNavObj.currentList().title;
   axsFinance.axsJAXObj.speakTextViaNode(listTitle);
   axsFinance.axsLensObj.view(element.parentNode.parentNode);
 };
@@ -1453,9 +1441,39 @@ axsFinance.pkVerticalSearchHandler = function(command, index, id, args) {
  * a dynamic change in the data presented by these lists.
  */
 axsFinance.refreshAllResultLists = function() {
+  var test = axsFinance.axsNavObjRes.navItemIdxs;
+  for (var i = 0, list; list = axsFinance.axsNavObjRes.navArray[i]; i++) {
+    axsFinance.axsNavObjRes.refreshList(list.title);
+    if (list.refreshMode === axsFinance.refreshMode.GO_BOTTOM) {
+      var currentItemIdx = axsFinance.axsNavObjRes.navArray[i].items.length - 1;
+      axsFinance.axsNavObjRes.navItemIdxs[i] = currentItemIdx;
+    }
+  }
+};
+
+/**
+ * Wraps around an item list traversed with the fwd and back keys
+ * and goes to the top of the list.
+ * @param {Object} item A wrapper for the current DOM node.
+ */
+axsFinance.goToNextPreviousResulstsPageGoTop = function(item) {
+  axsFinance.goToNextPreviousResulstsPage(item);
   var navArray = axsFinance.axsNavObjRes.navArray;
   for (var i = 0, list; list = navArray[i]; i++) {
-    axsFinance.axsNavObjRes.refreshList(list.title);
+    list.refreshMode = axsFinance.refreshMode.GO_TOP;
+  }
+};
+
+/**
+ * Wraps around an item list traversed with the fwd and back keys
+ * and goes to the bottom of the list.
+ * @param {Object} item A wrapper for the current DOM node.
+ */
+axsFinance.goToNextPreviousResulstsPageGoBottom = function(item) {
+  axsFinance.goToNextPreviousResulstsPage(item);
+  var navArray = axsFinance.axsNavObjRes.navArray;
+  for (var i = 0, list; list = navArray[i]; i++) {
+    list.refreshMode = axsFinance.refreshMode.GO_BOTTOM;
   }
 };
 
@@ -1463,13 +1481,10 @@ axsFinance.refreshAllResultLists = function() {
  * Wraps around an item list traversed with the fwd and back keys
  * @param {Object} item A wrapper for the current DOM node.
  */
-axsFinance.wrapAround = function(item) {
+axsFinance.goToNextPreviousResulstsPage = function(item) {
   var element = item.elem;
   if (element.tagName == 'A') {
     axsFinance.axsJAXObj.clickElem(element, false);
-  } else {
-    var currentItem = axsFinance.axsNavObjCrit.currentItem();
-    axsFinance.axsNavObjCrit.actOnItem(currentItem);
   }
 };
 
@@ -1515,6 +1530,8 @@ axsFinance.setActiveAxsNavObjRes = function() {
   if (axsFinance.searchCriteriaModified) {
     axsFinance.buildAndLoadResultCNRAndPowerKey(false);
     axsFinance.searchCriteriaModified = false;
+  } else {
+    axsFinance.refreshAllResultLists();
   }
 
   var currentItem = axsFinance.axsNavObjRes.currentItem();
@@ -1568,9 +1585,9 @@ axsFinance.closeCriteriaWizard = function() {
 /**
  * Populates a template replacing special tokens (like {i} where is is an index)
  * with concrete values.
- * @param {string} template The template string to populate
- * @param {Array} values The array with replacement (concrete) values
- * @return {string} The string generated from populating the template
+ * @param {string} template The template string to populate.
+ * @param {Array} values The array with replacement (concrete) values.
+ * @return {string} The string generated from populating the template.
  */
 axsFinance.populateTemplate = function(template, values) {
   var populated = new String(template);
@@ -1625,7 +1642,7 @@ axsFinance.addSpaceBetweenChars = function(text) {
 
 /**
  * Speaks a text and positions the screen to an element.
- * @param {Node} element DOM node
+ * @param {Node} element DOM node.
  * @param {string} text The text to be spoken.
  * characters.
  */
@@ -1670,7 +1687,7 @@ axsFinance.buildTableRowText = function(textContents, columnDesc) {
  * Replaces phrases (i.e. the entire text), tokens (i.e. words), and symbols
  * (i.e. characters) of the processed text with predefined values (mappings).
  * built by alternating a phrase and a column content.
- * @param {string} text The text to be processed
+ * @param {string} text The text to be processed.
  * @return {string} The text with replaced phrases/tokens/symbols.
  */
 axsFinance.parseSpecChrsAndTkns = function(text) {
@@ -1734,7 +1751,7 @@ axsFinance.parseSpecChrsAndTkns = function(text) {
  * characters are replaced by ' ', and all carriage returns ('\r') and line
  * feeds(\n) are removed.
  * @param {string} text The text to be normalized.
- * @return {string} The normalized version of the text
+ * @return {string} The normalized version of the text.
  */
 axsFinance.normalizeString = function(text) {
   //remove leading and trailing spaces
@@ -1748,7 +1765,7 @@ axsFinance.normalizeString = function(text) {
 /**
  * Handler for key events. 'ESC' unfocuses the current focused element and
  * 'q' reads (speaks) the current quote.
- * @param {Event} evt A keypress event
+ * @param {Event} evt A keypress event.
  * @return {boolean} If true, the event should be propagated.
  */
 axsFinance.keyHandler = function(evt) {
@@ -1781,18 +1798,30 @@ axsFinance.charCodeMap = {
   // Map additional keyboard behavior that involves char codes here
   // / (slash symbol)
  47 : function() {
-     document.getElementById('searchbox').focus();
-     document.getElementById('searchbox').select();
-     return false;
-   },
+        document.getElementById('searchbox').focus();
+        document.getElementById('searchbox').select();
+        return false;
+      },
   // ? (question mark)
   63 : function() {
-     var helpStr = axsFinance.HELP +
-         axsFinance.axsNavObjCrit.localHelpString() +
-         axsFinance.axsNavObjCrit.globalHelpString();
-     axsFinance.axsJAXObj.speakTextViaNode(helpStr);
-     return false;
-  }
+         var helpStr = axsFinance.HELP +
+                       axsFinance.axsNavObjCrit.localHelpString() +
+                       axsFinance.axsNavObjCrit.globalHelpString();
+         axsFinance.axsJAXObj.speakTextViaNode(helpStr);
+         return false;
+       },
+  // - (minus symbol)
+  45 : function() {
+         axsFinance.magSize -= 0.10;
+         axsFinance.axsLensObj.setMagnification(axsFinance.magSize);
+         return false;
+       },
+  // = (equal symbol)
+  61 : function() {
+         axsFinance.magSize += 0.10;
+         axsFinance.axsLensObj.setMagnification(axsFinance.magSize);
+         return false;
+       }
 };
 
 /**

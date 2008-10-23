@@ -989,7 +989,7 @@ axsFinance.addSpaceBetweenChars = function(text) {
  * Replaces phrases (i.e. the entire text), tokens (i.e. words), and symbols
  * (i.e. characters) of the processed text with predefined values (mappings).
  * built by alternating a phrase and a column content.
- * @param {string} text The text to be processed
+ * @param {string} text The text to be processed.
  * @return {string} The text with replaced phrases/tokens/symbols.
  */
 axsFinance.parseSpecChrsAndTkns = function(text) {
@@ -1062,7 +1062,7 @@ axsFinance.normalizeString = function(text) {
  * Populates a template replacing special tokens (like {i} where is is an index)
  * with concrete values.
  * @param {string} template The template string to populate.
- * @param {Array} phrases The array with replacement (concrete) values
+ * @param {Array} phrases The array with replacement (concrete) values.
  * @return {string} The populated template.
  */
 axsFinance.populateTemplate = function(template, phrases) {
@@ -1077,7 +1077,7 @@ axsFinance.populateTemplate = function(template, phrases) {
 /**
  * Handler for key events. 'ESC' unfocuses the current focused element and
  * 'q' reads (speaks) the current quote.
- * @param {Event} evt A keypress event
+ * @param {Event} evt A keypress event.
  * @return {boolean} If true, indicates that the event should be propagated.
  */
 axsFinance.keyHandler = function(evt) {
@@ -1125,12 +1125,24 @@ axsFinance.charCodeMap = {
      },
   // ? (question mark)
   63 : function() {
-       var helpStr = axsFinance.HELP +
-           axsFinance.axsNavSectorObj.localHelpString() +
-           axsFinance.axsNavSectorObj.globalHelpString();
-       axsFinance.axsJAXObj.speakTextViaNode(helpStr);
-       return false;
-    }
+         var helpStr = axsFinance.HELP +
+             axsFinance.axsNavSectorObj.localHelpString() +
+             axsFinance.axsNavSectorObj.globalHelpString();
+         axsFinance.axsJAXObj.speakTextViaNode(helpStr);
+         return false;
+      },
+  // - (minus symbol)
+  45 : function() {
+         axsFinance.magSize -= 0.10;
+         axsFinance.axsLensObj.setMagnification(axsFinance.magSize);
+         return false;
+       },
+  // = (equal symbol)
+  61 : function() {
+         axsFinance.magSize += 0.10;
+         axsFinance.axsLensObj.setMagnification(axsFinance.magSize);
+         return false;
+       }
 };
 
 //Run the initialization routine of the script

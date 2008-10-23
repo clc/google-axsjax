@@ -49,7 +49,7 @@
     </target>
 
     <target title="Go to section" trigger="listEntry">
-      //li/a[text()="News"]
+      id("news_tab_title")
     </target>
 
   </list>
@@ -66,7 +66,7 @@
     </target>
 
     <target title="Go to section" trigger="listEntry">
-      //li/a[text()="Blogs"]
+       id("blogs_tab_title")
     </target>
 
   </list>
@@ -108,7 +108,7 @@
     </target>
 
     <target title="Go to section" trigger="listEntry">
-      //li/a[contains(text(), "Feeds")]
+      id("plot_feeds_title")
     </target>
 
   </list>
