@@ -174,7 +174,7 @@ axsFinance.CNR = '<cnr next="RIGHT l" prev="LEFT h">' +
     '    </target>' +
     '' +
     '    <target title="Go to section" trigger="listEntry">' +
-    '      //li/a[text()="News"]' +
+    '      id("news_tab_title")' +
     '    </target>' +
     '' +
     '  </list>' +
@@ -191,7 +191,7 @@ axsFinance.CNR = '<cnr next="RIGHT l" prev="LEFT h">' +
     '    </target>' +
     '' +
     '    <target title="Go to section" trigger="listEntry">' +
-    '      //li/a[text()="Blogs"]' +
+    '       id("blogs_tab_title")' +
     '    </target>' +
     '' +
     '  </list>' +
@@ -233,7 +233,7 @@ axsFinance.CNR = '<cnr next="RIGHT l" prev="LEFT h">' +
     '    </target>' +
     '' +
     '    <target title="Go to section" trigger="listEntry">' +
-    '      //li/a[contains(text(), "Feeds")]' +
+    '      id("plot_feeds_title")' +
     '    </target>' +
     '' +
     '  </list>' +
@@ -431,8 +431,8 @@ axsFinance.refreshNewsBlogsFeedsListEventHandler = function(evt) {
 
 /**
  * Handles the focus event of the search box. Avoids focusing of
- * this element performed by the page scripts
- * @param {Event} evt The focus event
+ * this element performed by the page scripts.
+ * @param {Event} evt The focus event.
  */
 axsFinance.searchBoxKeyHandler = function(evt) {
   if (!axsFinance.searchBoxFocusEnabled) {
@@ -507,8 +507,8 @@ axsFinance.readCurrentQuote = function() {
  * Parses the current quote (the first element in the first and second items 
  * in the Market data list and read via pressing the 'q' key) and generates
  * a readable string.
- * @param {Node} element The current DOM node 
- * @return {string} The readable text generated from the quote 
+ * @param {Node} element The current DOM node .
+ * @return {string} The readable text generated from the quote.
  */
 axsFinance.parseCurrentQuote = function(element) {
   var text = '';
@@ -659,7 +659,7 @@ axsFinance.focusOnSearchBox = function(item) {
 
 /**
  * Speaks a text and positions the screen to an element.
- * @param {Node} element DOM node 
+ * @param {Node} element DOM node.
  * @param {string} text The text to be spoken. 
  * characters.
  */
@@ -709,7 +709,7 @@ axsFinance.refreshCurrentList = function() {
  * Replaces phrases (i.e. the entire text), tokens (i.e. words), and symbols
  * (i.e. characters) of the processed text with predefined values (mappings).
  * built by alternating a phrase and a column content. 
- * @param {string} text The text to be processed  
+ * @param {string} text The text to be processed.
  * @return {string} The text with replaced phrases/tokens/symbols.
  */
 axsFinance.parseSpecChrsAndTkns = function(text) {
@@ -763,7 +763,7 @@ axsFinance.parseSpecChrsAndTkns = function(text) {
  * characters are replaced by ' ', and all carriage returns ('\r') and line 
  * feeds(\n) are removed.
  * @param {string} text The text to be normalized. 
- * @return {string} The normalized version of the text
+ * @return {string} The normalized version of the text.
  */
 axsFinance.normalizeString = function(text) {
   //remove leading and trailing spaces
@@ -777,7 +777,7 @@ axsFinance.normalizeString = function(text) {
 /**
  * Handler for key events. 'ESC' unfocuses the current focused element and
  * 'q' reads (speaks) the current quote.
- * @param {Event} evt A keypress event
+ * @param {Event} evt A keypress event.
  * @return {boolean} If true, indicates that the event should be propagated.
  */
 axsFinance.keyHandler = function(evt) {

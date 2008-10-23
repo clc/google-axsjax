@@ -9,6 +9,10 @@
     //a[@href="/finance/stockscreener"]
   </target>
 
+  <target title="Portfolios" hotkey="o">
+    id("guser")//a[text()="Portfolios"]
+  </target>
+
   <list title="Market summary" next="DOWN j" prev="UP k"
       fwd="n" back="p">
 
@@ -18,8 +22,14 @@
     </item>
 
     <item index="1">
-      id("home-main")//div[contains(@class, "news major")]//a
+      id("home-main")//div[contains(@class, "news major")]
+          //a[not(@class="more-rel")]
     </item>
+
+    <target title="Related articles"  hotkey="r"
+        onEmpty="No related articles available.">
+      //div[contains(@class, "news major")]//a[@class="more-rel"]
+    </target>
 
   </list>
 
@@ -36,8 +46,7 @@
       fwd="n" back="p">
 
     <item action="CALL:axsFinance.readMktTopStAndPortfRelTopStDesc">
-      id("market-news")//span[*]/a[not(@class)] |
-          id("market-news")/div/div[*]/a
+      id("market-news")//span[@class="name"]//a
     </item>
 
     <target title="Related articles"  hotkey="r"
@@ -52,13 +61,18 @@
       id("market-news-title")
     </target>
 
+    <target title="View all daily news"  hotkey="a"
+        onEmpty="No more daily news">
+      id("market-news")//a[contains(text(), "View all of today")]
+    </target>
+    
   </list>
 
   <list title="Portfolio related top stories"
       next="DOWN j" prev="UP k" fwd="n" back="p">
 
     <item action="CALL:axsFinance.readMktTopStAndPortfRelTopStDesc">
-      id("portfolio-news")//span[*]/a[not(@class)]
+      id("portfolio-news")//span[@class="name"]//a
     </item>
 
     <target title="Related articles"  hotkey="r"
@@ -73,17 +87,27 @@
       id("portfolio-news-title")
     </target>
 
+    <target title="View all daily news"  hotkey="a"
+        onEmpty="No more daily news">
+      id("portfolio-news-title")//a[contains(text(), "View all of today")]
+    </target>
+          
   </list>
 
   <list title="Video top stories" next="DOWN j" prev="UP k" fwd="n"
       back="p" type="dynamic">
 
     <item action="CALL:axsFinance.readVideoDesc">
-      id("video-news")//a
+      id("video-news")//a[@class]
     </item>
 
     <target title = "Video top stories" trigger="listEntry">
       id("video-news-title")
+    </target>
+    
+    <target title="More finance videos on Google video"  hotkey="a"
+        onEmpty="No more finance videos">
+      id("video-news")//a[not(@class)]
     </target>
 
   </list>

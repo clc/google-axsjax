@@ -58,13 +58,13 @@
     </target>
 
     <target title="Next page" trigger="listTail"
-        action="CALL:axsFinance.wrapAround">
+        action="CALL:axsFinance.wrapAroundGoTop">
       id("searchresults")//td[position() > 1]//span[@class="navb"]/.. 
           | //div[@class="footerLinks"]
     </target>
 
     <target title="Previous page" trigger="listHead"
-        action="CALL:axsFinance.wrapAround">
+        action="CALL:axsFinance.wrapAroundGoBottom">
       id("searchresults")//td[1]//span[@class="navb"]/..
           | //div[@class="footerLinks"]
     </target>

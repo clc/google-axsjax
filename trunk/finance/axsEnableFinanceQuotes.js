@@ -122,7 +122,7 @@ axsFinance.relatedCompaniesDescArray = new Array('',
                                                 axsFinance.str.EXCHANGE,
                                                 axsFinance.str.SYMBOL,
                                                 axsFinance.str.LAST_TRADE,
-                                                axsFinance.str.CHANGE,
+                                                '',
                                                 axsFinance.str.OR,
                                                 axsFinance.str.MKT_CAP,
                                                 axsFinance.str.USD);
@@ -234,7 +234,7 @@ axsFinance.CNR = '<cnr next="RIGHT l" prev="LEFT h">' +
     '    </target>' +
     '' +
     '    <target title="Go to section" trigger="listEntry">' +
-    '      //li/a[text()="News"]' +
+    '       id("news_tab_title")' +
     '    </target>' +
     '' +
     '  </list>' +
@@ -251,7 +251,7 @@ axsFinance.CNR = '<cnr next="RIGHT l" prev="LEFT h">' +
     '    </target>' +
     '' +
     '    <target title="Go to section" trigger="listEntry">' +
-    '      //li/a[text()="Blogs"]' +
+    '      id("blogs_tab_title")' +
     '    </target>' +
     '' +
     '  </list>' +
@@ -293,7 +293,7 @@ axsFinance.CNR = '<cnr next="RIGHT l" prev="LEFT h">' +
     '    </target>' +
     '' +
     '    <target title="Go to section" trigger="listEntry">' +
-    '      //li/a[contains(text(), "Feeds")]' +
+    '      id("plot_feeds_title")' +
     '    </target>' +
     '' +
     '  </list>' +
@@ -320,7 +320,7 @@ axsFinance.CNR = '<cnr next="RIGHT l" prev="LEFT h">' +
     '="n" back="p">' +
     '' +
     '    <item>' +
-    '      id("groups")//div[@class="item"]' +
+    '      id("groups")//div[@class="item"]//a[@id]' +
     '    </item>' +
     '' +
     '    <target title="Go to link" hotkey="ENTER">' +
@@ -329,6 +329,11 @@ axsFinance.CNR = '<cnr next="RIGHT l" prev="LEFT h">' +
     '' +
     '    <target title="Go to section" trigger="listEntry">' +
     '      id("groups")/div[@class="hdg"]' +
+    '    </target>' +
+    '' +
+    '    <target title="All discussions" hotkey="a" ' +
+    '        onEmpty="No more discussions">' +
+    '      id("groups")//div[@class="item"]//a[not(@id)]' +
     '    </target>' +
     '' +
     '  </list>' +
@@ -359,10 +364,6 @@ axsFinance.CNR = '<cnr next="RIGHT l" prev="LEFT h">' +
     '      id("events")//tr' +
     '    </item>' +
     '' +
-    '    <item>' +
-    '      id("events")/following-sibling::*//a' +
-    '    </item>' +
-    '' +
     '    <target title="Go to section" trigger="listEntry">' +
     '      id("blogs")/following-sibling::div[@class="content"' +
     ']' +
@@ -372,6 +373,11 @@ axsFinance.CNR = '<cnr next="RIGHT l" prev="LEFT h">' +
     '    <target title="Go to link" hotkey="ENTER" onEmpty="No' +
     '        link available.">' +
     '      .//descendant-or-self::a' +
+    '    </target>' +
+    '' +
+    '    <target title="All events from AOL" hotkey="a" ' +
+    '        onEmpty="No more events">' +
+    '      id("all_events")' +
     '    </target>' +
     '' +
     '  </list>' +
@@ -418,7 +424,7 @@ axsFinance.CNR = '<cnr next="RIGHT l" prev="LEFT h">' +
     '      id("fd")//tr[1]//td[1]axsFinance.str.BIO' +
     '    </target>' +
     '' +
-    '    <target title="Go to link" hotkey="ENTER">' +
+    '    <target title="Open income statement" hotkey="ENTER">' +
     '      ./../tr[1]//a' +
     '    </target>' +
     '' +
@@ -436,7 +442,7 @@ axsFinance.CNR = '<cnr next="RIGHT l" prev="LEFT h">' +
     '      id("fd")//tr' +
     '    </item>' +
     '' +
-    '    <target title="Go to link" hotkey="ENTER">' +
+    '    <target title="Open balance sheet" hotkey="ENTER">' +
     '      ./../tr[6]//a' +
     '    </target>' +
     '' +
@@ -455,7 +461,7 @@ axsFinance.CNR = '<cnr next="RIGHT l" prev="LEFT h">' +
     '      id("fd")//tr' +
     '    </item>' +
     '' +
-    '    <target title="Go to link" hotkey="ENTER">' +
+    '    <target title="Open cash flow" hotkey="ENTER">' +
     '      ./../tr[12]//a' +
     '    </target>' +
     '' +
@@ -474,13 +480,9 @@ axsFinance.CNR = '<cnr next="RIGHT l" prev="LEFT h">' +
     '      id("keyratios")//tr[@class]' +
     '    </item>' +
     '' +
-    '    <item>' +
+    '    <target title="More ratios from Reuters" hotkey="a"' +
+    '        onEmpty="No more ratios">' +
     '      id("keyratios")//a' +
-    '    </item>' +
-    '' +
-    '    <target title="More ratios" hotkey="ENTER"' +
-    '        onEmpty="No link available.">' +
-    '      .' +
     '    </target>' +
     '' +
     '    <target title="Go to section" trigger="listEntry">' +
@@ -723,7 +725,7 @@ axsFinance.refreshNewsBlogsFeedsListEventHandler = function(evt) {
 /**
  * Handles the focus event of the search box. Avoids focusing of
  * this element performed by the page scripts
- * @param {Event} evt The focus event
+ * @param {Event} evt The focus event.
  */
 axsFinance.searchBoxKeyHandler = function(evt) {
   if (!axsFinance.searchBoxFocusEnabled) {
@@ -854,8 +856,8 @@ axsFinance.readCurrentQuote = function() {
  * Parses the current quote (the first element in the first and second items 
  * in the Market data list and read via pressing the 'q' key) and generates
  * a readable string.
- * @param {Node} element The current DOM node 
- * @return {string} The readable text generated from the quote 
+ * @param {Node} element The current DOM node.
+ * @return {string} The readable text generated from the quote.
  */
 axsFinance.parseCurrentQuote = function(element) {
   var text = '';
@@ -975,17 +977,21 @@ axsFinance.readRelCompDesc = function(item) {
   }
   var symbol = axsFinance.normalizeString(rowColumns[7].textContent);
   symbol = axsFinance.addSpaceBetweenChars(symbol);
-  var lastTrade = axsFinance.normalizeString(rowColumns[9].textContent);
+  var lastTrade = axsFinance.normalizeString(rowColumns[9].textContent) ||
+                  axsFinance.str.NA;
   var note = '';
   if (rowColumns[11].textContent.indexOf('*') != -1) {
     note = axsFinance.str.DELAY;
   }
   var index = rowColumns[13].textContent.indexOf('(');
   var absoluteChange = rowColumns[13].textContent.substring(0, index);
-  absoluteChange = axsFinance.parseSpecChrsAndTkns(absoluteChange);
+  absoluteChange = axsFinance.parseSpecChrsAndTkns(absoluteChange) ||
+                   axsFinance.str.NA;
   var relativeChange = rowColumns[13].textContent.substring(index);
-  relativeChange = axsFinance.parseSpecChrsAndTkns(relativeChange);
-  var marketCap = axsFinance.parseSpecChrsAndTkns(rowColumns[15].textContent);
+  relativeChange = axsFinance.parseSpecChrsAndTkns(relativeChange) ||
+                   axsFinance.str.NA;
+  var marketCap = axsFinance.parseSpecChrsAndTkns(rowColumns[15].textContent) ||
+                  axsFinance.str.NA;
   var docTextPhrases = new Array(companyName,
                                  exchange,
                                  symbol,
@@ -1176,7 +1182,7 @@ axsFinance.addSpaceBetweenChars = function(text) {
 
 /**
  * Speaks a text and positions the screen to an element.
- * @param {Node} element DOM node 
+ * @param {Node} element DOM node.
  * @param {string} text The text to be spoken. 
  * characters.
  */
@@ -1226,7 +1232,7 @@ axsFinance.refreshCurrentList = function() {
  * Replaces phrases (i.e. the entire text), tokens (i.e. words), and symbols
  * (i.e. characters) of the processed text with predefined values (mappings).
  * built by alternating a phrase and a column content. 
- * @param {string} text The text to be processed  
+ * @param {string} text The text to be processed.
  * @return {string} The text with replaced phrases/tokens/symbols.
  */
 axsFinance.parseSpecChrsAndTkns = function(text) {
@@ -1280,7 +1286,7 @@ axsFinance.parseSpecChrsAndTkns = function(text) {
  * characters are replaced by ' ', and all carriage returns ('\r') and line 
  * feeds(\n) are removed.
  * @param {string} text The text to be normalized. 
- * @return {string} The normalized version of the text
+ * @return {string} The normalized version of the text.
  */
 axsFinance.normalizeString = function(text) {
   //remove leading and trailing spaces
@@ -1294,7 +1300,7 @@ axsFinance.normalizeString = function(text) {
 /**
  * Handler for key events. 'ESC' unfocuses the current focused element and
  * 'q' reads (speaks) the current quote.
- * @param {Event} evt A keypress event
+ * @param {Event} evt A keypress event.
  * @return {boolean} If true, indicates that the event should be propagated.
  */
 axsFinance.keyHandler = function(evt) {
@@ -1341,7 +1347,19 @@ axsFinance.charCodeMap = {
                      axsFinance.axsNavObj.globalHelpString();
        axsFinance.axsJAXObj.speakTextViaNode(helpStr);
        return false;
-    }
+    },
+  // - (minus symbol)
+  45 : function() {
+         axsFinance.magSize -= 0.10;
+         axsFinance.axsLensObj.setMagnification(axsFinance.magSize);
+         return false;
+       },
+  // = (equal symbol)
+  61 : function() {
+         axsFinance.magSize += 0.10;
+         axsFinance.axsLensObj.setMagnification(axsFinance.magSize);
+         return false;
+       }
 };
 
 //Run the initialization routine of the script

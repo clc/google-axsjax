@@ -41,7 +41,9 @@ axsFinance.str = {
   N_A_ABBR : '-',
   N_A : 'Not available',
   AND_ABBR : '&',
-  AND : 'and'
+  AND : 'and',
+  MINUS_ABBR : '-',
+  MINUS : 'minus '
 };
 
 /**
@@ -143,7 +145,7 @@ axsFinance.phrasesMap[axsFinance.str.AND_ABBR] = axsFinance.str.AND;
  * @type {Object}
  */
 axsFinance.charPrefixMap = new Object();
-axsFinance.charPrefixMap[axsFinance.str.MINUS_ABR] = axsFinance.str.MINUS;
+axsFinance.charPrefixMap[axsFinance.str.MINUS_ABBR] = axsFinance.str.MINUS;
 axsFinance.charPrefixMap[axsFinance.str.UP_ABR] = axsFinance.str.UP;
 
 /**
@@ -325,8 +327,12 @@ axsFinance.generateCnrStr = function() {
   var rows = axsFinance.axsJAXObj.evalXPath(xPath, document.body);
 
   for (var i = 0, row; row = rows[i]; i++) {
-    if (row.childNodes.length === 1) {
+    if (row.childNodes.length === 1 || i === rows.length - 1) {
       endIndex = i;
+      // Due to inconsistency in the page-not all sections have an end bold line
+      if (row.childNodes.length > 1 || i === rows.length - 1) {
+        endIndex++;
+      }
       title = rows[i - 1].childNodes[1].textContent;
       title = axsFinance.parseSpecChrsAndTkns(title);
       listCNR = axsFinance.generateListCnrStr(title, begIndex, endIndex);
@@ -347,10 +353,10 @@ axsFinance.generateCnrStr = function() {
  */
 axsFinance.generateListCnrStr = function(title, begIndex, endIndex) {
   var phrases = new Array(axsFinance.visibleCategotyClassName,
-                      begIndex,
+                          begIndex,
                           endIndex);
   var cnrXPath = axsFinance.populateTemplate(axsFinance.str.XPATH_TEMPLATE,
-                                         phrases);
+                                             phrases);
   phrases = new Array(title, cnrXPath);
   var listCNR = axsFinance.populateTemplate(axsFinance.CNR_BODY, phrases);
   return listCNR;
@@ -491,7 +497,7 @@ axsFinance.documentDOMSubtreeModifiedEventHandler = function(evt) {
 
 /**
  * Speaks a text and positions the screen to an element.
- * @param {Node} element DOM node
+ * @param {Node} element DOM node.
  * @param {string} text The text to be spoken.
  * characters.
  */
@@ -506,7 +512,7 @@ axsFinance.speakAndGo = function(element, text) {
  * Populates a template replacing special tokens (like {i} where is is an index)
  * with concrete values.
  * @param {string} template The template string to populate.
- * @param {Array} phrases The array with replacement (concrete) values
+ * @param {Array} phrases The array with replacement (concrete) values.
  * @return {string} The populated template. 
  */
 axsFinance.populateTemplate = function(template, phrases) {
@@ -522,7 +528,7 @@ axsFinance.populateTemplate = function(template, phrases) {
  * Replaces phrases (i.e. the entire text), tokens (i.e. words), and symbols
  * (i.e. characters) of the processed text with predefined values (mappings).
  * built by alternating a phrase and a column content.
- * @param {string} text The text to be processed
+ * @param {string} text The text to be processed.
  * @return {string} The text with replaced phrases/tokens/symbols.
  */
 axsFinance.parseSpecChrsAndTkns = function(text) {
@@ -586,7 +592,7 @@ axsFinance.parseSpecChrsAndTkns = function(text) {
  * characters are replaced by ' ', and all carriage returns ('\r') and line
  * feeds(\n) are removed.
  * @param {string} text The text to be normalized.
- * @return {string} The normalized version of the text
+ * @return {string} The normalized version of the text.
  */
 axsFinance.normalizeString = function(text) {
   //remove leading and trailing spaces
@@ -600,7 +606,7 @@ axsFinance.normalizeString = function(text) {
 /**
  * Handler for key events. 'ESC' unfocuses the current focused element and
  * 'q' reads (speaks) the current quote.
- * @param {Event} evt A keypress event
+ * @param {Event} evt A keypress event.
  * @return {boolean} If true, the event should be propagated.
  */
 axsFinance.keyHandler = function(evt) {
