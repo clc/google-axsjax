@@ -1,0 +1,103 @@
+<cnr next="RIGHT l" prev="LEFT h">
+
+  <target title="Personal profile section" hotkey="ESC r"
+      action="CALL:axsHealth.closeSettingsSection">
+    /html
+  </target>
+
+  <list title="General" fwd="DOWN j n" back="UP k p" type="dynamic">
+
+    <item action="CALL:axsHealth.readSetting">
+      //div[@class="gwt-TabPanelBottom"]/div[not(contains(@style,
+          "display: none"))]//table[@class="h9-settings-smallTable"]/tbody
+          /tr[not(.//div[contains(@class, "columnHeader")])]
+    </item>
+
+    <target title="Initialize settings section" trigger="listEntry"
+        action="CALL:axsHealth.openSettingsSubCategory">
+      //td[@class="gwt-TabBarItem-wrapper"]//div[text()="General"]
+    </target>
+
+    <target title="Edit setting" hotkey="ENTER"
+        action="CALL:axsHealth.focusOnFirstInputInCategory">
+      .//*[self::input or self::select]
+    </target>
+
+    <target title="Save" hotkey="s"
+        action="CALL:axsHealth.pressButton">
+      //div[@class="gwt-TabPanelBottom"]/div[not(contains(@style,
+          "display: none"))]//button[text()="Save changes"]
+    </target>
+
+    <target title="Cancel" hotkey="c" action="CALL:axsHealth.pressButton">
+      //div[@class="gwt-TabPanelBottom"]/div[not(contains(@style,
+          "display: none"))]//button[text()="Cancel"]
+    </target>
+
+  </list>
+
+  <list title="Profiles" fwd="DOWN j n" back="UP k p" type="dynamic">
+
+    <item action="CALL:axsHealth.readProfile">
+      //div[@class="gwt-TabPanelBottom"]/div[not(contains(@style,
+          "display: none"))]//table[@class="h9-settings-smallTable"]/tbody
+          /tr[not(.//div[contains(@class, "columnHeader")])]
+    </item>
+
+    <target title="Open profiles settings" trigger="listEntry"
+         action="CALL:axsHealth.openSettingsSubCategory">
+      //td[@class="gwt-TabBarItem-wrapper"]//div[text()="Profiles"]
+    </target>
+
+    <target title="Edit profile" hotkey="ENTER"
+        action="CALL:axsHealth.editProfileSettings">
+      .//div[contains(@class, "h9-settings-boldlink")]
+    </target>
+
+    <target title="Hide" hotkey="e" action="CALL:axsHealth.pressButton">
+      .//a[text()="Hide"]
+    </target>
+
+    <target title="Delete" hotkey="DEL"
+        action="CALL:axsHealth.pressButton">
+      .//div[text()="Delete"]
+    </target>
+
+    <target title="Show" hotkey="s" action="CALL:axsHealth.pressButton">
+      .//a[text()="Show"]
+    </target>
+
+  </list>
+    
+  <list title="Profile details" fwd="DOWN j n" back="UP k p"
+      type="dynamic">
+
+    <item action="CALL:axsHealth.readProfileDetail">
+      //table[@class="h9-settings-profileDetails"]//tr[.//input]
+    </item>
+
+    <target title="Initialize profile details" trigger="listEntry"
+        action="CALL:axsHealth.openProfileDetailsSubCategory">
+      /html
+    </target>
+
+    <target title="Edit personal profile category" hotkey="ENTER"
+        action="CALL:axsHealth.focusOnFirstInputInCategory">
+      .//*[self::input or self::select]
+    </target>
+
+    <target title="Save" hotkey="s"
+        action="CALL:axsHealth.pressSettingsProfileDetailsButton">
+      //table[@class="h9-settings-tabFooter-table"]//button[contains
+           (text(), "Save")]
+    </target>
+
+    <target title="Cancel" hotkey="c"
+        action="CALL:axsHealth.pressSettingsProfileDetailsButton">
+      //table[@class="h9-settings-tabFooter-table"]//button[contains
+          (text(), "Cancel")]
+    </target>
+
+  </list>
+
+</cnr>

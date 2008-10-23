@@ -1,0 +1,559 @@
+<cnr next="RIGHT l" prev="LEFT h">
+
+  <target title="Import medical records" hotkey="i">
+    //div[contains(text(), "Import medical records")]
+  </target>
+
+  <target title="Explore health services" hotkey="x">
+    //div[contains(text(), "Explore health services")]
+  </target>
+
+  <target title="Create new profile" hotkey="t">
+    //div[contains(text(), "Create a new profile")]
+  </target>
+
+  <target title="Health topics" hotkey="y">
+    //a[contains(text(), "Read about health topics")]
+  </target>
+
+  <target title="Settings" hotkey="e"
+      action="CALL:axsHealth.setActiveAxsNavObjSet">
+    //table[@class="weaver-header"]//div[text()="Settings"]
+  </target>
+
+  <list title="Profiles" next="DOWN j" prev="UP k" fwd="n"
+      back="p" type="dynamic">
+
+    <item action="CALL:axsHealth.selectProfile">
+      //div[contains(@class, "weaver-nav-title")]
+    </item>
+
+  </list>
+
+  <list title="Notices" next="DOWN j" prev="UP k" fwd="n"
+      back="p" type="dynamic" onEmpty="No notices">
+
+    <item action="CALL:axsHealth.readNotice">
+       //tr[contains(@class, "notices-row") or
+           contains(@class, "notices-unreadrow")]
+    </item>
+
+    <target title="Read" hotkey="ENTER"
+        action="CALL:axsHealth.readNoticeContent">
+      .
+    </target>
+
+    <target title="Delete" hotkey="DEL">
+      //table[@class="notices-previewTitle"]//button[text()="Delete"]
+    </target>
+
+    <target title="Select or unselect" hotkey="o"
+        action="CALL:axsHealth.selectOrUnselectNotice">
+      .//input
+    </target>
+
+    <target title="Actions" hotkey="z"
+        action="CALL:axsHealth.goNoticesActionSelect">
+      //select[@class="gwt-ListBox notices-actionsListBox"]
+    </target>
+
+    <target title="Select all" hotkey="c">
+      //table[@class="notices-functionsPanel-line"]//div[text()="All"]
+    </target>
+
+    <target title="Select none" hotkey="n">
+      //table[@class="notices-functionsPanel-line"]//div[text()="None"]
+    </target>
+
+    <target title="Select read" hotkey="r">
+      //table[@class="notices-functionsPanel-line"]//div[text()="Read"]
+    </target>
+
+    <target title="Open notices section" hotkey="b"
+        action="CALL:axsHealth.openPersonalProfileSubCategory">
+      //div[contains(text(), "Notices")]
+    </target>
+
+    <target title="Select unread" hotkey="u">
+      //table[@class="notices-functionsPanel-line"]//div[text()="Unread"]
+    </target>
+
+    <target title="Order by sender" hotkey="1">
+      //table[@class="notices-list"]//u[text()="From"]
+    </target>
+
+    <target title="Order by subject" hotkey="2">
+      //table[@class="notices-list"]//u[text()="Subject"]
+    </target>
+
+    <target title="Order by date" hotkey="3">
+      //table[@class="notices-list"]//u[text()="Date"]
+    </target>
+
+    <target title="Search notices" hotkey="s"
+        action="CALL:axsHealth.goToNoticesSearchBox">
+      //table[@class="notices-functionsPanel-line"]//input
+    </target>
+
+    <target title="Open notices section" trigger="listEntry"
+        action="CALL:axsHealth.openPersonalProfileSubCategory">
+      //div[contains(text(), "Notices")]
+    </target>
+
+    <target title="Add items to profile" hotkey="a"
+        action="CALL:axsHealth.setActiveAxsNavObjAddToProf">
+      //div[contains(@class, "weaver-nav-item") and contains(text(),
+          "Add to this profile")]
+    </target>
+
+  </list>
+
+  <list title="Drug interactions" next="DOWN j" prev="UP k" fwd="n"
+      back="p" type="dynamic" onEmpty="No drug interactions">
+
+    <item action="CALL:axsHealth.readDrugIteraction">
+      //table[@class="healthreport-inner"]//
+          table[@class="weaver-drug-interaction"]
+    </item>
+
+    <target title="Open drug interactions section" trigger="listEntry"
+        action="CALL:axsHealth.openPersonalProfileSubCategory">
+      //div[contains(text(), "Drug interactions")]
+    </target>
+
+    <target title="Add items to profile" hotkey="a"
+        action="CALL:axsHealth.setActiveAxsNavObjAddToProf">
+      //div[contains(@class, "weaver-nav-item") and contains(text(),
+          "Add to this profile")]
+    </target>
+
+  </list>
+
+  <list title="Biometrics" next="DOWN j" prev="UP k" fwd="n"
+      back="p" type="dynamic">
+
+    <item action="CALL:axsHealth.readBiometric">
+      //table[@class="profile-name-row" and not(contains(@style,
+          "display: none"))]
+    </item>
+
+    <target title="Open biometrics section" trigger="listEntry"
+        action="CALL:axsHealth.openAndInitializeBiometrics">
+      //div[contains(@class, "weaver-nav-item") and
+          contains(text(), "Age, sex, height...")]
+    </target>
+
+    <target title="Add items to profile" hotkey="a"
+        action="CALL:axsHealth.setActiveAxsNavObjAddToProf">
+      //div[contains(@class, "weaver-nav-item") and contains(text(),
+          "Add to this profile")]
+    </target>
+
+    <target title="Edit biometric" hotkey="ENTER"
+        action="CALL:axsHealth.focusOnFirstInputInCategory">
+      .
+    </target>
+
+    <target title="Save" hotkey="s" action="CALL:axsHealth.pressButton">
+      //button[text()="Save" and not(@disabled)]
+    </target>
+
+    <target title="Cancel" hotkey="c" action="CALL:axsHealth.pressButton">
+      //button[text()="Cancel" and not(@disabled)]
+    </target>
+
+  </list>
+
+  <list title="Conditions" next="DOWN j" prev="UP k" fwd="n"
+      back="p" type="dynamic" onEmpty="No conditions">
+
+    <item action="CALL:axsHealth.readCondition">
+       //table[contains(@class, "profile-details")]//tr[(contains(@class,
+           "profile-detail-item") and not(ancestor-or-self::tr[contains
+           (@style, "display: none")]) and not(.//div[contains(text(),
+           "Notes:")]))]
+    </item>
+
+    <target title="Open conditions section" trigger="listEntry"
+        action="CALL:axsHealth.openPersonalProfileSubCategory">
+      //div[contains(@class, "weaver-nav-item") and
+          contains(text(), "Conditions")]
+    </target>
+
+    <target title="Add conditions to profile" hotkey="a"
+        action="CALL:axsHealth.setActiveAxsNavObjAddToProf">
+      //div[contains(text(), "to profile")]
+    </target>
+
+    <target title="Add record" hotkey="r" onEmpty="Cannot
+        add a record to a historical entry">
+      .//div[contains(@class, "link") and text()="Add record"]
+    </target>
+
+    <target title="Edit record" hotkey="ENTER">
+      .//div[contains(@class, "link") and text()="Edit"]
+    </target>
+
+    <target title="Delete record" hotkey="DEL"
+        action="CALL:axsHealth.deleteRecord">
+      .//div[contains(@class, "link") and text()="Delete"]
+    </target>
+
+    <target title="Expand historical records" hotkey="[" onEmpty="No his
+        torical records" action="CALL:axsHealth.expandHistoryRecords">
+      //table[@class="profile-details"]//img[../../self::tr[not(contains
+          (@style, "display: none"))]]
+    </target>
+
+    <target title="Collapse historical records" hotkey="]" onEmpty="No his
+        torical records" action="CALL:axsHealth.collapseHistoryRecords">
+      //table[@class="profile-details"]//img[../../self::tr[not(contains
+          (@style, "display: none"))]]
+    </target>
+
+  </list>
+
+  <list title="Medications" next="DOWN j" prev="UP k" fwd="n"
+      back="p" type="dynamic" onEmpty="No medications">
+
+    <item action="CALL:axsHealth.readMedication">
+       //table[contains(@class, "profile-details")]//tr[(contains(@class,
+           "profile-detail-item") and not(ancestor-or-self::tr[contains
+           (@style, "display: none")]) and not(.//div[contains(text(),
+           "Notes:")]))]
+    </item>
+
+    <target title="Add medications to profile" hotkey="a"
+        action="CALL:axsHealth.setActiveAxsNavObjAddToProf">
+      //div[contains(text(), "to profile")]
+    </target>
+
+    <target title="Open medications section" trigger="listEntry"
+        action="CALL:axsHealth.openPersonalProfileSubCategory">
+      //div[contains(@class, "weaver-nav-item") and
+          contains(text(), "Medications")]
+    </target>
+
+    <target title="Add record" hotkey="r" onEmpty="Cannot
+        add a record to a historical entry">
+      .//div[contains(@class, "link") and text()="Add record"]
+    </target>
+
+    <target title="Edit record" hotkey="ENTER">
+      .//div[contains(@class, "link") and text()="Edit"]
+    </target>
+
+    <target title="Delete record" hotkey="DEL"
+        action="CALL:axsHealth.deleteRecord">
+      .//div[contains(@class, "link") and text()="Delete"]
+    </target>
+
+    <target title="Expand historical records" hotkey="[" onEmpty="No his
+        torical records" action="CALL:axsHealth.expandHistoryRecords">
+      //table[@class="profile-details"]//img[../../self::tr[not(contains
+          (@style, "display: none"))]]
+    </target>
+
+    <target title="Collapse historical records" hotkey="]" onEmpty="No his
+        torical records" action="CALL:axsHealth.collapseHistoryRecords">
+      //table[@class="profile-details"]//img[../../self::tr[not(contains
+          (@style, "display: none"))]]
+    </target>
+
+  </list>
+
+  <list title="Allergies" next="DOWN j" prev="UP k" fwd="n"
+      back="p" type="dynamic" onEmpty="No allergies">
+
+    <item action="CALL:axsHealth.readAllergy">
+       //table[contains(@class, "profile-details")]//tr[(contains(@class,
+           "profile-detail-item") and not(ancestor-or-self::tr[contains
+           (@style, "display: none")]) and not(.//div[contains(text(),
+           "Notes:")]))]
+    </item>
+
+    <target title="Open Allergies section" trigger="listEntry"
+        action="CALL:axsHealth.openPersonalProfileSubCategory">
+      //div[contains(@class, "weaver-nav-item") and
+          contains(text(), "Allergies")]
+    </target>
+
+    <target title="Add allergies to profile" hotkey="a"
+        action="CALL:axsHealth.setActiveAxsNavObjAddToProf">
+      //div[contains(text(), "to profile")]
+    </target>
+
+    <target title="Add record" hotkey="r" onEmpty="Cannot
+        add a record to a historical entry">
+      .//div[contains(@class, "link") and text()="Add record"]
+    </target>
+
+    <target title="Edit record" hotkey="ENTER">
+      .//div[contains(@class, "link") and text()="Edit"]
+    </target>
+
+    <target title="Delete record" hotkey="DEL"
+        action="CALL:axsHealth.deleteRecord">
+      .//div[contains(@class, "link") and text()="Delete"]
+    </target>
+
+    <target title="Expand historical records" hotkey="[" onEmpty="No his
+        torical records" action="CALL:axsHealth.expandHistoryRecords">
+      //table[@class="profile-details"]//img[../../self::tr[not(contains
+          (@style, "display: none"))]]
+    </target>
+
+    <target title="Collapse historical records" hotkey="]" onEmpty="No his
+        torical records" action="CALL:axsHealth.collapseHistoryRecords">
+      //table[@class="profile-details"]//img[../../self::tr[not(contains
+          (@style, "display: none"))]]
+    </target>
+
+  </list>
+
+  <list title="Procedures" next="DOWN j" prev="UP k" fwd="n"
+      back="p" type="dynamic" onEmpty="No procedures">
+
+    <item action="CALL:axsHealth.readProcedure">
+       //table[contains(@class, "profile-details")]//tr[(contains(@class,
+           "profile-detail-item") and not(ancestor-or-self::tr[contains
+           (@style, "display: none")]) and not(.//div[contains(text(),
+           "Notes:")]))]
+    </item>
+
+    <target title="Open procedures section" trigger="listEntry"
+        action="CALL:axsHealth.openPersonalProfileSubCategory">
+      //div[contains(@class, "weaver-nav-item") and
+          contains(text(), "Procedures")]
+    </target>
+
+    <target title="Add procedures to profile" hotkey="a"
+        action="CALL:axsHealth.setActiveAxsNavObjAddToProf">
+      //div[contains(text(), "to profile")]
+    </target>
+
+    <target title="Add record" hotkey="r" onEmpty="Cannot
+        add a record to a historical entry">
+      .//div[contains(@class, "link") and text()="Add record"]
+    </target>
+
+    <target title="Edit record" hotkey="ENTER">
+      .//div[contains(@class, "link") and text()="Edit"]
+    </target>
+
+    <target title="Delete record" hotkey="DEL"
+        action="CALL:axsHealth.deleteRecord">
+      .//div[contains(@class, "link") and text()="Delete"]
+    </target>
+
+    <target title="Expand historical records" hotkey="[" onEmpty="No his
+        torical records" action="CALL:axsHealth.expandHistoryRecords">
+      //table[@class="profile-details"]//img[../../self::tr[not(contains
+          (@style, "display: none"))]]
+    </target>
+
+    <target title="Collapse historical records" hotkey="]" onEmpty="No his
+        torical records" action="CALL:axsHealth.collapseHistoryRecords">
+      //table[@class="profile-details"]//img[../../self::tr[not(contains
+          (@style, "display: none"))]]
+    </target>
+
+  </list>
+
+  <list title="Test results" next="DOWN j" prev="UP k" fwd="n"
+      back="p" type="dynamic" onEmpty="No test results">
+
+    <item action="CALL:axsHealth.readTestResult">
+       //table[contains(@class, "profile-details")]//tr[(contains(@class,
+           "profile-detail-item") and not(ancestor-or-self::tr[contains
+           (@style, "display: none")]) and not(.//div[contains(text(),
+           "Notes:")]))]
+    </item>
+
+    <target title="Add test results to profile" hotkey="a"
+        action="CALL:axsHealth.setActiveAxsNavObjAddToProf">
+      //div[contains(text(), "to profile")]
+    </target>
+
+    <target title="Open test results section" trigger="listEntry"
+        action="CALL:axsHealth.openPersonalProfileSubCategory">
+      //div[contains(@class, "weaver-nav-item") and
+          contains(text(), "Test results")]
+    </target>
+
+    <target title="Add record" hotkey="r" onEmpty="Cannot
+        add a record to a historical entry">
+      .//div[contains(@class, "link") and text()="Add record"]
+    </target>
+
+    <target title="Edit record" hotkey="ENTER">
+      .//div[contains(@class, "link") and text()="Edit"]
+    </target>
+
+    <target title="Delete record" hotkey="DEL"
+        action="CALL:axsHealth.deleteRecord">
+      .//div[contains(@class, "link") and text()="Delete"]
+    </target>
+
+    <target title="Expand historical records" hotkey="[" onEmpty="No his
+        torical records" action="CALL:axsHealth.expandHistoryRecords">
+      //table[@class="profile-details"]//img[../../self::tr[not(contains
+          (@style, "display: none"))]]
+    </target>
+
+    <target title="Collapse historical records" hotkey="]" onEmpty="No his
+        torical records" action="CALL:axsHealth.collapseHistoryRecords">
+      //table[@class="profile-details"]//img[../../self::tr[not(contains
+          (@style, "display: none"))]]
+    </target>
+
+  </list>
+
+  <list title="Immunizations" next="DOWN j" prev="UP k" fwd="n"
+      back="p" type="dynamic" onEmpty="No immunizations">
+
+    <item action="CALL:axsHealth.readImmunization">
+       //table[contains(@class, "profile-details")]//tr[(contains(@class,
+           "profile-detail-item") and not(ancestor-or-self::tr[contains
+           (@style, "display: none")]) and not(.//div[contains(text(),
+           "Notes:")]))]
+    </item>
+
+    <target title="Add immunizations to profile" hotkey="a"
+        action="CALL:axsHealth.setActiveAxsNavObjAddToProf">
+      //div[contains(text(), "to profile")]
+    </target>
+
+    <target title="Open immunizations section" trigger="listEntry"
+        action="CALL:axsHealth.openPersonalProfileSubCategory">
+      //div[contains(@class, "weaver-nav-item") and
+          contains(text(), "Immunizations")]
+    </target>
+
+    <target title="Add record" hotkey="r" onEmpty="Cannot
+        add a record to a historical entry">
+      .//div[contains(@class, "link") and text()="Add record"]
+    </target>
+
+    <target title="Edit record" hotkey="ENTER">
+      .//div[contains(@class, "link") and text()="Edit"]
+    </target>
+
+    <target title="Delete record" hotkey="DEL"
+        action="CALL:axsHealth.deleteRecord">
+      .//div[contains(@class, "link") and text()="Delete"]
+    </target>
+
+    <target title="Expand historical records" hotkey="[" onEmpty="No his
+        torical records" action="CALL:axsHealth.expandHistoryRecords">
+      //table[@class="profile-details"]//img[../../self::tr[not(contains
+          (@style, "display: none"))]]
+    </target>
+
+    <target title="Collapse historical records" hotkey="]" onEmpty="No his
+        torical records" action="CALL:axsHealth.collapseHistoryRecords">
+      //table[@class="profile-details"]//img[../../self::tr[not(contains
+          (@style, "display: none"))]]
+    </target>
+
+  </list>
+
+  <list title="Medical contacts" next="DOWN j" prev="UP k" fwd="n"
+      back="p" type="dynamic" onEmpty="No medical contacts">
+
+    <item action="CALL:axsHealth.readMedicalContact">
+      //table[contains(@class, "ContactListPanel")]//div
+          [string-length(text())>1]
+    </item>
+
+    <target title="Add items to profile" hotkey="a"
+        action="CALL:axsHealth.setActiveAxsNavObjAddToProf">
+      //div[contains(@class, "weaver-nav-item") and contains(text(),
+          "Add to this profile")]
+    </target>
+
+    <target title="Open medical contacts section" trigger="listEntry"
+        action="CALL:axsHealth.openPersonalProfileSubCategory">
+      //div[contains(text(), "Medical contacts")]
+    </target>
+
+    <target title="Create medical contact" hotkey="c">
+      //div[contains(text(), "Create a contact")]
+    </target>
+
+    <target title="Edit medical contact" hotkey="ENTER"
+          action="CALL:axsHealth.openEditRecordModalWindow">
+      //table[contains(@class, "ContactsView")]//div[@class="DetailsSlot"]
+          //div[text() = "Edit"]
+    </target>
+
+    <target title="Delete medical contact" hotkey="DEL" >
+      //table[contains(@class, "ContactsView")]//div[@class="DetailsSlot"]
+          //div[text() = "Delete"]
+    </target>
+
+    <target title="Details and reviews" hotkey="d" >
+      //table[contains(@class, "ContactsView")]//div[@class="DetailsSlot"]
+          //a[text() = "Details and reviews"]
+    </target>
+
+  </list>
+
+  <list title="Find a doctor" fwd="DOWN j n" back="UP k p"
+      type="dynamic" onEmpty="No doctors found. 
+      Press f to begin a new search.">
+
+    <item action="CALL:axsHealth.readDoctor">
+       //table[@class="DDSearchClusterPanel"]
+    </item>
+
+    <target title="Add items to profile" hotkey="a"
+        action="CALL:axsHealth.setActiveAxsNavObjAddToProf">
+      //div[contains(@class, "weaver-nav-item") and contains(text(),
+          "Add to this profile")]
+    </target>
+
+    <target title="Open found doctors section" trigger="listEntry"
+         action="CALL:axsHealth.openPersonalProfileSubCategory">
+      //div[contains(text(), "Find a doctor")]
+    </target>
+
+    <target title="Go to home page" hotkey="ENTER">
+      .//div[contains(@class, "DDSearchClusterPanel-name")]/a
+    </target>
+
+    <target title="Find" hotkey="f"
+        action="CALL:axsHealth.findDoctor">
+      //select[contains(@class, "DDSearchView-specialtybox")]
+    </target>
+
+    <target title="Go to next page" trigger="listTail">
+      //a[contains(text(), "Next")]
+    </target>
+
+    <target title="Go to previous page" trigger="listHead">
+      //a[contains(text(), "Previous")]
+    </target>
+
+    <target title="Directions" hotkey="d" onEmpty="No directions
+        available">
+      .//a[contains(text(), "Directions")]
+    </target>
+
+    <target title="Website" hotkey="w" onEmpty="No website available">
+      .//a[contains(text(), "Website")]
+    </target>
+
+    <target title="Save medical contact" hotkey="s"
+        onEmpty="Entry already saved">
+      .//div[contains(text(), "Save to")]
+    </target>
+
+    <target title="Delete" hotkey="DEL" onEmpty="Unable to delete not
+        added entry">
+      .//div[contains(text(), "Delete")]
+    </target>
+
+  </list>
+
+</cnr>

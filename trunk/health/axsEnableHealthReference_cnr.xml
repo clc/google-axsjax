@@ -1,0 +1,119 @@
+<cnr next="RIGHT l" prev="LEFT h">
+
+  <target title="Add this condition to a Google Health profile" hotkey="a">
+    id("addProfileButton")//table
+  </target>
+
+  <target title="Health topics" hotkey="t">
+    id("indexPage")
+  </target>
+    
+  <list title="Symptoms" fwd="DOWN j n" back="UP k p">
+
+    <item>
+      //div[@class="subtitle" and text()="Symptoms"]//following-sibling::
+          div[1]/*
+    </item>
+
+  </list>
+
+  <list title="Treatment" fwd="DOWN j n" back="UP k p">
+
+    <item>
+      //div[@class="subtitle" and text()="Treatment"]//following-sibling::
+          div[1]/*
+    </item>
+
+  </list>
+
+  <list title="Causes" fwd="DOWN j n" back="UP k p">
+
+    <item>
+      //div[@class="subtitle" and text()="Causes"]//following-sibling::
+          div[1]/*
+    </item>
+
+  </list>
+
+  <list title="Tests and diagnosis" fwd="DOWN j n" back="UP k p">
+
+    <item>
+      //div[@class="subtitle" and contains(text(), "Tests")]//
+          following-sibling::div[1]/*
+    </item>
+
+  </list>
+
+  <list title="Prognosis" fwd="DOWN j n" back="UP k p">
+
+    <item>
+      //div[@class="subtitle" and text()="Prognosis"]//following-sibling::
+          div[1]/*
+    </item>
+
+  </list>
+
+  <list title="Prevention" fwd="DOWN j n" back="UP k p">
+
+    <item>
+      //div[@class="subtitle" and text()="Prevention"]//following-sibling
+          ::div[1]/*
+    </item>
+
+  </list>
+
+  <list title="Complications" fwd="DOWN j n" back="UP k p">
+
+    <item>
+      //div[@class="subtitle" and text()="Complications"]//
+          following-sibling::div[1]/*
+    </item>
+
+  </list>
+
+  <list title="When to contact a doctor" fwd="DOWN j n" back="UP k p">
+
+    <item>
+      //div[@class="subtitle" and text()="When to contact a doctor"]//
+          following-sibling::div[1]/*
+    </item>
+
+  </list>
+
+  <list title="Web results" fwd="DOWN j n" back="UP k p">
+
+    <item action="CALL:axsHealth.readWebResult">
+      //div[@class="contentbox search"]//div[@class="entry"]
+    </item>
+
+    <target title="Open web result" hotkey="ENTER">
+      ./a
+    </target>
+
+  </list>
+
+  <list title="Google Scholar results" fwd="DOWN j n" back="UP k p">
+
+    <item action="CALL:axsHealth.readScholarResult">
+      //div[@class="contentbox scholar"]//div[@class="entry"]
+    </item>
+
+    <target title="Open Scholar result" hotkey="ENTER">
+      ./a
+    </target>
+
+  </list>
+
+  <list title="Related Groups" fwd="DOWN j n" back="UP k p">
+
+    <item>
+      //div[@class="contentbox groups"]//div[@class="entry"]
+    </item>
+
+    <target title="Open Related Groups result" hotkey="ENTER">
+      ./a
+    </target>
+
+  </list>
+
+</cnr>

@@ -1,0 +1,277 @@
+<cnr next="RIGHT l" prev="LEFT h">
+
+  <target title="Personal profile section" hotkey="ESC r"
+      action="CALL:axsHealth.activatePersonalProfileSection">
+    /html
+  </target>
+
+  <target title="Import medical records" hotkey="i">
+    //div[contains(text(), "Import medical records")]
+  </target>
+
+  <target title="Explore health services" hotkey="x">
+    //div[contains(text(), "Explore health services")]
+  </target>
+
+  <target title="Create new profile" hotkey="c">
+    //div[contains(text(), "Create a new profile")]
+  </target>
+
+  <list title="Add conditions" fwd="DOWN j n" back="UP k p"
+      type="dynamic">
+
+    <item action="CALL:axsHealth.readCandidateItem">
+       //div[@class="gwt-TabPanelBottom"]/div
+           [not(contains(@style, "display: none"))]
+           //table[@class="quickAdd-item"]//td[1]
+    </item>
+
+    <target title="Go to previous letter" trigger="listHead"
+        action="CALL:axsHealth.clickPreviousLetterLink">
+      //div[@class="gwt-TabPanelBottom"]/div[not(contains(@style,
+          "display: none"))]//td[./div[@class="quickAdd-link-selected"]]
+    </target>
+
+    <target title="Go to next letter" trigger="listTail"
+        action="CALL:axsHealth.clickNextLetterLink">
+     //div[@class="gwt-TabPanelBottom"]/div[not(contains(@style,
+          "display: none"))]//td[./div[@class="quickAdd-link-selected"]]
+    </target>
+
+    <target title="Open add conditions section" trigger="listEntry"
+        action="CALL:axsHealth.initializeAddToProfileSection">
+      //div[@class="quickAdd-TabBarItemText" and text()="Conditions"]
+    </target>
+
+    <target title="Add item" hotkey="ENTER"
+        action="CALL:axsHealth.addCandidateItem">
+      ./..//div[@class="gwt-Hyperlink"]/a
+    </target>
+
+    <target title="Search condition or symptom" hotkey="s"
+        action="CALL:axsHealth.goToSearchBox">
+      //div[@class="gwt-TabPanelBottom"]/div[not(contains(@style,
+          "display: none"))]//input
+    </target>
+
+    <target title="Explain item" hotkey="e" onEmpty="No explanation
+        available">
+      .//a
+    </target>
+
+    <target title="Conditions summary" hotkey="u"
+        action="CALL:axsHealth.readConditionsSumnmary">
+      //html
+    </target>
+
+  </list>
+
+  <list title="Add medications" fwd="DOWN j n" back="UP k p"
+      type="dynamic">
+
+    <item action="CALL:axsHealth.readCandidateItem">
+       //div[@class="gwt-TabPanelBottom"]/div
+           [not(contains(@style, "display: none"))]
+           //table[@class="quickAdd-item"]//td[1]
+    </item>
+
+    <target title="Go to previous letter" trigger="listHead"
+        action="CALL:axsHealth.clickPreviousLetterLink">
+      //div[@class="gwt-TabPanelBottom"]/div[not(contains(@style,
+          "display: none"))]//td[./div[@class="quickAdd-link-selected"]]
+    </target>
+
+    <target title="Go to next letter" trigger="listTail"
+        action="CALL:axsHealth.clickNextLetterLink">
+     //div[@class="gwt-TabPanelBottom"]/div[not(contains(@style,
+          "display: none"))]//td[./div[@class="quickAdd-link-selected"]]
+    </target>
+
+    <target title="Open add medications section" trigger="listEntry"
+        action="CALL:axsHealth.initializeAddToProfileSection">
+      //div[@class="quickAdd-TabBarItemText" and text()="Medications"]
+    </target>
+
+    <target title="Add item" hotkey="ENTER"
+        action="CALL:axsHealth.addCandidateItem">
+      ./..//div[@class="gwt-Hyperlink"]/a
+    </target>
+
+    <target title="Search medication" hotkey="s"
+        action="CALL:axsHealth.goToSearchBox">
+      //div[@class="gwt-TabPanelBottom"]/div[not(contains(@style,
+          "display: none"))]//input
+    </target>
+
+    <target title="Medications summary" hotkey="u"
+        action="CALL:axsHealth.readMedicationsSumnmary">
+      //html
+    </target>
+
+  </list>
+
+  <list title="Add allergies" fwd="DOWN j n" back="UP k p"
+      type="dynamic">
+
+    <item action="CALL:axsHealth.readCandidateItem">
+       //div[@class="gwt-TabPanelBottom"]/div
+           [not(contains(@style, "display: none"))]
+           //table[@class="quickAdd-item"]//td[1]
+    </item>
+
+    <target title="Go to previous letter" trigger="listHead"
+        action="CALL:axsHealth.clickPreviousLetterLink">
+      //div[@class="gwt-TabPanelBottom"]/div[not(contains(@style,
+          "display: none"))]//td[./div[@class="quickAdd-link-selected"]]
+    </target>
+
+    <target title="Go to next letter" trigger="listTail"
+        action="CALL:axsHealth.clickNextLetterLink">
+     //div[@class="gwt-TabPanelBottom"]/div[not(contains(@style,
+          "display: none"))]//td[./div[@class="quickAdd-link-selected"]]
+    </target>
+
+    <target title="Open add allergies section" trigger="listEntry"
+        action="CALL:axsHealth.initializeAddToProfileSection">
+      //div[@class="quickAdd-TabBarItemText" and text()="Allergies"]
+    </target>
+
+    <target title="Add item" hotkey="ENTER"
+        action="CALL:axsHealth.addCandidateItem">
+      ./..//div[@class="gwt-Hyperlink"]/a
+    </target>
+
+    <target title="Search allergy" hotkey="s"
+        action="CALL:axsHealth.goToSearchBox">
+      //div[@class="gwt-TabPanelBottom"]/div[not(contains(@style,
+          "display: none"))]//input
+    </target>
+
+    <target title="Allergies summary" hotkey="u"
+        action="CALL:axsHealth.readAllergiesSumnmary">
+      //html
+    </target>
+
+  </list>
+
+  <list title="Add procedures" fwd="DOWN j n" back="UP k p"
+      type="dynamic">
+
+    <item action="CALL:axsHealth.readCandidateItem">
+       //div[@class="gwt-TabPanelBottom"]/div
+           [not(contains(@style, "display: none"))]
+           //table[@class="quickAdd-item"]//td[1]
+    </item>
+
+    <target title="Go to previous letter" trigger="listHead"
+        action="CALL:axsHealth.clickPreviousLetterLink">
+      //div[@class="gwt-TabPanelBottom"]/div[not(contains(@style,
+          "display: none"))]//td[./div[@class="quickAdd-link-selected"]]
+    </target>
+
+    <target title="Go to next letter" trigger="listTail"
+        action="CALL:axsHealth.clickNextLetterLink">
+     //div[@class="gwt-TabPanelBottom"]/div[not(contains(@style,
+          "display: none"))]//td[./div[@class="quickAdd-link-selected"]]
+    </target>
+
+    <target title="Open add procedures section" trigger="listEntry"
+        action="CALL:axsHealth.initializeAddToProfileSection">
+      //div[@class="quickAdd-TabBarItemText" and text()="Procedures"]
+    </target>
+
+    <target title="Add item" hotkey="ENTER"
+        action="CALL:axsHealth.addCandidateItem">
+      ./..//div[@class="gwt-Hyperlink"]/a
+    </target>
+
+    <target title="Search procedure or surgery" hotkey="s"
+        action="CALL:axsHealth.goToSearchBox">
+      //div[@class="gwt-TabPanelBottom"]/div[not(contains(@style,
+          "display: none"))]//input
+    </target>
+
+    <target title="Procedures summary" hotkey="u"
+        action="CALL:axsHealth.readProceduresSumnmary">
+      //html
+    </target>
+
+  </list>
+
+  <list title="Add test results" fwd="DOWN j n" back="UP k p"
+      type="dynamic">
+
+    <item action="CALL:axsHealth.readCandidateItem">
+       //div[@class="gwt-TabPanelBottom"]/div
+           [not(contains(@style, "display: none"))]
+           //table[@class="quickAdd-item"]//td[1]
+    </item>
+
+    <target title="Go to previous letter" trigger="listHead"
+        action="CALL:axsHealth.clickPreviousLetterLink">
+      //div[@class="gwt-TabPanelBottom"]/div[not(contains(@style,
+          "display: none"))]//td[./div[@class="quickAdd-link-selected"]]
+    </target>
+
+    <target title="Go to next letter" trigger="listTail"
+        action="CALL:axsHealth.clickNextLetterLink">
+     //div[@class="gwt-TabPanelBottom"]/div[not(contains(@style,
+          "display: none"))]//td[./div[@class="quickAdd-link-selected"]]
+    </target>
+
+    <target title="Open add test section" trigger="listEntry"
+        action="CALL:axsHealth.initializeAddToProfileSection">
+      //div[@class="quickAdd-TabBarItemText" and text()="Test results"]
+    </target>
+
+    <target title="Add item" hotkey="ENTER"
+        action="CALL:axsHealth.addCandidateItem">
+      ./..//div[@class="gwt-Hyperlink"]/a
+    </target>
+
+    <target title="Search test" hotkey="s"
+        action="CALL:axsHealth.goToSearchBox">
+      //div[@class="gwt-TabPanelBottom"]/div[not(contains(@style,
+          "display: none"))]//input
+    </target>
+
+    <target title="Test results summary" hotkey="u"
+        action="CALL:axsHealth.readTestResultsSumnmary">
+      //html
+    </target>
+
+  </list>
+
+  <list title="Add immunizations" fwd="DOWN j n" back="UP k p"
+      type="dynamic">
+
+    <item action="CALL:axsHealth.readCandidateItem">
+       //div[@class="gwt-TabPanelBottom"]/div
+           [not(contains(@style, "display: none"))]
+           //table[@class="quickAdd-item"]//td[1]
+    </item>
+
+    <target title="Open add immunization section" trigger="listEntry"
+        action="CALL:axsHealth.initializeAddToProfileSection">
+      //div[@class="quickAdd-TabBarItemText" and text()="Immunizations"]
+    </target>
+
+    <target title="Add item" hotkey="ENTER"
+        action="CALL:axsHealth.addCandidateItem">
+      ./..//div[@class="gwt-Hyperlink"]/a
+    </target>
+
+    <target title="Search immunization" hotkey="s"
+        action="CALL:axsHealth.goToSearchBox">
+      //div[@class="gwt-TabPanelBottom"]/div[not(contains(@style,
+          "display: none"))]//input
+    </target>
+
+    <target title="Immunizations summary" hotkey="u"
+        action="CALL:axsHealth.readImmunizationsSumnmary">
+      //html
+    </target>
+
+  </list>
+
+</cnr>
