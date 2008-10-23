@@ -1,0 +1,34 @@
+<cnr next="RIGHT l" prev="LEFT h">
+
+  <list title="Modal dialog" fwd="DOWN j n" back="UP k p" type="dynamic">
+
+    <item action="CALL:axsHealth.readModalDialogInput">
+      //table[@class="weaver-DialogWidget"]/tbody/tr/td/table/tbody/tr
+        /td/table/tbody/tr[.//input or .//select or .//textarea]
+    </item>
+
+    <item action="CALL:axsHealth.readModalDialogInput">
+      //table[@class="weaver-DialogWidget"]/tbody/tr[(.//input or
+          .//select or .//textarea) and not(.//table)]
+    </item>
+
+    <target title="Edit dialog input" hotkey="ENTER"
+        action="CALL:axsHealth.focusOnFirstInputInCategory">
+      .
+    </target>
+
+    <target title="Save" hotkey="s">
+      //*[@class="tk-ModalDialog"]//button[text()="Save"]
+    </target>
+
+    <target title="Cancel" hotkey="c">
+      //*[@class="tk-ModalDialog"]//button[text()="Cancel"]
+    </target>
+
+    <target title="OK" hotkey="ESC">
+      //*[@class="tk-ModalDialog"]//button[text()="OK"]
+    </target>
+
+  </list>
+
+</cnr>

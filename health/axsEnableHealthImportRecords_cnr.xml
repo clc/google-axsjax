@@ -1,0 +1,19 @@
+<cnr next="RIGHT l" prev="LEFT h">
+
+  <list title="Health providers" fwd="DOWN j n" back="UP k p">
+
+    <item action="CALL:axsHealth.readHealthProvider">
+      //div[@class="listing"]
+    </item>
+
+    <target title="Open web site" hotkey="ENTER">
+      .//a
+    </target>
+
+    <target title="Link to profile" hotkey="i">
+      .//button
+    </target>
+
+  </list>
+
+</cnr>
