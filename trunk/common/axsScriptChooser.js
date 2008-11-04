@@ -196,7 +196,14 @@ function pickFromUncompiled(scriptsBaseURL){
     scriptsArray.push(pkLib);
     shouldInsertScripts = true;
   }
-
+  else if (currentURL.indexOf('.craigslist.org/') != -1){
+    theScript.src = baseURL + 'www.craigslist.org/axsEnableCraigslistCategoryPostings.js';
+    scriptsArray.push(navLib);
+    scriptsArray.push(lensLib);
+    scriptsArray.push(sndLib);
+    scriptsArray.push(pkLib);
+    shouldInsertScripts = true;
+  }  
   if (shouldInsertScripts){
     scriptsArray.push(theScript);
     for (var i = 0, script; script = scriptsArray[i]; i++){
