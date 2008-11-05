@@ -332,9 +332,9 @@ AxsNav.prototype.prevItem = function(){
 AxsNav.prototype.backItem = function(){
   var list = this.navArray[this.navListIdx];
   var index = this.navItemIdxs[this.navListIdx];
-  if ((list.headTarget !== null) && (index - 1 <= -1)){
+  if ((list.headTarget !== null) && (index <= 0)){
     this.actOnTarget(list.headTarget);
-    this.navItemIdxs[this.navListIdx] = list.items.length;
+    this.navItemIdxs[this.navListIdx] = list.items.length - 1;
     return null;
   }
   var item = this.prevItem();
@@ -1356,6 +1356,7 @@ AxsNav.prototype.setUpNavKeys = function(cnrJson, emptyLists){
 
                      var command = self.getFunctionForKey(evt.keyCode,
                                                           evt.charCode);
+                                           
                      if (command) {
                        return command();
                      }
