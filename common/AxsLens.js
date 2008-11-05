@@ -30,6 +30,8 @@ var AxsLens = function(axsJAXObj){
   this.multiplier = 1.5;
   this.padding = -1;
 
+  this.scrollMode = 0;
+
   this.activeDoc = axsJAXObj.getActiveDocument();
   this.lens = this.activeDoc.createElement('span');
 
@@ -41,6 +43,32 @@ var AxsLens = function(axsJAXObj){
 
   this.lens.style.display = 'none';
   this.activeDoc.body.appendChild(this.lens);
+
+  //Initialize this with a dummy function for js compilation
+  var dummyObject;
+  this.callback = function(dummyObject){};
+};
+
+/**
+ * Enums for the scroll modes
+ */
+AxsLens.ScrollMode = {
+  NONE: 0, //Default
+  FORCE_TO_LENS: 1
+};
+
+/**
+ * Sets the type of scrolling to use.
+ * By default, no scrolling will be done.
+ * However, scrolling can be forced by setting the scrollMode to
+ * AxsLens.ScrollMode.FORCE_TO_LENS
+ * This may introduce some side effects such as screen flashing,
+ * so only set this if you really need it.
+ * @param {number} scrollMode The scrollMode to be used when magnifying.
+ * @param {Array} paramsArray Params for scroll modes that require parameters.
+ */
+AxsLens.prototype.setScrollMode = function(scrollMode, paramsArray){
+  this.scrollMode = scrollMode;
 };
 
 /**
@@ -50,7 +78,7 @@ var AxsLens = function(axsJAXObj){
  * to the copy, and place the copy in an
  * element floating above the targetNode.
  * If targetNode is set to null, the lens will stop being displayed.
- * @param {Object?} targetNode The DOM node to be viewed
+ * @param {Object?} targetNode The DOM node to be viewed.
  */
 AxsLens.prototype.view = function(targetNode){
   while (this.lens.firstChild){
@@ -75,18 +103,18 @@ AxsLens.prototype.view = function(targetNode){
   }
   this.lens.appendChild(targetNode.cloneNode(true));
 
-  this.magnify();
-
   this.lens.style.top = top + 'px';
   this.lens.style.left = left + 'px';
   this.lens.style.zIndex = 999;
   this.lens.style.display = 'block';
+
+  this.magnify();
 };
 
 /**
  * Sets the multiplication factor of the lens
  * @param {Number} multiplier The multiplication factor to be used 
- * by the lens when magnifying content
+ * by the lens when magnifying content.
  */
 AxsLens.prototype.setMagnification = function(multiplier){
   this.multiplier = multiplier;
@@ -104,12 +132,20 @@ AxsLens.prototype.magnify = function() {
   this.addPadding();
   //Attach the lens object back to the document
   this.activeDoc.body.appendChild(this.lens);
+  //Invoke callback if there is one
+  if (this.callback){
+    this.callback(this.lens);
+  }
+  if (this.scrollMode == AxsLens.ScrollMode.FORCE_TO_LENS){
+    var self = this;
+    window.setTimeout(function(){self.lens.scrollIntoView(true);}, 0);
+  }
 };
 
 /**
  * Sets the padding in pixels between the magnified nodes.
  * Setting this to -1 will leave the padding as it was on the original element.
- * @param {Number} numberOfPixels The padding value to apply (in pixels)
+ * @param {Number} numberOfPixels The padding value to apply (in pixels).
  */
 AxsLens.prototype.setPadding = function(numberOfPixels) {
   this.padding = numberOfPixels;
@@ -150,15 +186,45 @@ AxsLens.prototype.enlargeImages = function(){
  * Enlarges the text of the content being viewed in the lens.
  */
 AxsLens.prototype.magnifyText = function(){
+  // Use fontSizeAdjust if possible, but fallback to using just font-size 
+  // and a percentage if there is no choice.
   // fontSizeAdjust is based on the aspect value of the font.
   // The default aspect value of Arial is .52
-  var fontSizeAdjust = this.multiplier * 0.52;
-  this.lens.style.fontSizeAdjust = fontSizeAdjust;
+  var hasFontSizeAdjust = 'fontSizeAdjust' in this.lens.style;
+  if (hasFontSizeAdjust){
+    var fontSizeAdjust = this.multiplier * 0.52;
+    this.lens.style.fontSizeAdjust = fontSizeAdjust;
+  } else {
+    var adjustment = (this.multiplier * 100) + '%';
+    this.lens.style.setProperty('font-size', adjustment, 'important');
+  }
 
   // Force the line-height to normal so that multiline text does
   // not collide with itself.
+  // Also, remove individual fontSize settings if that was used
+  //  instead of fontSizeAdjust
   var subnodes = this.lens.getElementsByTagName('*');
   for (var i = 0, node; node = subnodes[i]; i++){
     node.style.setProperty('line-height', 'normal', 'important');
+    if (!hasFontSizeAdjust){
+      node.style.setProperty('font-size', '100%', 'important');
+    }
   }
+
+};
+
+/**
+ * Sets a callback to be invoked when magnification is performed.
+ * The callback will be called with the lens node as the parameter.
+ * Such callbacks could be useful when dealing with special cases such
+ * as CSS spriting where the positioning needs to be recomputed in a way
+ * that is specific to the particular web app.
+ *
+ * @notypecheck {Function?} callback.
+ *
+ * @param {Function?} callback to be called when magnification is performed.
+ * Set this to null to disable using the callback.
+ */
+AxsLens.prototype.setMagnificationCallback = function(callback) {
+  this.callback = callback;
 };

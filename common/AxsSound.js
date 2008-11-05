@@ -40,7 +40,7 @@ var AxsSound = function(earconsOnly){
 
 /**
  * Sets the verbosity.
- * @param {string} verbosity "verbose", "minimal" or "none"
+ * @param {string} verbosity "verbose", "minimal" or "none".
  */
 AxsSound.prototype.setVerbosity = function(verbosity){
   this.verbosity = verbosity;
@@ -109,7 +109,7 @@ AxsSound.prototype.checkInitStatus = function(){
 /**
  * Plays the specified sound url.
  * @param {string} url Can be either the name of a known earcon
- *                    sound or the URL of an MP3
+ *                     sound or the URL of an MP3.
  */
 AxsSound.prototype.play = function(url){
   var playedEarcon = this.playEarcon(url);
@@ -131,10 +131,10 @@ AxsSound.prototype.play = function(url){
 
 /**
  * Plays the specified sound url from the startTime until the endTime
- * @param {string} url The URL of an MP3
+ * @param {string} url The URL of an MP3.
  * @param {number} startTime The time at which to start,
- *                           specified in milliseconds
- * @param {number} endTime The time at which to end, specified in milliseconds
+ *                           specified in milliseconds.
+ * @param {number} endTime The time at which to end, specified in milliseconds.
  */
 AxsSound.prototype.playSeg = function(url, startTime, endTime){
   var playedEarcon = this.playEarcon(url);
@@ -212,7 +212,7 @@ AxsSound.prototype.isPlaying = function(){
 
 /**
  * Plays the specified earcon sound.
- * @param {string} earcon The name of a known earcon
+ * @param {string} earcon The name of a known earcon.
  */
 AxsSound.prototype.playEarcon = function(earcon){
   var earconCMD = '';
