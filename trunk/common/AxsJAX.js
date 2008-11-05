@@ -176,7 +176,9 @@ AxsJAX.prototype.speakNode = function(targetNode, opt_noFocusChange){
       currentFocusedNode = this.activeParent;
     }
     this.setAttributeOf(currentFocusedNode, 'activedescendant', null);
-    currentFocusedNode.focus();
+    if (currentFocusedNode.focus) {
+      currentFocusedNode.focus();
+    }
     this.setAttributeOf(currentFocusedNode, 'activedescendant', targetNode.id);
     //Restore the original role of the targetNode
     var self = this;
