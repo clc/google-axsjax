@@ -85,7 +85,11 @@ function pickFromCompiled(scriptsBaseURL){
              ((path.indexOf('/search') === 0) ||
               (path.indexOf('/custom') === 0) ||
               (path.indexOf('/cse') === 0))){
-      scriptURL = scriptsBaseURL + 'websearch/comp_websearch.js';
+      // Redirect users to the Accessible View experiment
+      if ((currentURL.indexOf('esrch=Axs') == -1) && (currentURL.indexOf('?') != -1)){
+        currentURL = currentURL.replace('?', '?esrch=Axs&');
+        document.location = currentURL;
+      }
     }
   }
   else if (document.baseURI == 'http://www.minijuegosgratis.com/juegos/jawbreaker/jawbreaker.htm'){
