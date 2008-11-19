@@ -215,13 +215,12 @@ axsFinance.CNR = '<cnr next="RIGHT l" prev="LEFT h">' +
     'ck="p" type="dynamic">' +
     '' +
     '    <item action="CALL:axsFinance.readNewsDesc">' +
-    '      id("newsmovingdiv")//div[@class="inner"]//tbody' +
+    '      //div[@class="newsCluster"]' +
     '    </item>' +
     '' +
-    '    <item>' +
-    '      id("older_news_link")//following-sibling::a[not(./i' +
-    'mg)]' +
-    '    </item>' +
+    '    <target title="View all news" hotkey="a">' +
+    '      id("older_news_link")//following-sibling::a[not(./img)]' +
+    '    </target>' +
     '' +
     '    <target title="Go to link" hotkey="ENTER">' +
     '      .//ancestor-or-self::a' +
@@ -260,13 +259,13 @@ axsFinance.CNR = '<cnr next="RIGHT l" prev="LEFT h">' +
     'ck="p" type="dynamic">' +
     '' +
     '    <item action="CALL:axsFinance.readFeedExampleDesc">' +
-    '      //div[./div[contains(@id, "rss-feed-item-snippet")]' +
-    '          and not(.//b)]' +
+    '      //div[./div[contains(@id, "rss-feed-item-snippet")]  ' +
+    '          and .//a[contains(text(), "Try this example")]]' +
     '    </item>' +
     '' +
     '    <item action="CALL:axsFinance.readFeedSearchResDesc">' +
-    '      //div[./div[contains(@id, "rss-feed-item-snippet")]' +
-    '         and .//b]' +
+    '    id("plot_feed_div_cont")//div[contains' +
+    '          (@id,"rss-feed-item-snippet")]/..' +
     '    </item>' +
     '' +
     '    <item action="CALL:axsFinance.readBlogsDesc">' +
@@ -278,13 +277,19 @@ axsFinance.CNR = '<cnr next="RIGHT l" prev="LEFT h">' +
     '      .//a[@class="g"]' +
     '    </target>' +
     '' +
-    '    <target title="Try this example" hotkey="t">' +
-    '      .//a[not(@class)]' +
+    '    <target title="Try this example" hotkey="t" ' +
+    '        onEmpty="This item is not an example">' +
+    '      .//a[text()="Try this example"]' +
     '    </target>' +
     '' +
-    '    <target title="Go to feed" hotkey="ENTER"' +
-    '        onEmpty="The current item is not a feed">' +
+    '    <target title="Go to feed" hotkey="f"' +
+    '        onEmpty="This item is not a feed">' +
     '      .//a[./img[@class="rssSprite"]]' +
+    '    </target>' +
+    '' +
+    '    <target title="Go to source" hotkey="ENTER"' +
+    '        onEmpty="No associated source">' +
+    '      .//a[@class="g"]' +
     '    </target>' +
     '' +
     '    <target title="Feed search" hotkey="s"' +
@@ -324,7 +329,7 @@ axsFinance.CNR = '<cnr next="RIGHT l" prev="LEFT h">' +
     '    </item>' +
     '' +
     '    <target title="Go to link" hotkey="ENTER">' +
-    '      .//a' +
+    '      .' +
     '    </target>' +
     '' +
     '    <target title="Go to section" trigger="listEntry">' +
@@ -414,9 +419,8 @@ axsFinance.CNR = '<cnr next="RIGHT l" prev="LEFT h">' +
     '  <list title="Income statement in millions of US dollars' +
     '"' +
     '      next="DOWN j" prev="UP k" fwd="n" back="p">' +
-    '    <item index="1" count="4"' +
-    '        action="CALL:axsFinance.readFinancialCompDesc">' +
-    '      id("fd")//tr' +
+    '    <item action="CALL:axsFinance.readFinancialCompDesc">' +
+    '      id("fd")//tr[@class and following-sibling::tr[.//a[@id="bal"]]]' +
     '    </item>' +
     '' +
     '    <target title="Income statement section" trigger="lis' +
@@ -425,7 +429,7 @@ axsFinance.CNR = '<cnr next="RIGHT l" prev="LEFT h">' +
     '    </target>' +
     '' +
     '    <target title="Open income statement" hotkey="ENTER">' +
-    '      ./../tr[1]//a' +
+    '      id("inc")' +
     '    </target>' +
     '' +
     '    <target title="Go to section" trigger="listEntry">' +
@@ -437,13 +441,13 @@ axsFinance.CNR = '<cnr next="RIGHT l" prev="LEFT h">' +
     '  <list title="Balance sheet in millions of US dollars"' +
     '      next="DOWN j" prev="UP k" fwd="n" back="p">' +
     '' +
-    '    <item index="7" count="5"' +
-    '        action="CALL:axsFinance.readFinancialCompDesc">' +
-    '      id("fd")//tr' +
+    '    <item action="CALL:axsFinance.readFinancialCompDesc">' +
+    '      id("fd")//tr[@class and preceding-sibling::tr[.//a[@id="bal"]]' +
+    '        and following-sibling::tr[.//a[@id="cash"]]]' +
     '    </item>' +
     '' +
     '    <target title="Open balance sheet" hotkey="ENTER">' +
-    '      ./../tr[6]//a' +
+    '      id("bal")' +
     '    </target>' +
     '' +
     '    <target title="Go to section" trigger="listEntry">' +
@@ -456,13 +460,12 @@ axsFinance.CNR = '<cnr next="RIGHT l" prev="LEFT h">' +
     '"DOWN j" ' +
     '      prev="UP k" fwd="n" back="p">' +
     '' +
-    '    <item index="12" count="5"' +
-    '        action="CALL:axsFinance.readFinancialCompDesc">' +
-    '      id("fd")//tr' +
+    '    <item action="CALL:axsFinance.readFinancialCompDesc">' +
+    '      id("fd")//tr[@class and preceding-sibling::tr[.//a[@id="cash"]]]' +
     '    </item>' +
     '' +
     '    <target title="Open cash flow" hotkey="ENTER">' +
-    '      ./../tr[12]//a' +
+    '      id("cash")' +
     '    </target>' +
     '' +
     '    <target title="Go to section" trigger="listEntry">' +

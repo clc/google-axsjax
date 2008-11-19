@@ -140,8 +140,8 @@ axsFinance.RESULTS_CNR_BOTTOM = '</cnr>';
  * Body section of the 'Results' CNR which is a template applied for each column
  * @type {string}
  */
-axsFinance.RESULTS_CNR_BODY = '<list title="{0}" fwd="DOWN j n" ' +
-      'back="UP k p" type="dynamic">' +
+axsFinance.RESULTS_CNR_BODY = '<list title="{0}" next="DOWN j" prev="UP k" ' +
+    'fwd="n" back="p" type="dynamic">' +
 
     '<item action="CALL:axsFinance.readResultCellValue">' +
       'id("searchresults")/table[@class="results innermargi' +
@@ -986,6 +986,9 @@ axsFinance.readCriteriaDesc = function(item) {
 
   text = text + ' ' + axsFinance.str.ENTER_TO_EDIT;
   axsFinance.speakAndGo(element.firstChild, text);
+
+  // avoid auto sync since it uses static historical data, this list is dynamic
+  axsFinance.activeAxsNavObj.lastItem = null;
 };
 
 /**
