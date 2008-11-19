@@ -155,7 +155,7 @@ axsFinance.CNR = '<cnr next="RIGHT l" prev="LEFT h">' +
     'ck="p" type="dynamic">' +
     '' +
     '    <item action="CALL:axsFinance.readNewsDesc">' +
-    '      id("newsmovingdiv")//div[@class="inner"]//tbody' +
+    '      //div[@class="newsCluster"]' +
     '    </item>' +
     '' +
     '    <item>' +
@@ -194,19 +194,24 @@ axsFinance.CNR = '<cnr next="RIGHT l" prev="LEFT h">' +
     '       id("blogs_tab_title")' +
     '    </target>' +
     '' +
+    '    <target title="Blog search" hotkey="s"' +
+    '        action="CALL:axsFinance.focusOnSearchBox">' +
+    '      id("blogs_div_cont")//input[@class="filter-box label-input-label"]' +
+    '    </target>' +
+    '' +
     '  </list>' +
     '' +
     '  <list title="Feeds" next="DOWN j" prev="UP k" fwd="n" ba' +
     'ck="p" type="dynamic">' +
     '' +
     '    <item action="CALL:axsFinance.readFeedExampleDesc">' +
-    '      //div[./div[contains(@id, "rss-feed-item-snippet")]' +
-    '          and not(.//b)]' +
+    '      //div[./div[contains(@id, "rss-feed-item-snippet")]  ' +
+    '          and .//a[contains(text(), "Try this example")]]' +
     '    </item>' +
     '' +
     '    <item action="CALL:axsFinance.readFeedSearchResDesc">' +
-    '      //div[./div[contains(@id, "rss-feed-item-snippet")]' +
-    '         and .//b]' +
+    '      id("plot_feed_div_cont")//div[contains' +
+    '          (@id,"rss-feed-item-snippet")]/..' +
     '    </item>' +
     '' +
     '    <item action="CALL:axsFinance.readBlogsDesc">' +
@@ -218,13 +223,19 @@ axsFinance.CNR = '<cnr next="RIGHT l" prev="LEFT h">' +
     '      .//a[@class="g"]' +
     '    </target>' +
     '' +
-    '    <target title="Try this example" hotkey="t">' +
-    '      .//a[not(@class)]' +
+    '    <target title="Try this example" hotkey="t" ' +
+    '        onEmpty="This item is not an example">' +
+    '      .//a[text()="Try this example"]' +
     '    </target>' +
     '' +
-    '    <target title="Go to feed" hotkey="ENTER"' +
-    '        onEmpty="The current item is not a feed">' +
+    '    <target title="Go to feed" hotkey="f"' +
+    '        onEmpty="This item is not a feed">' +
     '      .//a[./img[@class="rssSprite"]]' +
+    '    </target>' +
+    '' +
+    '    <target title="Go to source" hotkey="ENTER"' +
+    '        onEmpty="No associated source">' +
+    '      .//a[@class="g"]' +
     '    </target>' +
     '' +
     '    <target title="Feed search" hotkey="s"' +

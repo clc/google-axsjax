@@ -226,7 +226,9 @@ axsFinance.announceIntro = function() {
 
     var ratio = axsFinance.getCurrencyRatio();
     var text = title + ' ' + ratio;
-    axsFinance.axsJAXObj.speakTextViaNode(text);
+
+    var conversionResult = document.getElementById('currency_value');
+    axsFinance.speakAndGo(conversionResult, text);
   }
 };
 
