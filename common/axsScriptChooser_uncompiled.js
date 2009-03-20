@@ -130,6 +130,14 @@ function pickScript(){
       shouldInsertScripts = true;
     }
   }
+  else if (currentURL.indexOf('http://moderator.appspot.com/') === 0){
+    theScript.src = baseURL + 'moderator/axsEnableModerator.js';
+    scriptsArray.push(navLib);
+    scriptsArray.push(lensLib);
+    scriptsArray.push(pkLib);
+    scriptsArray.push(sndLib);
+    shouldInsertScripts = true;
+  }
   else if (currentURL === 'http://www.minijuegosgratis.com/juegos/jawbreaker/jawbreaker.htm'){
     theScript.src = baseURL + 'jawbreaker/axsEnableJawbreaker.js';
     scriptsArray.push(sndLib);
