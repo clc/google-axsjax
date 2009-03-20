@@ -209,4 +209,4 @@ axsModerator.charCodeMap = {
        }
 };
 
-axsModerator.init();
+window.setTimeout(axsModerator.init, 3000);
