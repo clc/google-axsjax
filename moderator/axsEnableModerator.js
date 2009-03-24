@@ -82,7 +82,7 @@ axsModerator.init = function(){
                   '	<target title="Skip" hotkey="s" action="CALL:axsModerator.voteSkip">' +
                   '	 .' +
                   '	</target>' +
-                  '	<target title="Repeat" hotkey="r" action="CALL:axsModerator.featuredQuestionChangeHandler">' +
+                  '	<target title="Repeat" hotkey="r" action="CALL:axsModerator.repeatFeaturedQuestion">' +
                   '	 .' +
                   '	</target>' +
                   '  </list>' +
@@ -108,7 +108,7 @@ axsModerator.init = function(){
                   '  </list>' +
                   '	<target title="Ask a question" hotkey="a">' +
                   '	 //table[@class="AskMinimizedPanel"]//div[@class="goog-button-base-content"]' +
-                  '	</target>' +                  
+                  '	</target>' +
                   '</cnr>';
 
   axsModerator.axsNavObj.navInit(cnrString, null);
@@ -118,69 +118,100 @@ axsModerator.init = function(){
   axsModerator.axsLensObj.setMagnification(axsModerator.magSize);
   axsModerator.axsSoundObj = new AxsSound(true);
   axsModerator.axsNavObj.setSound(axsModerator.axsSoundObj);
-  
+
   document.addEventListener('DOMAttrModified', axsModerator.domAttrModifiedHandler, true);
-  var featuredQxpath =  '//div[contains(@class, "featured") and not(contains(@class, "text-featured"))]//div[contains(@class,"text text-less paragraph")]';
+  var featuredQxpath = '//div[contains(@class, "featured") and not(contains(@class, "text-featured"))]//div[contains(@class,"text text-less paragraph")]';
   var featuredQuestionNode = axsModerator.axsJAXObj.evalXPath(featuredQxpath, document.body)[0];
   if (featuredQuestionNode){
     featuredQuestionNode.addEventListener('DOMNodeInserted', axsModerator.featuredQuestionChangeHandler, true);
     axsModerator.axsNavObj.fwdItem();
-    axsModerator.featuredQuestionChangeHandler();
+    axsModerator.featuredQuestionChangeHandler(null);
   }
 };
 
-
+/**
+ * Action handler for when the user tries to navigate to a topic.
+ * @param {Object} topicItem AxsNav item object that holds the
+ * link to the topic.
+ */
 axsModerator.goToTopic = function(topicItem){
   var aElem = topicItem.elem;
   var targUrl = aElem.href;
   window.content.document.location = targUrl;
   window.setTimeout(function(){window.location.reload()}, 1000);
-}
+};
 
-
+/**
+ * Action handler for when the user votes YES on a question
+ * @param {Object} questionItem AxsNav item object that holds the
+ * YES button element.
+ */
 axsModerator.voteYes = function(questionItem){
   var questionElem = questionItem.elem;
   var xpath = './/div[contains(@class,"gwt-ToggleButton")]';
   var yesButton = axsModerator.axsJAXObj.evalXPath(xpath, questionElem)[0];
   axsModerator.axsJAXObj.clickElem(yesButton, false);
-  axsModerator.axsJAXObj.speakTextViaNode("Press enter to confirm your yes vote.");
-}
+  axsModerator.axsJAXObj.speakTextViaNode('Press enter to confirm your yes vote.');
+};
 
+/**
+ * Action handler for when the user votes NO on a question.
+ * @param {Object} questionItem AxsNav item object that holds the
+ * NO button element.
+ */
 axsModerator.voteNo = function(questionItem){
   var questionElem = questionItem.elem;
   var xpath = './/div[contains(@class,"gwt-ToggleButton")]';
   var noButton = axsModerator.axsJAXObj.evalXPath(xpath, questionElem)[1];
   axsModerator.axsJAXObj.clickElem(noButton, false);
-  axsModerator.axsJAXObj.speakTextViaNode("Press enter to confirm your no vote.");
-}
+  axsModerator.axsJAXObj.speakTextViaNode('Press enter to confirm your no vote.');
+};
 
+/**
+ * Action handler for when the user skips a question.
+ * @param {Object} questionItem AxsNav item object that holds the
+ * SKIP button element.
+ */
 axsModerator.voteSkip = function(questionItem){
   var questionElem = questionItem.elem;
   var xpath = '//div[(@class = "goog-button-base-content") and (text()="Skip")]';
   var skipButton = axsModerator.axsJAXObj.evalXPath(xpath, questionElem)[0];
   axsModerator.axsJAXObj.clickElem(skipButton, false);
-}
+};
 
-
+/**
+ * DOM nodes are modified when the statusbox changes ("Saving...").
+ * @param {Event} evt A DOM AttrModified event.
+ */
 axsModerator.domAttrModifiedHandler = function(evt){
   var attrib = evt.attrName;
   var newVal = evt.newValue;
   var oldVal = evt.prevValue;
   var target = evt.target;
-  if (target.className == "qdb-StatusBox"){
+  if (target.className == 'qdb-StatusBox'){
     axsModerator.axsJAXObj.speakTextViaNode(target.textContent);
   }
-}
+};
 
-
+/**
+ * Handles the DOMNodeInsertion event when the featured question
+ * changes.
+ * @param {Event?} evt A DOM Node Insertion event - this isn't really used.
+ */
 axsModerator.featuredQuestionChangeHandler = function(evt){
   axsModerator.axsNavObj.actOnItem(axsModerator.axsNavObj.currentItem());
   axsModerator.axsLensObj.view(null);
-}
-
+};
 
 /**
- * Handles key events for keyboard shortcuts
+ * Action handler for repeating the currently featured question.
+ */
+axsModerator.repeatFeaturedQuestion = function(){
+  axsModerator.featuredQuestionChangeHandler(null);
+};
+
+/**
+ * Handles key events for keyboard shortcuts.
  * @param {Object} evt A keyboard event object.
  * @return {boolean} Whether the event should be passed on.
  */
@@ -204,14 +235,14 @@ axsModerator.keyHandler = function(evt){
 };
 
 /**
- * Map from key codes to functions
+ * Map from key codes to functions.
  */
 axsModerator.keyCodeMap = {
   // Map additional keyboard behavior that involves key codes here
 };
 
 /**
- * Map from character codes to functions
+ * Map from character codes to functions.
  * @return {boolean} Always returns false to indicate
  *                   that the keycode has been handled.
  */
