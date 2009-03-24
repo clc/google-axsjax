@@ -65,6 +65,9 @@ function pickFromCompiled(scriptsBaseURL){
         scriptURL = scriptsBaseURL + 'finance/comp_financeCurrency.js';
       }
     }
+    else if (currentURL.indexOf('http://moderator.appspot.com/') === 0){
+      scriptURL = scriptsBaseURL + 'moderator/comp_moderator.js';
+    }
     else if (prefix == 'mail'){
       if (document.baseURI.indexOf('&view=cw&fs=1&tf=1') != -1){
         scriptURL = scriptsBaseURL + 'gmail/comp_talk.js';
@@ -145,14 +148,6 @@ function pickFromUncompiled(scriptsBaseURL){
     shouldInsertScripts = true;
   }
   //Check for uncompiled scripts
-  else if (currentURL.indexOf('http://moderator.appspot.com/') === 0){
-    theScript.src = baseURL + 'moderator/axsEnableModerator.js';
-    scriptsArray.push(navLib);
-    scriptsArray.push(lensLib);
-    scriptsArray.push(pkLib);
-    scriptsArray.push(sndLib);
-    shouldInsertScripts = true;
-  }
   else if ((currentURL.indexOf('http://www.xkcd.com') === 0) ||
            (currentURL.indexOf('http://xkcd.com') === 0)){
     theScript.src = baseURL + 'xkcd/axsEnableXKCD.js';
