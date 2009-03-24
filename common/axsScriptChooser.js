@@ -65,9 +65,6 @@ function pickFromCompiled(scriptsBaseURL){
         scriptURL = scriptsBaseURL + 'finance/comp_financeCurrency.js';
       }
     }
-    else if (currentURL.indexOf('http://moderator.appspot.com/') === 0){
-      scriptURL = scriptsBaseURL + 'moderator/comp_moderator.js';
-    }
     else if (prefix == 'mail'){
       if (document.baseURI.indexOf('&view=cw&fs=1&tf=1') != -1){
         scriptURL = scriptsBaseURL + 'gmail/comp_talk.js';
@@ -94,6 +91,9 @@ function pickFromCompiled(scriptsBaseURL){
         document.location = currentURL;
       }
     }
+  }
+  else if (currentURL.indexOf('http://moderator.appspot.com/') === 0){
+    scriptURL = scriptsBaseURL + 'moderator/comp_moderator.js';
   }
   else if (document.baseURI == 'http://www.minijuegosgratis.com/juegos/jawbreaker/jawbreaker.htm'){
     scriptURL = scriptsBaseURL + 'jawbreaker/comp_jawbreaker.js';
