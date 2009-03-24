@@ -69,6 +69,23 @@ axsModerator.init = function(){
   document.addEventListener('keypress', axsModerator.keyHandler, true);
 
   var cnrString = '<cnr next="RIGHT l" prev="LEFT h">   ' +
+                  '  <list title="Featured question" next="DOWN j" prev="UP k">' +
+                  '    <item>' +
+                  '      //div[contains(@class, "featured") and not(contains(@class, "text-featured"))]' +
+                  '    </item>' +
+                  '	<target title="Yes" hotkey="y" action="CALL:axsModerator.voteYes">' +
+                  '	 .' +
+                  '	</target>' +
+                  '	<target title="No" hotkey="n" action="CALL:axsModerator.voteNo">' +
+                  '	 .' +
+                  '	</target>' +
+                  '	<target title="Skip" hotkey="s" action="CALL:axsModerator.voteSkip">' +
+                  '	 .' +
+                  '	</target>' +
+                  '	<target title="Repeat" hotkey="r" action="CALL:axsModerator.featuredQuestionChangeHandler">' +
+                  '	 .' +
+                  '	</target>' +
+                  '  </list>' +
                   '  <list title="Questions" next="DOWN j" prev="UP k">' +
                   '    <item>' +
                   '      //table[contains(@class, "QuestionListPanel")]/tbody/tr' +
@@ -103,6 +120,13 @@ axsModerator.init = function(){
   axsModerator.axsNavObj.setSound(axsModerator.axsSoundObj);
   
   document.addEventListener('DOMAttrModified', axsModerator.domAttrModifiedHandler, true);
+  var featuredQxpath =  '//div[contains(@class, "featured") and not(contains(@class, "text-featured"))]//div[contains(@class,"text text-less paragraph")]';
+  var featuredQuestionNode = axsModerator.axsJAXObj.evalXPath(featuredQxpath, document.body)[0];
+  if (featuredQuestionNode){
+    featuredQuestionNode.addEventListener('DOMNodeInserted', axsModerator.featuredQuestionChangeHandler, true);
+    axsModerator.axsNavObj.fwdItem();
+    axsModerator.featuredQuestionChangeHandler();
+  }
 };
 
 
@@ -130,6 +154,13 @@ axsModerator.voteNo = function(questionItem){
   axsModerator.axsJAXObj.speakTextViaNode("Press enter to confirm your no vote.");
 }
 
+axsModerator.voteSkip = function(questionItem){
+  var questionElem = questionItem.elem;
+  var xpath = '//div[(@class = "goog-button-base-content") and (text()="Skip")]';
+  var skipButton = axsModerator.axsJAXObj.evalXPath(xpath, questionElem)[0];
+  axsModerator.axsJAXObj.clickElem(skipButton, false);
+}
+
 
 axsModerator.domAttrModifiedHandler = function(evt){
   var attrib = evt.attrName;
@@ -139,6 +170,12 @@ axsModerator.domAttrModifiedHandler = function(evt){
   if (target.className == "qdb-StatusBox"){
     axsModerator.axsJAXObj.speakTextViaNode(target.textContent);
   }
+}
+
+
+axsModerator.featuredQuestionChangeHandler = function(evt){
+  axsModerator.axsNavObj.actOnItem(axsModerator.axsNavObj.currentItem());
+  axsModerator.axsLensObj.view(null);
 }
 
 
@@ -209,4 +246,5 @@ axsModerator.charCodeMap = {
        }
 };
 
-window.setTimeout(axsModerator.init, 3000);
+
+window.setTimeout(axsModerator.init, 1000);
