@@ -92,7 +92,8 @@ function pickFromCompiled(scriptsBaseURL){
       }
     }
   }
-  else if (currentURL.indexOf('http://moderator.appspot.com/') === 0){
+  else if ((currentURL.indexOf('http://moderator.appspot.com/') === 0) || 
+           (currentURL.indexOf('http://moderator.whitehouse.gov/') === 0)){
     scriptURL = scriptsBaseURL + 'moderator/comp_moderator.js';
   }
   else if (document.baseURI == 'http://www.minijuegosgratis.com/juegos/jawbreaker/jawbreaker.htm'){
