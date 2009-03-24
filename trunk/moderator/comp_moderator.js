@@ -1,48 +1,2698 @@
-(function() { 
-var g=false,h=null,i=true,k,l=function(a){this.bb=0;this.O=h;this.Ta=g;this.s=h;this.W=g;var b=this;this.ba=document.body;this.gb();if(a){this.Ta=i;document.addEventListener("keypress",function(d){b.Jb(d,b)},i);document.body.Kb=i}};k=l.prototype;
-k.gb=function(){var a=this.r(),b=this,d=function(e){b.s=e.target;if(e.target.tagName=="INPUT"||e.target.tagName=="SELECT"||e.target.tagName=="TEXTAREA")b.W=i;return i};a.addEventListener("focus",d,i);var c=function(e){b.pa(b.s,"aria-activedescendant");b.s=h;if(e.target.tagName=="INPUT"||e.target.tagName=="SELECT"||e.target.tagName=="TEXTAREA")b.W=g;return i};a.addEventListener("blur",c,i)};k.r=function(){var a=this.ba;while(a.nodeType!=9)a=a.parentNode;return a};
-k.Sa=function(a,b){a.id||this.Da(a);if(b){this.J(a,"live","rude");this.J(a,"atomic","true");var d=this.r(),c=d.createElement("div");c.textContent=" ";c.name="AxsJAX_dummyNode";a.lastChild&&a.lastChild.name&&a.lastChild.name==c.name&&a.removeChild(a.lastChild);a.appendChild(c)}else{var e=this.sb(a,"role");this.J(a,"role","row");var f=this.s;if(!f||f.nodeType==9){this.ba.tabIndex=-1;f=this.ba}this.J(f,"activedescendant",h);f.focus&&f.focus();this.J(f,"activedescendant",a.id);var j=this;window.setTimeout(function(){e?
-j.J(a,"role",e):j.pa(a,"role")},0)}};
-k.v=function(a,b){var d="AxsJAX_pixelAudioNode",c="AxsJAX_pixelAudioNode",e="data:image/gif;base64,R0lGODlhAQABAIAAANvf7wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==",f=this.r(),j=h;if(b){if(b.previousSibling&&b.previousSibling.name==c)j=b.previousSibling;else{j=f.createElement("img");j.name=c;j.setAttribute("tabindex",0);j.style.outline="none";j.src=e;b.parentNode.insertBefore(j,b);this.qb(j)}j.setAttribute("alt",a);j.setAttribute("title",a);window.setTimeout(function(){j.blur();j.focus()},0)}else{if((j=
-f.getElementById(d))&&j.alt==a)a=a+" ";if(!j){j=f.createElement("img");j.id=d;j.src=e;f.body.appendChild(j)}j.setAttribute("alt",a);j.setAttribute("title",a);this.Sa(j)}};
-k.U=function(a,b){var d=this.r(),c=d.createEvent("MouseEvents");c.initMouseEvent("mousedown",i,i,d.defaultView,1,0,0,0,0,g,g,b,g,0,h);try{a.dispatchEvent(c)}catch(e){}c=d.createEvent("MouseEvents");c.initMouseEvent("mouseup",i,i,d.defaultView,1,0,0,0,0,g,g,b,g,0,h);try{a.dispatchEvent(c)}catch(e){}c=d.createEvent("MouseEvents");c.initMouseEvent("click",i,i,d.defaultView,1,0,0,0,0,g,g,b,g,0,h);try{a.dispatchEvent(c)}catch(e){}var f=a.getAttribute("href");if(a.tagName=="A"&&f&&f!="#")if(b)window.open(a.href);
-else document.location=a.href};k.Da=function(a,b){if(!a)return"";if(a.id)return a.id;var d=b||"AxsJAX_ID_";return a.id=d+this.bb++};k.Pa=function(a){if(!a)return g;if(a.tagName=="A"||a.tagName=="INPUT"){this.O=a;return i}var b=a.getElementsByTagName("*");for(var d=0,c;c=b[d];d++)if(c.tagName=="A"||c.tagName=="INPUT"||c.hasAttribute("tabindex")&&c.tabIndex!=-1){this.O=c;return i}return g};k.Jb=function(a,b){if(!b.Ta)return i;if(a.keyCode==9&&b.O){b.O.focus();b.O=h}return i};
-k.xb=function(a){this.Sa(a);a.scrollIntoView(i);this.Pa(a)};k.J=function(a,b,d){if(!!a){b=b.toLowerCase();switch(b){case "live":b="aria-live";break;case "activedescendant":b="aria-activedescendant";break;case "atomic":b="aria-atomic";break;default:break}a.setAttribute(b,d)}};k.sb=function(a,b){return a.getAttribute(b)};k.pa=function(a,b){a&&a.removeAttribute&&a.removeAttribute(b)};
-k.qb=function(a){var b=this.Da(a),d=this.r(),c=d.baseURI,e=c.indexOf("#");if(e!=-1)c=c.substring(0,e);d.location=c+"#"+b};k.q=function(a,b){try{var d=b.ownerDocument.evaluate(a,b,h,XPathResult.ORDERED_NODE_ITERATOR_TYPE,h)}catch(c){return[]}var e=[];for(var f=d.iterateNext();f;f=d.iterateNext())e.push(f);return e};var n=function(a){this.aa=this.Z="";this.b=[];this.a=0;this.d=[];this.k=h;this.P=[];this.A={};this.B={};this.z=[];this.w=[];this.f=a;this.Tb=this.t=h;this.u=h;this.cb="list";this.wa="item";this.Ca="wrap";this.H=h};n.e={db:"next list",eb:"previous list",$a:"go forward",Za:"go backwards",Va:"cycle next",Wa:"cycle previous",Pb:"Select available action",Ob:"No available actions",za:"Page up",ya:"Page down",va:"Enter",Mb:"Escape",Lb:"Delete",Ba:"Up",ua:"Down",xa:"Left",Aa:"Right"};k=n.prototype;
-k.ta=function(a){var b=i;if(a.type=="dynamic"&&a.i.length===0){this.t!==h&&this.t.view(h);a.i=this.Y(a.$);a.l=this.Oa(a.$);if(this.b[this.a]===a)this.d[this.a]=-1;else for(var d=0,c;c=this.b[d];d++)if(c===a){this.d[d]=-1;break}}if(a.i.length===0&&a.ea===h)b=g;return b};k.Ia=function(){var a=this.F(),b=a.ea,d=h;if(b!==h){this.Q(b);d=this.ga(b.action)}if(d===h){this.ib();this.u!==h&&this.u.I(this.cb)}};
-k.Cb=function(){if(this.b.length<1)return h;for(var a=0;this.b[a];a++){this.a++;if(this.a>=this.b.length)this.a=0;if(this.ta(this.b[this.a]))break}return this.F()};k.Eb=function(){if(this.b.length<1)return h;for(var a=0;this.b[a];a++){this.a--;if(this.a<0)this.a=this.b.length-1;if(this.ta(this.b[this.a]))break}return this.F()};k.F=function(){return this.b[this.a]};k.ib=function(){this.f.v(this.F().title)};
-k.la=function(){if(this.b.length<1)return h;var a=this.b[this.a],b=a.i;if(b.length<1)return h;if(this.k){var d=this.k.h.K[this.a];if(typeof d!="undefined")this.d[this.a]=d}this.d[this.a]++;var c=g;if(this.d[this.a]>=b.length){this.d[this.a]=0;c=i}var e=this.d[this.a];if(b[e].h.parentNode===h){this.t!==h&&this.t.view(h);a.i=this.Y(a.$);this.d[this.a]=0;e=this.d[this.a]}this.k=b[e];if(this.u!==h)c?this.u.I(this.Ca):this.u.I(this.wa);return this.k};
-k.Ka=function(){var a=this.b[this.a],b=this.d[this.a];if(a.sa!==h&&b+1>=a.i.length){this.Q(a.sa);this.d[this.a]=0;return h}var d=this.la();return d};
-k.Ra=function(){if(this.b.length<1)return h;var a=this.b[this.a],b=a.i;if(b.length<1)return h;if(this.k){var d=this.k.h.K[this.a];if(typeof d!="undefined")this.d[this.a]=d}this.d[this.a]--;var c=g;if(this.d[this.a]<0){this.d[this.a]=b.length-1;c=i}var e=this.d[this.a];if(b[e].h.parentNode===h){this.t!==h&&this.t.view(h);a.i=this.Y(a.$);this.d[this.a]=a.i.length;e=this.d[this.a]}this.k=b[e];if(this.u!==h)c?this.u.I(this.Ca):this.u.I(this.wa);return this.k};
-k.lb=function(){var a=this.b[this.a],b=this.d[this.a];if(a.ha!==h&&b<=0){this.Q(a.ha);this.d[this.a]=a.i.length-1;return h}var d=this.Ra();return d};k.da=function(){if(this.b.length<1)return h;if(this.k){var a=this.k.h.K[this.a];if(typeof a!="undefined")this.d[this.a]=a}var b=this.b[this.a],d=b.i,c=this.d[this.a];return this.k=d[c]};k.ga=function(a){var b=h;if(a!==h&&a.indexOf&&a.indexOf("CALL:")===0&&a.indexOf("(")===-1)try{b=eval(a.substring(5))}catch(d){}return b};
-k.C=function(a){if(a!==h){var b=this,d=function(){var j=b.ga(a.action);if(j)j(a);else{b.t!==h&&b.t.view(a.h);b.f.xb(a.h)}};if(this.f.s&&this.f.s.blur){var c=this.f.s;this.f.s=h;c.removeAttribute&&this.f.pa(c,"aria-activedescendant");var e=function(j){j.target.removeEventListener("blur",e,i);d()};c.addEventListener("blur",e,i);c.blur()}else d()}else{var f=this.b[this.a];f.type=="dynamic"&&this.f.v(f.onEmpty)}};
-k.o=function(a,b,d,c){for(var e=0,f;f=a[e];e++)if(f=="LEFT")d[37]=c;else if(f=="UP")d[38]=c;else if(f=="RIGHT")d[39]=c;else if(f=="DOWN")d[40]=c;else if(f=="PGUP")d[33]=c;else if(f=="PGDOWN")d[34]=c;else if(f=="ENTER")d[13]=c;else if(f=="ESC")d[27]=c;else if(f=="DEL")d[46]=c;else b[f.charCodeAt(0)]=c};
-k.S=function(a,b,d){var c=[];if(!(a==="")){c=a.split(" ");var e=this;if(d=="prev")this.o(c,this.z[b],this.w[b],function(){e.C(e.Ra())});else if(d=="next")this.o(c,this.z[b],this.w[b],function(){e.C(e.la())});else d=="back"?this.o(c,this.z[b],this.w[b],function(){e.C(e.lb())}):this.o(c,this.z[b],this.w[b],function(){e.C(e.Ka())})}};k.kb=function(a,b,d){var c=[];if(!(a==="")){c=a.split(" ");var e=this;this.o(c,this.A,this.B,function(){if(e.ta(e.b[b])){e.a=b;e.C(e.la())}else e.f.v(d)})}};
-k.jb=function(a,b){var d=[];if(!(a==="")){d=a.split(" ");var c=this;this.o(d,this.A,this.B,function(){c.f.v(b)})}};k.Ea=function(a,b,d){var c=[];if(!(a.hotkey==="")){c=a.hotkey.split(" ");var e=this;this.o(c,b,d,function(){e.Q(a)})}};k.Q=function(a){var b=a.m,d=this.f.r().documentElement;if(b.indexOf(".")===0)d=this.da().h;var c=this.f.q(b,d);if(c.length<1)this.f.v(a.onEmpty);else{var e=this.ga(a.action);if(e){var f={};f.action=a.action;f.h=c[0];e(f)}else{this.f.U(c[0],g);c[0].scrollIntoView(i)}this.f.Pa(c[0])}};
-k.tb=function(a,b){var d=h,c=this.a;if(c<this.w.length)d=this.w[c][a]||this.z[c][b]||h;if(d===h)d=this.B[a]||this.A[b];return d};
-k.Bb=function(a,b){var d={};d.Ma=[];var c=new DOMParser,e=c.parseFromString(a,"text/xml"),f=e.getElementsByTagName("list"),j,o;for(j=0,o;o=f[j];j++){var m={};m.title=o.getAttribute("title");m.hotkey=o.getAttribute("hotkey");m.ka=o.getAttribute("next");m.na=o.getAttribute("prev");m.rb=o.getAttribute("fwd");m.back=o.getAttribute("back");m.onEmpty=o.getAttribute("onEmpty");m.type=o.getAttribute("type");var p,r,q,s,t;m.i=[];var B=o.getElementsByTagName("item");for(p=0;r=B[p];p++){var z={};z.m=r.textContent;
-if(r.attributes instanceof NamedNodeMap){s=r.attributes;t=s.length;for(q=0;q<t;q++){var u=s.item(q);z[u.nodeName]=u.value}}m.i.push(z)}m.l=[];var D=o.getElementsByTagName("target");for(p=0;r=D[p];p++){var v={};v.m=r.textContent;if(r.attributes instanceof NamedNodeMap){s=r.attributes;t=s.length;for(q=0;q<t;q++){var u=s.item(q);v[u.nodeName]=u.value}}m.l.push(v)}d.Ma.push(m)}d.l=[];var w,x=e.firstChild;for(j=0,w;w=x.childNodes[j];j++)if(w.tagName=="target"){var v={};v.m=w.textContent;if(w.attributes instanceof
-NamedNodeMap){s=w.attributes;t=s.length;for(q=0;q<t;q++){var u=s.item(q);v[u.nodeName]=u.value}}d.l.push(v)}d.ka=x.getAttribute("next");d.na=x.getAttribute("prev");if(b===h||typeof b=="undefined")this.Qa(d,b);else{var H=new (function(I,E,F,G){b(x,E,F,G)});this.Qa(d,H)}};
-k.wb=function(){var a=this.ub(),b="";for(var d=0,c;c=a[d];d++)b=b+c.X+", "+c.title+". ";b=b+this.Z+", "+n.e.db;b=b+this.aa+", "+n.e.eb;b=b.replace("PGUP",n.e.za);b=b.replace("PGDOWN",n.e.ya);b=b.replace("ENTER",n.e.va);b=b.replace("DEL",n.e.Xa);b=b.replace("UP",n.e.Ba);b=b.replace("DOWN",n.e.ua);b=b.replace("LEFT",n.e.xa);return b=b.replace("RIGHT",n.e.Aa)};
-k.zb=function(){var a=this.vb(),b="";for(var d=0,c;c=a[d];d++)b=b+c.X+", "+c.title+". ";var e=this.F();if(e.ma!=="")b=b+e.ma+", "+n.e.Va+". ";if(e.oa!=="")b=b+e.oa+", "+n.e.Wa+". ";if(e.fa!=="")b=b+e.fa+", "+n.e.$a+". ";if(e.ca!=="")b=b+e.ca+", "+n.e.Za+". ";b=b.replace("PGUP",n.e.za);b=b.replace("PGDOWN",n.e.ya);b=b.replace("ENTER",n.e.va);b=b.replace("DEL",n.e.Xa);b=b.replace("UP",n.e.Ba);b=b.replace("DOWN",n.e.ua);b=b.replace("LEFT",n.e.xa);return b=b.replace("RIGHT",n.e.Aa)};
-k.Gb=function(a){this.t=a};k.Hb=function(a){this.u=a};k.ub=function(){var a=[],b;for(var d=0,c;c=this.b[d];d++)if(c.L!==""){b={};b.title=c.title;b.X=c.L;a.push(b)}for(var e=0,f;f=this.P[e];e++)if(this.La(f)){b={};b.title=f.title;b.X=f.hotkey;a.push(b)}return a};k.vb=function(){var a=[],b=this.F();for(var d=0,c;c=b.l[d];d++)if(this.La(c)){var e={};e.title=c.title;e.X=c.hotkey;a.push(e)}return a};
-k.La=function(a){var b=g;if(a.hotkey!==""){var d=a.m,c=this.f.r().body;if(d.indexOf(".")===0){var e=this.da();if(e)c=e.h}var f=this.f.q(d,c);if(f.length>0)b=i}return b};
-k.Qa=function(a,b){this.b=[];this.a=0;this.d=[];var d=[],c,e;for(c=0,e;e=a.Ma[c];c++){var f={};f.Qb=h;f.$=e;f.title=e.title||"";f.L=e.hotkey||"";f.ma=e.ka||"";f.oa=e.na||"";f.fa=e.rb||"";f.ca=e.back||"";f.onEmpty=e.onEmpty||"";f.type=e.type||"";f.sa=h;f.ha=h;f.ea=h;f.i=this.Y(e);f.l=this.Oa(e);for(var j=0,o;o=f.l[j];j++)if(o.trigger=="listTail")f.sa=o;else if(o.trigger=="listHead")f.ha=o;else if(o.trigger=="listEntry")f.ea=o;if(f.i.length>0||f.type=="dynamic"){this.b.push(f);this.d.push(-1)}else f.L!==
-""&&d.push(f)}this.P=[];this.Ub=0;var m;if(a.l)for(c=0,m;m=a.l[c];c++){var p={};p.m=m.m;p.m=p.m.replace(/^\s\s*/,"").replace(/\s\s*$/,"");p.title=m.title||"";p.trigger=m.trigger||"key";p.hotkey=m.hotkey||"";p.action=m.action||"click";p.onEmpty=m.onEmpty||"";this.P.push(p)}this.H!==h&&document.removeEventListener("keypress",this.H,i);b===h||typeof b=="undefined"?this.Ib(a,d):b(a,this.b,d,this.P)};
-k.Y=function(a){var b=[];if(!a.i)return b;for(var d=0,c;c=a.i[d];d++)try{var e=c.m.replace(/^\s\s*/,"").replace(/\s\s*$/,""),f=this.f.r().documentElement,j=this.f.q(e,f),o=c.index||"0",m=parseInt(o,10),p=j.length-m,r=c.Rb||"*";if(r!="*")p=parseInt(r,10);var q=p+m,s=c.action||h;while(m<q){var t={};t.action=s;t.h=j[m];if(typeof t.h!="undefined"){if(typeof t.h.K=="undefined")t.h.K={};t.h.K[this.b.length]=b.length;b.push(t)}m++}}catch(B){}return b};
-k.Oa=function(a){var b=[];if(!a.l)return b;for(var d=0,c;c=a.l[d];d++){var e={};e.m=c.m.replace(/^\s\s*/,"").replace(/\s\s*$/,"");e.title=c.title||"";e.trigger=c.trigger||"key";e.hotkey=c.hotkey||"";e.action=c.action||"click";e.onEmpty=c.onEmpty||"";b.push(e)}return b};
-k.Ib=function(a,b){var d=this,c;this.A={};this.B={};this.z=[];this.w=[];var e;for(c=0,e;e=this.P[c];c++)this.Ea(e,this.A,this.B);var f=[];this.Z=a.ka||"";if(this.Z!=="")f=this.Z.split(" ");this.o(f,this.A,this.B,function(){d.Cb();d.Ia()});f=[];this.aa=a.na||"";if(this.aa!=="")f=this.aa.split(" ");this.o(f,this.A,this.B,function(){d.Eb();d.Ia()});var j;for(c=0,j;j=this.b[c];c++){var o={},m={};this.z.push(o);this.w.push(m);this.S(j.ma,c,"next");this.S(j.oa,c,"prev");this.S(j.fa,c,"fwd");this.S(j.ca,
-c,"back");this.kb(j.L,c,j.onEmpty);var p;for(p=0,e;e=j.l[p];p++)this.Ea(e,o,m)}var r;for(c=0,r;r=b[c];c++)this.jb(r.L,r.onEmpty);this.H=function(q){if(q.ctrlKey)return i;if(d.f.W)return i;var s=d.tb(q.keyCode,q.charCode);if(s)return s()};document.addEventListener("keypress",this.H,i)};var y=function(a){this.g=a;this.N=1.5;this.padding=-1;this.Fb=0;this.R=a.r();this.c=this.R.createElement("span");this.c.style.backgroundColor="#CCE6FF";this.c.style.borderColor="#0000CC";this.c.style.borderWidth="medium";this.c.style.borderStyle="groove";this.c.style.position="absolute";this.c.style.display="none";this.R.body.appendChild(this.c);this.Ga=function(){}};y.fb={Nb:0,Ya:1};k=y.prototype;
-k.view=function(a){while(this.c.firstChild)this.c.removeChild(this.c.firstChild);if(a===h)this.c.style.display="none";else{var b=0,d=0,c=a;if(c.offsetParent){b=c.offsetLeft;d=c.offsetTop;c=c.offsetParent;while(c!==h){b+=c.offsetLeft;d+=c.offsetTop;c=c.offsetParent}}this.c.appendChild(a.cloneNode(i));this.c.style.top=d+"px";this.c.style.left=b+"px";this.c.style.zIndex=999;this.c.style.display="block";this.Na()}};k.qa=function(a){this.N=a;this.Na()};
-k.Na=function(){this.R.body.removeChild(this.c);this.Ab();this.pb();this.hb();this.R.body.appendChild(this.c);this.Ga&&this.Ga(this.c);if(this.Fb==y.fb.Ya){var a=this;window.setTimeout(function(){a.c.scrollIntoView(i)},0)}};k.hb=function(){if(!(this.padding<0)){var a="//*[not(.//*)]",b=this.g.q(a,this.c);for(var d=0,c;c=b[d];d++)c.style.padding=this.padding+"px"}};
-k.pb=function(){var a=this.c.getElementsByTagName("img");for(var b=0,d;d=a[b];b++){if(!d.hasAttribute("Axs_OrigHeight")){d.setAttribute("Axs_OrigHeight",d.height);d.setAttribute("Axs_OrigWidth",d.width)}d.height=d.getAttribute("Axs_OrigHeight")*this.N;d.width=d.getAttribute("Axs_OrigWidth")*this.N}};
-k.Ab=function(){var a="fontSizeAdjust"in this.c.style;if(a){var b=this.N*0.52;this.c.style.fontSizeAdjust=b}else{var d=this.N*100+"%";this.c.style.setProperty("font-size",d,"important")}var c=this.c.getElementsByTagName("*");for(var e=0,f;f=c[e];e++){f.style.setProperty("line-height","normal","important");a||f.style.setProperty("font-size","100%","important")}};var A=function(a){var b="http://google-axsjax.googlecode.com/svn/trunk/";this.ob=b+"common/earcons/axsEarcons.swf?sound=";this.n=h;this.V=a;this.ra=b+"thirdparty/soundmanager2/";this.j=h;this.G=g;this.Ua="minimal";this.T=g;this.ja=0};k=A.prototype;
-k.ia=function(){if(!this.V)if(!this.G)if(!this.T){this.T=i;this.ja=0;if(this.j!==h){this.j.parentNode.removeChild(this.j);this.j=h}this.j=document.createElement("iframe");var a=document.location.toString();if(a.indexOf("#")!=-1)a=a.substring(0,a.indexOf("#"));this.j.src=this.ra+"AxsJAX_SM2_Linker.html#Verbosity="+this.Ua+",Parent="+a;this.j.width="0%";this.j.height="0%";this.j.style.top="-1000";this.j.style.left="-1000";this.j.style.position="absolute";document.getElementsByTagName("body")[0].appendChild(this.j);
-this.Ha()}};k.Ha=function(){if(document.location.hash=="#InitSuccess"){this.G=i;this.T=g}else if(this.Ua=="none"&&this.ja>0){this.G=i;this.T=g}else{var a=this;window.setTimeout(function(){a.Ha()},100);this.ja++}};k.I=function(a){var b=this.Db(a);if(!(this.V||b))if(this.G)this.j.src=this.ra+"AxsJAX_SM2_Linker.html#AxsSoundCmd=Play("+a+")";else{this.ia();var d=this;window.setTimeout(function(){d.I(a)},500)}};
-k.stop=function(){if(this.n){this.n.parentNode.removeChild(this.n);this.n=h}if(!this.V)if(!!this.G)this.j.src=this.ra+"AxsJAX_SM2_Linker.html#AxsSoundCmd=Stop()"};k.getTime=function(){if(this.V)return-1;if(!this.G)return-1;var a="Time=",b=unescape(document.location.hash);if(b.indexOf(a)==-1)return-1;var d=b.indexOf(a)+a.length,c=parseInt(b.substring(d),10);return c};
-k.Db=function(a){var b="";switch(a){case "alert":b="alert";break;case "deselect":b="deselect";break;case "item":b="item";break;case "list":b="list";break;case "select":b="select";break;case "success":b="success";break;case "wrap":b="wrap";break;default:}if(!(b==="")){if(this.n===h){this.n=document.createElement("embed");this.n.height=0;this.n.width=0;document.body.appendChild(this.n)}this.n.src=this.ob+b}};var C={};C.ab="The following shortcut keys are available. ";C.g=h;C.p=h;C.D=h;C.Fa=h;C.M=1.5;
-C.ia=function(){C.g=new l(i);C.p=new n(C.g);document.addEventListener("keypress",C.H,i);var a='<cnr next="RIGHT l" prev="LEFT h">     <list title="Featured question" next="DOWN j" prev="UP k">    <item>      //div[contains(@class, "featured") and not(contains(@class, "text-featured"))]    </item>\t<target title="Yes" hotkey="y" action="CALL:axsModerator.voteYes">\t .\t</target>\t<target title="No" hotkey="n" action="CALL:axsModerator.voteNo">\t .\t</target>\t<target title="Skip" hotkey="s" action="CALL:axsModerator.voteSkip">\t .\t</target>\t<target title="Repeat" hotkey="r" action="CALL:axsModerator.featuredQuestionChangeHandler">\t .\t</target>  </list>  <list title="Questions" next="DOWN j" prev="UP k">    <item>      //table[contains(@class, "QuestionListPanel")]/tbody/tr    </item>\t<target title="Yes" hotkey="y" action="CALL:axsModerator.voteYes">\t .\t</target>\t<target title="No" hotkey="n" action="CALL:axsModerator.voteNo">\t .\t</target>  </list>   <list title="Topics" fwd="DOWN j" back="UP k">    <item>      //div[contains(@class, "fork")]/..//div[contains(@class, "link link-regular G1k55290GB")]    </item>\t<target title="Go to topic" hotkey="ENTER" action="CALL:axsModerator.goToTopic">\t .//a\t</target>  </list>\t<target title="Ask a question" hotkey="a">\t //table[@class="AskMinimizedPanel"]//div[@class="goog-button-base-content"]\t</target></cnr>';C.p.Bb(a,
-h);C.D=new y(C.g);C.p.Gb(C.D);C.D.qa(C.M);C.Fa=new A(i);C.p.Hb(C.Fa);document.addEventListener("DOMAttrModified",C.nb,i);var b='//div[contains(@class, "featured") and not(contains(@class, "text-featured"))]//div[contains(@class,"text text-less paragraph")]',d=C.g.q(b,document.body)[0];if(d){d.addEventListener("DOMNodeInserted",C.Ja,i);C.p.Ka();C.Ja()}};C.Sb=function(a){var b=a.h,d=b.href;window.content.document.location=d;window.setTimeout(function(){window.location.reload()},1000)};
-C.Xb=function(a){var b=a.h,d='.//div[contains(@class,"gwt-ToggleButton")]',c=C.g.q(d,b)[0];C.g.U(c,g);C.g.v("Press enter to confirm your yes vote.")};C.Vb=function(a){var b=a.h,d='.//div[contains(@class,"gwt-ToggleButton")]',c=C.g.q(d,b)[1];C.g.U(c,g);C.g.v("Press enter to confirm your no vote.")};C.Wb=function(a){var b=a.h,d='//div[(@class = "goog-button-base-content") and (text()="Skip")]',c=C.g.q(d,b)[0];C.g.U(c,g)};C.nb=function(a){var b=a.target;b.className=="qdb-StatusBox"&&C.g.v(b.textContent)};
-C.Ja=function(){C.p.C(C.p.da());C.D.view(h)};C.H=function(a){if(a.ctrlKey)return i;if(a.keyCode==27){C.g.s.blur();return g}if(C.g.W)return i;var b=C.yb[a.keyCode]||C.mb[a.charCode];if(b)return b();return i};C.yb={};C.mb={45:function(){C.M-=0.1;C.D.qa(C.M);return g},61:function(){C.M+=0.1;C.D.qa(C.M);return g},63:function(){var a=C.ab+C.p.zb()+C.p.wb();C.g.v(a);return g},47:function(){var a="//input",b=C.g.q(a,document.body)[0];b.focus();b.select();return g}};window.setTimeout(C.ia,1000);
- })();
+//javascript/axsjax/common/AxsJAX.js
+// Copyright 2007 Google Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+/**
+ * @fileoverview AxsJAX - JavaScript library for enhancing the accessibility
+ * of AJAX apps through WAI-ARIA.
+ * Note that IE does not implement WAI-ARIA; thus these scripts are specific
+ * to Firefox.
+ * @author clchen@google.com (Charles L. Chen)
+ */
+
+/**
+ * Class of scripts for improving accessibility of Web 2.0  Apps.
+ * @param {boolean} useTabKeyFix  Whether or not to try syncing to the last
+ *                                marked position when the user presses the
+ *                                tab key.
+ * @constructor
+ */
+var AxsJAX = function(useTabKeyFix){
+  this.ID_NUM_ = 0;
+  this.tabbingStartPosNode = null;
+  this.tabKeyFixOn = false;
+  this.lastFocusedNode = null;
+  this.inputFocused = false;
+
+  var self = this;
+  this.activeParent = document.body;
+
+  //Monitor focus and blur
+  this.addFocusBlurMonitors();
+
+  //Activate the tab key fix if needed
+  if (useTabKeyFix){
+    this.tabKeyFixOn = true;
+    document.addEventListener('keypress',
+                              function(event){
+                                self.tabKeyHandler(event, self);
+                              },
+                              true);
+    // Record in a custom DOM property:
+    document.body.AXSJAX_TABKEYFIX_ADDED = true;
+  }
+};
+
+
+/**
+ * Adds focus/blur handlers to the current active document.
+ * This should be invoked when AxsJAX is first initialized and
+ * when a new active document has been set.
+ */
+AxsJAX.prototype.addFocusBlurMonitors = function(){
+  var activeDoc = this.getActiveDocument();
+  var self = this;
+  //These return "true" so that any page actions based on
+  //focus and blur will still occur.
+  var focusHandler = function(evt){
+                       self.lastFocusedNode = evt.target;
+                       if ((evt.target.tagName == 'INPUT') ||
+                           (evt.target.tagName == 'SELECT') ||
+                           (evt.target.tagName == 'TEXTAREA')){
+                         self.inputFocused = true;
+                       }
+                       return true;
+                     };
+  activeDoc.addEventListener('focus', focusHandler, true);
+
+  var blurHandler = function(evt){
+                      self.removeAttributeOf(self.lastFocusedNode,
+                                             'aria-activedescendant');
+                      self.lastFocusedNode = null;
+                      if ((evt.target.tagName == 'INPUT') ||
+                          (evt.target.tagName == 'SELECT') ||
+                          (evt.target.tagName == 'TEXTAREA')){
+                        self.inputFocused = false;
+                      }
+                      return true;
+                    };
+  activeDoc.addEventListener('blur', blurHandler, true);
+};
+
+
+/**
+ * AxsJAX causes assistive technologies to speak by using the activedescendant
+ * property. Usually, the activedescendant should be set on the document.body
+ * object and this is the default if setActiveParent is never called. However,
+ * if the node to be spoken is inside an iframe, then it can
+ * not be referenced by its ID from the parent document. Thus activedescendant
+ * will not work. The solution is to use setActiveParent to set the active
+ * parent that AxsJAX is using to the child iframe's document.body.
+ * @param {Node} targetNode The HTML node to be used as the active parent.
+ */
+AxsJAX.prototype.setActiveParent = function(targetNode){
+  this.activeParent = targetNode;
+  var activeDoc = this.getActiveDocument();
+  if (this.tabKeyFixOn && !activeDoc.body.AXSJAX_TABKEYFIX_ADDED){
+    var self = this;
+    activeDoc.addEventListener('keypress',
+                               function(event){
+                                 self.tabKeyHandler(event, self);
+                               },
+                               true);
+    activeDoc.body.AXSJAX_TABKEYFIX_ADDED = true;
+  }
+  this.addFocusBlurMonitors();
+};
+
+
+/**
+ * Gets the document for the active parent.
+ * @return {Node} The document that is the ancestor for the active parent.
+ */
+AxsJAX.prototype.getActiveDocument = function(){
+  var activeDoc = this.activeParent;
+  while (activeDoc.nodeType != 9){ // 9 == DOCUMENT_NODE
+    activeDoc = activeDoc.parentNode;
+  }
+  return activeDoc;
+};
+
+
+/**
+ * Triggers a DOMNodeInserted event on an HTML element node.
+ * AT will respond by reading the content of the node.
+ * This should NOT be called on any node which already has
+ * live region markup as it will cause that markup to be overridden.
+ * Note that any further modifications to this node will
+ * also be spoken immediately.
+ * This should be used in cases where the nodes are already loaded,
+ * the user is navigating between the nodes, and it is desirable
+ * to mirror the visual indication that a node is the current node
+ * by speaking its contents as soon as as it becomes the current node.
+ * @param {Node} targetNode The HTML node to be spoken.
+ * @param {boolean} opt_noFocusChange  Specify if focus must move to targetNode.
+ */
+AxsJAX.prototype.speakNode = function(targetNode, opt_noFocusChange){
+  if (!targetNode.id){
+    this.assignId(targetNode);
+  }
+  if (opt_noFocusChange){
+    this.setAttributeOf(targetNode, 'live', 'rude');
+    this.setAttributeOf(targetNode, 'atomic', 'true');
+    var activeDoc = this.getActiveDocument();
+
+    // It would be simpler to retain the dummyNode once it has been created
+    // and change its textContent; however that fails to trigger the update
+    // events we need. So we create a new node, taking care to remove any
+    // previously created dummyNode.
+    var dummyNode = activeDoc.createElement('div');
+    dummyNode.textContent = ' ';
+    dummyNode.name = 'AxsJAX_dummyNode';
+    if (targetNode.lastChild &&
+        targetNode.lastChild.name &&
+        (targetNode.lastChild.name == dummyNode.name)){
+      targetNode.removeChild(targetNode.lastChild);
+    }
+    targetNode.appendChild(dummyNode);
+  } else {
+    var oldRole = this.getAttributeOf(targetNode, 'role');
+    this.setAttributeOf(targetNode, 'role', 'row');
+    var currentFocusedNode = this.lastFocusedNode;
+    // Use the body if there is no last focused node or
+    // if the last focused node is the entire document.
+    if ((!currentFocusedNode) || (currentFocusedNode.nodeType == 9)){
+      this.activeParent.tabIndex = -1;
+      currentFocusedNode = this.activeParent;
+    }
+    this.setAttributeOf(currentFocusedNode, 'activedescendant', null);
+    if (currentFocusedNode.focus) {
+      currentFocusedNode.focus();
+    }
+    this.setAttributeOf(currentFocusedNode, 'activedescendant', targetNode.id);
+    //Restore the original role of the targetNode
+    var self = this;
+    window.setTimeout(
+        function(){
+          if (oldRole){
+            self.setAttributeOf(targetNode, 'role', oldRole);
+          } else {
+            self.removeAttributeOf(targetNode, 'role');
+          }
+        }, 0);
+  }
+};
+
+
+/**
+ * Triggers a DOMNodeInserted event by inserting the text to be spoken
+ * into a hidden node. AT will respond by reading the content of this new node.
+ * This should be used in cases a message needs to be spoken
+ * to give an auditory cue for something that is shown visually.
+ * A good example would be when content has loaded or is changed from
+ * being hidden to being displayed; it is visually obvious, but there may not
+ * be any audio cue.
+ * @param {String} textString The text to be spoken.
+ */
+AxsJAX.prototype.speakText = function(textString){
+  //Use the main window's document directly here to ensure the AT
+  //receives and processes the live region event correctly.
+  //Since this is only a string, it is safe to do this without considering
+  //the active document of the AxsJAX object.
+  var doc = window.content.document;
+  var audioNode = doc.createElement('span');
+  audioNode.id = 'AxsJAX_audioNode';
+  this.setAttributeOf(audioNode, 'role', 'alert');
+  audioNode.style.position = 'absolute';
+  audioNode.style.left = '-1000em';
+
+  var oldAudioNode = doc.getElementById(audioNode.id);
+  if (oldAudioNode){
+    doc.body.removeChild(oldAudioNode);
+  }
+  audioNode.textContent = textString;
+  doc.body.appendChild(audioNode);
+};
+
+/**
+ * This will insert a transparent pixel at the end of the page, put
+ * the textString as the pixel's alt text, then use speakNode on the pixel.
+ * This is way  of generating spoken feedback   when
+ * ARIA live region support is unavailable.
+ * The advantage is that it is more compatible as few assistive technologies
+ * currently support live regions.
+ * The disadvantage (besides being a somewhat hacky way of doing things) is
+ * that it may cause problems with things which rely on focus/blur as this
+ * causes focus to be set somewhere on the page.
+ *
+ * If there is an anchorNode specified, this function will place the pixel
+ * before the anchorNode and set focus to the pixel.
+ *
+ * This enables AT like screenreaders  resume reading at a given position.
+ * If there is no anchorNode specified, this function will append the pixel
+ * as the last child to the body of the active document and call speakNode on
+ * the pixel.
+ *
+ * @param {String} textString The text to be spoken.
+ * @param {Node} opt_anchorNode The node to insert the pixel in front of.
+ *
+ */
+AxsJAX.prototype.speakTextViaNode = function(textString, opt_anchorNode){
+  var pixelId = 'AxsJAX_pixelAudioNode';
+  var pixelName = 'AxsJAX_pixelAudioNode';
+  var encodedClearPixel = 'data:image/gif;base64,R0lGODlhAQABAIAAANvf7wAAA' +
+                          'CH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==';
+  var activeDoc = this.getActiveDocument();
+  var pixelNode = null;
+  if (opt_anchorNode){
+    if (opt_anchorNode.previousSibling &&
+        opt_anchorNode.previousSibling.name == pixelName){
+      pixelNode = opt_anchorNode.previousSibling;
+    } else {
+      pixelNode = activeDoc.createElement('img');
+      pixelNode.name = pixelName;
+      pixelNode.setAttribute('tabindex', 0);
+      pixelNode.style.outline = 'none';
+      pixelNode.src = encodedClearPixel;
+      opt_anchorNode.parentNode.insertBefore(pixelNode, opt_anchorNode);
+      this.forceATSync(pixelNode);
+    }
+    pixelNode.setAttribute('alt', textString);
+    pixelNode.setAttribute('title', textString);
+    // Use a setTimeout here as Firefox attribute setting can be quirky
+    // (tabIndex is not always set soon enough).
+    window.setTimeout(function(){pixelNode.blur();pixelNode.focus();}, 0);
+  } else {
+    pixelNode = activeDoc.getElementById(pixelId);
+    if (pixelNode && (pixelNode.alt == textString)){
+      textString = textString + ' ';
+    }
+    if (!pixelNode){
+      pixelNode = activeDoc.createElement('img');
+      pixelNode.id = pixelId;
+      pixelNode.src = encodedClearPixel;
+      activeDoc.body.appendChild(pixelNode);
+    }
+    pixelNode.setAttribute('alt', textString);
+    pixelNode.setAttribute('title', textString);
+
+    this.speakNode(pixelNode);
+  }
+};
+
+/**
+ * Puts alt='' for all images that are children of the target node that
+ * have no alt text defined. This is a bandage fix to prevent screen readers
+ * from rambling on by reading the URL string of the image.
+ * A real fix for this problem should be to either use appropriate alt text for
+ * the images or explicitly put alt='' for images that have no semantic value.
+ * @param {Node} targetNode The target node of this operation.
+ */
+AxsJAX.prototype.putNullForNoAltImages = function(targetNode){
+  var images = targetNode.getElementsByTagName('img');
+  for (var i = 0, image; image = images[i]; i++) {
+    if (!image.alt){
+      image.alt = '';
+    }
+  }
+};
+
+
+/**
+ * Dispatches a left click event on the element that is the targetNode.
+ * Clicks go in the sequence of mousedown, mouseup, and click.
+ * @param {Node} targetNode The target node of this operation.
+ * @param {boolean} shiftKey Specifies if shift is held down.
+ */
+AxsJAX.prototype.clickElem = function(targetNode, shiftKey){
+  var activeDoc = this.getActiveDocument();
+  //Send a mousedown
+  var evt = activeDoc.createEvent('MouseEvents');
+  evt.initMouseEvent('mousedown', true, true, activeDoc.defaultView,
+                     1, 0, 0, 0, 0, false, false, shiftKey, false, 0, null);
+  //Use a try block here so that if the AJAX fails and it is a link,
+  //it can still fall through and retry by setting the document.location.
+  try{
+    targetNode.dispatchEvent(evt);
+  } catch (e){}
+  //Send a mouse up
+  evt = activeDoc.createEvent('MouseEvents');
+  evt.initMouseEvent('mouseup', true, true, activeDoc.defaultView,
+                     1, 0, 0, 0, 0, false, false, shiftKey, false, 0, null);
+  //Use a try block here so that if the AJAX fails and it is a link,
+  //it can still fall through and retry by setting the document.location.
+  try{
+    targetNode.dispatchEvent(evt);
+  } catch (e){}
+  //Send a click
+  evt = activeDoc.createEvent('MouseEvents');
+  evt.initMouseEvent('click', true, true, activeDoc.defaultView,
+                     1, 0, 0, 0, 0, false, false, shiftKey, false, 0, null);
+  //Use a try block here so that if the AJAX fails and it is a link,
+  //it can still fall through and retry by setting the document.location.
+  try{
+    targetNode.dispatchEvent(evt);
+  } catch (e){}
+  //Clicking on a link does not cause traversal because of script
+  //privilege limitations. The traversal has to be done by setting
+  //document.location.
+  var href = targetNode.getAttribute('href');
+  if ((targetNode.tagName == 'A') &&
+       href &&
+      (href != '#')){
+    if (shiftKey){
+      window.open(targetNode.href);
+    } else {
+      document.location = targetNode.href;
+    }
+  }
+
+};
+
+/**
+ * Dispatches a key event on the element that is the targetNode.
+ * @param {Node} targetNode The target node of this operation.
+ * @param {String} theKey The key to use for this operation.
+ *                        This can be any single printable character or ENTER.
+ * @param {Boolean} holdCtrl Whether or not the Ctrl key should be held for
+ *                        this operation.
+ * @param {Boolean} holdAlt Whether or not the Alt key should be held for
+ *                       this operation.
+ * @param {Boolean} holdShift Whether or not the Shift key should be held
+ *                         for this operation.
+ */
+AxsJAX.prototype.sendKey = function(targetNode, theKey,
+                                    holdCtrl, holdAlt, holdShift){
+  var keyCode = 0;
+  var charCode = 0;
+  if (theKey == 'ENTER'){
+    keyCode = 13;
+  }
+  else if (theKey.length == 1){
+    charCode = theKey.charCodeAt(0);
+  }
+  var activeDoc = this.getActiveDocument();
+  var evt = activeDoc.createEvent('KeyboardEvent');
+  evt.initKeyEvent('keypress', true, true, null, holdCtrl,
+                   holdAlt, holdShift, false, keyCode, charCode);
+  targetNode.dispatchEvent(evt);
+};
+
+/**
+ * Assigns an ID to the targetNode.
+ * If targetNode already has an ID, this is a no-op.
+ * Always returns the ID of targetNode.
+ * If targetNode is null, we return ''
+ * @param {Node} targetNode The target node of this operation.
+ * @param {String} opt_prefixString
+ * Prefix to help ensure the uniqueness of the ID.
+ * This is optional; if null, it will use "AxsJAX_ID_".
+ * @return {String} The ID that the targetNode now has.
+ */
+AxsJAX.prototype.assignId = function(targetNode, opt_prefixString){
+  if (!targetNode){
+    return '';
+  }
+  if (targetNode.id){
+    return targetNode.id;
+  }
+  var prefix = opt_prefixString || 'AxsJAX_ID_';
+  targetNode.id = prefix + this.ID_NUM_++;
+  return targetNode.id;
+};
+
+/**
+ * Marks the current position by remembering what the last focusable node was.
+ * The focusable node will be the targetNode if it has a focus() function, or
+ * if it does not, the first descendent node that it has which does.
+ * If the targetNode itself and all of its descendents have no focus() function,
+ * this function will complete with failure.
+ * If the AxsJAX.tabKeyHandler is used, then it will put the focus on this node.
+ * @param {Node} targetNode The target node of this operation.
+ * @return {Boolean} True if the position was marked successfully.
+ *                   False if failed.
+ */
+AxsJAX.prototype.markPosition = function(targetNode){
+  if (!targetNode){
+    return false;
+  }
+  if ((targetNode.tagName == 'A') || (targetNode.tagName == 'INPUT')){
+    this.tabbingStartPosNode = targetNode;
+    return true;
+  }
+  var allDescendants = targetNode.getElementsByTagName('*');
+  for (var i = 0, currentNode; currentNode = allDescendants[i]; i++){
+    if ((currentNode.tagName == 'A') ||
+        (currentNode.tagName == 'INPUT') ||
+        (currentNode.hasAttribute('tabindex') &&
+         (currentNode.tabIndex != -1))){
+      this.tabbingStartPosNode = currentNode;
+      return true;
+    }
+  }
+  return false;
+};
+
+/**
+ * Restores the focus .
+ * Usage:
+ *   var myAxsJAXObj = new AxsJAX();
+ *   document.addEventListener('keypress',
+ *       function(event){
+ *         myAxsJAXObj.tabKeyHandler(event,myAxsJAXObj);
+ *       },
+ *       true);
+ * @param {Event} evt The event.
+ * @param {Object} selfRef The AxsJAX object. A self reference is needed here
+ *                         since this in an event handler does NOT refer to the
+ *                         AxsJAX object.
+ * @return {Boolean} Always returns true to pass the tab key along.
+ */
+AxsJAX.prototype.tabKeyHandler = function(evt, selfRef){
+  if (!selfRef.tabKeyFixOn){
+    return true;
+  }
+  if ((evt.keyCode == 9) && (selfRef.tabbingStartPosNode)){
+    selfRef.tabbingStartPosNode.focus();
+    selfRef.tabbingStartPosNode = null;
+  }
+  return true;
+};
+
+/**
+ * Scrolls to the targetNode and speaks it.
+ * This will automatically mark the position; this should be used if you are
+ * navigating through content.
+ * @param {Node} targetNode The HTML node to be spoken.
+ */
+AxsJAX.prototype.goTo = function(targetNode){
+  this.speakNode(targetNode);
+  targetNode.scrollIntoView(true);
+  this.markPosition(targetNode);
+};
+
+
+/**
+ * Sets the attribute of the targetNode to the value.
+ * Use this rather than a direct set attribute to abstract away ARIA
+ * naming changes.
+ * @param {Node} targetNode The HTML node to have the attribute set on.
+ * @param {string} attribute The attribute to set.
+ * @param {string?} value The value the attribute should be set to.
+ */
+AxsJAX.prototype.setAttributeOf = function(targetNode, attribute, value){
+  if (!targetNode){
+    return;
+  }
+  //Add the aria- to attributes
+  attribute = attribute.toLowerCase();
+  switch (attribute){
+    case 'live':
+      attribute = 'aria-live';
+      break;
+    case 'activedescendant':
+      attribute = 'aria-activedescendant';
+      break;
+    case 'atomic':
+      attribute = 'aria-atomic';
+      break;
+    default:
+      break;
+  }
+  targetNode.setAttribute(attribute, value);
+};
+
+/**
+ * Gets the attribute of the targetNode.
+ * Use this rather than a direct get attribute to abstract away ARIA
+ * naming changes.
+ * @param {Node} targetNode The HTML node to get the attribute of.
+ * @param {string} attribute The attribute to get the value of.
+ * @return {string} The value of the attribute of the targetNode.
+ */
+AxsJAX.prototype.getAttributeOf = function(targetNode, attribute){
+  return targetNode.getAttribute(attribute);
+};
+
+/**
+ * Removes the attribute of the targetNode.
+ * Use this rather than a direct remove attribute to abstract away ARIA
+ * naming changes.
+ * @param {Node} targetNode The HTML node to remove the attribute from.
+ * @param {string} attribute The attribute to be removed.
+ */
+AxsJAX.prototype.removeAttributeOf = function(targetNode, attribute){
+  if (targetNode && targetNode.removeAttribute){
+    targetNode.removeAttribute(attribute);
+  }
+};
+
+/**
+ * Sets the location of the active document. This will force
+ * assistive technologies that use a browse vs forms mode system
+ * to be synced to the targetNode.
+ * @param {Node} targetNode The HTML node to force the AT to sync to.
+ */
+AxsJAX.prototype.forceATSync = function(targetNode){
+  var id = this.assignId(targetNode);
+  var activeDoc = this.getActiveDocument();
+  var loc = activeDoc.baseURI;
+  var indexOfHash = loc.indexOf('#');
+  if (indexOfHash != -1){
+    loc = loc.substring(0, indexOfHash);
+  }
+  activeDoc.location = loc + '#' + id;
+};
+
+/**
+ * Given an XPath expression and rootNode, it returns an array of children nodes
+ * that match. The code for this function was taken from Mihai Parparita's GMail
+ * Macros Greasemonkey Script.
+ * http://gmail-greasemonkey.googlecode.com/svn/trunk/scripts/gmail-new-macros.user.js
+ * @param {string} expression The XPath expression to evaluate.
+ * @param {Node} rootNode The HTML node to start evaluating the XPath from.
+ * @return {Array} The array of children nodes that match.
+ */
+AxsJAX.prototype.evalXPath = function(expression, rootNode) {
+  try {
+    var xpathIterator = rootNode.ownerDocument.evaluate(
+      expression,
+      rootNode,
+      null, // no namespace resolver
+      XPathResult.ORDERED_NODE_ITERATOR_TYPE,
+      null); // no existing results
+  } catch (err) {
+    return [];
+  }
+  var results = [];
+  // Convert result to JS array
+  for (var xpathNode = xpathIterator.iterateNext();
+       xpathNode;
+       xpathNode = xpathIterator.iterateNext()) {
+    results.push(xpathNode);
+  }
+  return results;
+};
+
+
+
+
+
+//javascript/axsjax/common/AxsNav.js
+// Copyright 2008 Google Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+/**
+ * @fileoverview AxsNav - JavaScript library for enhancing the navigation
+ * of content on web pages.
+ * @author clchen@google.com (Charles L. Chen)
+ */
+
+/**
+ * Class for managing navigation of website content
+ * @param {Object} axsJAXObj  An instance of an AxsJAX object.
+ * @constructor
+ */
+var AxsNav = function(axsJAXObj){
+  this.nextListKeys = '';
+  this.prevListKeys = '';
+  this.navArray = new Array();
+  this.navListIdx = 0;
+  this.navItemIdxs = new Array();
+  this.lastItem = null;
+  this.targetsArray = new Array();
+  this.topCharCodeMap = new Object();
+  this.topKeyCodeMap = new Object();
+  this.charCodeMaps = new Array();
+  this.keyCodeMaps = new Array();
+  this.axs_ = axsJAXObj;
+  this.lens_ = null;
+  this.pk_ = null;
+  this.snd_ = null;
+  this.LIST_SND = 'list';
+  this.ITEM_SND = 'item';
+  this.WRAP_SND = 'wrap';
+  this.keyHandler = null;
+};
+
+/**
+ * Object that contains all string literals used by AxsNav.
+ * @type {Object}
+ */
+AxsNav.str = {
+  NEXT_LIST : 'next list',
+  PREV_LIST : 'previous list',
+  GO_FORWARD : 'go forward',
+  GO_BACKWARDS : 'go backwards',
+  CYCLE_NEXT : 'cycle next',
+  CYCLE_PREV : 'cycle previous',
+  SELECT_ACTION : 'Select available action',
+  NO_AVAILABLE_ACTION : 'No available actions',
+  PGUP : 'Page up',
+  PGDOWN : 'Page down',
+  ENTER : 'Enter',
+  ESC : 'Escape',
+  DEL : 'Delete',
+  UP : 'Up',
+  DOWN : 'Down',
+  LEFT : 'Left',
+  RIGHT : 'Right'
+};
+
+
+/**
+ * Set the PowerKey object used for displaying the valid actions in a
+ * given context. The PowerKey auto completion input element is invoked
+ * via a shortcutKey.
+ * @param {Object} powerKeyObj A PowerKey object.
+ * @param {string} shortcutKey A key for invoking PowerKey.
+ */
+AxsNav.prototype.setPowerKey = function(powerKeyObj, shortcutKey) {
+  if (shortcutKey) {
+    this.pk_ = powerKeyObj;
+    //Initialize the PowerKey object if it has not been initialized yet
+    if (this.pk_.cmpTextElement === null) {
+      this.defaultInitPowerKeyObj();
+    }
+    var self = this;
+    var keyArray = new Array(shortcutKey);
+    this.assignKeysToMethod(keyArray,
+                            this.topCharCodeMap,
+                            this.topKeyCodeMap,
+                            function() {
+                              self.showAvailableActionsSelector();
+                            });
+  }
+};
+
+/**
+ * Returns whether the specified navigation list is valid.
+ * If the navigation list is dynamic and appears to not be valid,
+ * this function will try to reload it and check whether or
+ * not it becomes valid.
+ * @param {Object} navList The specified list object to check.
+ * @return {boolean} Whether the specified list object is valid.
+ */
+AxsNav.prototype.validateList = function(navList) {
+  var valid = true;
+  //Reload dynamic lists
+  if ((navList.type == 'dynamic') && (navList.items.length === 0)){
+    //Clear the lens to avoid its contents interfering with the xpath
+    if (this.lens_ !== null){
+      this.lens_.view(null);
+    }
+    navList.items = this.makeItemsArray(navList.origListObj);
+    navList.targets = this.makeTargetsArray(navList.origListObj)
+    // Reset the nav index of the list being validated.
+    // Most of the time, the list being validated is the same
+    // as the current list.
+    if (this.navArray[this.navListIdx] === navList){
+      this.navItemIdxs[this.navListIdx] = -1;
+    } else {
+      for (var i = 0, tempList; tempList = this.navArray[i]; i++) {
+        if (tempList === navList){
+          this.navItemIdxs[i] = -1;
+          break;
+        }
+      }
+    }
+  }
+  if ((navList.items.length === 0) && (navList.entryTarget === null)){
+    valid = false;
+  }
+  return valid;
+};
+
+/**
+ * Performs the specified action with a list is switched into.
+ */
+AxsNav.prototype.doListEntryActions = function() {
+  var currentList = this.currentList();
+  var target = currentList.entryTarget;
+  var func = null;
+  if (target !== null){
+    this.actOnTarget(target);
+    func = this.getCallbackFunction(target.action);
+  }
+  if (func === null){
+    this.announceCurrentList();
+    if (this.snd_ !== null){
+      this.snd_.play(this.LIST_SND);
+    }
+  }
+};
+
+/**
+ * Goes to the next navigation list and returns it
+ * @return {Object?} The next navigation list.
+ */
+AxsNav.prototype.nextList = function(){
+  if (this.navArray.length < 1){
+    return null;
+  }
+  //Find the next list with items
+  for (var i = 0, list; list = this.navArray[i]; i++) {
+    this.navListIdx++;
+    if (this.navListIdx >= this.navArray.length){
+      this.navListIdx = 0;
+    }
+    if (this.validateList(this.navArray[this.navListIdx])) {
+      break;
+    }
+  }
+  return this.currentList();
+};
+
+/**
+ * Goes to the previous navigation list and returns it
+ * @return {Object?} The previous navigation list.
+ */
+AxsNav.prototype.prevList = function(){
+  if (this.navArray.length < 1){
+    return null;
+  }
+  //Find the next list with item
+  for (var i = 0, list; list = this.navArray[i]; i++) {
+    this.navListIdx--;
+    if (this.navListIdx < 0){
+      this.navListIdx = this.navArray.length - 1;
+    }
+    if (this.validateList(this.navArray[this.navListIdx])) {
+      break;
+    }
+  }
+  return this.currentList();
+};
+
+/**
+ * Returns the current navigation list.
+ * @return {Object} The current navigation list.
+ */
+AxsNav.prototype.currentList = function(){
+  return this.navArray[this.navListIdx];
+};
+
+/**
+ * Speaks the title of the current list
+ */
+AxsNav.prototype.announceCurrentList = function(){
+  this.axs_.speakTextViaNode(this.currentList().title);
+};
+
+/**
+ * Goes to the next item and returns it; if there is no next item, this will
+ * wrap to the first item in the list.
+ * @return {Object?} The next item. Use item.elem to get at the DOM node.
+ */
+AxsNav.prototype.nextItem = function(){
+  if (this.navArray.length < 1){
+    return null;
+  }
+  var currentList = this.navArray[this.navListIdx];
+  var items = currentList.items;
+  if (items.length < 1){
+    return null;
+  }
+  if (this.lastItem){
+    var syncedIndex = this.lastItem.elem.AxsNavInfo[this.navListIdx];
+    if (typeof(syncedIndex) != 'undefined'){
+      this.navItemIdxs[this.navListIdx] = syncedIndex;
+    }
+  }
+  this.navItemIdxs[this.navListIdx]++;
+  var looped = false;
+  if (this.navItemIdxs[this.navListIdx] >= items.length){
+    this.navItemIdxs[this.navListIdx] = 0;
+    looped = true;
+  }
+  var itemIndex = this.navItemIdxs[this.navListIdx];
+  // Perform a validity check to determine if the xpaths should be re-evaluated
+  if (items[itemIndex].elem.parentNode === null){
+    //Clear the lens to avoid its contents interfering with the xpath
+    if (this.lens_ !== null){
+      this.lens_.view(null);
+    }
+    currentList.items = this.makeItemsArray(currentList.origListObj);
+    this.navItemIdxs[this.navListIdx] = 0;
+    itemIndex = this.navItemIdxs[this.navListIdx];
+  }
+  this.lastItem = items[itemIndex];
+  if (this.snd_ !== null){
+    if (looped){
+      this.snd_.play(this.WRAP_SND);
+    } else {
+      this.snd_.play(this.ITEM_SND);
+    }
+  }
+  return this.lastItem;
+};
+
+/**
+ * Goes to the next item and returns it; if this causes wrapping and
+ * there is a tailTarget on the list, then this will act on that target
+ * and return null instead.
+ * @return {Object?} The next item. Use item.elem to get at the DOM node.
+ */
+AxsNav.prototype.fwdItem = function(){
+  var list = this.navArray[this.navListIdx];
+  var index = this.navItemIdxs[this.navListIdx];
+  if ((list.tailTarget !== null) && (index + 1 >= list.items.length)){
+    this.actOnTarget(list.tailTarget);
+    this.navItemIdxs[this.navListIdx] = 0;
+    return null;
+  }
+  var item = this.nextItem();
+  return item;
+};
+
+/**
+ * Goes to the previous item and returns it; if there is no previous item, this
+ * will wrap to the last item in the list.
+ * @return {Object?} The previous item. Use item.elem to get at the DOM node.
+ */
+AxsNav.prototype.prevItem = function(){
+  if (this.navArray.length < 1){
+    return null;
+  }
+  var currentList = this.navArray[this.navListIdx];
+  var items = currentList.items;
+  if (items.length < 1){
+    return null;
+  }
+  if (this.lastItem){
+    var syncedIndex = this.lastItem.elem.AxsNavInfo[this.navListIdx];
+    if (typeof(syncedIndex) != 'undefined'){
+      this.navItemIdxs[this.navListIdx] = syncedIndex;
+    }
+  }
+  this.navItemIdxs[this.navListIdx]--;
+  var looped = false;
+  if (this.navItemIdxs[this.navListIdx] < 0){
+    this.navItemIdxs[this.navListIdx] = items.length - 1;
+    looped = true;
+  }
+  var itemIndex = this.navItemIdxs[this.navListIdx];
+  // Perform a validity check to determine if the xpaths should be re-evaluated
+  if (items[itemIndex].elem.parentNode === null){
+    //Clear the lens to avoid its contents interfering with the xpath
+    if (this.lens_ !== null){
+      this.lens_.view(null);
+    }
+    currentList.items = this.makeItemsArray(currentList.origListObj);
+    this.navItemIdxs[this.navListIdx] = currentList.items.length;
+    itemIndex = this.navItemIdxs[this.navListIdx];
+  }
+  this.lastItem = items[itemIndex];
+  if (this.snd_ !== null){
+    if (looped){
+     this.snd_.play(this.WRAP_SND);
+    } else {
+     this.snd_.play(this.ITEM_SND);
+    }
+  }
+  return this.lastItem;
+};
+
+/**
+ * Goes to the previous item and returns it; if this causes wrapping and
+ * there is a headTarget on the list, then this will act on that target
+ * and return null instead.
+ * @return {Object?} The previous item. Use item.elem to get at the DOM node.
+ */
+AxsNav.prototype.backItem = function(){
+  var list = this.navArray[this.navListIdx];
+  var index = this.navItemIdxs[this.navListIdx];
+  if ((list.headTarget !== null) && (index <= 0)){
+    this.actOnTarget(list.headTarget);
+    this.navItemIdxs[this.navListIdx] = list.items.length - 1;
+    return null;
+  }
+  var item = this.prevItem();
+  return item;
+};
+
+/**
+ * Returns the current item.
+ * @return {Object?} The current item. Use item.elem to get at the DOM node.
+ */
+AxsNav.prototype.currentItem = function(){
+  if (this.navArray.length < 1){
+    return null;
+  }
+  if (this.lastItem){
+    var syncedIndex = this.lastItem.elem.AxsNavInfo[this.navListIdx];
+    if (typeof(syncedIndex) != 'undefined'){
+      this.navItemIdxs[this.navListIdx] = syncedIndex;
+    }
+  }
+  var currentList = this.navArray[this.navListIdx];
+  var items = currentList.items;
+  var itemIndex = this.navItemIdxs[this.navListIdx];
+  this.lastItem = items[itemIndex];
+  return this.lastItem;
+};
+
+/**
+ * Returns the callback function if the action is a valid callback;
+ * returns null otherwise.
+ * @param {String?} actionString The action string for an item or target.
+ * @return {Function?} The callback function if there is a valid one.
+ */
+AxsNav.prototype.getCallbackFunction = function(actionString){
+  var callbackFunc = null;
+  if ((actionString !== null) &&
+      actionString.indexOf &&
+      (actionString.indexOf('CALL:') === 0) &&
+      (actionString.indexOf('(') === -1)){
+    try{
+      callbackFunc = /** @type {Function} */ (eval(actionString.substring(5)));
+    } catch (e) { }
+  }
+  return callbackFunc;
+};
+
+/**
+ * This function will act on the item based on what action was specified
+ * in the Content Navigation Listing.
+ *
+ * @param {Object?} item The item to act on.
+ *      Use item.elem to get at the DOM node.
+ */
+AxsNav.prototype.actOnItem = function(item){
+  if (item !== null){
+    var self = this;
+    var doAction = function(){
+          var func = self.getCallbackFunction(item.action);
+          if (func){
+            func(item);
+          } else {
+            if (self.lens_ !== null){
+              self.lens_.view(item.elem);
+            }
+            self.axs_.goTo(item.elem);
+          }
+        };
+        // If there is a node that was focused, unfocus it so that
+        // any keys the user presses after using the nav system will not
+        // be sent to the wrong place.
+        if (this.axs_.lastFocusedNode && this.axs_.lastFocusedNode.blur){
+          var oldNode = this.axs_.lastFocusedNode;
+          // Set the lastFocusedNode to null to prevent AxsJAX's blur handler
+          // from kicking in as that blur handler will conflict with the
+          // temporary blur handler which results in screen readers not
+          // speaking properly due to how the eventing system works.
+          // Because we are not allowing the regular blur handler to work,
+          // we need to make sure that we do the same work of cleaning up.
+          this.axs_.lastFocusedNode = null;
+          if (oldNode.removeAttribute){
+            this.axs_.removeAttributeOf(oldNode, 'aria-activedescendant');
+          }
+          // The action needs to be done inside a temporary blur handler
+          // because otherwise, there is a timing issue of when the events
+          // get sent and screen readers won't speak.
+          var tempBlurHandler = function(evt){
+            evt.target.removeEventListener('blur', tempBlurHandler, true);
+            doAction();
+          };
+          oldNode.addEventListener('blur', tempBlurHandler, true);
+          oldNode.blur();
+        } else {
+          doAction();
+        }
+  } else {
+    var currentList = this.navArray[this.navListIdx];
+    if (currentList.type == 'dynamic'){
+      this.axs_.speakTextViaNode(currentList.onEmpty);
+    }
+  }
+};
+
+/**
+ * This function creates the maps keypresses to a method on a given
+ * char and key map.
+ *
+ * @param {Array} keyArray  Array of keys that will be associated with the
+ *                          method.
+ *
+ * @param {Object} charMap  Dictionary that maps character codes to methods.
+ *
+ * @param {Object} keyMap  Dictionary that maps key codes to methods.
+ *
+ * @param {Function} method  Method to be be associated with the array of keys.
+ */
+AxsNav.prototype.assignKeysToMethod = function(keyArray, 
+                                               charMap, 
+                                               keyMap, 
+                                               method){
+  for (var i = 0, key; key = keyArray[i]; i++){
+    if (key == 'LEFT'){
+      keyMap[37] = method;
+    } else if (key == 'UP'){
+      keyMap[38] = method;
+    } else if (key == 'RIGHT'){
+      keyMap[39] = method;
+    } else if (key == 'DOWN'){
+      keyMap[40] = method;
+    } else if (key == 'PGUP'){
+      keyMap[33] = method;
+    } else if (key == 'PGDOWN'){
+      keyMap[34] = method;
+    } else if (key == 'ENTER'){
+      keyMap[13] = method;
+    } else if (key == 'ESC'){
+      keyMap[27] = method;
+    } else if (key == 'DEL'){
+      keyMap[46] = method;
+    } else {
+      charMap[key.charCodeAt(0)] = method;
+    }
+  }
+};
+
+/**
+ * This function creates the mapping between keypresses and navigation behavior
+ * for item keys. This mapping is only active when the user is in the
+ * corresponding navList.
+ *
+ * @param {string} keyStr  String that indicates the keys to be used.
+ *
+ * @param {number} navListIdx  Index of the list that these keypresses are
+ *                             associated with.
+ *
+ * @param {string}  navTaskStr  "next","prev","fwd","back".
+ */
+AxsNav.prototype.assignItemKeys = function(keyStr, navListIdx, navTaskStr){
+  var keys = new Array();
+  if (keyStr === ''){
+    return;
+  }
+  keys = keyStr.split(' ');
+  var self = this;
+  if (navTaskStr == 'prev'){
+    this.assignKeysToMethod(keys,
+                            this.charCodeMaps[navListIdx],
+                            this.keyCodeMaps[navListIdx],
+                            function(){
+                              self.actOnItem(self.prevItem());
+                            });
+  } else if (navTaskStr == 'next') {
+    this.assignKeysToMethod(keys,
+                            this.charCodeMaps[navListIdx],
+                            this.keyCodeMaps[navListIdx],
+                            function(){
+                              self.actOnItem(self.nextItem());
+                            });
+  } else if (navTaskStr == 'back') {
+    this.assignKeysToMethod(keys,
+                            this.charCodeMaps[navListIdx],
+                            this.keyCodeMaps[navListIdx],
+                            function(){
+                              self.actOnItem(self.backItem());
+                            });
+  } else {
+    this.assignKeysToMethod(keys,
+                            this.charCodeMaps[navListIdx],
+                            this.keyCodeMaps[navListIdx],
+                            function(){
+                              self.actOnItem(self.fwdItem());
+                            });
+  }
+};
+
+/**
+ * This function creates the mapping between keypresses and navigation behavior
+ * for hotkeys. This mapping is active all the time, regardless of which navList
+ * the user is in.
+ *
+ * @param {string} keyStr  String that indicates the keys to be used.
+ *                         Pressing these keys will cause the user to jump to
+ *                         the list that the key is associated with and read the
+ *                         next item there.
+ *
+ * @param {number} navListIdx  Index of the list that these keypresses are
+ *                             associated with.
+ *
+ * @param {string} emptyMsg  String to speak to the user if the list is
+ *                           empty.
+ */
+AxsNav.prototype.assignHotKeys = function(keyStr, navListIdx, emptyMsg){
+  var keys = new Array();
+  if (keyStr === ''){
+    return;
+  }
+  keys = keyStr.split(' ');
+  var self = this;
+  this.assignKeysToMethod(keys,
+                          this.topCharCodeMap,
+                          this.topKeyCodeMap,
+                          function(){
+                            if (!self.validateList(self.navArray[navListIdx])){
+                              self.axs_.speakTextViaNode(emptyMsg);
+                              return;
+                            }
+                            self.navListIdx = navListIdx;
+                            self.actOnItem(self.nextItem());
+                          });
+};
+
+/**
+ * For all keys that map to lists with no items, those keys should
+ * speak some message to let the user know that the function was called
+ * but was unsuccessful because there is no content.
+ *
+ * @param {string} keyStr  String that indicates the keys to be used.
+ *
+ * @param {string} emptyMsg  The message that should be spoken when the user
+ *                           presses the key(s) to let them know that there
+ *                           is no content.
+ */
+AxsNav.prototype.assignEmptyMsgKeys = function(keyStr, emptyMsg){
+  var keys = new Array();
+  if (keyStr === ''){
+    return;
+  }
+  keys = keyStr.split(' ');
+  var self = this;
+  this.assignKeysToMethod(keys,
+                          this.topCharCodeMap,
+                          this.topKeyCodeMap,
+                          function(){
+                            self.axs_.speakTextViaNode(emptyMsg);
+                          });
+
+};
+
+
+/**
+ * This function creates the mapping between keypresses and target nodes.
+ * This mapping is active all the time, regardless of which navList
+ * the user is in.
+ *
+ * @param {Object} target  Target object created from the <target> element.
+ * @param {Object} charMap  Dictionary that maps character codes to methods.
+ * @param {Object} keyMap  Dictionary that maps key codes to methods.
+ */
+AxsNav.prototype.assignTargetKeys = function(target, charMap, keyMap){
+  var keys = new Array();
+  if (target.hotkey === ''){
+    return;
+  }
+  keys = target.hotkey.split(' ');
+  var self = this;
+  this.assignKeysToMethod(keys,
+                          charMap,
+                          keyMap,
+                          function(){
+                            self.actOnTarget(target);
+                          });
+};
+
+/**
+ * This function will act on the target specified.
+ *
+ * @param {Object?} target The target to act on.
+ */
+AxsNav.prototype.actOnTarget = function(target){
+  var xpath = target.xpath;
+  var rootNode = this.axs_.getActiveDocument().documentElement;
+  if (xpath.indexOf('.') === 0){
+    rootNode = this.currentItem().elem;
+  }
+  var elems = this.axs_.evalXPath(xpath, rootNode);
+  if (elems.length < 1){
+    this.axs_.speakTextViaNode(target.onEmpty);
+  } else {
+      var func = this.getCallbackFunction(target.action);
+      if (func){
+        var item = new Object();
+        item.action = target.action;
+        item.elem = elems[0];
+        func(item);
+    } else {
+      this.axs_.clickElem(elems[0], false);
+      elems[0].scrollIntoView(true);
+    }
+    this.axs_.markPosition(elems[0]);
+  }
+};
+
+
+/**
+ * Returns a function mapped to a key.
+ * @param {number} keyCode A key code.
+ * @param {number} charCode A char code.
+ * @return {Function?} A function mapped to the keyCode or charCode,
+ * undefined if the mapping does not exist.
+ */
+AxsNav.prototype.getFunctionForKey = function(keyCode, charCode) {
+  var command = null;
+  var idx = this.navListIdx;
+  if (idx < this.keyCodeMaps.length) {
+    command = this.keyCodeMaps[idx][keyCode] ||
+              this.charCodeMaps[idx][charCode] ||
+              null;
+  }
+  if (command === null) {
+    command = this.topKeyCodeMap[keyCode] ||
+              this.topCharCodeMap[charCode];
+  }
+  return command;
+};
+
+
+/**
+ * Builds up the navigation system of lists of items.
+ * This system uses the idea of multiple cursors and the visitor pattern.
+ *
+ * @param {string} cnrString  An XML string that contains the information needed
+ *                            to build up the content navigation rule.
+ *
+ * @notypecheck {Function?} opt_customNavMethod.
+ *
+ * @param {Function?} opt_customNavMethod A custom navigation
+ *                             method provided by the caller. This navigation
+ *                             method will be given the DOM created from the
+ *                             cnrString, the navigation array of lists of
+ *                             items, an array of all the lists which had zero
+ *                             items, and an an array of targets. If this is
+ *                             null, the default AxsJAX nav handler will be
+ *                             used.
+ */
+AxsNav.prototype.navInit = function(cnrString, opt_customNavMethod){
+  var cnrJson = new Object();
+  cnrJson.lists = new Array();
+
+  var parser = new DOMParser();
+  var cnrDOM = parser.parseFromString(cnrString, 'text/xml');
+
+  //Build up the navigation lists
+  var lists = cnrDOM.getElementsByTagName('list');
+
+  var i;
+  var listNode;
+  for (i = 0, listNode; listNode = lists[i]; i++){
+    var navList = new Object();
+    navList.title = listNode.getAttribute('title');
+    navList.hotkey = listNode.getAttribute('hotkey');
+    navList.next = listNode.getAttribute('next');
+    navList.prev = listNode.getAttribute('prev');
+    navList.fwd = listNode.getAttribute('fwd');
+    navList.back = listNode.getAttribute('back');
+    navList.onEmpty = listNode.getAttribute('onEmpty');
+    navList.type = listNode.getAttribute('type');
+
+    var j;
+    var entry;
+    var k;
+    var attributes;
+    var length;
+    //Parse items to JSON
+    navList.items = new Array();
+    var cnrItems = listNode.getElementsByTagName('item');
+    for (j = 0; entry = cnrItems[j]; j++){
+      var item = new Object();
+      item.xpath = entry.textContent;
+      if (entry.attributes instanceof NamedNodeMap){
+        attributes = entry.attributes;
+        length = attributes.length;
+        for (k = 0; k < length; k++){
+          var attrib = attributes.item(k);
+          item[attrib.nodeName] = attrib.value;
+        }
+      }
+      navList.items.push(item);
+    }
+    //Parse targets to JSON
+    navList.targets = new Array();
+    var cnrTargets = listNode.getElementsByTagName('target');
+    for (j = 0; entry = cnrTargets[j]; j++){
+      var target = new Object();
+      target.xpath = entry.textContent;
+      if (entry.attributes instanceof NamedNodeMap){
+        attributes = entry.attributes;
+        length = attributes.length;
+        for (k = 0; k < length; k++){
+          var attrib = attributes.item(k);
+          target[attrib.nodeName] = attrib.value;
+        }
+      }
+      navList.targets.push(target);
+    }
+    cnrJson.lists.push(navList);
+  }
+
+  //Build up the targets
+  cnrJson.targets = new Array();
+  var currentNode;
+  var cnrNode = cnrDOM.firstChild;
+  for (i = 0, currentNode; currentNode = cnrNode.childNodes[i]; i++){
+    if (currentNode.tagName == 'target'){
+      var target = new Object();
+      target.xpath = currentNode.textContent;
+      if (currentNode.attributes instanceof NamedNodeMap){
+        attributes = currentNode.attributes;
+        length = attributes.length;
+        for (k = 0; k < length; k++){
+          var attrib = attributes.item(k);
+          target[attrib.nodeName] = attrib.value;
+        }
+      }
+      cnrJson.targets.push(target);
+    }
+  }
+
+  //Get the next/prev list keys
+  cnrJson.next = cnrNode.getAttribute('next');
+  cnrJson.prev = cnrNode.getAttribute('prev');
+
+  if ((opt_customNavMethod === null) ||
+      (typeof(opt_customNavMethod) == 'undefined')){
+    this.navInitJson(cnrJson, opt_customNavMethod);
+  } else {
+    //Wrapper function that will invoke the user's opt_customNavMethod
+    //This will be called when navInitJson is done processing
+    var func = new function(dummyJson, navArray, emptyLists, targetsArray){
+          opt_customNavMethod(cnrNode, navArray, emptyLists, targetsArray);
+        }
+    this.navInitJson(cnrJson, func);
+  }
+};
+
+/**
+ * Generates a help string for the globally available keys.
+ * Keys which are specific to the current list are NOT included.
+ *
+ * @return {string} The help string for globally available keys.
+ */
+AxsNav.prototype.globalHelpString = function() {
+  var globalActions = this.getGlobalActions();
+
+  var helpStr = '';
+  for (var i = 0, action; action = globalActions[i]; i++) {
+    helpStr = helpStr + action.keys + ', ' + action.title + '. ';
+  }
+
+  helpStr = helpStr + this.nextListKeys + ', ' + AxsNav.str.NEXT_LIST;
+  helpStr = helpStr + this.prevListKeys + ', ' + AxsNav.str.PREV_LIST;
+
+  // Make the keys sound nicer when spoken
+  helpStr = helpStr.replace('PGUP', AxsNav.str.PGUP);
+  helpStr = helpStr.replace('PGDOWN', AxsNav.str.PGDOWN);
+  helpStr = helpStr.replace('ENTER', AxsNav.str.ENTER);
+  helpStr = helpStr.replace('DEL', AxsNav.str.DELETE);
+  helpStr = helpStr.replace('UP', AxsNav.str.UP);
+  helpStr = helpStr.replace('DOWN', AxsNav.str.DOWN);
+  helpStr = helpStr.replace('LEFT', AxsNav.str.LEFT);
+  helpStr = helpStr.replace('RIGHT', AxsNav.str.RIGHT);
+
+  return helpStr;
+};
+
+/**
+ * Generates a help string for locally available keys.
+ * @return {string} The help string for locally available keys.
+ */
+AxsNav.prototype.localHelpString = function() {
+  var localActions = this.getLocalActions();
+
+  var helpStr = '';
+  for (var i = 0, action; action = localActions[i]; i++) {
+    helpStr = helpStr + action.keys + ', ' + action.title + '. ';
+  }
+
+  var list = this.currentList();
+  if (list.nextKeys !== '') {
+    helpStr = helpStr + list.nextKeys + ', ' + AxsNav.str.CYCLE_NEXT + '. ';
+  }
+  if (list.prevKeys !== '') {
+    helpStr = helpStr + list.prevKeys + ', ' + AxsNav.str.CYCLE_PREV + '. ';
+  }
+  if (list.fwdKeys !== '') {
+    helpStr = helpStr + list.fwdKeys + ', ' + AxsNav.str.GO_FORWARD + '. ';
+  }
+  if (list.backKeys !== '') {
+    helpStr = helpStr + list.backKeys + ', ' + AxsNav.str.GO_BACKWARDS + '. ';
+  }
+
+  // Make the keys sound nicer when spoken
+  helpStr = helpStr.replace('PGUP', AxsNav.str.PGUP);
+  helpStr = helpStr.replace('PGDOWN', AxsNav.str.PGDOWN);
+  helpStr = helpStr.replace('ENTER', AxsNav.str.ENTER);
+  helpStr = helpStr.replace('DEL', AxsNav.str.DELETE);
+  helpStr = helpStr.replace('UP', AxsNav.str.UP);
+  helpStr = helpStr.replace('DOWN', AxsNav.str.DOWN);
+  helpStr = helpStr.replace('LEFT', AxsNav.str.LEFT);
+  helpStr = helpStr.replace('RIGHT', AxsNav.str.RIGHT);
+
+  return helpStr;
+};
+
+/**
+ * This function sets the lens to be used when going to an item's element.
+ *
+ * @param {Object?} lens  The AxsLens object to be used.
+ *                        If null, no lens will be used.
+ */
+AxsNav.prototype.setLens = function(lens){
+  this.lens_ = lens;
+};
+
+
+/**
+ * This function sets the lens to be used when going to an item's element.
+ *
+ * @param {Object?} snd   The AxsSound object to be used.
+ *                        The AxsSound object should already have its
+ *                        verbosity set and be initialized.
+ *                        If null, no sound object will be used.
+ */
+AxsNav.prototype.setSound = function(snd){
+  this.snd_ = snd;
+};
+
+/**
+ * Refreshes the dynamic list with the specified title.
+ * @param {string?} listTitle The title of the list that should be refreshed.
+ * @return {boolean} True if the list was successfully refreshed.
+ */
+AxsNav.prototype.refreshList = function(listTitle){
+  if (listTitle === null) {
+    return false;
+  }
+  var reloaded = false;
+  for (var i = 0, navList; navList = this.navArray[i]; i++) {
+    if (navList.title == listTitle) {
+      navList.items = new Array();
+      navList.targets = new Array();
+      reloaded = this.validateList(navList);
+      break;
+    }
+  }
+  return reloaded;
+};
+
+/**
+ * Disables the default keyboard handler for the AxsNav object by detaching it
+ * from the keypress event listener for the current document.
+ */
+AxsNav.prototype.disableNavKeys = function() {
+  if (this.keyHandler !== null){
+    document.removeEventListener('keypress', this.keyHandler, true);
+  }
+};
+
+/**
+ * Re-enables the default keyboard handler for the AxsNav object by reattaching
+ * it to the keypress event listener for the current document.
+ * This function assumes AxsNav.prototype.setUpNavKeys has already been called
+ * so that this.keyHandler is already setup and ready to go.
+ */
+AxsNav.prototype.enableNavKeys = function() {
+  if (this.keyHandler !== null){
+    // Remove it once so that the keyHandler is not accidentally added twice
+    // just in case enableNavKeys has already been called.
+    // If it has not already been added, this first removeEventListener call
+    // is a no-op.
+    document.removeEventListener('keypress', this.keyHandler, true);
+    document.addEventListener('keypress', this.keyHandler, true);
+  }
+};
+
+/**
+ * Shows a PowerKey input box for selecting an available action.
+ * Available actions are those that have nodes when their xPaths
+ * are evaluated when this function is called.
+ */
+AxsNav.prototype.showAvailableActionsSelector = function() {
+  //Fail silently if the PowerKey object is not set
+  if (this.pk_ === null) {
+    return;
+  }
+
+  var globalActions = this.getGlobalActions();
+  var localActions = this.getLocalActions();
+
+  if ((globalActions.length + localActions.length) === 0){
+    this.axs_.speakTextViaNode(AxsNav.str.NO_AVAILABLE_ACTION);
+    return;
+  }
+
+  var actionTitles = new Array();
+  var i = 0;
+  var action = '';
+  for (i = 0; action = localActions[i]; i++){
+    actionTitles.push(action.title);
+  }
+  for (i = 0; action = globalActions[i]; i++){
+    actionTitles.push(action.title);
+  }
+
+  this.pk_.setCompletionList(actionTitles);
+  this.pk_.updateCompletionField('visible', true, 40, 20);
+};
+
+/**
+ * Gets the global available actions in the current context.
+ * Each action has a "title" member and a "keys" member.
+ * @return {Array} An array of the globally available actions.
+ */
+AxsNav.prototype.getGlobalActions = function() {
+  var globalActions = new Array();
+
+  var action;
+
+  //global list actions
+  for (var i = 0, list; list = this.navArray[i]; i++) {
+    if (list.hotKeys !== '') {
+      action = new Object();
+      action.title = list.title;
+      action.keys = list.hotKeys;
+      globalActions.push(action);
+    }
+  }
+
+  //global targets
+  for (var j = 0, target; target = this.targetsArray[j]; j++) {
+    if (this.isValidTargetAction(target)) {
+      action = new Object();
+      action.title = target.title;
+      action.keys = target.hotkey;
+      globalActions.push(action);
+    }
+  }
+
+  return globalActions;
+};
+
+/**
+ * Gets the locally available actions in the current context.
+ * Each action has a "title" member and a "keys" member.
+ * @return {Array} An array of the locally available actions.
+ */
+AxsNav.prototype.getLocalActions = function() {
+  var localActions = new Array();
+
+  //local targets
+  var currentList = this.currentList();
+  for (var i = 0, target; target = currentList.targets[i]; i++) {
+    if (this.isValidTargetAction(target)) {
+      var action = new Object();
+      action.title = target.title;
+      action.keys = target.hotkey;
+      localActions.push(action);
+    }
+  }
+
+  return localActions;
+};
+
+/**
+ * Initializes the PowerKey instance that presents the valid actions.
+ * This method initializes the PowerKey object with reasonable default values.
+ */
+AxsNav.prototype.defaultInitPowerKeyObj = function() {
+  var parentElement = this.axs_.getActiveDocument().body;
+
+  //handles the selected action
+  var self = this;
+
+  var handler = function(completion, index, elementId, args) {
+                  var localActions = self.getLocalActions();
+                  var globalActions = self.getGlobalActions();
+                  var allActions = localActions.concat(globalActions);
+
+                  var hotkeyStr = allActions[index].keys;
+                  var key = hotkeyStr.split(' ')[0];
+                  var keyCode = -1;
+                  var charCode = -1;
+
+                  if (key == 'LEFT') {
+                    keyCode = 37;
+                  } else if (key == 'UP') {
+                    keyCode = 38;
+                  } else if (key == 'RIGHT') {
+                    keyCode = 39;
+                  } else if (key == 'DOWN') {
+                    keyCode = 40;
+                  } else if (key == 'PGUP') {
+                    keyCode = 33;
+                  } else if (key == 'PGDOWN') {
+                    keyCode = 34;
+                  } else if (key == 'ENTER') {
+                    keyCode = 13;
+                  } else if (key == 'DEL') {
+                    keyCode = 46;
+                  } else if (key == 'ESC') {
+                    keyCode = 27;
+                  } else {
+                    charCode = key.charCodeAt(0);
+                  }
+
+                  self.pk_.cmpTextElement.blur();
+                  var command = self.getFunctionForKey(keyCode, charCode);
+                  if (command){
+                    command();
+                  }
+                };
+
+  this.pk_.createCompletionField(parentElement,
+                                 50,
+                                 handler,
+                                 null,
+                                 this.availableActionArray,
+                                 false);
+
+  this.pk_.setCompletionPromptStr(AxsNav.str.SELECT_ACTION);
+  this.pk_.setAutoHideCompletionField(true);
+  this.pk_.setDefaultCSSStyle();
+};
+
+/**
+ * Returns true if the xPath of this target.
+ * evaluates to a non empty set of nodes.
+ * @param {Object} target A target object.
+ * @return {boolean} Whether the target action is valid.
+ */
+AxsNav.prototype.isValidTargetAction = function(target) {
+  var valid = false;
+
+  if (target.hotkey !== '') {
+    var xPath = target.xpath;
+    var rootNode = this.axs_.getActiveDocument().body;
+
+    //Handle relative XPath
+    if (xPath.indexOf('.') === 0) {
+      var currentItem = this.currentItem();
+      if (currentItem) {
+        rootNode = currentItem.elem;
+      }
+    }
+
+    //Find xPaths that return non empty set of nodes
+    var nodes = this.axs_.evalXPath(xPath, rootNode);
+    if (nodes.length > 0) {
+      valid = true;
+    }
+  }
+  return valid;
+};
+
+
+/**
+ * Builds up the navigation system of lists of items.
+ * This system uses the idea of multiple cursors and the visitor pattern.
+ *
+ * @param {Object} cnrJson  The CNR as a JSON.
+ *
+ * @notypecheck {Function?} opt_customNavMethod.
+ *
+ * @param {Function?} opt_customNavMethod A custom navigation
+ *                              method provided by the caller. This navigation
+ *                              method will be given the original cnrJson, the
+ *                              navigation array of lists of items, an array of
+ *                              all the lists which had zero items, and an array
+ *                              of targets. If this is null, the default AxsJAX
+ *                              nav handler will be used.
+ */
+AxsNav.prototype.navInitJson = function(cnrJson, opt_customNavMethod){
+  this.navArray = new Array();
+  this.navListIdx = 0;
+  this.navItemIdxs = new Array();
+
+  var emptyLists = new Array();
+
+  var i;
+  var currentList;
+  for (i = 0, currentList; currentList = cnrJson.lists[i]; i++){
+    var navList = new Object();
+    navList.cnrNode = null;
+    navList.origListObj = currentList;
+    navList.title = currentList.title || '';
+    navList.hotKeys = currentList.hotkey || '';
+    navList.nextKeys = currentList.next || '';
+    navList.prevKeys = currentList.prev || '';
+    navList.fwdKeys = currentList.fwd || '';
+    navList.backKeys = currentList.back || '';
+    navList.onEmpty = currentList.onEmpty || '';
+    navList.type = currentList.type || '';
+    navList.tailTarget = null;
+    navList.headTarget = null;
+    navList.entryTarget = null;
+    navList.items = this.makeItemsArray(currentList);
+    navList.targets = this.makeTargetsArray(currentList);
+    for (var j = 0, listTarget; listTarget = navList.targets[j]; j++){
+      if (listTarget.trigger == 'listTail'){
+        navList.tailTarget = listTarget;
+      } else if (listTarget.trigger == 'listHead'){
+        navList.headTarget = listTarget;
+      } else if (listTarget.trigger == 'listEntry'){
+        navList.entryTarget = listTarget;
+      }
+    }
+    if (navList.items.length > 0 || navList.type == 'dynamic'){
+      //Only add nav lists that have content to the array
+      this.navArray.push(navList);
+      this.navItemIdxs.push(-1);
+    } else if (navList.hotKeys !== ''){
+      //Record empty nav lists if the user can jump to them directly
+      emptyLists.push(navList);
+    }
+  }
+
+  //Build up the targets
+  var targets = new Array();
+  this.targetsArray = new Array();
+  this.targetsIdx = 0;
+  var currentTarget;
+  if (cnrJson.targets){
+    for (i = 0, currentTarget; currentTarget = cnrJson.targets[i]; i++){
+      var target = new Object();
+      //Strip all leading and trailing spaces from the xpath
+      target.xpath = currentTarget.xpath;
+      target.xpath = target.xpath.replace(/^\s\s*/, '').replace(/\s\s*$/, '');
+      target.title = currentTarget.title || '';
+      target.trigger = currentTarget.trigger || 'key';
+      target.hotkey = currentTarget.hotkey || '';
+      target.action = currentTarget.action || 'click';
+      target.onEmpty = currentTarget.onEmpty || '';
+      this.targetsArray.push(target);
+    }
+  }
+
+  //Remove the previous event listener if there was one
+  if (this.keyHandler !== null){
+    document.removeEventListener('keypress', this.keyHandler, true);
+  }
+  //Bind lists and targets to keys if there is no custom handler specified
+  if ((opt_customNavMethod === null) ||
+      (typeof(opt_customNavMethod) == 'undefined')){
+    this.setUpNavKeys(cnrJson, emptyLists);
+  } else {
+    opt_customNavMethod(cnrJson, this.navArray, emptyLists, this.targetsArray);
+  }
+};
+
+
+/**
+ * Makes an array of items given a navigation list node and its index.
+ * Elements associated with a list will be marked as such.
+ * @param {Object} jsonListObj The navigation list node.
+ * @return {Array} The array of items.
+ */
+AxsNav.prototype.makeItemsArray = function(jsonListObj){
+  var itemsArray = new Array();
+  if (!jsonListObj.items){
+    return itemsArray;
+  }
+  for (var i = 0, entry; entry = jsonListObj.items[i]; i++){
+    //Do this in a try-catch block since there are multiple
+    //sets of items and even if one set does not exist as expected,
+    //the other sets should still be available.
+    try{
+      //Strip all leading and trailing spaces from the xpath
+      var xpath = entry.xpath.replace(/^\s\s*/, '').replace(/\s\s*$/, '');
+      var htmlElem = this.axs_.getActiveDocument().documentElement;
+      var elems = this.axs_.evalXPath(xpath, htmlElem);
+      var idxStr = entry.index || '0';
+      var idx = parseInt(idxStr, 10);
+      var count = elems.length - idx;
+      var countStr = entry.count || '*';
+      if (countStr != '*'){
+        count = parseInt(countStr, 10);
+      }
+      var end = count + idx;
+      var action = entry.action || null;
+      while (idx < end){
+        var item = new Object();
+        item.action = action;
+        item.elem = elems[idx];
+        if (typeof(item.elem) != 'undefined'){
+          if (typeof(item.elem.AxsNavInfo) == 'undefined'){
+            item.elem.AxsNavInfo = new Object();
+          }
+          item.elem.AxsNavInfo[this.navArray.length] = itemsArray.length;
+          itemsArray.push(item);
+        }
+        idx++;
+      }
+    }
+    catch (err){ }
+  }
+  return itemsArray;
+};
+
+/**
+ * Returns an array of target objects for the given <list> node.
+ * @param {Object} jsonListObj  A <list> node.
+ * @return {Array} An array of target objects.
+ */
+AxsNav.prototype.makeTargetsArray = function(jsonListObj){
+  var targetsArray = new Array();
+  if (!jsonListObj.targets){
+    return targetsArray;
+  }
+  for (var i = 0, entry; entry = jsonListObj.targets[i]; i++){
+    var target = new Object();
+    //Strip all leading and trailing spaces from the xpath
+    target.xpath = entry.xpath.replace(/^\s\s*/, '').replace(/\s\s*$/, '');
+    target.title = entry.title || '';
+    target.trigger = entry.trigger || 'key';
+    target.hotkey = entry.hotkey || '';
+    target.action = entry.action || 'click';
+    target.onEmpty = entry.onEmpty || '';
+    targetsArray.push(target);
+  }
+  return targetsArray;
+};
+
+
+/**
+ * This function attaches the default AxsJAX key handler for navigation.
+ * @param {Object} cnrJson  The CNR as a JSON.
+ * @param {Array} emptyLists  An array of lists which have zero items.
+ */
+AxsNav.prototype.setUpNavKeys = function(cnrJson, emptyLists){
+  var self = this;
+  var i;
+
+  this.topCharCodeMap = new Object();
+  this.topKeyCodeMap = new Object();
+  this.charCodeMaps = new Array();
+  this.keyCodeMaps = new Array();
+
+  //Acting on global targets
+  var target;
+  for (i = 0, target; target = this.targetsArray[i]; i++){
+    this.assignTargetKeys(target, this.topCharCodeMap, this.topKeyCodeMap);
+  }
+
+  //Moving through lists
+  var keys = new Array();
+  this.nextListKeys = cnrJson.next || '';
+  if (this.nextListKeys !== ''){
+    keys = this.nextListKeys.split(' ');
+  }
+  this.assignKeysToMethod(keys,
+                          this.topCharCodeMap,
+                          this.topKeyCodeMap,
+                          function(){
+                            self.nextList();
+                            self.doListEntryActions();
+                          });
+
+  keys = new Array();
+  this.prevListKeys = cnrJson.prev || '';
+  if (this.prevListKeys !== ''){
+    keys = this.prevListKeys.split(' ');
+  }
+  this.assignKeysToMethod(keys,
+                          this.topCharCodeMap,
+                          this.topKeyCodeMap,
+                          function(){
+                            self.prevList();
+                            self.doListEntryActions();
+                          });
+
+
+  //Moving through items and handling per-list targets
+  var list;
+  for (i = 0, list; list = this.navArray[i]; i++){
+    var charMap = new Object();
+    var keyMap = new Object();
+    this.charCodeMaps.push(charMap);
+    this.keyCodeMaps.push(keyMap);
+    this.assignItemKeys(list.nextKeys, i, 'next');
+    this.assignItemKeys(list.prevKeys, i, 'prev');
+    this.assignItemKeys(list.fwdKeys, i, 'fwd');
+    this.assignItemKeys(list.backKeys, i, 'back');
+    this.assignHotKeys(list.hotKeys, i, list.onEmpty);
+    var j;
+    for (j = 0, target; target = list.targets[j]; j++){
+      this.assignTargetKeys(target, charMap, keyMap);
+    }
+  }
+
+  //Dealing with empty lists with hotkeys
+  var emptyList;
+  for (i = 0, emptyList; emptyList = emptyLists[i]; i++){
+    this.assignEmptyMsgKeys(emptyList.hotKeys, emptyList.onEmpty);
+  }
+
+  this.keyHandler = function(evt){
+                     //None of these commands involve Ctrl.
+                     //If Ctrl is held, it must be for some AT.
+                     if (evt.ctrlKey) return true;
+                     if (self.axs_.inputFocused) return true;
+
+                     var command = self.getFunctionForKey(evt.keyCode,
+                                                          evt.charCode);
+
+                     if (command) {
+                       return command();
+                     }
+                   };
+
+  document.addEventListener('keypress', this.keyHandler, true);
+};
+
+//javascript/axsjax/common/AxsLens.js
+// Copyright 2008 Google Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+/**
+ * @fileoverview AxsLens - JavaScript library for applying a lens
+ * to content on web pages.
+ * @author clchen@google.com (Charles L. Chen)
+ */
+
+/**
+ * Class for applying a lens to content on web pages.
+ * Lenses can be used to magnify the content, change the font color,
+ * change the background color, and more.
+ * @param {Object} axsJAXObj  An instance of an AxsJAX object.
+ * @constructor
+ */
+var AxsLens = function(axsJAXObj){
+  this.axsJAXObj = axsJAXObj;
+  this.multiplier = 1.5;
+  this.padding = -1;
+
+  this.scrollMode = 0;
+
+  this.activeDoc = axsJAXObj.getActiveDocument();
+  this.lens = this.activeDoc.createElement('span');
+
+  this.lens.style.backgroundColor = '#CCE6FF';
+  this.lens.style.borderColor = '#0000CC';
+  this.lens.style.borderWidth = 'medium';
+  this.lens.style.borderStyle = 'groove';
+  this.lens.style.position = 'absolute';
+
+  this.lens.style.display = 'none';
+  this.activeDoc.body.appendChild(this.lens);
+
+  //Initialize this with a dummy function for js compilation
+  var dummyObject;
+  this.callback = function(dummyObject){};
+};
+
+/**
+ * Enums for the scroll modes
+ */
+AxsLens.ScrollMode = {
+  NONE: 0, //Default
+  FORCE_TO_LENS: 1
+};
+
+/**
+ * Sets the type of scrolling to use.
+ * By default, no scrolling will be done.
+ * However, scrolling can be forced by setting the scrollMode to
+ * AxsLens.ScrollMode.FORCE_TO_LENS
+ * This may introduce some side effects such as screen flashing,
+ * so only set this if you really need it.
+ * @param {number} scrollMode The scrollMode to be used when magnifying.
+ * @param {Array} paramsArray Params for scroll modes that require parameters.
+ */
+AxsLens.prototype.setScrollMode = function(scrollMode, paramsArray){
+  this.scrollMode = scrollMode;
+};
+
+/**
+ * View the targetNode through AxsLens.
+ * This method will create a copy of the 
+ * targetNode, apply the lens' transformation
+ * to the copy, and place the copy in an
+ * element floating above the targetNode.
+ * If targetNode is set to null, the lens will stop being displayed.
+ * @param {Object?} targetNode The DOM node to be viewed.
+ */
+AxsLens.prototype.view = function(targetNode){
+  while (this.lens.firstChild){
+    this.lens.removeChild(this.lens.firstChild);
+  }
+  if (targetNode === null) {
+    this.lens.style.display = 'none';
+    return;
+  }
+  var left = 0;
+  var top = 0;
+  var obj = targetNode;
+  if (obj.offsetParent) {
+    left = obj.offsetLeft;
+    top = obj.offsetTop;
+    obj = obj.offsetParent;
+    while (obj !== null) {
+      left += obj.offsetLeft;
+      top += obj.offsetTop;
+      obj = obj.offsetParent;
+    }
+  }
+  this.lens.appendChild(targetNode.cloneNode(true));
+
+  this.lens.style.top = top + 'px';
+  this.lens.style.left = left + 'px';
+  this.lens.style.zIndex = 999;
+  this.lens.style.display = 'block';
+
+  this.magnify();
+};
+
+/**
+ * Sets the multiplication factor of the lens
+ * @param {Number} multiplier The multiplication factor to be used 
+ * by the lens when magnifying content.
+ */
+AxsLens.prototype.setMagnification = function(multiplier){
+  this.multiplier = multiplier;
+  this.magnify();
+};
+
+/**
+ * Magnifies the lens object by enlarging its text and images.
+ */
+AxsLens.prototype.magnify = function() {
+  //Detach to avoid propagation of events generated during the magnification
+  this.activeDoc.body.removeChild(this.lens);
+  this.magnifyText();
+  this.enlargeImages();
+  this.addPadding();
+  //Attach the lens object back to the document
+  this.activeDoc.body.appendChild(this.lens);
+  //Invoke callback if there is one
+  if (this.callback){
+    this.callback(this.lens);
+  }
+  if (this.scrollMode == AxsLens.ScrollMode.FORCE_TO_LENS){
+    var self = this;
+    window.setTimeout(function(){self.lens.scrollIntoView(true);}, 0);
+  }
+};
+
+/**
+ * Sets the padding in pixels between the magnified nodes.
+ * Setting this to -1 will leave the padding as it was on the original element.
+ * @param {Number} numberOfPixels The padding value to apply (in pixels).
+ */
+AxsLens.prototype.setPadding = function(numberOfPixels) {
+  this.padding = numberOfPixels;
+};
+
+/**
+ * Adds padding to the leaf-level children of the lens.
+ */
+AxsLens.prototype.addPadding = function() {
+  if (this.padding < 0){
+    return;
+  }
+  //Get all leafs of the lens
+  var xPath = '//*[not(.//*)]';
+  var leafNodes = this.axsJAXObj.evalXPath(xPath, this.lens);
+
+  for (var i = 0, leafNode; leafNode = leafNodes[i]; i++) {
+    leafNode.style.padding = this.padding + 'px';
+  }
+};
+
+/**
+ * Enlarges the images of the content being viewed in the lens.
+ */
+AxsLens.prototype.enlargeImages = function(){
+  var images = this.lens.getElementsByTagName('img');
+  for (var i = 0, image; image = images[i]; i++){
+    if (!image.hasAttribute('Axs_OrigHeight')){
+      image.setAttribute('Axs_OrigHeight', image.height);
+      image.setAttribute('Axs_OrigWidth', image.width);
+    }
+    image.height = image.getAttribute('Axs_OrigHeight') * this.multiplier;
+    image.width = image.getAttribute('Axs_OrigWidth') * this.multiplier;
+  }
+};
+
+/**
+ * Enlarges the text of the content being viewed in the lens.
+ */
+AxsLens.prototype.magnifyText = function(){
+  // Use fontSizeAdjust if possible, but fallback to using just font-size 
+  // and a percentage if there is no choice.
+  // fontSizeAdjust is based on the aspect value of the font.
+  // The default aspect value of Arial is .52
+  var hasFontSizeAdjust = 'fontSizeAdjust' in this.lens.style;
+  if (hasFontSizeAdjust){
+    var fontSizeAdjust = this.multiplier * 0.52;
+    this.lens.style.fontSizeAdjust = fontSizeAdjust;
+  } else {
+    var adjustment = (this.multiplier * 100) + '%';
+    this.lens.style.setProperty('font-size', adjustment, 'important');
+  }
+
+  // Force the line-height to normal so that multiline text does
+  // not collide with itself.
+  // Also, remove individual fontSize settings if that was used
+  //  instead of fontSizeAdjust
+  var subnodes = this.lens.getElementsByTagName('*');
+  for (var i = 0, node; node = subnodes[i]; i++){
+    node.style.setProperty('line-height', 'normal', 'important');
+    if (!hasFontSizeAdjust){
+      node.style.setProperty('font-size', '100%', 'important');
+    }
+  }
+
+};
+
+/**
+ * Sets a callback to be invoked when magnification is performed.
+ * The callback will be called with the lens node as the parameter.
+ * Such callbacks could be useful when dealing with special cases such
+ * as CSS spriting where the positioning needs to be recomputed in a way
+ * that is specific to the particular web app.
+ *
+ * @notypecheck {Function?} callback.
+ *
+ * @param {Function?} callback to be called when magnification is performed.
+ * Set this to null to disable using the callback.
+ */
+AxsLens.prototype.setMagnificationCallback = function(callback) {
+  this.callback = callback;
+};
+
+//javascript/axsjax/common/AxsSound.js
+// Copyright 2008 Google Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+/**
+ * @fileoverview AxsSound - JavaScript library for playing sound from a URL.
+ * This library uses SoundManager2 
+ * (http://www.schillmania.com/projects/soundmanager2/).
+ * @author clchen@google.com (Charles L. Chen)
+ */
+
+/**
+ * Class for playing sound from a URL.
+ * @constructor
+ * @param {boolean} earconsOnly If true, then only allow playing of known
+ *                              earcons and not MP3s.
+ */
+var AxsSound = function(earconsOnly){
+  var baseURL = 'http://google-axsjax.googlecode.com/svn/trunk/';
+  this.earconsSwf = baseURL + 'common/earcons/axsEarcons.swf?sound=';
+  this.earconsObj = null;
+  this.earconsOnly = earconsOnly;
+  this.sm2BaseURL = baseURL + 'thirdparty/soundmanager2/';
+  this.sm2LinkerFrame = null;
+  this.initSucceeded = false;
+  this.verbosity = 'minimal';
+  this.busyInitializing = false;
+  this.initChecks = 0;
+};
+
+/**
+ * Sets the verbosity.
+ * @param {string} verbosity "verbose", "minimal" or "none".
+ */
+AxsSound.prototype.setVerbosity = function(verbosity){
+  this.verbosity = verbosity;
+};
+
+/**
+ * Initializes SoundManager 2.
+ * If only earcons are used, this is a no-op.
+ */
+AxsSound.prototype.init = function(){
+  //Earcons do not need initialization
+  if (this.earconsOnly){
+    return;
+  }
+  if (this.initSucceeded){
+    return;
+  }
+  if (this.busyInitializing){
+    return;
+  }
+  this.busyInitializing = true;
+  this.initChecks = 0;
+  if (this.sm2LinkerFrame !== null){
+    this.sm2LinkerFrame.parentNode.removeChild(this.sm2LinkerFrame);
+    this.sm2LinkerFrame = null;
+  }
+  this.sm2LinkerFrame = document.createElement('iframe');
+  var loc = document.location.toString();
+  if (loc.indexOf('#') != -1){
+    loc = loc.substring(0, loc.indexOf('#'));
+  }
+  this.sm2LinkerFrame.src = this.sm2BaseURL +
+                            'AxsJAX_SM2_Linker.html' +
+                            '#Verbosity=' +
+                            this.verbosity +
+                            ',Parent=' +
+                            loc;
+  this.sm2LinkerFrame.width = '0%';
+  this.sm2LinkerFrame.height = '0%';
+  this.sm2LinkerFrame.style.top = '-1000';
+  this.sm2LinkerFrame.style.left = '-1000';
+  this.sm2LinkerFrame.style.position = 'absolute';
+  document.getElementsByTagName('body')[0].appendChild(this.sm2LinkerFrame);
+  this.checkInitStatus();
+};
+
+/**
+ * Monitors the status of initializing SoundManager 2.
+ */
+AxsSound.prototype.checkInitStatus = function(){
+  if (document.location.hash == '#InitSuccess'){
+    this.initSucceeded = true;
+    this.busyInitializing = false;
+    return;
+  }
+  if ((this.verbosity == 'none') && (this.initChecks > 0)){
+    this.initSucceeded = true;
+    this.busyInitializing = false;
+    return;
+  }
+  var self = this;
+  window.setTimeout(function(){self.checkInitStatus();}, 100);
+  this.initChecks++;
+};
+
+/**
+ * Plays the specified sound url.
+ * @param {string} url Can be either the name of a known earcon
+ *                     sound or the URL of an MP3.
+ */
+AxsSound.prototype.play = function(url){
+  var playedEarcon = this.playEarcon(url);
+  if (this.earconsOnly || playedEarcon){
+    return;
+  }
+  if (!this.initSucceeded){
+    this.init();
+    var self = this;
+    window.setTimeout(function(){self.play(url);}, 500);
+    return;
+  }
+  this.sm2LinkerFrame.src = this.sm2BaseURL +
+                            'AxsJAX_SM2_Linker.html' +
+                            '#AxsSoundCmd=Play(' +
+                            url +
+                            ')';
+};
+
+/**
+ * Plays the specified sound url from the startTime until the endTime
+ * @param {string} url The URL of an MP3.
+ * @param {number} startTime The time at which to start,
+ *                           specified in milliseconds.
+ * @param {number} endTime The time at which to end, specified in milliseconds.
+ */
+AxsSound.prototype.playSeg = function(url, startTime, endTime){
+  var playedEarcon = this.playEarcon(url);
+  if (this.earconsOnly || playedEarcon){
+    return;
+  }
+  if (!this.initSucceeded){
+    this.init();
+    var self = this;
+    window.setTimeout(function(){self.playSeg(url, startTime, endTime);}, 500);
+    return;
+  }
+  this.sm2LinkerFrame.src = this.sm2BaseURL +
+                            'AxsJAX_SM2_Linker.html' +
+                            '#AxsSoundCmd=PlaySeg(' +
+                            url +
+                            ',' +
+                            startTime +
+                            ',' +
+                            endTime +
+                            ')';
+};
+
+/**
+ * Stops playing the sound.
+ */
+AxsSound.prototype.stop = function(){
+  if (this.earconsObj){
+    this.earconsObj.parentNode.removeChild(this.earconsObj);
+    this.earconsObj = null;
+  }
+  if (this.earconsOnly){
+    return;
+  }
+  if (!this.initSucceeded){
+    return;
+  }
+  this.sm2LinkerFrame.src = this.sm2BaseURL +
+                            'AxsJAX_SM2_Linker.html' +
+                            '#AxsSoundCmd=Stop()';
+};
+
+/**
+ * Returns the current time in the sound stream.
+ * @return {number} The current time specified in ms. 
+ *                  -1 indicates that the sound is not playing.
+ */
+AxsSound.prototype.getTime = function(){
+  if (this.earconsOnly){
+    return -1;
+  }
+  if (!this.initSucceeded){
+    return -1;
+  }
+  var timeKeyword = 'Time=';
+  var timeStr = unescape(document.location.hash);
+  if (timeStr.indexOf(timeKeyword) == -1){
+    return -1;
+  }
+  var timeStart = timeStr.indexOf(timeKeyword) + timeKeyword.length;
+  var time = parseInt(timeStr.substring(timeStart), 10);
+  return time;
+};
+
+/**
+ * Returns whether the sound is playing.
+ * @return {boolean} True if the sound is playing.
+ */
+AxsSound.prototype.isPlaying = function(){
+  if (this.getTime() == -1){
+    return false;
+  }
+  return true;
+};
+
+/**
+ * Plays the specified earcon sound.
+ * @param {string} earcon The name of a known earcon.
+ */
+AxsSound.prototype.playEarcon = function(earcon){
+  var earconCMD = '';
+  switch (earcon){
+    case 'alert':
+      earconCMD = 'alert';
+      break;
+    case 'deselect':
+      earconCMD = 'deselect';
+      break;
+    case 'item':
+      earconCMD = 'item';
+      break;
+    case 'list':
+      earconCMD = 'list';
+      break;
+    case 'select':
+      earconCMD = 'select';
+      break;
+    case 'success':
+      earconCMD = 'success';
+      break;
+    case 'wrap':
+      earconCMD = 'wrap';
+      break;
+    default:
+  }
+  if (earconCMD === ''){
+    return;
+  }
+  if (this.earconsObj === null){
+    this.earconsObj = document.createElement('embed');
+    this.earconsObj.height = 0;
+    this.earconsObj.width = 0;
+    document.body.appendChild(this.earconsObj);
+  }
+  this.earconsObj.src = this.earconsSwf + earconCMD;
+};
+
+//javascript/axsjax/moderator/axsEnableModerator.js
+// Copyright 2008 Google Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+/**
+ * @fileoverview AxsJAX to enhance accessibility
+ * of Google Moderator.
+ *
+ * http://moderator.appspot.com
+ *
+ * @author clchen@google.com (Charles L. Chen)
+ */
+// create namespace
+var axsModerator = {};
+
+/**
+ * The help string to be spoken to the user.
+ * @type string
+ */
+axsModerator.HELP = 'The following shortcut keys are available. ';
+
+/**
+ * The AxsJAX object that will do the tickling and speaking.
+ * @type AxsJAX?
+ */
+axsModerator.axsJAXObj = null;
+/**
+ * The AxsNav object that will handle navigation.
+ * @type AxsNav?
+ */
+axsModerator.axsNavObj = null;
+
+/**
+ * The AxsLens object that will magnify content.
+ * @type AxsLens?
+ */
+axsModerator.axsLensObj = null;
+
+/**
+ * The AxsSound object that will play earcons
+ * @type AxsSound?
+ */
+axsModerator.axsSoundObj = null;
+
+/**
+ * The magnification factor for the AxsLens object.
+ * @type number
+ */
+axsModerator.magSize = 1.5;
+
+/**
+ * Initializes the AxsJAX script for News
+ */
+axsModerator.init = function(){
+  axsModerator.axsJAXObj = new AxsJAX(true);
+  axsModerator.axsNavObj = new AxsNav(axsModerator.axsJAXObj);
+
+  //Add event listeners
+  document.addEventListener('keypress', axsModerator.keyHandler, true);
+
+  var cnrString = '<cnr next="RIGHT l" prev="LEFT h">   ' +
+                  '  <list title="Featured question" next="DOWN j" prev="UP k">' +
+                  '    <item>' +
+                  '      //div[contains(@class, "featured") and not(contains(@class, "text-featured"))]' +
+                  '    </item>' +
+                  '	<target title="Yes" hotkey="y" action="CALL:axsModerator.voteYes">' +
+                  '	 .' +
+                  '	</target>' +
+                  '	<target title="No" hotkey="n" action="CALL:axsModerator.voteNo">' +
+                  '	 .' +
+                  '	</target>' +
+                  '	<target title="Skip" hotkey="s" action="CALL:axsModerator.voteSkip">' +
+                  '	 .' +
+                  '	</target>' +
+                  '	<target title="Repeat" hotkey="r" action="CALL:axsModerator.featuredQuestionChangeHandler">' +
+                  '	 .' +
+                  '	</target>' +
+                  '  </list>' +
+                  '  <list title="Questions" next="DOWN j" prev="UP k">' +
+                  '    <item>' +
+                  '      //table[contains(@class, "QuestionListPanel")]/tbody/tr' +
+                  '    </item>' +
+                  '	<target title="Yes" hotkey="y" action="CALL:axsModerator.voteYes">' +
+                  '	 .' +
+                  '	</target>' +
+                  '	<target title="No" hotkey="n" action="CALL:axsModerator.voteNo">' +
+                  '	 .' +
+                  '	</target>' +
+                  '  </list>' +
+                  ' ' +
+                  '  <list title="Topics" fwd="DOWN j" back="UP k">' +
+                  '    <item>' +
+                  '      //div[contains(@class, "fork")]/..//div[contains(@class, "link link-regular G1k55290GB")]' +
+                  '    </item>' +
+                  '	<target title="Go to topic" hotkey="ENTER" action="CALL:axsModerator.goToTopic">' +
+                  '	 .//a' +
+                  '	</target>' +
+                  '  </list>' +
+                  '	<target title="Ask a question" hotkey="a">' +
+                  '	 //table[@class="AskMinimizedPanel"]//div[@class="goog-button-base-content"]' +
+                  '	</target>' +                  
+                  '</cnr>';
+
+  axsModerator.axsNavObj.navInit(cnrString, null);
+
+  axsModerator.axsLensObj = new AxsLens(axsModerator.axsJAXObj);
+  axsModerator.axsNavObj.setLens(axsModerator.axsLensObj);
+  axsModerator.axsLensObj.setMagnification(axsModerator.magSize);
+  axsModerator.axsSoundObj = new AxsSound(true);
+  axsModerator.axsNavObj.setSound(axsModerator.axsSoundObj);
+  
+  document.addEventListener('DOMAttrModified', axsModerator.domAttrModifiedHandler, true);
+  var featuredQxpath =  '//div[contains(@class, "featured") and not(contains(@class, "text-featured"))]//div[contains(@class,"text text-less paragraph")]';
+  var featuredQuestionNode = axsModerator.axsJAXObj.evalXPath(featuredQxpath, document.body)[0];
+  if (featuredQuestionNode){
+    featuredQuestionNode.addEventListener('DOMNodeInserted', axsModerator.featuredQuestionChangeHandler, true);
+    axsModerator.axsNavObj.fwdItem();
+    axsModerator.featuredQuestionChangeHandler();
+  }
+};
+
+
+axsModerator.goToTopic = function(topicItem){
+  var aElem = topicItem.elem;
+  var targUrl = aElem.href;
+  window.content.document.location = targUrl;
+  window.setTimeout(function(){window.location.reload()}, 1000);
+}
+
+
+axsModerator.voteYes = function(questionItem){
+  var questionElem = questionItem.elem;
+  var xpath = './/div[contains(@class,"gwt-ToggleButton")]';
+  var yesButton = axsModerator.axsJAXObj.evalXPath(xpath, questionElem)[0];
+  axsModerator.axsJAXObj.clickElem(yesButton, false);
+  axsModerator.axsJAXObj.speakTextViaNode("Press enter to confirm your yes vote.");
+}
+
+axsModerator.voteNo = function(questionItem){
+  var questionElem = questionItem.elem;
+  var xpath = './/div[contains(@class,"gwt-ToggleButton")]';
+  var noButton = axsModerator.axsJAXObj.evalXPath(xpath, questionElem)[1];
+  axsModerator.axsJAXObj.clickElem(noButton, false);
+  axsModerator.axsJAXObj.speakTextViaNode("Press enter to confirm your no vote.");
+}
+
+axsModerator.voteSkip = function(questionItem){
+  var questionElem = questionItem.elem;
+  var xpath = '//div[(@class = "goog-button-base-content") and (text()="Skip")]';
+  var skipButton = axsModerator.axsJAXObj.evalXPath(xpath, questionElem)[0];
+  axsModerator.axsJAXObj.clickElem(skipButton, false);
+}
+
+
+axsModerator.domAttrModifiedHandler = function(evt){
+  var attrib = evt.attrName;
+  var newVal = evt.newValue;
+  var oldVal = evt.prevValue;
+  var target = evt.target;
+  if (target.className == "qdb-StatusBox"){
+    axsModerator.axsJAXObj.speakTextViaNode(target.textContent);
+  }
+}
+
+
+axsModerator.featuredQuestionChangeHandler = function(evt){
+  axsModerator.axsNavObj.actOnItem(axsModerator.axsNavObj.currentItem());
+  axsModerator.axsLensObj.view(null);
+}
+
+
+/**
+ * Handles key events for keyboard shortcuts
+ * @param {Object} evt A keyboard event object.
+ * @return {boolean} Whether the event should be passed on.
+ */
+axsModerator.keyHandler = function(evt){
+  //If Ctrl is held, it must be for some AT.
+  if (evt.ctrlKey) return true;
+
+  if (evt.keyCode == 27){ // ESC
+    axsModerator.axsJAXObj.lastFocusedNode.blur();
+    return false;
+  }
+
+  if (axsModerator.axsJAXObj.inputFocused) return true;
+
+  var command = axsModerator.keyCodeMap[evt.keyCode] ||
+                axsModerator.charCodeMap[evt.charCode];
+
+  if (command) return command();
+
+  return true;
+};
+
+/**
+ * Map from key codes to functions
+ */
+axsModerator.keyCodeMap = {
+  // Map additional keyboard behavior that involves key codes here
+};
+
+/**
+ * Map from character codes to functions
+ * @return {boolean} Always returns false to indicate
+ *                   that the keycode has been handled.
+ */
+axsModerator.charCodeMap = {
+  // Map additional keyboard behavior that involves char codes here
+  // - (minus symbol)
+  45 : function() {
+         axsModerator.magSize -= 0.10;
+         axsModerator.axsLensObj.setMagnification(axsModerator.magSize);
+         return false;
+       },
+  // = (equal symbol)
+  61 : function() {
+         axsModerator.magSize += 0.10;
+         axsModerator.axsLensObj.setMagnification(axsModerator.magSize);
+         return false;
+       },
+  63 : function() {
+         var helpStr = axsModerator.HELP +
+                       axsModerator.axsNavObj.localHelpString() +
+                       axsModerator.axsNavObj.globalHelpString();
+         axsModerator.axsJAXObj.speakTextViaNode(helpStr);
+         return false;
+       },
+  // / (slash symbol)
+  47 : function() {
+         var xpath = '//input';
+         var search = axsModerator.axsJAXObj.evalXPath(xpath, document.body)[0];
+         search.focus();
+         search.select();
+         return false;
+       }
+};
+
+
+window.setTimeout(axsModerator.init, 1000);
+
