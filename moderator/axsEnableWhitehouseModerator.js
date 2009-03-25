@@ -119,7 +119,7 @@ axsModerator.init = function(){
   axsModerator.axsSoundObj = new AxsSound(true);
   axsModerator.axsNavObj.setSound(axsModerator.axsSoundObj);
   document.addEventListener('DOMAttrModified', axsModerator.domAttrModifiedHandler, true);
-  
+
   axsModerator.axsNavObj.navListIdx = 2;
   axsModerator.axsNavObj.fwdItem();
   axsModerator.goToTopic(axsModerator.axsNavObj.currentItem());
@@ -127,15 +127,15 @@ axsModerator.init = function(){
 
 
 axsModerator.refreshFeaturedQuestion = function(){
- if (axsModerator.axsNavObj.refreshList("Featured question")){
+ if (axsModerator.axsNavObj.refreshList('Featured question')){
    axsModerator.axsNavObj.navListIdx = 0;
    axsModerator.axsNavObj.fwdItem();
    var featureQuestionNode = axsModerator.axsNavObj.currentItem().elem;
    featureQuestionNode.addEventListener('DOMNodeInserted', axsModerator.featuredQuestionChangeHandler, true);
    axsModerator.featuredQuestionChangeHandler(null);
  }
- axsModerator.axsNavObj.refreshList("Questions")
-}
+ axsModerator.axsNavObj.refreshList('Questions')
+};
 
 /**
  * Action handler for when the user tries to navigate to a topic.
@@ -206,7 +206,7 @@ axsModerator.domAttrModifiedHandler = function(evt){
   if (target.className == 'qdb-StatusBox'){
     axsModerator.axsLensObj.view(null);
     axsModerator.axsJAXObj.speakTextViaNode(target.textContent);
-    if (target.textContent.indexOf("Loading") === 0){
+    if (target.textContent.indexOf('Loading') === 0){
       window.setTimeout(axsModerator.refreshFeaturedQuestion, 500);
     }
   }
