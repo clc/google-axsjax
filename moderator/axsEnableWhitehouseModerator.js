@@ -71,7 +71,7 @@ axsModerator.init = function(){
   var cnrString = '<cnr next="RIGHT l" prev="LEFT h">   ' +
                   '  <list title="Featured question" next="DOWN j" prev="UP k" type="dynamic">' +
                   '    <item count="1">' +
-                  '      //div[contains(@class, "moderator-featured")]' +
+                  '      //div[contains(@class, "moderator-featured")]/../../..[not(contains(@style, "display: none"))]//div[contains(@class, "moderator-featured")]' +
                   '    </item>' +
                   '	<target title="Yes" hotkey="y" action="CALL:axsModerator.voteYes">' +
                   '	 .' +
@@ -125,7 +125,11 @@ axsModerator.init = function(){
   axsModerator.goToTopic(axsModerator.axsNavObj.currentItem());
 };
 
-
+/**
+ * Refreshes the featured question that users are encouraged to vote on.
+ * Moderator refreshes this with an AJAX call; refresh in the script keeps
+ * everything synced + causes the new question to be spoken.
+ */
 axsModerator.refreshFeaturedQuestion = function(){
  if (axsModerator.axsNavObj.refreshList('Featured question')){
    axsModerator.axsNavObj.navListIdx = 0;
@@ -210,6 +214,10 @@ axsModerator.domAttrModifiedHandler = function(evt){
       window.setTimeout(axsModerator.refreshFeaturedQuestion, 500);
     }
   }
+  else if (target.className == 'text text-error'){
+    axsModerator.axsJAXObj.speakTextViaNode(target.textContent);
+  }
+  
 };
 
 /**
@@ -218,7 +226,9 @@ axsModerator.domAttrModifiedHandler = function(evt){
  * @param {Event?} evt A DOM Node Insertion event - this isn't really used.
  */
 axsModerator.featuredQuestionChangeHandler = function(evt){
+  var fqElem = axsModerator.axsNavObj.currentItem().elem;
   axsModerator.axsNavObj.actOnItem(axsModerator.axsNavObj.currentItem());
+  axsModerator.axsJAXObj.speakTextViaNode(fqElem.textContent.replace("Voting is closed", ""));
   axsModerator.axsLensObj.view(null);
 };
 
