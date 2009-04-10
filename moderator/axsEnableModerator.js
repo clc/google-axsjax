@@ -69,9 +69,9 @@ axsModerator.init = function(){
   document.addEventListener('keypress', axsModerator.keyHandler, true);
 
   var cnrString = '<cnr next="RIGHT l" prev="LEFT h">   ' +
-                  '  <list title="Featured question" next="DOWN j" prev="UP k">' +
-                  '    <item>' +
-                  '      //div[contains(@class, "featured") and not(contains(@class, "text-featured"))]' +
+                  '  <list title="Featured question" next="DOWN j" prev="UP k" type="dynamic">' +
+                  '    <item count="1">' +
+                  '      //div[contains(@class, "moderator-featured")]/../../..[not(contains(@style, "display: none"))]//div[contains(@class, "moderator-featured")]' +
                   '    </item>' +
                   '	<target title="Yes" hotkey="y" action="CALL:axsModerator.voteYes">' +
                   '	 .' +
@@ -86,9 +86,9 @@ axsModerator.init = function(){
                   '	 .' +
                   '	</target>' +
                   '  </list>' +
-                  '  <list title="Questions" next="DOWN j" prev="UP k">' +
+                  '  <list title="Questions" next="DOWN j" prev="UP k" type="dynamic">' +
                   '    <item>' +
-                  '      //table[contains(@class, "QuestionListPanel")]/tbody/tr' +
+                  '      //div[contains(@class, "QuestionListPanel")]/table/tbody/tr' +
                   '    </item>' +
                   '	<target title="Yes" hotkey="y" action="CALL:axsModerator.voteYes">' +
                   '	 .' +
@@ -98,9 +98,9 @@ axsModerator.init = function(){
                   '	</target>' +
                   '  </list>' +
                   ' ' +
-                  '  <list title="Topics" fwd="DOWN j" back="UP k">' +
-                  '    <item>' +
-                  '      //div[contains(@class, "fork")]/..//div[contains(@class, "link link-regular G1k55290GB")]' +
+                  '  <list title="Topics" fwd="DOWN j" back="UP k" type="dynamic">' +
+                  '    <item index="5">' +
+                  '      //div[contains(@class, "link link-regular ")]' +
                   '    </item>' +
                   '	<target title="Go to topic" hotkey="ENTER" action="CALL:axsModerator.goToTopic">' +
                   '	 .//a' +
@@ -118,15 +118,27 @@ axsModerator.init = function(){
   axsModerator.axsLensObj.setMagnification(axsModerator.magSize);
   axsModerator.axsSoundObj = new AxsSound(true);
   axsModerator.axsNavObj.setSound(axsModerator.axsSoundObj);
-
   document.addEventListener('DOMAttrModified', axsModerator.domAttrModifiedHandler, true);
-  var featuredQxpath = '//div[contains(@class, "featured") and not(contains(@class, "text-featured"))]//div[contains(@class,"text text-less paragraph")]';
-  var featuredQuestionNode = axsModerator.axsJAXObj.evalXPath(featuredQxpath, document.body)[0];
-  if (featuredQuestionNode){
-    featuredQuestionNode.addEventListener('DOMNodeInserted', axsModerator.featuredQuestionChangeHandler, true);
-    axsModerator.axsNavObj.fwdItem();
-    axsModerator.featuredQuestionChangeHandler(null);
-  }
+
+  axsModerator.axsNavObj.navListIdx = 2;
+  axsModerator.axsNavObj.fwdItem();
+  axsModerator.goToTopic(axsModerator.axsNavObj.currentItem());
+};
+
+/**
+ * Refreshes the featured question that users are encouraged to vote on.
+ * Moderator refreshes this with an AJAX call; refresh in the script keeps
+ * everything synced + causes the new question to be spoken.
+ */
+axsModerator.refreshFeaturedQuestion = function(){
+ if (axsModerator.axsNavObj.refreshList('Featured question')){
+   axsModerator.axsNavObj.navListIdx = 0;
+   axsModerator.axsNavObj.fwdItem();
+   var featureQuestionNode = axsModerator.axsNavObj.currentItem().elem;
+   featureQuestionNode.addEventListener('DOMNodeInserted', axsModerator.featuredQuestionChangeHandler, true);
+   axsModerator.featuredQuestionChangeHandler(null);
+ }
+ axsModerator.axsNavObj.refreshList('Questions')
 };
 
 /**
@@ -135,10 +147,17 @@ axsModerator.init = function(){
  * link to the topic.
  */
 axsModerator.goToTopic = function(topicItem){
-  var aElem = topicItem.elem;
-  var targUrl = aElem.href;
-  window.content.document.location = targUrl;
-  window.setTimeout(function(){window.location.reload()}, 1000);
+  var targetNode = topicItem.elem;
+  var activeDoc = axsModerator.axsJAXObj.getActiveDocument();
+  //Send a mousedown
+  var evt = activeDoc.createEvent('MouseEvents');
+  evt.initMouseEvent('click', true, true, activeDoc.defaultView,
+                     1, 0, 0, 0, 0, false, false, false, false, 0, null);
+  //Use a try block here so that if the AJAX fails and it is a link,
+  //it can still fall through and retry by setting the document.location.
+  try{
+    targetNode.dispatchEvent(evt);
+  } catch (e){}
 };
 
 /**
@@ -189,8 +208,16 @@ axsModerator.domAttrModifiedHandler = function(evt){
   var oldVal = evt.prevValue;
   var target = evt.target;
   if (target.className == 'qdb-StatusBox'){
+    axsModerator.axsLensObj.view(null);
+    axsModerator.axsJAXObj.speakTextViaNode(target.textContent);
+    if (target.textContent.indexOf('Loading') === 0){
+      window.setTimeout(axsModerator.refreshFeaturedQuestion, 500);
+    }
+  }
+  else if (target.className == 'text text-error'){
     axsModerator.axsJAXObj.speakTextViaNode(target.textContent);
   }
+  
 };
 
 /**
@@ -199,7 +226,9 @@ axsModerator.domAttrModifiedHandler = function(evt){
  * @param {Event?} evt A DOM Node Insertion event - this isn't really used.
  */
 axsModerator.featuredQuestionChangeHandler = function(evt){
+  var fqElem = axsModerator.axsNavObj.currentItem().elem;
   axsModerator.axsNavObj.actOnItem(axsModerator.axsNavObj.currentItem());
+  axsModerator.axsJAXObj.speakTextViaNode(fqElem.textContent.replace("Voting is closed", ""));
   axsModerator.axsLensObj.view(null);
 };
 
