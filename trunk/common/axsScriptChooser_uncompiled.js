@@ -160,6 +160,13 @@ function pickScript(){
     scriptsArray.push(sndLib);
     shouldInsertScripts = true;
   }
+  else if (currentURL.indexOf('http://shop.ebay.com') === 0){
+    theScript.src = baseURL + 'www.ebay.com/axsEnableEbay.js';
+    scriptsArray.push(navLib);
+    scriptsArray.push(lensLib);
+    scriptsArray.push(sndLib);
+    shouldInsertScripts = true;
+  }
   else if (currentURL.indexOf('http://www.weather.com') === 0){
     theScript.src = baseURL + 'www.weather.com/axsEnableWeather.js';
     scriptsArray.push(navLib);
