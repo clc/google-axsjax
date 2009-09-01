@@ -1,0 +1,26 @@
+<cnr next="RIGHT l" prev="LEFT h"> 
+    <list title="Cycle Results" next="DOWN j" prev="UP k" fwd="n" back="p"> 
+        <item action="CALL:axsEnableEbaySearch.speakResult"> 
+        //table[@class="nol"]/tbody/tr 
+        </item> 
+        <target title="Next page" trigger="listTail"> 
+        //td[@class="next"]/a[2]/img  
+        </target> 
+        <target title="Previous page" trigger="listHead"> 
+        //td[@class="prev"]/a[1]/img  
+        </target>	 
+        <target title="Go to result" hotkey="ENTER"> 
+        ./td[@class="details"]/div[1]/a[1] 
+        </target>                   
+    </list> 
+    <target title="All Items" hotkey="a" onEmpty="All Items is not available"> 
+    id("searchtabs_tab_rgt_1")/a[1] 
+    </target>                   
+    <target title="Auctions only" hotkey="u" onEmpty=" Auctions only is not available"> 
+    id("searchtabs_tab_rgt_2")/a[1] 
+    </target>                   
+    <target title="Buy It Now Only" hotkey="b" onEmpty=" Buy It Now Only is not available"> 
+    id("searchtabs_tab_rgt_3")/a[1] 
+    </target>                   
+
+</cnr>
