@@ -87,7 +87,7 @@ function pickFromCompiled(scriptsBaseURL){
               (path.indexOf('/cse') === 0))){
       // Redirect users to the Accessible View experiment
       if ((currentURL.indexOf('esrch=Axs') == -1) && (currentURL.indexOf('?') != -1)){
-        currentURL = currentURL.replace('?', '?esrch=Axs&');
+        currentURL = currentURL.replace('?', '?e=ForceExperiment&expid=18910');
         document.location = currentURL;
       }
     }
