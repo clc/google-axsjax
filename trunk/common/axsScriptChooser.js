@@ -87,14 +87,14 @@ function pickFromCompiled(scriptsBaseURL){
               (path.indexOf('/cse') === 0))){
       // Redirect users to the Accessible View experiment
       if ((currentURL.indexOf('e=ForceExperiment&expid=18910') == -1) && (currentURL.indexOf('?') != -1)){
-        currentURL = currentURL.replace('?', '?e=ForceExperiment&expid=18910');
+        currentURL = currentURL.replace('?', '?e=ForceExperiment&expid=18910&');
         document.location = currentURL;
       }
     }
     else if (((prefix == 'www') && (path.length > 1)) &&
              (path.indexOf('/webhp') === 0)){
       // Redirect users to the Accessible View experiment
-      currentURL = currentURL.replace('?', '?e=ForceExperiment&expid=18910');
+      currentURL = currentURL.replace('?', '?e=ForceExperiment&expid=18910&');
       currentURL.replace('/webhp?', '/search?');
       document.location = currentURL;
     }    
