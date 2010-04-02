@@ -86,18 +86,11 @@ function pickFromCompiled(scriptsBaseURL){
               (path.indexOf('/custom') === 0) ||
               (path.indexOf('/cse') === 0))){
       // Redirect users to the Accessible View experiment
-      if ((currentURL.indexOf('e=ForceExperiment&expid=18910') == -1) && (currentURL.indexOf('?') != -1)){
-        currentURL = currentURL.replace('?', '?e=ForceExperiment&expid=18910&');
+      if ((currentURL.indexOf('esrch=Axs&') == -1) && (currentURL.indexOf('?') != -1)){
+        currentURL = currentURL.replace('?', '?esrch=Axs&');
         document.location = currentURL;
       }
     }
-    else if (((prefix == 'www') && (path.length > 1)) &&
-             (path.indexOf('/webhp') === 0)){
-      // Redirect users to the Accessible View experiment
-      currentURL = currentURL.replace('?', '?e=ForceExperiment&expid=18910&');
-      currentURL.replace('/webhp?', '/search?');
-      document.location = currentURL;
-    }    
   }
   else if (currentURL.indexOf('http://moderator.appspot.com/#') === 0){
     currentURL = currentURL.replace('http://moderator.appspot.com/#', 'http://moderator.appspot.com/?axs#');
