@@ -1,0 +1,93 @@
+<cnr next="RIGHT l" prev="LEFT h">
+
+  <target title="Markets" hotkey="m">
+    (//li[@class="nav-item"])[1]//a
+  </target>
+
+  <target title="News" hotkey="e">
+    (//li[@class="nav-item"])[2]//a
+  </target>
+
+  <target title="Portfolios" hotkey="o">
+    (//li[@class="nav-item"])[3]//a
+  </target>
+
+  <target title="Stock screener" hotkey="s">
+    (//li[@class="nav-item"])[4]//a
+  </target>
+
+  <target title="Google domestic trends" hotkey="g">
+    (//li[@class="nav-item"])[5]//a
+  </target>
+
+  <target title="Financials" hotkey="f">
+    id("nav-cf")
+  </target>
+
+  <target title="Go to link" hotkey="ENTER">
+    .//descendant-or-self::a
+  </target>
+
+  <list title="Recent quotes" next="DOWN j" prev="UP k" fwd="n" back="p"
+       type="dynamic" onEmpty="No recent quotes">
+
+    <item action="CALL:axsFinance.readRecentQuote">
+      id("rq")//tr
+    </item>
+
+    <target title="Create portfolio from quotes" hotkey="t"
+        onEmpty="No recent quotes.">
+      id("rq-create")
+    </target>
+
+  </list>
+
+  <list title="Recent activity" next="DOWN j" prev="UP k" fwd="n"
+      back="p" type="dynamic" onEmpty="No recent activities">
+
+    <item>
+      //li[@class="ra-entry"]//a
+    </item>
+
+  </list>
+
+  <list title="News" next="DOWN j" prev="UP k" fwd="n"
+      back="p" onEmpty="No news">
+
+    <item>
+      id("news-main")/div
+    </item>
+
+    <target title="Next page wrap" trigger="listTail">
+      //a[./div[@id="nav_nn"]]
+    </target>
+
+    <target title="Previous page wrap" trigger="listHead">
+      //a[./div[@id="nav_np"]]
+    </target>
+
+    <target title="Next page" hotkey="x">
+      //a[./div[@id="nav_nn"]]
+    </target>
+
+    <target title="Previous page" hotkey="v">
+      //a[./div[@id="nav_np"]]
+    </target>
+
+    <target title="Related articles" hotkey="r"
+        onEmpty="No related articles">
+      .//a[@class="more-rel"]
+    </target>
+
+  </list>
+
+  <list title="Published articles" next="DOWN j" prev="UP k" fwd="n"
+    back="p">
+
+    <item>
+      id("monthlinks")//a
+    </item>
+
+  </list>
+
+</cnr>

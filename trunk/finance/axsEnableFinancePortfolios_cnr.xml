@@ -1,0 +1,236 @@
+<cnr next="RIGHT l" prev="LEFT h">
+
+  <target title="Add transaction" hotkey="a"
+      action="CALL:axsFinance.focusOnTransactionSection">
+    id("add_symbols")
+  </target>
+
+  <target title="Markets" hotkey="m">
+    (//li[@class="nav-item"])[1]//a
+  </target>
+
+  <target title="News" hotkey="e">
+    (//li[@class="nav-item"])[2]//a
+  </target>
+
+  <target title="Stock screener" hotkey="s">
+    (//li[@class="nav-item"])[3]//a
+  </target>
+
+  <target title="Google domestic trends" hotkey="g">
+    (//li[@class="nav-item"])[4]//a
+  </target>
+
+  <target title="Go to link" hotkey="ENTER">
+    .//descendant-or-self::a
+  </target>
+
+  <list title="Portfolios" next="DOWN j" prev="UP k" fwd="n" back="p"
+       type="dynamic">
+
+    <item>
+      //li[@class="navsub"]/a
+    </item>
+
+  </list>
+
+  <list title="Recent quotes" next="DOWN j" prev="UP k" fwd="n" back="p"
+       type="dynamic" onEmpty="No recent quotes">
+
+    <item action="CALL:axsFinance.readRecentQuote">
+      id("rq")//tr
+    </item>
+
+    <target title="Create portfolio from quotes" hotkey="t"
+        onEmpty="No recent quotes.">
+      id("rq-create")
+    </target>
+
+  </list>
+
+  <list title="Recent activity" next="DOWN j" prev="UP k" fwd="n"
+      back="p" type="dynamic" onEmpty="No recent activities">
+
+    <item>
+      //li[@class="ra-entry"]//a
+    </item>
+
+  </list>
+
+  <list title="Transactions" next="DOWN j" prev="UP k" fwd="n"
+      back="p" type="dynamic">
+
+    <item action="CALL:axsFinance.readTransaction">
+      id("pf-view-table")/table/tbody/tr
+    </item>
+
+    <target title="Overview" hotkey="o">
+      id("pf-overview")[not(parent::div[contains
+          (@class,"goog-tab-selected")])]
+    </target>
+
+    <target title="Fundamentals" hotkey="f">
+      id("pf-fundamentals")[not(parent::div[contains
+          (@class,"goog-tab-selected")])]
+    </target>
+
+    <target title="Performance" hotkey="p">
+      id("pf-perf")[not(parent::div[contains
+          (@class,"goog-tab-selected")])]
+    </target>
+
+    <target title="Returns" hotkey="r">
+      id("pf-returns")[not(parent::div[contains
+          (@class,"goog-tab-selected")])]
+    </target>
+
+    <target title="Transactions" hotkey="t">
+      id("pf-trans")[not(parent::div[contains
+          (@class,"goog-tab-selected")])]
+    </target>
+
+    <target title="Edit transactions" hotkey="x">
+      // inconsistency in the DOM - some sibling links have id
+      (//div[contains(@class,"gf-table-control-plain")]//a)[2]
+    </target>
+
+    <target title="Edit portfolio" hotkey="y">
+      // inconsistency in the DOM - some sibling links have id
+      (//div[contains(@class,"gf-table-control-plain")]//a)[3]
+    </target>
+
+    <target title="Delete portfolio" hotkey="DEL">
+      id("delete-portfolio-link")
+    </target>
+
+    <target title="Download to spread sheet" hotkey="d">
+      id("download")
+    </target>
+
+    <target title="Download to OFX" hotkey="w">
+      id("download_ofx")
+    </target>
+
+  </list>
+
+  <list title="Portfolio related news" next="DOWN j" prev="UP k" fwd="n"
+      back="p">
+
+    <item>
+      //div[@class="sfe-section news"]/div
+    </item>
+
+    <target title="All portfolio related news" hotkey="n">
+      //div[@class="sfe-section news"]/a
+    </target>
+
+    <target title="Related articles" hotkey="r">
+      .//a[@class="more-rel"]
+    </target>
+
+  </list>
+
+  <list title="Events" next="DOWN j" prev="UP k" fwd="n" back="p"
+      type="dynamic" noEmpty="No events">
+
+    <item>
+      id("upcoming_div")[not(contains(@style,"display: none;"))]
+          //div[@class="event"]
+    </item>
+
+    <item>
+      id("past_div")[contains(@style,"display:") and
+          not(contains(@style,"display: none;"))]//div[@class="event"]
+    </item>
+
+    <item>
+      //div[@id="upcoming_div" and not(contains(@style,"display:
+          none;"))]//a[@id="add-events-to-calendar" and not(./img)]
+    </item>
+
+    <target title="Upcoming" hotkey="u">
+      id("upcoming")[@class="nac"]
+    </target>
+
+    <target title="Past" hotkey="p">
+      id("past")[@class="nac"]
+    </target>
+
+  </list>
+
+  <list title="Edit transactions" next="DOWN j" prev="UP k" fwd="n"
+      back="p" type="dynamic" noEmpty="No transactions">
+
+    <item action="CALL:axsFinance.readEditableTransaction">
+      //tr[contains(@id,"tedit_")]
+    </item>
+
+    <target title="Save" hotkey="v">
+      // no better way to identify the node
+      //input[@value="Save changes"]
+    </target>
+
+    <target title="Cancel" hotkey="c">
+      // no better way to identify the node
+      //input[@value="Cancel"]
+    </target>
+
+    <target title="Overview" hotkey="o">
+      id("pf-overview")[not(parent::div[contains
+          (@class,"goog-tab-selected")])]
+    </target>
+
+    <target title="Fundamentals" hotkey="f">
+      id("pf-fundamentals")[not(parent::div[contains
+          (@class,"goog-tab-selected")])]
+    </target>
+
+    <target title="Performance" hotkey="p">
+      id("pf-perf")[not(parent::div[contains
+          (@class,"goog-tab-selected")])]
+    </target>
+
+    <target title="Returns" hotkey="r">
+      id("pf-returns")[not(parent::div[contains
+          (@class,"goog-tab-selected")])]
+    </target>
+
+    <target title="Transactions" hotkey="t">
+      id("pf-trans")[not(parent::div[contains
+          (@class,"goog-tab-selected")])]
+    </target>
+
+    <target title="Edit transactions" hotkey="x">
+      // inconsistency in the DOM - some sibling links have id
+      (//div[contains(@class,"gf-table-control-plain")]//a)[1]
+    </target>
+
+    <target title="Edit portfolio" hotkey="y">
+      // inconsistency in the DOM - some sibling links have id
+      (//div[contains(@class,"gf-table-control-plain")]//a)[2]
+    </target>
+
+    <target title="Delete portfolio" hotkey="DEL">
+      id("delete-portfolio-link")
+    </target>
+
+    <target title="Download to spread sheet" hotkey="d">
+      id("download")
+    </target>
+
+    <target title="Download to OFX" hotkey="w">
+      id("download_ofx")
+    </target>
+
+  </list>
+
+  <list title="Edit portfolio" next="DOWN j" prev="UP k" fwd="n"
+      back="p" type="dynamic" noEmpty="No transactions">
+
+    <item action="CALL:axsFinance.focusOnProfileCategory">
+      id("pform")[.//textarea]
+    </item>
+
+  </list>
+
+</cnr>
