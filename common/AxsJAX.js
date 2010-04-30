@@ -1,11 +1,11 @@
 // Copyright 2007 Google Inc.
-// 
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
-// 
+//
 //      http://www.apache.org/licenses/LICENSE-2.0
-// 
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -13,9 +13,9 @@
 // limitations under the License.
 
 /**
- * @fileoverview AxsJAX - JavaScript library for enhancing the accessibility 
+ * @fileoverview AxsJAX - JavaScript library for enhancing the accessibility
  * of AJAX apps through WAI-ARIA.
- * Note that IE does not implement WAI-ARIA; thus these scripts are specific 
+ * Note that IE does not implement WAI-ARIA; thus these scripts are specific
  * to Firefox.
  * @author clchen@google.com (Charles L. Chen)
  */
@@ -51,6 +51,8 @@ var AxsJAX = function(useTabKeyFix){
     // Record in a custom DOM property:
     document.body.AXSJAX_TABKEYFIX_ADDED = true;
   }
+  // Identify the scripted web app as an application and not a document
+  this.setAttributeOf(document.body, 'role', 'application');
 };
 
 
@@ -227,7 +229,7 @@ AxsJAX.prototype.speakText = function(textString){
 /**
  * This will insert a transparent pixel at the end of the page, put
  * the textString as the pixel's alt text, then use speakNode on the pixel.
- * This is way  of generating spoken feedback   when 
+ * This is way  of generating spoken feedback   when
  * ARIA live region support is unavailable.
  * The advantage is that it is more compatible as few assistive technologies
  * currently support live regions.
@@ -324,7 +326,7 @@ AxsJAX.prototype.clickElem = function(targetNode, shiftKey){
   //it can still fall through and retry by setting the document.location.
   try{
     targetNode.dispatchEvent(evt);
-  } catch(e){}
+  } catch (e){}
   //Send a mouse up
   evt = activeDoc.createEvent('MouseEvents');
   evt.initMouseEvent('mouseup', true, true, activeDoc.defaultView,
@@ -333,7 +335,7 @@ AxsJAX.prototype.clickElem = function(targetNode, shiftKey){
   //it can still fall through and retry by setting the document.location.
   try{
     targetNode.dispatchEvent(evt);
-  } catch(e){}
+  } catch (e){}
   //Send a click
   evt = activeDoc.createEvent('MouseEvents');
   evt.initMouseEvent('click', true, true, activeDoc.defaultView,
@@ -342,20 +344,21 @@ AxsJAX.prototype.clickElem = function(targetNode, shiftKey){
   //it can still fall through and retry by setting the document.location.
   try{
     targetNode.dispatchEvent(evt);
-  } catch(e){}
+  } catch (e){}
   //Clicking on a link does not cause traversal because of script
   //privilege limitations. The traversal has to be done by setting
   //document.location.
+  var href = targetNode.getAttribute('href');
   if ((targetNode.tagName == 'A') &&
-      targetNode.href &&
-      ((targetNode.href.indexOf('http') === 0) ||
-       (targetNode.href.indexOf('javascript:') === 0))){
+       href &&
+      (href != '#')){
     if (shiftKey){
       window.open(targetNode.href);
     } else {
       document.location = targetNode.href;
     }
   }
+
 };
 
 /**
@@ -396,7 +399,7 @@ AxsJAX.prototype.sendKey = function(targetNode, theKey,
  * @param {String} opt_prefixString
  * Prefix to help ensure the uniqueness of the ID.
  * This is optional; if null, it will use "AxsJAX_ID_".
- * @return {String} The ID that the targetNode now has.
+ * @return {string} The ID that the targetNode now has.
  */
 AxsJAX.prototype.assignId = function(targetNode, opt_prefixString){
   if (!targetNode){
@@ -583,6 +586,16 @@ AxsJAX.prototype.evalXPath = function(expression, rootNode) {
   return results;
 };
 
-
-
-
+/**
+ * This function initializes an AxsJAX script by calling a given initialization
+ * routine after the page load event has been generated. Using
+ * this method instead of attaching the event listener directly is recommended
+ * to enable testability of the application.
+ *
+ * @param {Function!} initFunction The initialization function to invoke.
+ */
+AxsJAX.initializeOnLoad = function(initFunction) {
+  window.addEventListener('load', function() {
+    initFunction();
+  }, true);
+};
