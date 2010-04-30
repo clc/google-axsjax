@@ -1,11 +1,11 @@
 // Copyright 2008 Google Inc.
-// 
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
-// 
+//
 //    http://www.apache.org/licenses/LICENSE-2.0
-// 
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,7 +15,7 @@
 /**
  * @fileoverview AxsJAX script intended to enhance accessibility of
  * the Stock screener page of Google Finance.
- * 
+ *
  * @author svetoslavganov@google.com (Svetoslav R. Ganov)
  */
 
@@ -48,16 +48,18 @@ axsFinance.str = {
   NOT_ADDED : 'Not added',
   STATUS : 'Status',
   DEFINITION : 'Definition',
-  UP : ' up by ',
+  UP : 'up by',
   UP_ABR : '+',
-  MINUS : ' minus ',
-  MINUS_ABR : '-',
+  DOWN : 'down by',
+  DOWN_ABBR : '-',
   PERCENT_ABR : '%',
   PERCENT : 'percent',
   MILION : ' million',
   MILLION_ABR : 'M',
   BILLION : ' billion',
-  BILLION_ABR : 'B',
+  BILLION_ABBR : 'B',
+  TRILLION : ' trillion',
+  TRILLION_ABR : 'T',
   EPS : 'E P S',
   EPS_ABR : 'EPS',
   WEEK_HIGH : 'Fifty two week high',
@@ -76,7 +78,7 @@ axsFinance.str = {
   FIVE_Y_PE : '5 year',
   TEN_Y_PE_ABR : '10y',
   TEN_Y_PE : '10 year',
-  APP_NAME : 'Stock screener, ',
+  GOOGLE_FINANCE_STOCK_SCREENER : 'Google Finance Stock screener, ',
   ST_SCR_CNR : 'Screener',
   RES_CNR : 'Results',
   SELECTED : 'selected',
@@ -91,7 +93,8 @@ axsFinance.str = {
   IN_DESCENDING_ORDER : 'in descending order',
   IN_ASCENDING_ORDER : 'in ascending order',
   COMPANIES_FOUND : 'companies found',
-  RESULTS_FROM : 'results from'
+  RESULTS_FROM : 'results from',
+  RECENT_QUOTES_TEMPLATE : '{0}, {1}, or {2}.'
 };
 
 /**
@@ -140,309 +143,350 @@ axsFinance.RESULTS_CNR_BOTTOM = '</cnr>';
  * Body section of the 'Results' CNR which is a template applied for each column
  * @type {string}
  */
-axsFinance.RESULTS_CNR_BODY = '<list title="{0}" next="DOWN j" prev="UP k" ' +
-    'fwd="n" back="p" type="dynamic">' +
+axsFinance.RESULTS_CNR_BODY =
+    '<list title="{0}" next="DOWN j" prev="UP k" ' +
+        'fwd="n" back="p" type="dynamic">' +
 
-    '<item action="CALL:axsFinance.readResultCellValue">' +
-      'id("searchresults")/table[@class="results innermargi' +
-          'n"]//tr/td[{1}]' +
-          '[not(@class="top_row") and not(@class="bottom_row")]' +
-    '</item>' +
+      '<item action="CALL:axsFinance.readResultCellValue">' +
+        'id("advanced_search_results")//tr[@class="highlightWhite" or ' +
+            '@class="highlightGrey"]/td[{1}]' +
+      '</item>' +
 
-    '<target title="Go to section" trigger="listEntry" ' +
-        'action="CALL:axsFinance.readResultCellValueListEntry">' +
-      'id("criteria_rows")' +
-    '</target>' +
+      '<target title="Go to section" trigger="listEntry" ' +
+          'action="CALL:axsFinance.readResultCellValueListEntry">' +
+        'id("criteria_rows")' +
+      '</target>' +
 
-    '<target title="Go to link" hotkey="ENTER" onEmpty="No link available">' +
-      './/a' +
-    '</target>' +
+      '<target title="Go to link" hotkey="ENTER" onEmpty="No link available">' +
+        './/a' +
+      '</target>' +
 
-    '<target title="Next page" trigger="listTail" ' +
-        'action="CALL:axsFinance.goToNextPreviousResulstsPageGoTop">' +
-      'id("searchresults")//td[position() > 1]//span[@class="navb"]/..  ' +
-          '| //div[@class="footerLinks"]' +
-    '</target>' +
+      '<target title="Next page" trigger="listTail" ' +
+          'action="CALL:axsFinance.goToNextPage">' +
+        '//div[@class="SP_arrow_next"]' +
+      '</target>' +
 
-    '<target title="Previous page" trigger="listHead" ' +
-        'action="CALL:axsFinance.goToNextPreviousResulstsPageGoBottom">' +
-        'id("searchresults")//td[1]//span[@class="navb"]/.. ' +
-        '| //div[@class="footerLinks"]' +
-    '</target>' +
+      '<target title="Previous page" trigger="listHead" ' +
+          'action="CALL:axsFinance.goToPreviousPage">' +
+          '//div[@class="SP_arrow_previous"]' +
+      '</target>' +
 
-    '<target title="Reverse sorting order" hotkey="r" ' +
-        'onEmpty="This column is not sortable">' +
-      'id("searchresults")//td[{1}]/a[@class="activelink"]' +
-    '</target>' +
+      '<target title="Reverse sorting order" hotkey="r" ' +
+          'onEmpty="This column is not sortable">' +
+        'id("searchresults")//td[{1}]/a[@class="activelink"]' +
+      '</target>' +
 
-  '</list>';
+    '</list>';
 
 /**
  * CNR String for the 'Criteria' section
  * @type {string}
  */
-axsFinance.CRITERIA_CNR = '<cnr next="RIGHT l" prev="LEFT h">' +
+axsFinance.CRITERIA_CNR =
+    '<cnr next="RIGHT l" prev="LEFT h">' +
 
-  '<target title="Go to the results section" hotkey="s" ' +
-      'action="CALL:axsFinance.setActiveAxsNavObjRes">' +
-    '/html' +
-  '</target>' +
+      '<target title="Markets" hotkey="m">' +
+        '(//li[@class="nav-item"])[1]//a' +
+      '</target>' +
 
-  '<target title="Open add criteria wizard" hotkey="w" ' +
-      'action="CALL:axsFinance.setActiveAxsNavObjWiz">' +
-    '/html' +
-  '</target>' +
+      '<target title="News" hotkey="e">' +
+        '(//li[@class="nav-item"])[2]//a' +
+      '</target>' +
 
-  '<target title="Reset to default criteria" hotkey="d">' +
-    'id("action_links")//a[not(@class)]' +
-  '</target>' +
+      '<target title="Portfolios" hotkey="o">' +
+        '(//li[@class="nav-item"])[3]//a' +
+      '</target>' +
 
-  '<list title="Criteria list" next="DOWN j" prev="UP k" ' +
-      'fwd="n" back="p" type="dynamic">' +
+      '<target title="Google domestic trends" hotkey="g">' +
+        '(//li[@class="nav-item"])[4]//a' +
+      '</target>' +
 
-    '<item action="CALL:axsFinance.readCriteriaDesc">' +
-      'id("criteria_rows_tbody")/tr[not(.//b)]' +
-    '</item>' +
+      '<target title="Go to the results section" hotkey="s" ' +
+          'action="CALL:axsFinance.setActiveAxsNavObjRes">' +
+        '/html' +
+      '</target>' +
 
-    '<target title="Load CNR and go to section" trigger="listEntry" ' +
-        'action="CALL:axsFinance.refreshStockCriteriaCNRAndAnnounceList">' +
-      'id("criteria_rows")' +
-    '</target>' +
+      '<target title="Open add criteria wizard" hotkey="w" ' +
+          'action="CALL:axsFinance.setActiveAxsNavObjWiz">' +
+        '/html' +
+      '</target>' +
 
-    '<target title="Delete criteria" hotkey="DEL" ' +
-        'onEmpty="This element is not a criteria" ' +
-        'action="CALL:axsFinance.removeCriteria">' +
-      './/img[not(@id) and @class="activelink"]' +
-    '</target>' +
+      '<target title="Create portfolio from quotes" hotkey="t" ' +
+          'onEmpty="No recent quotes.">' +
+        'id("rq-create")' +
+      '</target>' +
 
-    '<target title="Edit criteria" hotkey="ENTER" ' +
-        'onEmpty="This element is not a criteria" ' +
-        'action="CALL:axsFinance.focusOnCriteriaRangeInput">' +
-      '/html' +
-    '</target>' +
+      '<target title="Reset to default criteria" hotkey="d">' +
+        'id("action_links")//a[not(@class)]' +
+      '</target>' +
 
-    '<target title="Explain criteria" hotkey="e" ' +
-        'onEmpty="This element is not a criteria and has no explanation" ' +
-        'action="CALL:axsFinance.readCriteriaHelp">' +
-      './/img[@id and @class="activelink"]/..' +
-    '</target>' +
+      '<target title="Select exchange" hotkey="x" ' +
+          'action="CALL:axsFinance.focusNode">' +
+        'id("exchangeselect")' +
+      '</target>' +
 
-  '</list>' +
+      '<target title="Select sector" hotkey="r" ' +
+          'action="CALL:axsFinance.focusNode">' +
+        'id("sectorselect")' +
+      '</target>' +
 
-  '<list title="Sector" next="DOWN j" prev="UP k" fwd="n" ' +
-      'back="p" type="dynamic">' +
+      '<list title="Recent quotes" next="DOWN j" prev="UP k" fwd="n" back="p"' +
+          ' type="dynamic">' +
 
-    '<item action="CALL:axsFinance.readDropDownListItem">' +
-      'id("sectorselect")//option' +
-    '</item>' +
+        '<item action="CALL:axsFinance.readRecentQuote">' +
+          'id("rq")//tr' +
+        '</item>' +
 
-    '<target title="Focus on sector" trigger="listEntry" '+
-        'action="CALL:axsFinance.focusOnDropDownList">' +
-      'id("sectorselect")' +
-    '</target>' +
+        '<target title="Go to link" hotkey="ENTER" ' +
+            'onEmpty="No link available">' +
+          './/descendant-or-self::a' +
+        '</target>' +
 
-    '<target title="Select sector" hotkey="ENTER" '+
-        'action="CALL:axsFinance.selectDropDownListOption">' +
-      '/html' +
-    '</target>' +
+      '</list>' +
 
-  '</list>' +
+      '<list title="Recent activity" next="DOWN j" prev="UP k" fwd="n" ' +
+          'back="p" type="dynamic">' +
 
-  '<list title="Exchange" next="DOWN j" prev="UP k" fwd="n" '+
-      'back="p" type="dynamic">' +
+        '<item>' +
+          '//li[@class="ra-entry"]//a' +
+        '</item>' +
 
-    '<item action="CALL:axsFinance.readDropDownListItem">' +
-      'id("exchangeselect")//option' +
-    '</item>' +
+        '<target title="Go to link" hotkey="ENTER" ' +
+            'onEmpty="No link available">' +
+          './/descendant-or-self::a' +
+        '</target>' +
 
-    '<target title="Focus on exchange" trigger="listEntry" ' +
-        'action="CALL:axsFinance.focusOnDropDownList">' +
-      'id("exchangeselect")' +
-    '</target>' +
+      '</list>' +
 
-    '<target title="Select exchange" hotkey="ENTER" '+
-        'action="CALL:axsFinance.selectDropDownListOption">' +
-      '/html' +
-    '</target>' +
+      '<list title="Criteria list" next="DOWN j" prev="UP k" ' +
+          'fwd="n" back="p" type="dynamic">' +
 
-  '</list>' +
+        '<item action="CALL:axsFinance.readCriteriaDesc">' +
+          'id("criteria_rows_tbody")/tr[not(.//b)]' +
+        '</item>' +
 
-'</cnr>';
+        '<target title="Load CNR and go to section" trigger="listEntry" ' +
+            'action="CALL:axsFinance.refreshStockCriteriaCNRAndAnnounceList">' +
+          'id("criteria_rows")' +
+        '</target>' +
+
+        '<target title="Delete criteria" hotkey="DEL" ' +
+            'onEmpty="This element is not a criteria" ' +
+            'action="CALL:axsFinance.removeCriteria">' +
+          './/img[not(@id) and @class="activelink"]' +
+        '</target>' +
+
+        '<target title="Edit criteria" hotkey="ENTER" ' +
+            'onEmpty="This element is not a criteria" ' +
+            'action="CALL:axsFinance.focusOnCriteriaRangeInput">' +
+          '/html' +
+        '</target>' +
+
+        '<target title="Explain criteria" hotkey="e" ' +
+            'onEmpty="This element is not a criteria and has no explanation" ' +
+            'action="CALL:axsFinance.readCriteriaHelp">' +
+          './/img[@id and @class="activelink"]/..' +
+        '</target>' +
+
+      '</list>' +
+
+    '</cnr>';
 
 /**
  * CNR for the 'Add criteria wizard' section.
  * @type {string}
  */
-axsFinance.WIZARD_CNR = '<cnr next="RIGHT l" prev="LEFT h">' +
+axsFinance.WIZARD_CNR =
+    '<cnr next="RIGHT l" prev="LEFT h">' +
 
-    '<target title="Close add criteria wizard" hotkey="w" ' +
-        'action="CALL:axsFinance.setActiveAxsNavObjCrit">' +
-      '/html' +
-    '</target>' +
-
-    '<list title="Popular criteria" next="DOWN j" prev="UP k" ' +
-        'fwd="n" back="p" type="dynamic">' +
-
-      '<item action="CALL:axsFinance.readCriteriaExplanation">' +
-        'id("popular")//a' +
-      '</item>' +
-
-      '<target title="Load CNR and go to section" ' +
-          'trigger="listEntry" ' +
-          'action="CALL:axsFinance.readCurrentCriteriaList">' +
-        '//table[@class="searchtabs"]//tr[1]//a' +
+      '<target title="Close add criteria wizard" hotkey="w" ' +
+          'action="CALL:axsFinance.setActiveAxsNavObjCrit">' +
+        '/html' +
       '</target>' +
 
-      '<target title="Add selected criteria" hotkey="ENTER" ' +
-        'action="CALL:axsFinance.addCriteria">' +
-        'id("criteria_button")/button' +
-      '</target>' +
+      '<list title="Popular criteria" next="DOWN j" prev="UP k" ' +
+          'fwd="n" back="p" type="dynamic">' +
 
-    '</list>' +
+        '<item action="CALL:axsFinance.readCriteriaExplanation">' +
+          'id("popular")//a' +
+        '</item>' +
 
-    '<list title="Price criteria" next="DOWN j" ' +
-        'prev="UP k" fwd="n" back="p" type="dynamic">' +
+        '<target title="Load CNR and go to section" ' +
+            'trigger="listEntry" ' +
+            'action="CALL:axsFinance.readCurrentCriteriaList">' +
+          '//table[@class="searchtabs"]//tr[1]//a' +
+        '</target>' +
 
-      '<item action="CALL:axsFinance.readCriteriaExplanation">' +
-        'id("price")//a' +
-      '</item>' +
+        '<target title="Add selected criteria" hotkey="ENTER" ' +
+            'action="CALL:axsFinance.addCriteria">' +
+          'id("criteria_button")/button' +
+        '</target>' +
 
-      '<target title="Load CNR and go to section" ' +
-          'trigger="listEntry" ' +
-          'action="CALL:axsFinance.readCurrentCriteriaList">' +
-        '//table[@class="searchtabs"]//tr[2]//a' +
-      '</target>' +
+      '</list>' +
 
-      '<target title="Add selected criteria" hotkey="ENTER" ' +
-          'action="CALL:axsFinance.addCriteria">' +
-        'id("criteria_button")/button' +
-      '</target>' +
+      '<list title="Price criteria" next="DOWN j" ' +
+          'prev="UP k" fwd="n" back="p" type="dynamic">' +
 
-    '</list>' +
+        '<item action="CALL:axsFinance.readCriteriaExplanation">' +
+          'id("price")//a' +
+        '</item>' +
 
-    '<list title="Valuation criteria" next="DOWN j" ' +
-        'prev="UP k" fwd="n" back="p" type="dynamic">' +
+        '<target title="Load CNR and go to section" ' +
+            'trigger="listEntry" ' +
+            'action="CALL:axsFinance.readCurrentCriteriaList">' +
+          '//table[@class="searchtabs"]//tr[2]//a' +
+        '</target>' +
 
-      '<item action="CALL:axsFinance.readCriteriaExplanation">' +
-        'id("valuation")//a' +
-      '</item>' +
+        '<target title="Add selected criteria" hotkey="ENTER" ' +
+            'action="CALL:axsFinance.addCriteria">' +
+          'id("criteria_button")/button' +
+        '</target>' +
 
-      '<target title="Load CNR and go to section" trigger="listEntry" ' +
-          'action="CALL:axsFinance.readCurrentCriteriaList">' +
-        '//table[@class="searchtabs"]//tr[3]//a' +
-      '</target>' +
+      '</list>' +
 
-      '<target title="Add selected criteria" hotkey="ENTER" ' +
-          'action="CALL:axsFinance.addCriteria">' +
-        'id("criteria_button")/button' +
-      '</target>' +
+      '<list title="Valuation criteria" next="DOWN j" ' +
+          'prev="UP k" fwd="n" back="p" type="dynamic">' +
 
-    '</list>' +
+        '<item action="CALL:axsFinance.readCriteriaExplanation">' +
+          'id("valuation")//a' +
+        '</item>' +
 
-    '<list title="Dividend criteria" next="DOWN j" ' +
-        'prev="UP k" fwd="n" back="p" type="dynamic">' +
+       '<target title="Load CNR and go to section" trigger="listEntry" ' +
+            'action="CALL:axsFinance.readCurrentCriteriaList">' +
+          '//table[@class="searchtabs"]//tr[3]//a' +
+        '</target>' +
 
-      '<item action="CALL:axsFinance.readCriteriaExplanation">' +
-        'id("dividend")//a' +
-      '</item>' +
+        '<target title="Add selected criteria" hotkey="ENTER" ' +
+            'action="CALL:axsFinance.addCriteria">' +
+          'id("criteria_button")/button' +
+        '</target>' +
 
-      '<target title="Load CNR and go to section" ' +
-          'trigger="listEntry" ' +
-          'action="CALL:axsFinance.readCurrentCriteriaList">' +
-        '//table[@class="searchtabs"]//tr[4]//a' +
-      '</target>' +
+      '</list>' +
 
-      '<target title="Add selected criteria" hotkey="ENTER" ' +
-          'action="CALL:axsFinance.addCriteria">' +
-        'id("criteria_button")/button' +
-      '</target>' +
+      '<list title="Dividend criteria" next="DOWN j" ' +
+          'prev="UP k" fwd="n" back="p" type="dynamic">' +
 
-    '</list>' +
+        '<item action="CALL:axsFinance.readCriteriaExplanation">' +
+          'id("dividend")//a' +
+        '</item>' +
 
-    '<list title="Financial ratios criteria" next="DOWN j" ' +
-        'prev="UP k" fwd="n" back="p" type="dynamic">' +
+        '<target title="Load CNR and go to section" ' +
+            'trigger="listEntry" ' +
+            'action="CALL:axsFinance.readCurrentCriteriaList">' +
+          '//table[@class="searchtabs"]//tr[4]//a' +
+        '</target>' +
 
-      '<item action="CALL:axsFinance.readCriteriaExplanation">' +
-        'id("financialratios")//a' +
-      '</item>' +
+        '<target title="Add selected criteria" hotkey="ENTER" ' +
+            'action="CALL:axsFinance.addCriteria">' +
+          'id("criteria_button")/button' +
+        '</target>' +
 
-      '<target title="Load CNR and go to section" ' +
-          'trigger="listEntry" ' +
-          'action="CALL:axsFinance.readCurrentCriteriaList">' +
-        '//table[@class="searchtabs"]//tr[5]//a' +
-      '</target>' +
+      '</list>' +
 
-      '<target title="Add selected criteria" hotkey="ENTER" ' +
-          'action="CALL:axsFinance.addCriteria">' +
-        'id("criteria_button")/button' +
-      '</target>' +
+      '<list title="Financial ratios criteria" next="DOWN j" ' +
+         'prev="UP k" fwd="n" back="p" type="dynamic">' +
 
-    '</list>' +
+        '<item action="CALL:axsFinance.readCriteriaExplanation">' +
+          'id("financialratios")//a' +
+        '</item>' +
 
-    '<list title="Stock metrics criteria" next="DOWN j" ' +
-        'prev="UP k" fwd="n" back="p" type="dynamic">' +
+        '<target title="Load CNR and go to section" ' +
+            'trigger="listEntry" ' +
+            'action="CALL:axsFinance.readCurrentCriteriaList">' +
+          '//table[@class="searchtabs"]//tr[5]//a' +
+        '</target>' +
 
-      '<item action="CALL:axsFinance.readCriteriaExplanation">' +
-        'id("stockmetrics")//a' +
-      '</item>' +
+        '<target title="Add selected criteria" hotkey="ENTER" ' +
+            'action="CALL:axsFinance.addCriteria">' +
+          'id("criteria_button")/button' +
+        '</target>' +
 
-      '<target title="Load CNR and go to section" trigger="listEntry" ' +
-          'action="CALL:axsFinance.readCurrentCriteriaList">' +
-        '//table[@class="searchtabs"]//tr[6]//a' +
-      '</target>' +
+      '</list>' +
 
-      '<target title="Add selected criteria" hotkey="ENTER" ' +
-          'action="CALL:axsFinance.addCriteria">' +
-        'id("criteria_button")/button' +
-      '</target>' +
+      '<list title="Operating metrics criteria" next="DOWN j" ' +
+          'prev="UP k" fwd="n" back="p" type="dynamic">' +
 
-    '</list>' +
+        '<item action="CALL:axsFinance.readCriteriaExplanation">' +
+          'id("operatingmetrics")//a' +
+        '</item>' +
 
-    '<list title="Margins criteria" next="DOWN j" prev="UP k" ' +
-        'fwd="n" back="p" type="dynamic">' +
+        '<target title="Load CNR and go to section" trigger="listEntry" ' +
+            'action="CALL:axsFinance.readCurrentCriteriaList">' +
+          '//table[@class="searchtabs"]//tr[6]//a' +
+        '</target>' +
 
-      '<item action="CALL:axsFinance.readCriteriaExplanation">' +
-        'id("margins")//a' +
-      '</item>' +
+        '<target title="Add selected criteria" hotkey="ENTER" ' +
+            'action="CALL:axsFinance.addCriteria">' +
+          'id("criteria_button")/button' +
+        '</target>' +
 
-      '<target title="Load CNR and go to section" ' +
-          'trigger="listEntry" ' +
-          'action="CALL:axsFinance.readCurrentCriteriaList">' +
-        '//table[@class="searchtabs"]//tr[7]//a' +
-      '</target>' +
+      '</list>' +
 
-      '<target title="Add selected criteria" hotkey="ENTER" ' +
-          'action="CALL:axsFinance.addCriteria">' +
-        'id("criteria_button")/button' +
-      '</target>' +
+      '<list title="Stock metrics criteria" next="DOWN j" prev="UP k" ' +
+          'fwd="n" back="p" type="dynamic">' +
 
-    '</list>' +
+        '<item action="CALL:axsFinance.readCriteriaExplanation">' +
+          'id("stockmetrics")//a' +
+        '</item>' +
 
-    '<list title="Growth criteria" next="DOWN j" prev="UP k" fwd="n" ' +
-        'back="p" type="dynamic">' +
+        '<target title="Load CNR and go to section" ' +
+            'trigger="listEntry" ' +
+            'action="CALL:axsFinance.readCurrentCriteriaList">' +
+          '//table[@class="searchtabs"]//tr[7]//a' +
+        '</target>' +
 
-      '<item action="CALL:axsFinance.readCriteriaExplanation">' +
-        'id("growth")//a' +
-      '</item>' +
+        '<target title="Add selected criteria" hotkey="ENTER" ' +
+            'action="CALL:axsFinance.addCriteria">' +
+          'id("criteria_button")/button' +
+       '</target>' +
 
-      '<target title="Load CNR and go to section" ' +
-          'trigger="listEntry" ' +
-          'action="CALL:axsFinance.readCurrentCriteriaList">' +
-        '//table[@class="searchtabs"]//tr[8]//a' +
-      '</target>' +
+      '</list>' +
 
-      '<target title="Add selected criteria" hotkey="ENTER" ' +
-          'action="CALL:axsFinance.addCriteria">' +
-        'id("criteria_button")/button' +
-      '</target>' +
+       '<list title="Margins criteria" next="DOWN j" prev="UP k" fwd="n" ' +
+           'back="p" type="dynamic">' +
 
-    '</list>' +
+        '<item action="CALL:axsFinance.readCriteriaExplanation">' +
+          'id("margins")//a' +
+        '</item>' +
 
-  '</cnr>';
+        '<target title="Load CNR and go to section" ' +
+            'trigger="listEntry" ' +
+            'action="CALL:axsFinance.readCurrentCriteriaList">' +
+          '//table[@class="searchtabs"]//tr[8]//a' +
+        '</target>' +
+
+        '<target title="Add selected criteria" hotkey="ENTER" ' +
+            'action="CALL:axsFinance.addCriteria">' +
+          'id("criteria_button")/button' +
+        '</target>' +
+
+      '</list>' +
+
+      '<list title="Growth criteria" next="DOWN j" prev="UP k" fwd="n" ' +
+          'back="p" type="dynamic">' +
+
+        '<item action="CALL:axsFinance.readCriteriaExplanation">' +
+          'id("growth")//a' +
+        '</item>' +
+
+        '<target title="Load CNR and go to section" ' +
+            'trigger="listEntry" ' +
+            'action="CALL:axsFinance.readCurrentCriteriaList">' +
+          '//table[@class="searchtabs"]//tr[9]//a' +
+        '</target>' +
+
+        '<target title="Add selected criteria" hotkey="ENTER" ' +
+            'action="CALL:axsFinance.addCriteria">' +
+          'id("criteria_button")/button' +
+        '</target>' +
+
+      '</list>' +
+
+    '</cnr>';
 
 /**
- * Stores the last list index to enable handling the multiple list that compose 
- * the results as a table i.e. traversal is performed column by column on the 
+ * Stores the last list index to enable handling the multiple list that compose
+ * the results as a table i.e. traversal is performed column by column on the
  * same row (i.e. the current row does not change)
  */
 axsFinance.previousIdx = -1;
@@ -455,8 +499,8 @@ axsFinance.previousIdx = -1;
 axsFinance.lastCriteriaRow = null;
 
 /**
- * Buffer for queuing TTS messages 
- * @type {string} 
+ * Buffer for queuing TTS messages
+ * @type {string}
  */
 axsFinance.messageBuffer = '';
 
@@ -470,7 +514,7 @@ axsFinance.stockScreenerDescArray = new Array('',
 
 /**
  * Flag indicating completion of the initial loading of the page
- * @type {boolean} 
+ * @type {boolean}
  */
 axsFinance.initComplete = false;
 
@@ -492,18 +536,19 @@ axsFinance.phrasesMap[axsFinance.str.TEN_Y_PE_ABR] = axsFinance.str.TEN_Y_PE;
  * Map from prefix characters to strings
  * @type {Object}
  */
-axsFinance.charPrefixMap = new Object();
-axsFinance.charPrefixMap[axsFinance.str.MINUS_ABR] = axsFinance.str.MINUS;
-axsFinance.charPrefixMap[axsFinance.str.UP_ABR] = axsFinance.str.UP;
+axsFinance.prefixMap = new Object();
+axsFinance.prefixMap[axsFinance.str.DOWN_ABBR] = axsFinance.str.DOWN;
+axsFinance.prefixMap[axsFinance.str.UP_ABR] = axsFinance.str.UP;
 
 /**
  * Map from suffix characters to strings
  * @type {Object}
  */
-axsFinance.charSuffixMap = new Object();
-axsFinance.charSuffixMap[axsFinance.str.BILLION_ABR] = axsFinance.str.BILLION;
-axsFinance.charSuffixMap[axsFinance.str.MILLION_ABR] = axsFinance.str.MILION;
-axsFinance.charSuffixMap[axsFinance.str.PERCENT_ABR] = axsFinance.str.PERCENT;
+axsFinance.suffixMap = new Object();
+axsFinance.suffixMap[axsFinance.str.TRILION_ABBR] = axsFinance.str.TRILION;
+axsFinance.suffixMap[axsFinance.str.BILLION_ABBR] = axsFinance.str.BILLION;
+axsFinance.suffixMap[axsFinance.str.MILLION_ABR] = axsFinance.str.MILION;
+axsFinance.suffixMap[axsFinance.str.PERCENT_ABR] = axsFinance.str.PERCENT;
 
 /**
  * These are strings to be spoken to the user
@@ -522,21 +567,21 @@ axsFinance.EVT_HANDL_TIMEOUT_INT = 300;
 axsFinance.axsJAXObj = null;
 
 /**
- * The AxsJAX navigation object for the 'Criteria' section. 
+ * The AxsJAX navigation object for the 'Criteria' section.
  * Provides page navigation.
  * @type AxsNav?
  */
 axsFinance.axsNavObjCrit = null;
 
 /**
- * The AxsJAX navigation object for the 'Criteria wizard' section. 
+ * The AxsJAX navigation object for the 'Criteria wizard' section.
  * Provides page navigation.
  * @type AxsNav?
  */
 axsFinance.axsNavObjWiz = null;
 
 /**
- * The AxsJAX navigation object for the 'Results' section. 
+ * The AxsJAX navigation object for the 'Results' section.
  * Provides page navigation.
  * @type AxsNav?
  */
@@ -562,26 +607,26 @@ axsFinance.axsSoundObj = null;
 
 /**
  * The power key object used for quick search
- * @type {Object?} 
+ * @type {Object?}
  */
 axsFinance.pkResultSearchObj = null;
 
 /**
- * The PowerKey object that shows an auto completion element for valid 
+ * The PowerKey object that shows an auto completion element for valid
  * actions in the 'Criteria' section.
  * @type {PowerKey?}
  */
 axsFinance.pkObjCrit = null;
 
 /**
- * The PowerKey object that shows an auto completion element for valid 
+ * The PowerKey object that shows an auto completion element for valid
  * actions in the 'Criteria wizard' section.
  * @type {PowerKey?}
  */
 axsFinance.pkObjWiz = null;
 
 /**
- * The PowerKey object that shows an auto completion element for valid 
+ * The PowerKey object that shows an auto completion element for valid
  * actions in the 'Results' section.
  * @type {PowerKey?}
  */
@@ -609,7 +654,7 @@ axsFinance.eventHandlerToEventMap = new Object();
 axsFinance.prevNavListIdx = 0;
 
 /**
- * Flag indicating if the search criteria has been modified 
+ * Flag indicating if the search criteria has been modified
  * i.e. a category has been added or removed.
  */
 axsFinance.searchCriteriaModified = false;
@@ -738,7 +783,7 @@ axsFinance.instrumentCriteriaRow = function(criteriaRow) {
 
   //Change inputs' titles. The screen reader will read graspable text upon TAB
   var criteria = criteriaRow.childNodes[0].textContent;
-  criteria = axsFinance.parseSpecChrsAndTkns(criteria) + ', ';
+  criteria = axsFinance.parseSpecialCharsAndTokens(criteria) + ', ';
   minInput.title = criteria + ' ' + axsFinance.str.MIN;
   maxInput.title = criteria + ' ' + axsFinance.str.MAX;
 };
@@ -778,7 +823,7 @@ axsFinance.DOMSubtreeModifiedEventDispatch = function(evt) {
 };
 
 /**
- * Event handler for refreshing the 'Criteria list' list in the 
+ * Event handler for refreshing the 'Criteria list' list in the
  * 'Criteria' section.
  * @param {Event?} evt A DOMSubtreeModified event.
  */
@@ -805,7 +850,7 @@ axsFinance.messageBufferEventHandler = function(evt) {
 };
 
 /**
- * Event handler for speaking the current option in the auto 
+ * Event handler for speaking the current option in the auto
  * completion search box.
  * @param {Event} evt A DOMSubtreeModified event.
  */
@@ -854,7 +899,7 @@ axsFinance.autoCompletionEventHandler = function(evt) {
       if (event.timeToHandle > currentTime) {
         window.setTimeout(delegFunc, event.timeToHandle - currentTime);
       } else {
-        //Check if the page is still loading => wait to complete    
+        //Check if the page is still loading => wait to complete
         var loading = document.getElementsByClassName('weaver-loading')[0];
         if (loading) {
           window.setTimeout(delegFunc, axsFinance.EVT_HANDL_TIMEOUT_INT);
@@ -869,7 +914,7 @@ axsFinance.autoCompletionEventHandler = function(evt) {
 };
 
 /**
- * Change some properties of the style sheets to improve 
+ * Change some properties of the style sheets to improve
  * presentation for people with reduced vision.
  */
 axsFinance.customizeStyleSheets = function() {
@@ -882,37 +927,53 @@ axsFinance.customizeStyleSheets = function() {
 };
 
 /**
- * Focuses on a drop down list.
+ * Focuses a node.
  * @param {Object} item A wrapper for the current DOM node.
  */
-axsFinance.focusOnDropDownList = function(item) {
-  var element = item.elem;
-  axsFinance.axsLensObj.view(element.parentNode);
-  var title = axsFinance.axsNavObjCrit.currentList().title;
-
-  axsFinance.speakAndGo(element, title);
+axsFinance.focusNode = function(item) {
+  item.elem.focus();
 };
 
 /**
- * Reads the values in a drop down lists (Region, Exchange, Sector)
+ * Reads rows from a table and populates the values in a given template.
  * @param {Object} item A wrapper for the current DOM node.
  */
-axsFinance.readDropDownListItem = function(item) {
-  var element = item.elem;
-  axsFinance.speakAndGo(element, element.textContent);
+axsFinance.readRecentQuote = function(item) {
+  var row = item.elem;
+
+  var xPath = './td[not(.//b)]';
+  var columns = axsFinance.axsJAXObj.evalXPath(xPath, row);
+  var values = new Array();
+
+  for (var i = 0, length = columns.length; i < length; i++) {
+    values[i] = axsFinance.getSpaceSeparatedVisibleDescendantsTextContent(
+        columns[i]);
+    values[i] = axsFinance.parseSpecialCharsAndTokens(values[i]);
+  }
+
+  var text = axsFinance.populateTemplate(axsFinance.str.RECENT_QUOTES_TEMPLATE,
+      values);
+  axsFinance.speakAndGo(row, text);
 };
 
 /**
- * Selects an option from a drop down list.
- * @param {Object} item A wrapper for the current DOM node.
+ * Gets the text content of the DOM tree rooted at a given node selecting
+ * only visible nodes (i.e. display != none). The text content of all the
+ * nodes is concatenated and separated with space.
+ * @param {Node} node The root node.
+ * @return {string} The text content.
  */
-axsFinance.selectDropDownListOption = function(item) {
-  var option = axsFinance.axsNavObjCrit.currentItem().elem;
-  option.selected = true;
-  axsFinance.axsLensObj.view(null);
+axsFinance.getSpaceSeparatedVisibleDescendantsTextContent = function(node) {
+  var text = '';
+  var xPath = './/descendant-or-self::*[not(contains(@style,"display: ' +
+      'none;"))]/text()';
+  var textNodes = axsFinance.axsJAXObj.evalXPath(xPath, node);
 
-  var text = option.value + ' ' + axsFinance.str.SELECTED;
-  axsFinance.axsJAXObj.speakTextViaNode(text);
+  for (var i = 0, count = textNodes.length; i < count; i++) {
+    text = text + textNodes[i].textContent + ' ';
+  }
+
+  return text;
 };
 
 /**
@@ -974,11 +1035,11 @@ axsFinance.readCriteriaDesc = function(item) {
   axsFinance.lastCriteriaRow = element;
 
   var criteria = element.childNodes[0].textContent;
-  criteria = axsFinance.parseSpecChrsAndTkns(criteria) + ', ';
+  criteria = axsFinance.parseSpecialCharsAndTokens(criteria) + ', ';
   var min = element.childNodes[1].childNodes[0].value;
-  min = axsFinance.parseSpecChrsAndTkns(min) + ', ';
+  min = axsFinance.parseSpecialCharsAndTokens(min) + ', ';
   var max = element.childNodes[3].childNodes[0].value;
-  max = axsFinance.parseSpecChrsAndTkns(max) + ', ';
+  max = axsFinance.parseSpecialCharsAndTokens(max) + ', ';
 
   var columnsText = new Array(criteria, min, max);
   var text = axsFinance.buildTableRowText(columnsText,
@@ -1093,19 +1154,10 @@ axsFinance.readCriteriaHelp = function(item) {
   var linkNode = element.childNodes[1];
   axsFinance.axsJAXObj.clickElem(linkNode, false);
 
-  var xpath = '//div[@class="definition_title"]';
-  var explNodes = axsFinance.axsJAXObj.evalXPath(xpath, document.body);
-  for (var i = 0, node; node = explNodes[i]; i++) {
-  var explTitleNode = explNodes[i].firstChild;
-  var descTitleText = axsFinance.normalizeString(descTitleNode.textContent);
-  var explTitleText = axsFinance.normalizeString(explTitleNode.textContent);
+  var xpath = '//div[@class="tooltip"]';
+  var explNode = axsFinance.axsJAXObj.evalXPath(xpath, document.body)[0];
 
-  if (descTitleText == explTitleText) {
-    var explTextNode = explNodes[i].nextSibling;
-    axsFinance.axsJAXObj.speakTextViaNode(explTextNode.textContent);
-    break;
-  }
-  }
+  axsFinance.axsJAXObj.speakTextViaNode(explNode.textContent);
 };
 
 /**
@@ -1131,7 +1183,7 @@ axsFinance.refreshStockCriteriaCNRAndAnnounceList = function() {
 axsFinance.announceSummary = function() {
   var text = '';
   if (!axsFinance.initComplete) {
-    text = axsFinance.str.APP_NAME;
+    text = axsFinance.str.GOOGLE_FINANCE_STOCK_SCREENER;
   }
 
   var summaryElem = document.getElementById('searchresultssummary');
@@ -1249,7 +1301,7 @@ axsFinance.readResultCellValueListEntry = function() {
   var text = '';
   var columnValue = axsFinance.getCellValue(element);
   var title = axsFinance.axsNavObjRes.navArray[navListIdx].title;
-  title = axsFinance.parseSpecChrsAndTkns(title);
+  title = axsFinance.parseSpecialCharsAndTokens(title);
   text = title + ' ' + columnValue;
   axsFinance.speakAndGo(element, text);
 
@@ -1297,7 +1349,7 @@ axsFinance.getCellValue = function(tdElement) {
   } else if (tdElement == tdElement.parentNode.childNodes[0]) {
     columnValue = axsFinance.normalizeString(columnValue);
   } else {
-    columnValue = axsFinance.parseSpecChrsAndTkns(columnValue);
+    columnValue = axsFinance.parseSpecialCharsAndTokens(columnValue);
   }
   return columnValue;
 };
@@ -1459,8 +1511,9 @@ axsFinance.refreshAllResultLists = function() {
  * and goes to the top of the list.
  * @param {Object} item A wrapper for the current DOM node.
  */
-axsFinance.goToNextPreviousResulstsPageGoTop = function(item) {
-  axsFinance.goToNextPreviousResulstsPage(item);
+axsFinance.goToNextPage = function(item) {
+  axsFinance.axsJAXObj.clickElem(item.elem, false);
+
   var navArray = axsFinance.axsNavObjRes.navArray;
   for (var i = 0, list; list = navArray[i]; i++) {
     list.refreshMode = axsFinance.refreshMode.GO_TOP;
@@ -1472,22 +1525,12 @@ axsFinance.goToNextPreviousResulstsPageGoTop = function(item) {
  * and goes to the bottom of the list.
  * @param {Object} item A wrapper for the current DOM node.
  */
-axsFinance.goToNextPreviousResulstsPageGoBottom = function(item) {
-  axsFinance.goToNextPreviousResulstsPage(item);
+axsFinance.goToPreviousPage = function(item) {
+  axsFinance.axsJAXObj.clickElem(item.elem, false);
+
   var navArray = axsFinance.axsNavObjRes.navArray;
   for (var i = 0, list; list = navArray[i]; i++) {
     list.refreshMode = axsFinance.refreshMode.GO_BOTTOM;
-  }
-};
-
-/**
- * Wraps around an item list traversed with the fwd and back keys
- * @param {Object} item A wrapper for the current DOM node.
- */
-axsFinance.goToNextPreviousResulstsPage = function(item) {
-  var element = item.elem;
-  if (element.tagName == 'A') {
-    axsFinance.axsJAXObj.clickElem(element, false);
   }
 };
 
@@ -1693,7 +1736,7 @@ axsFinance.buildTableRowText = function(textContents, columnDesc) {
  * @param {string} text The text to be processed.
  * @return {string} The text with replaced phrases/tokens/symbols.
  */
-axsFinance.parseSpecChrsAndTkns = function(text) {
+axsFinance.parseSpecialCharsAndTokens = function(text) {
   var parsedText = '';
 
   //check input
@@ -1730,14 +1773,14 @@ axsFinance.parseSpecChrsAndTkns = function(text) {
       }
 
       //parse the first character
-      var prefixMapping = axsFinance.charPrefixMap[token.charAt(0)];
+      var prefixMapping = axsFinance.prefixMap[token.charAt(0)];
       if (prefixMapping != undefined) {
         token = prefixMapping + ' ' + token.substring(1);
       }
 
       //parse the last character
       var lastCharacter = token.charAt(token.length - 1);
-      var suffixMapping = axsFinance.charSuffixMap[lastCharacter];
+      var suffixMapping = axsFinance.suffixMap[lastCharacter];
       if (suffixMapping != undefined) {
         token = token.substring(0, token.length - 1) + ' ' + suffixMapping;
       }
@@ -1794,13 +1837,13 @@ axsFinance.keyHandler = function(evt) {
 
 /**
  * Map from character codes to functions
- * @return {boolean} Always returns false to indicate 
+ * @return {boolean} Always returns false to indicate
  *           that the keycode has been handled.
  */
 axsFinance.charCodeMap = {
   // Map additional keyboard behavior that involves char codes here
   // / (slash symbol)
- 47 : function() {
+  47 : function() {
         document.getElementById('searchbox').focus();
         document.getElementById('searchbox').select();
         return false;
@@ -1833,7 +1876,8 @@ axsFinance.charCodeMap = {
  * @param {Event} evt A DOMNodeInserted event.
  */
 axsFinance.init = function(evt) {
-  if (evt.target.className == 'nav') {
+  if (evt.target.className == 'results innermargin gf-table') {
+    window.removeEventListener('DOMNodeInserted', axsFinance.init, true);
     axsFinance.initAxsJAX();
   }
 };

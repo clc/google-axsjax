@@ -1,11 +1,11 @@
 // Copyright 2008 Google Inc.
-// 
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
-// 
+//
 //    http://www.apache.org/licenses/LICENSE-2.0
-// 
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -14,21 +14,20 @@
 
 /**
  * @fileoverview AxsJAX script intended to enhance accessibility of
- * the Stock screener page of Google Finance.
- * 
+ * the Stock Statement page of Google Finance.
+ *
  * @author svetoslavganov@google.com (Svetoslav R. Ganov)
  */
 
 // create namespace
 var axsFinance = {};
 
-
 /**
  * Object that contains all string literal used for enhancing the presentation
  * @type {Object}
  */
 axsFinance.str = {
-  XPATH_TEMPLATE : 'id("{0}")//tr[position() &gt;= {1} ' +
+  XPATH_TEMPLATE : 'id("{0}")//tbody/tr[position() &gt;= {1} ' +
       'and position() &lt;= {2}]',
   MAR_ABBR : '03',
   MAR : 'March',
@@ -42,8 +41,13 @@ axsFinance.str = {
   N_A : 'Not available',
   AND_ABBR : '&',
   AND : 'and',
-  MINUS_ABBR : '-',
-  MINUS : 'minus '
+  UP_ABBR : '+',
+  UP : 'up by ',
+  DOWN_ABBR : '-',
+  DOWN : 'down by ',
+  RECENT_QUOTE_TEMPLATE : '{0}, {1}, change {2}.',
+  GOOGLE_FINANCE : 'Google Finance',
+  HELP : 'The following shortcut keys are available. '
 };
 
 /**
@@ -51,6 +55,35 @@ axsFinance.str = {
  * @type {string}
  */
 axsFinance.CNR_TOP = '<cnr next="RIGHT l" prev="LEFT h">' +
+
+  '<target title="Markets" hotkey="m">' +
+    '(//li[@class="nav-item"])[1]//a' +
+  '</target>' +
+
+  '<target title="News" hotkey="e">' +
+    '(//li[@class="nav-item"])[2]//a' +
+  '</target>' +
+
+  '<target title="Portfolios" hotkey="o">' +
+    '(//li[@class="nav-item"])[3]//a' +
+  '</target>' +
+
+  '<target title="Stock screener" hotkey="s">' +
+    '(//li[@class="nav-item"])[4]//a' +
+  '</target>' +
+
+  '<target title="Google domestic trends" hotkey="g">' +
+    '(//li[@class="nav-item"])[5]//a' +
+  '</target>' +
+
+  '<target title="Create portfolio from quotes" hotkey="t" ' +
+      'onEmpty="No recent quotes.">' +
+    'id("rq-create")' +
+  '</target>' +
+
+  '<target title="Go to link" hotkey="ENTER">' +
+    './/descendant-or-self::a' +
+  '</target>' +
 
   '<target title="Quarterly data" hotkey="q" ' +
       'onEmpty="Quarterly data already opened" ' +
@@ -66,22 +99,39 @@ axsFinance.CNR_TOP = '<cnr next="RIGHT l" prev="LEFT h">' +
 
   '<target title="Income statement" hotkey="i" ' +
       'onEmpty="Income statement already opened">' +
-    'id("inc")[@class="nac"]' +
+    'id("fs-type-tabs")//div[@id=":0" and ' +
+        'not(contains(@class, "selected"))]/a' +
   '</target>' +
 
   '<target title="Balance sheet" hotkey="b" ' +
       'onEmpty="Balance sheet already opened">' +
-    'id("bal")[@class="nac"]' +
+    'id("fs-type-tabs")//div[@id=":1" and ' +
+        'not(contains(@class, "selected"))]/a' +
   '</target>' +
 
   '<target title="Cash flow" hotkey="c" ' +
       'onEmpty="Cash flow already opened">' +
-    'id("cas")[@class="nac"]' +
+    'id("fs-type-tabs")//div[@id=":2" and ' +
+        'not(contains(@class, "selected"))]/a' +
   '</target>' +
 
-  '<target title="Stock screener" hotkey="s">' +
-    '//a[@class="screener-link"]' +
-  '</target>';
+  '<list title="Recent quotes" next="DOWN j" prev="UP k" fwd="n" back="p"' +
+      ' type="dynamic" onEmpty="No recent quotes">' +
+
+    '<item action="CALL:axsFinance.readRecentQuote">' +
+      'id("rq")//tr' +
+    '</item>' +
+
+  '</list>' +
+
+  '<list title="Recent activity" next="DOWN j" prev="UP k" fwd="n" ' +
+      'back="p" type="dynamic" onEmpty="No recent activities">' +
+
+    '<item>' +
+      '//li[@class="ra-entry"]//a' +
+    '</item>' +
+
+  '</list>';
 
 /**
  * Body section of the 'Results' CNR which is a template applied for each column
@@ -102,33 +152,6 @@ axsFinance.CNR_BODY = '<list title="{0}" fwd="DOWN j n" ' +
  */
 axsFinance.CNR_BOTTOM = '</cnr>';
 
-
-/**
- * Stores the last list index to enable handling the multiple list that compose 
- * the results as a table i.e. traversal is performed column by column on the 
- * same row (i.e. the current row does not change)
- */
-axsFinance.previousIdx = -1;
-
-/**
- * Stores the last visited criteria row. Needed for reseting the row to its
- * default visual representation upon leaving the criteria list.
- * @type {Object?}
- */
-axsFinance.lastCriteriaRow = null;
-
-/**
- * Buffer for queuing TTS messages 
- * @type {string} 
- */
-axsFinance.messageBuffer = '';
-
-/**
- * Flag indicating completion of the initial loading of the page
- * @type {boolean} 
- */
-axsFinance.initComplete = false;
-
 /**
  * Map from phrases to phrases
  */
@@ -144,20 +167,15 @@ axsFinance.phrasesMap[axsFinance.str.AND_ABBR] = axsFinance.str.AND;
  * Map from prefix characters to strings
  * @type {Object}
  */
-axsFinance.charPrefixMap = new Object();
-axsFinance.charPrefixMap[axsFinance.str.MINUS_ABBR] = axsFinance.str.MINUS;
-axsFinance.charPrefixMap[axsFinance.str.UP_ABR] = axsFinance.str.UP;
+axsFinance.prefixMap = new Object();
+axsFinance.prefixMap[axsFinance.str.DOWN_ABBR] = axsFinance.str.DOWN;
+axsFinance.prefixMap[axsFinance.str.UP_ABBR] = axsFinance.str.UP;
 
 /**
  * Map from suffix characters to strings
  * @type {Object}
  */
-axsFinance.charSuffixMap = new Object();
-
-/**
- * These are strings to be spoken to the user
- */
-axsFinance.HELP = 'The following shortcut keys are available. ';
+axsFinance.suffixMap = new Object();
 
 /**
  * Map for flags indicating if a handler for an event has been triggered
@@ -195,13 +213,7 @@ axsFinance.axsLensObj = null;
 axsFinance.axsSoundObj = null;
 
 /**
- * The power key object used for quick search
- * @type {Object?} 
- */
-axsFinance.pkResultSearchObj = null;
-
-/**
- * The PowerKey object that shows an auto completion element for valid 
+ * The PowerKey object that shows an auto completion element for valid
  * actions in the 'Criteria' section.
  * @type {PowerKey?}
  */
@@ -222,17 +234,7 @@ axsFinance.magSize = 2.5;
 axsFinance.currentCNRPosition = null;
 
 /**
- * Stores the index of the previous list in the 'Results' section. Each column
- * of the results table is a separate list. However, the user can navigate in
- * the results table using the arrows and this separation in lists is
- * transparent. This index helps identifying when to play a wrap sound while
- * switching the lists.
- * @type {number}
- */
-axsFinance.prevNavListIdx = 0;
-
-/**
- * Template for reading items from all lists. This template is 
+ * Template for reading items from all lists. This template is
  * dynamically generated.
  * @type {string}
  */
@@ -242,7 +244,7 @@ axsFinance.listItemTemplate = '';
  * The id of the currently active section (i.e. visible data table)
  * @type {string}
  */
-axsFinance.visibleCategotyClassName = 'incinterimdiv';
+axsFinance.visibleCategotyId = 'incinterimdiv';
 
 /**
  * Initializes the AxsJAX script for Google finance - quotes page.
@@ -265,13 +267,52 @@ axsFinance.initAxsJAX = function() {
   var func = axsFinance.keyHandler;
   document.addEventListener('keypress', func, true);
 
+  document.addEventListener('DOMNodeInserted',
+      axsFinance.refreshRecentQuotesEventListener, false);
+
   func = axsFinance.documentDOMSubtreeModifiedEventHandler;
   document.addEventListener('DOMSubtreeModified', func, true);
+
+  axsFinance.announceIntro();
+};
+
+/**
+ * Announces the introduction of the page.
+ */
+axsFinance.announceIntro = function() {
+  var xPath = '//div[@class="hdg top"]//h3';
+  var companyNode = axsFinance.axsJAXObj.evalXPath(xPath, document.body)[0];
+
+  var text = axsFinance.str.GOOGLE_FINANCE + ', ' +
+      axsFinance.normalizeString(companyNode.textContent) + ', ' +
+      axsFinance.getActiveSectionAndPeriod();
+  axsFinance.axsJAXObj.speakTextViaNode(text, false);
+};
+
+/**
+ * This is a listener that refreshed the 'Recent quotes' list
+ * and is registered for the event of inserting the recent quotes
+ * table.
+ *
+ * @param {Event} evt A DOMNodeInserted event.
+ */
+axsFinance.refreshRecentQuotesEventListener = function(evt) {
+  if (evt.target.className === 'd-quotes') {
+    axsFinance.axsNavObj.refreshList('Recent quotes');
+  }
+};
+
+/**
+ * Positions the navigation to the beginning of the first list of
+ * the data section i.e. the data table which is partitioned into lists.
+ */
+axsFinance.goToFirstDataList = function() {
+  axsFinance.axsNavObj.navListIdx = 2;
 };
 
 /**
  * Builds the CNR for the current state of the page and
- * initializes the AxsNav object with that CRN. Also the 
+ * initializes the AxsNav object with that CRN. Also the
  * key binding for accessing the available actions is set.
  */
 axsFinance.initializeNavigation = function() {
@@ -288,13 +329,22 @@ axsFinance.initializeNavigation = function() {
  * Announces the current section and period.
  */
 axsFinance.announceActiveSectionAndPeriod = function() {
-  var xPath = '//a[(@id="inc" or @id="bal" or @id="cas" or @id="interim" or ' +
-      '@id="annual") and @class="ac"]';
+  var text = axsFinance.getActiveSectionAndPeriod();
+  axsFinance.axsJAXObj.speakTextViaNode(text, null);
+};
+
+/**
+ * Returns a description of the current section and period.
+ * @return {string} The description.
+ */
+axsFinance.getActiveSectionAndPeriod = function() {
+  var xPath = '//div[contains(@class,"goog-tab-selected") or ' +
+      '@class="gf-table-control-plain"]//a[@class="t" or @class="ac"]';
   var stateLinks = axsFinance.axsJAXObj.evalXPath(xPath, document.body);
   var activeSection = stateLinks[0].textContent;
   var activePeriod = stateLinks[1].textContent;
-  var text = activeSection + ' ' + activePeriod;
-  axsFinance.axsJAXObj.speakTextViaNode(text, null);
+
+  return activeSection + ', ' + activePeriod;
 };
 
 /**
@@ -321,25 +371,24 @@ axsFinance.generateCnrStr = function() {
   var cnrStr = axsFinance.CNR_TOP;
   var listCNR = '';
   var title = '';
-  var begIndex = 2;  //first two rows are irrelevant
+  var begIndex = 0;
   var endIndex = 0;
-  var xPath = 'id("' + axsFinance.visibleCategotyClassName + '")//tr';
+  var xPath = 'id("' + axsFinance.visibleCategotyId + '")//tbody/tr';
   var rows = axsFinance.axsJAXObj.evalXPath(xPath, document.body);
 
   for (var i = 0, row; row = rows[i]; i++) {
-    if (row.childNodes.length === 1 || i === rows.length - 1) {
-      endIndex = i;
-      // Due to inconsistency in the page-not all sections have an end bold line
-      if (row.childNodes.length > 1 || i === rows.length - 1) {
-        endIndex++;
-      }
-      title = rows[i - 1].childNodes[1].textContent;
-      title = axsFinance.parseSpecChrsAndTkns(title);
+    if (row.className === 'hilite' || i === rows.length - 1) {
+      endIndex = i + 1; // xPath arrays are one bases
+
+      title = axsFinance.parseSpecialCharsAndTokens(
+          row.childNodes[1].textContent);
       listCNR = axsFinance.generateListCnrStr(title, begIndex, endIndex);
       cnrStr = cnrStr + listCNR;
-      begIndex = endIndex + 2;
+
+      begIndex = endIndex + 1;
     }
   }
+
   cnrStr = cnrStr + axsFinance.CNR_BOTTOM;
   return cnrStr;
 };
@@ -352,7 +401,7 @@ axsFinance.generateCnrStr = function() {
  * @return {string} The CNR string for the list.
  */
 axsFinance.generateListCnrStr = function(title, begIndex, endIndex) {
-  var phrases = new Array(axsFinance.visibleCategotyClassName,
+  var phrases = new Array(axsFinance.visibleCategotyId,
                           begIndex,
                           endIndex);
   var cnrXPath = axsFinance.populateTemplate(axsFinance.str.XPATH_TEMPLATE,
@@ -367,9 +416,8 @@ axsFinance.generateListCnrStr = function(title, begIndex, endIndex) {
  * @return {string} A template for reading item in all lists.
  */
 axsFinance.generateListItemTemplate = function() {
-  var xPath = 'id("' + axsFinance.visibleCategotyClassName + '")//tr' +
-      '[@class="hdgr"]//td[not(@align)]';
-
+  var xPath = 'id("' + axsFinance.visibleCategotyId +
+      '")//thead//th[not(@class="lm lft nwp")]';
   var columnHeaders = axsFinance.axsJAXObj.evalXPath(xPath, document.body);
   var template = '{0}, ';
 
@@ -395,7 +443,7 @@ axsFinance.generateListItemTemplate = function() {
  */
 axsFinance.parseDate = function(dateString) {
   var dateTokens = dateString.split('-');
-  var year = dateTokens[0]
+  var year = dateTokens[0];
   var month = dateTokens[1];
   var parsed = axsFinance.phrasesMap[month] + ' ' + year;
   return parsed;
@@ -410,11 +458,53 @@ axsFinance.readTableRow = function(item) {
   var phrases = new Array();
 
   for (var i = 1, cell; cell = element.childNodes[i]; i = i + 2) {
-    phrases.push(axsFinance.parseSpecChrsAndTkns(cell.textContent));
+    phrases.push(axsFinance.parseSpecialCharsAndTokens(cell.textContent));
   }
 
   var text = axsFinance.populateTemplate(axsFinance.listItemTemplate, phrases);
   axsFinance.speakAndGo(element, text);
+};
+
+/**
+ * Reads rows from a table and populates the values in a given template.
+ * @param {Object} item A wrapper for the current DOM node.
+ */
+axsFinance.readRecentQuote = function(item) {
+  var row = item.elem;
+
+  var xPath = './td[not(.//b)]';
+  var columns = axsFinance.axsJAXObj.evalXPath(xPath, row);
+  var values = new Array();
+
+  for (var i = 0, length = columns.length; i < length; i++) {
+    values[i] = axsFinance.getSpaceSeparatedVisibleDescendantsTextContent(
+        columns[i]);
+    values[i] = axsFinance.parseSpecialCharsAndTokens(values[i]);
+  }
+
+  var text = axsFinance.populateTemplate(axsFinance.str.RECENT_QUOTE_TEMPLATE,
+    values);
+  axsFinance.speakAndGo(row, text);
+};
+
+/**
+ * Gets the text content of the DOM tree rooted at a given node selecting
+ * only visible nodes (i.e. display != none). The text content of all the
+ * nodes is concatenated and separated with space.
+ * @param {Node} node The root node.
+ * @return {string} The text content.
+ */
+axsFinance.getSpaceSeparatedVisibleDescendantsTextContent = function(node) {
+  var text = '';
+  var xPath = './/descendant-or-self::*[not(contains(@style,"display: ' +
+      'none;"))]/text()';
+  var textNodes = axsFinance.axsJAXObj.evalXPath(xPath, node);
+
+  for (var i = 0, count = textNodes.length; i < count; i++) {
+    text = text + textNodes[i].textContent + ' ';
+  }
+
+  return text;
 };
 
 /**
@@ -430,10 +520,11 @@ axsFinance.documentDOMSubtreeModifiedEventHandler = function(evt) {
       target.id == 'balannualdiv' ||
       target.id == 'casinterimdiv' ||
       target.id == 'casannualdiv') {
-    axsFinance.visibleCategotyClassName = target.id;
+    axsFinance.visibleCategotyId = target.id;
 
     var func = function() {
         axsFinance.initializeNavigation();
+        axsFinance.goToFirstDataList();
         axsFinance.announceActiveSectionAndPeriod();
 
         //restore the current position if such is stored
@@ -447,6 +538,7 @@ axsFinance.documentDOMSubtreeModifiedEventHandler = function(evt) {
 
         //clear the lens
         axsFinance.axsLensObj.view(null);
+
     };
     axsFinance.executeFunctionAfterMostRecentEvent(func, evt);
   }
@@ -513,7 +605,7 @@ axsFinance.speakAndGo = function(element, text) {
  * with concrete values.
  * @param {string} template The template string to populate.
  * @param {Array} phrases The array with replacement (concrete) values.
- * @return {string} The populated template. 
+ * @return {string} The populated template.
  */
 axsFinance.populateTemplate = function(template, phrases) {
   var populatedTemplate = new String(template);
@@ -531,7 +623,7 @@ axsFinance.populateTemplate = function(template, phrases) {
  * @param {string} text The text to be processed.
  * @return {string} The text with replaced phrases/tokens/symbols.
  */
-axsFinance.parseSpecChrsAndTkns = function(text) {
+axsFinance.parseSpecialCharsAndTokens = function(text) {
   var parsedText = '';
 
   //check input
@@ -568,14 +660,14 @@ axsFinance.parseSpecChrsAndTkns = function(text) {
       }
 
       //parse the first character
-      var prefixMapping = axsFinance.charPrefixMap[token.charAt(0)];
+      var prefixMapping = axsFinance.prefixMap[token.charAt(0)];
       if (prefixMapping != undefined) {
         token = prefixMapping + ' ' + token.substring(1);
       }
 
       //parse the last character
       var lastCharacter = token.charAt(token.length - 1);
-      var suffixMapping = axsFinance.charSuffixMap[lastCharacter];
+      var suffixMapping = axsFinance.suffixMap[lastCharacter];
       if (suffixMapping != undefined) {
         token = token.substring(0, token.length - 1) + ' ' + suffixMapping;
       }
@@ -631,49 +723,38 @@ axsFinance.keyHandler = function(evt) {
 };
 
 /**
- * Map from character codes to functions
- * @return {boolean} Always returns false to indicate 
- *           that the keycode has been handled.
+ * Map from character codes to functions.
+ * @return {boolean} Always returns false to indicate that the keycode
+ *         has been handled.
  */
 axsFinance.charCodeMap = {
   // Map additional keyboard behavior that involves char codes here
   // / (slash symbol)
- 47 : function() {
-     document.getElementById('searchbox').focus();
-     document.getElementById('searchbox').select();
-     return false;
-   },
+  47 : function() {
+        document.getElementById('searchbox').focus();
+        document.getElementById('searchbox').select();
+        return false;
+      },
   // ? (question mark)
   63 : function() {
-     var helpStr = axsFinance.HELP +
-         axsFinance.axsNavObj.localHelpString() +
-         axsFinance.axsNavObj.globalHelpString();
-     axsFinance.axsJAXObj.speakTextViaNode(helpStr);
-     return false;
-  },
+        var helpStr = axsFinance.str.HELP +
+            axsFinance.axsNavObj.localHelpString() +
+            axsFinance.axsNavObj.globalHelpString();
+        axsFinance.axsJAXObj.speakTextViaNode(helpStr);
+        return false;
+      },
   // - (minus symbol)
   45 : function() {
-         axsFinance.magSize -= 0.10;
-         axsFinance.axsLensObj.setMagnification(axsFinance.magSize);
-         return false;
-  },
+        axsFinance.magSize -= 0.10;
+        axsFinance.axsLensObj.setMagnification(axsFinance.magSize);
+        return false;
+      },
   // = (equal symbol)
   61 : function() {
-         axsFinance.magSize += 0.10;
-         axsFinance.axsLensObj.setMagnification(axsFinance.magSize);
-         return false;
-  }
-};
-
-/**
- * Invokes the AxsJAX initialization routine after the last element
- * has been inserted in the DOM.
- * @param {Event} evt A DOMNodeInserted event.
- */
-axsFinance.init = function(evt) {
-  if (evt.target.className == 'nav') {
-    axsFinance.initAxsJAX();
-  }
+        axsFinance.magSize += 0.10;
+        axsFinance.axsLensObj.setMagnification(axsFinance.magSize);
+        return false;
+      }
 };
 
 //Run the initialization routine of the script

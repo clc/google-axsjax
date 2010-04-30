@@ -1,6 +1,26 @@
 <cnr next="RIGHT l" prev="LEFT h">
 
-  <target title="Announce currency ratio" hotkey="t" 
+  <target title="Markets" hotkey="m">
+    (//li[@class="nav-item"])[1]//a
+  </target>
+
+  <target title="News" hotkey="e">
+    (//li[@class="nav-item"])[2]//a
+  </target>
+
+  <target title="Portfolios" hotkey="o">
+    (//li[@class="nav-item"])[3]//a
+  </target>
+
+  <target title="Stock screener" hotkey="s">
+    (//li[@class="nav-item"])[4]//a
+  </target>
+
+  <target title="Google domestic trends" hotkey="g">
+    (//li[@class="nav-item"])[5]//a
+  </target>
+
+  <target title="Announce currency ratio" hotkey="t"
       action="CALL:axsFinance.announceCurrencyRatio">
     //html
   </target>
@@ -9,47 +29,61 @@
     id("currency_reverse")
   </target>
 
-  <target title="Open or close currency converter" hotkey="c" 
+  <target title="Open or close currency converter" hotkey="c"
       action="CALL:axsFinance.openCloseCurrencyConverter">
     //html
   </target>
 
-  <list title="News" next="DOWN j" prev="UP k" fwd="n" 
-      back="p" type="dynamic">
+  <target title="Go to link" hotkey="ENTER">
+    .//descendant-or-self::a
+  </target>
 
-    <item action="CALL:axsFinance.readNewsDesc">
-      id("newsmovingdiv")//div[@class="inner"]//tbody
+  <target title="Create portfolio from quotes" hotkey="r"
+      onEmpty="No recent quotes.">
+    id("rq-create")
+  </target>
+
+  <list title="Recent quotes" next="DOWN j" prev="UP k" fwd="n" back="p"
+       type="dynamic" onEmpty="No recent quotes">
+
+    <item action="CALL:axsFinance.readRecentQuote">
+      id("rq")//tr
     </item>
 
-    <target title="Go to link" hotkey="ENTER">
-      .//a
-    </target>
+  </list>
+
+  <list title="Recent activity" next="DOWN j" prev="UP k" fwd="n"
+      back="p" type="dynamic">
+
+    <item>
+      //li[@class="ra-entry"]//a
+    </item>
+
+  </list>
+
+  <list title="News" next="DOWN j" prev="UP k" fwd="n"
+      back="p">
+
+    <item action="CALL:axsFinance.readNews">
+      //div[@class="news-item"]
+    </item>
 
     <target title="View all news" hotkey="a">
       //a[contains(text(), "View all news for")]
     </target>
 
-    <target title="Subscribe" hotkey="s">
+    <target title="Subscribe" hotkey="u">
       //a[./img[@id="subscribe"]]
-    </target>
-      
-    <target title="Related articles" hotkey="r" 
-        onEmpty="No related articles available">
-      ./../../..//a[@class="g bld" or @class="rl" or @class="rg"]
     </target>
 
   </list>
 
-  <list title="Value in other currencies" next="DOWN j" prev="UP k" 
+  <list title="Value in other currencies" next="DOWN j" prev="UP k"
       fwd="n" back="p" type="dynamic">
 
     <item action="CALL:axsFinance.readInOtherCurrency">
-      //table[@class="related-currencies"]//tr
+      //table[@class="currencies"]//tr
     </item>
-
-    <target title="See ratio with that currency" hotkey="ENTER">
-      .//a
-    </target>
 
   </list>
 
