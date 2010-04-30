@@ -6,7 +6,6 @@
  * @author chaitanyag@google.com (Chaitanya P. Gharpure)
  */
 
-
 /**
  * Javascript class for providing keyboard interface enhancements for
  * Web 2.0 applications.
@@ -143,7 +142,7 @@ var PowerKey = function(context, axsJAX) {
 
 
 /**
- * The reg exp indicating the pattern of the parameter to a completion. It 
+ * The reg exp indicating the pattern of the parameter to a completion. It
  * should start with '<', end wit '>' and contain only characters and numbers.
  * @type {RegExp}
  */
@@ -169,7 +168,7 @@ PowerKey.RIGHT_TRIMMABLE = /(\s|\r|\n)+$/;
 /**
  * Attaches event listener and sets the user specified handler or the
  * default handler if the action map is provided.
- * @param {Element?} target The element to attach the event listerner to.
+ * @param {EventTarget?} target The element to attach the event listerner to.
  * @param {string} event The event to listen for.
  * @notypecheck {Function?} handler.
  * @param {Function?} handler The event handler.
@@ -221,7 +220,7 @@ PowerKey.prototype.detachHandler = function(target, event, handler) {
 /**
  * Creates a floating element for holding the completion shell's text field.
  * @param {Element} parent The element whose child this element will be.
- * @param {number} size The size of the completion text field in # of 
+ * @param {number} size The size of the completion text field in # of
  *     characters.
  * @param {Function?} handler The completion handler.
  *     handler = function(completion, index, elementId, args) {}.
@@ -268,13 +267,16 @@ PowerKey.prototype.createCompletionField = function(parent,
   txtNode.id = fieldId;
   txtNode.size = size;
   txtNode.value = '';
-  txtNode.onkeypress =
-      function(evt) {
-        evt.stopPropagation();
-        if (evt.keyCode == PowerKey.keyCodes.TAB) {
-          return false;
-        }
-      };
+  txtNode.setAttribute('aria-owns', divId);
+  if (PowerKey.isGecko) {
+    txtNode.onkeypress =
+        function(evt) {
+          evt.stopPropagation();
+          if (evt.keyCode == PowerKey.keyCodes.TAB) {
+            return false;
+          }
+        };
+  }
   txtNode.readOnly = browseOnly;
 
   if (browseOnly) {
@@ -386,8 +388,8 @@ PowerKey.prototype.setCompletionList = function(list) {
  */
 PowerKey.prototype.addCompletionListByName = function(name, list, prompt) {
   if (this.namedCmpLists_[name]) {
-    var list = this.namedCmpLists_[name][0];
-    for (var i = 0, item; item = list[i]; i++) {
+    var namedList = this.namedCmpLists_[name][0];
+    for (var i = 0, item; item = namedList[i]; i++) {
       this.idMap[item] = null;
     }
   }
@@ -529,7 +531,11 @@ PowerKey.prototype.updateCompletionField = function(status,
       this.listElement_.innerText = '';
     }
     else if (this.listElement_) {
-      this.listElement_.textContent = '';
+      if (PowerKey.isIE) {
+        this.listElement_.innerText = '';
+      } else {
+        this.listElement_.textContent = '';
+      }
     }
     this.showBackground_(false, this.backgroundColor_,
         this.backgroundTransparency_);
@@ -664,6 +670,7 @@ PowerKey.prototype.handleCompletionKeyUp_ = function(evt,
     // Select current filtered list item.
     if (this.filterList_ &&
         this.filterList_.length > 0 &&
+        this.listPos_ >= 0 &&
         this.cmpTextElement.value != this.filterList_[this.listPos_] &&
         // Does not have parameters or is incomplete
         (this.filterList_[this.listPos_].indexOf('<') < 0 ||
@@ -974,7 +981,7 @@ PowerKey.DefaultHandler.prototype.handler =
     return;
   }
   if (evt.keyCode) {
-    var mapkeyCode = ''+evt.keyCode;
+    var mapkeyCode = '' + evt.keyCode;
     var mapkeyChar = String.fromCharCode(evt.keyCode).toLowerCase();
     if (evt.ctrlKey) {
       mapkeyCode = 'Ctrl+' + mapkeyCode;
@@ -1114,7 +1121,7 @@ PowerKey.Event = {
   CLICK: PowerKey.isIE ? 'onclick' : 'click',
   RESIZE: PowerKey.isIE ? 'onresize' : 'resize',
   FOCUS: PowerKey.isIE ? 'onfocus' : 'focus',
-  BLUR: 'blur'
+  BLUR: PowerKey.isIE ? 'onblur' : 'blur'
 };
 
 
@@ -1123,7 +1130,7 @@ PowerKey.Event = {
  * @type {string}
  */
 PowerKey.cssStr =
-'.pkHiddenStatus {display: none; position: absolute;}'+
+'.pkHiddenStatus {display: none; position: absolute;}' +
 '.pkVisibleStatus {display: block; position: absolute; left: 2px; top: 2px; ' +
   'line-height: 1.2em; z-index: 10001; background-color: #000000; ' +
   'padding: 2px; color: #fff; font-family: Arial, Sans-serif; ' +
@@ -1147,8 +1154,26 @@ PowerKey.setDefaultCSSStyle = function() {
   }
   style = document.createElement('style');
   style.type = 'text/css';
-  style.innerHTML = PowerKey.cssStr;
+  if (PowerKey.isIE) {
+    style.innerhtml = PowerKey.cssStr;
+  } else if (PowerKey.isGecko) {
+    style.innerHTML = PowerKey.cssStr;
+  }
   head.appendChild(style);
+};
+
+
+/**
+ * Adds the CSS tag to he DOM with href as the specified CSS file.
+ * @param {string} cssFile The CSS file to include.
+ */
+PowerKey.addCSSStyle = function(cssFile) {
+  var headID = document.getElementsByTagName('head')[0];
+  var cssNode = document.createElement('link');
+  cssNode.type = 'text/css';
+  cssNode.rel = 'stylesheet';
+  cssNode.href = cssFile;
+  headID.appendChild(cssNode);
 };
 
 
