@@ -5,137 +5,165 @@
     ./descendant-or-self::a
   </target>
 
-  <target title="Stock screener" hotkey="s">
-    //a[@href="/finance/stockscreener"]
+  <target title="News" hotkey="e">
+    (//li[@class="nav-item"])[1]//a
   </target>
 
   <target title="Portfolios" hotkey="o">
-    id("guser")//a[text()="Portfolios"]
+    (//li[@class="nav-item"])[2]//a
   </target>
 
-  <list title="Market summary" next="DOWN j" prev="UP k"
-      fwd="n" back="p">
+  <target title="Stock screener" hotkey="s">
+    (//li[@class="nav-item"])[3]//a
+  </target>
 
-    <item index="0" count="1"
-        action="CALL:axsFinance.handleMarketSummaryDescription">
-      id("home-main")//div[contains(@class, "news major")]//a
+  <target title="Google domestic trends" hotkey="g">
+    (//li[@class="nav-item"])[4]//a
+  </target>
+
+  <list title="Recent quotes" next="DOWN j" prev="UP k" fwd="n" back="p"
+       type="dynamic">
+
+    <item action="CALL:axsFinance.readRecentQuoteTemplate">
+      id("rq")//tr
     </item>
 
-    <item index="1">
-      id("home-main")//div[contains(@class, "news major")]
-          //a[not(@class="more-rel")]
-    </item>
-
-    <target title="Related articles"  hotkey="r"
-        onEmpty="No related articles available.">
-      //div[contains(@class, "news major")]//a[@class="more-rel"]
+    <target title="Create portfolio from quotes"  hotkey="c"
+        onEmpty="No recent quotes.">
+      id("rq-create")
     </target>
 
   </list>
 
-  <list title="Market summary indices and currencies"
-      next="DOWN j" prev="UP k" fwd="n" back="p">
-
-    <item action="CALL:axsFinance.readTableRowIndicesAndCurrencies">
-       id("sfe-mktsumm")//tr[*/*]
-    </item>
-
-  </list>
-
-  <list title="Market top stories" next="DOWN j" prev="UP k"
-      fwd="n" back="p">
-
-    <item action="CALL:axsFinance.readMktTopStAndPortfRelTopStDesc">
-      id("market-news")//span[@class="name"]//a
-    </item>
-
-    <target title="Related articles"  hotkey="r"
-        onEmpty="No related articles available.">
-      ./../following-sibling::div[@class="g-section
-          g-tpl-65 sfe-break-bottom" or
-          @class="byline sfe-break-bottom"]
-          [1]/descendant::a[@class="more-rel"]
-    </target>
-
-    <target title = "Market top stories" trigger="listEntry">
-      id("market-news-title")
-    </target>
-
-    <target title="View all daily news"  hotkey="a"
-        onEmpty="No more daily news">
-      id("market-news")//a[contains(text(), "View all of today")]
-    </target>
-    
-  </list>
-
-  <list title="Portfolio related top stories"
-      next="DOWN j" prev="UP k" fwd="n" back="p">
-
-    <item action="CALL:axsFinance.readMktTopStAndPortfRelTopStDesc">
-      id("portfolio-news")//span[@class="name"]//a
-    </item>
-
-    <target title="Related articles"  hotkey="r"
-        onEmpty="No related articles available.">
-      ./../following-sibling::div[@class="sfe-break-bottom" or
-          @class="byline sfe-break-bottom"][1]/
-          descendant::a[@class="more-rel"]
-    </target>
-
-    <target title = "Portfolio related top stories"
-        trigger="listEntry">
-      id("portfolio-news-title")
-    </target>
-
-    <target title="View all daily news"  hotkey="a"
-        onEmpty="No more daily news">
-      id("portfolio-news-title")//a[contains(text(), "View all of today")]
-    </target>
-          
-  </list>
-
-  <list title="Video top stories" next="DOWN j" prev="UP k" fwd="n"
+  <list title="Recent activity" next="DOWN j" prev="UP k" fwd="n"
       back="p" type="dynamic">
 
-    <item action="CALL:axsFinance.readVideoDesc">
-      id("video-news")//a[@class]
-    </item>
-
-    <target title = "Video top stories" trigger="listEntry">
-      id("video-news-title")
-    </target>
-    
-    <target title="More finance videos on Google video"  hotkey="a"
-        onEmpty="No more finance videos">
-      id("video-news")//a[not(@class)]
-    </target>
-
-  </list>
-
-  <list title="Recent quotes" next="DOWN j" prev="UP k"
-      fwd="n" back="p" type="dynamic">
-
-    <item action="CALL:axsFinance.readTableRowRecentQuotesDesc">
-      id("home-main")//table[@class="quotes"]//
-      td[@class="symbol"]/..[not(@class="colHeader")]
+    <item>
+      //li[@class="ra-entry"]//a
     </item>
 
   </list>
 
-  <list title="Sector summary" next="DOWN j" prev="UP k"
+  <list title="Market summary" next="DOWN j" prev="UP k" fwd="n"
+      back="p">
+
+    <item action="CALL:axsFinance.readTopStory">
+      //div[@class="news major"]
+    </item>
+
+    <item>
+      //div[@class="news major"]//div[@class="rel-article" and .//a
+          and not(.//a[contains(@class,"rel")])]
+    </item>
+
+    <target title="Related articles"  hotkey="r"
+        onEmpty="No related articles available.">
+      //div[@class="news major"]//a[@class="more-rel"]
+    </target>
+
+  </list>
+
+  <list title="Market summary indices" next="DOWN j" prev="UP k"
       fwd="n" back="p">
+
+    <item action="CALL:axsFinance.readIndexCurrencyBondTemplate">
+      //tr[@class="indices"]
+    </item>
+
+  </list>
+
+  <list title="Market top stories" next="DOWN j" prev="UP k" fwd="n"
+      back="p" >
+
+    <item>
+      id("market-news")//li
+    </item>
+
+    <target title = "Market top stories" trigger="listEntry">
+      (id("news-tabs")/div)[2]
+    </target>
+
+    <target title="Related articles"  hotkey="r"
+        onEmpty="No related articles available.">
+      .//a[@class="more-rel"]
+    </target>
+
+    <target title="More market news"  hotkey="a">
+      id("market-news")//div[@class="section-link"]/a
+    </target>
+
+  </list>
+
+  <list title="Portfolio related top stories" next="DOWN j" prev="UP k"
+      fwd="n" back="p">
+
+    <item>
+      id("portfolio-news")//li
+    </item>
+
+    <target title = "Portfolio related top stories" trigger="listEntry">
+      (id("news-tabs")/div)[3]
+    </target>
+
+    <target title="Related articles"  hotkey="r" onEmpty="No related
+        articles available.">
+      .//a[@class="more-rel"]
+    </target>
+
+    <target title="More market news"  hotkey="a">
+      id("market-news")//div[@class="section-link"]/a
+    </target>
+
+  </list>
+
+  <list title="Portfolios" next="DOWN j" prev="UP k"
+      onEmpty="No portfolios" fwd="n" back="p">
+
+    <item action="CALL:axsFinance.readPortfolioTemplate">
+      id("portfolios")//table[contains(@id,"portfolio")]//tr
+    </item>
+
+  </list>
+
+  <list title="World markets" next="DOWN j" prev="UP k" fwd="n"
+      back="p">
+
+    <item action="CALL:axsFinance.readIndexCurrencyBondTemplate">
+      id("markets")//table[@class="quotes"]//tr[count(./*) > 0]
+    </item>
+
+  </list>
+
+  <list title="Currencies" next="DOWN j" prev="UP k" fwd="n" back="p">
+
+    <item action="CALL:axsFinance.readIndexCurrencyBondTemplate">
+      id("currencies")//table[@class="quotes"]//tr
+    </item>
+
+  </list>
+
+  <list title="Bonds" next="DOWN j" prev="UP k" fwd="n" back="p">
+
+    <item action="CALL:axsFinance.readIndexCurrencyBondTemplate">
+      id("bonds")//table[@class="quotes"]//tr[count(./*) > 0]
+    </item>
+
+  </list>
+
+  <list title="Sector summary" next="DOWN j" prev="UP k" fwd="n"
+      back="p">
 
     <item action="CALL:axsFinance.readTableRowSectorSummaryDesc">
-       id("secperf")/table/tbody/tr[not(@class="colHeader")]
+      id("secperf")/table/tbody/tr[not(@class="colHeader")]
     </item>
 
   </list>
 
-  <list title="Popular trends" next="DOWN j" prev="UP k"
-      fwd="n" back="p">
+  <list title="Popular trends" next="DOWN j" prev="UP k" fwd="n"
+      back="p">
 
-    <item action="CALL:axsFinance.readTableRowTrendsNoVolumeDesc">
-       id("tm_zeitgeist")//td[@class="symbol"]/..
+    <item action="CALL:axsFinance.readPopularPriceMktCapVolTemplate">
+      id("tm_zeitgeist")//td[@class="symbol"]/..
     </item>
 
     <target title = "Popular trends" trigger="listEntry">
@@ -144,10 +172,10 @@
 
   </list>
 
-  <list title="Price trends gainers" next="DOWN j"
-      prev="UP k" fwd="n" back="p">
+  <list title="Price trends gainers" next="DOWN j" prev="UP k" fwd="n"
+      back="p">
 
-    <item action="CALL:axsFinance.readTableRowTrendsNoVolumeDesc">
+    <item action="CALL:axsFinance.readPopularPriceMktCapVolTemplate">
       id("tm_price_0")//td[@class="change chg"]/..
     </item>
 
@@ -157,10 +185,10 @@
 
   </list>
 
-  <list title="Price trends losers" next="DOWN j" prev="UP k"
-      fwd="n" back="p">
+  <list title="Price trends losers" next="DOWN j" prev="UP k" fwd="n"
+      back="p">
 
-    <item action="CALL:axsFinance.readTableRowTrendsNoVolumeDesc">
+    <item action="CALL:axsFinance.readPopularPriceMktCapVolTemplate">
       id("tm_price_0")//td[@class="change chr"]/..
     </item>
 
@@ -170,11 +198,11 @@
 
   </list>
 
-  <list title="Market capitalization trends gainers"
-      next="DOWN j" prev="UP k" fwd="n" back="p">
+  <list title="Market capitalization trends gainers" next="DOWN j"
+      prev="UP k" fwd="n" back="p">
 
-    <item action="CALL:axsFinance.readTableRowTrendsNoVolumeDesc">
-     id("tm_mcap_0")//td[@class="change chg"]/..
+    <item action="CALL:axsFinance.readPopularPriceMktCapVolTemplate">
+      id("tm_mcap_0")//td[@class="change chg"]/..
     </item>
 
     <target title = "Market capitalization trends gainers"
@@ -184,26 +212,25 @@
 
   </list>
 
-  <list title="Market capitalization trends losers"
-      next="DOWN j" prev="UP k" fwd="n" back="p">
+  <list title="Market capitalization trends losers" next="DOWN j"
+      prev="UP k" fwd="n" back="p">
 
-    <item action="CALL:axsFinance.readTableRowTrendsNoVolumeDesc">
-     id("tm_mcap_0")//td[@class="change chr"]/..
+    <item action="CALL:axsFinance.readPopularPriceMktCapVolTemplate">
+      id("tm_mcap_0")//td[@class="change chr"]/..
     </item>
 
-    <target title = "Market capitalization trends losers" 
+    <target title = "Market capitalization trends losers"
         trigger="listEntry">
       id("l_tm_mcap")
     </target>
 
   </list>
 
-  <list title="Volume trends" next="DOWN j" prev="UP k"
-      fwd="n" back="p">
+  <list title="Volume trends" next="DOWN j" prev="UP k" fwd="n"
+      back="p">
 
-    <item action="CALL:axsFinance.readTableRowTrendsVolumeDesc">
-      id("tm_volume_0")//td[@class="name"]/.. |
-          id("tm_volume_0")/div
+    <item action="CALL:axsFinance.readPopularPriceMktCapVolTemplate">
+      id("tm_volume_0")//td[@class="name"]/..
     </item>
 
     <target title = "Volume trends" trigger="listEntry">

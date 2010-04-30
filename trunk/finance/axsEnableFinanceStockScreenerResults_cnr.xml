@@ -41,11 +41,12 @@
 -->
 
 <!-- BODY -template
-  <list title="{0}" fwd="DOWN j n" back="UP k p" type="dynamic">
+   <list title="{0}" next="DOWN j" prev="UP k"
+      fwd="n" back="p" type="dynamic">
 
     <item action="CALL:axsFinance.readResultCellValue">
-      id("searchresults")/table[@class="results innermargin"]//tr/td[{1}]
-          [not(@class="top_row") and not(@class="bottom_row")]
+      id("advanced_search_results")//tr[@class="highlightWhite" or
+          @class="highlightGrey"]/td[{1}]
     </item>
 
     <target title="Go to section" trigger="listEntry"
@@ -58,15 +59,13 @@
     </target>
 
     <target title="Next page" trigger="listTail"
-        action="CALL:axsFinance.wrapAroundGoTop">
-      id("searchresults")//td[position() > 1]//span[@class="navb"]/.. 
-          | //div[@class="footerLinks"]
+        action="CALL:axsFinance.goToNextPage">
+      //div[@class="SP_arrow_next"]
     </target>
 
     <target title="Previous page" trigger="listHead"
-        action="CALL:axsFinance.wrapAroundGoBottom">
-      id("searchresults")//td[1]//span[@class="navb"]/..
-          | //div[@class="footerLinks"]
+        action="CALL:axsFinance.goToPreviousPage">
+        //div[@class="SP_arrow_previous"]
     </target>
 
     <target title="Reverse sorting order" hotkey="r"

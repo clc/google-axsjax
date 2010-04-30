@@ -1,27 +1,74 @@
 <cnr next="RIGHT l" prev="LEFT h">
 
-  <target title="Stock screener" hotkey="s">
-    //a[@href="/finance/stockscreener"]
-  </target>
-
   <target title="Read current quote" hotkey="q"
       action="CALL:axsFinance.readCurrentQuote">
-    /html
+    id("price-panel")
   </target>
 
-  <list title="Market data" next="DOWN j" prev="UP k"
-      fwd="n" back="p">
+  <target title="Markets" hotkey="m">
+    (//li[@class="nav-item"])[1]//a
+  </target>
 
-    <item action="CALL:axsFinance.readCurrentQuote">
-      /html
+  <target title="News" hotkey="e">
+    (//li[@class="nav-item"])[2]//a
+  </target>
+
+  <target title="Portfolios" hotkey="o">
+    (//li[@class="nav-item"])[3]//a
+  </target>
+
+  <target title="Stock screener" hotkey="s">
+    (//li[@class="nav-item"])[4]//a
+  </target>
+
+  <target title="Google domestic trends" hotkey="g">
+    (//li[@class="nav-item"])[5]//a
+  </target>
+
+  <target title="Financials" hotkey="f">
+    id("nav-cf")
+  </target>
+
+  <target title="Go to link" hotkey="ENTER">
+    .//descendant-or-self::a
+  </target>
+
+  <list title="Recent quotes" next="DOWN j" prev="UP k" fwd="n" back="p"
+       type="dynamic" onEmpty="No recent quotes">
+
+    <item action="CALL:axsFinance.readRecentQuote">
+      id("rq")//tr
     </item>
 
-    <item action="CALL:axsFinance.readMarketDataItem">
-      id("md")//tr/td[@class="key"]
+    <target title="Go to section" trigger="listEntry">
+      id("rq-box")
+    </target>
+
+    <target title="Create portfolio from quotes" hotkey="p"
+        onEmpty="No recent quotes.">
+      id("rq-create")
+    </target>
+
+  </list>
+
+  <list title="Recent activity" next="DOWN j" prev="UP k" fwd="n"
+      back="p" type="dynamic">
+
+    <item>
+      //li[@class="ra-entry"]//a
     </item>
 
-    <item action="CALL:axsFinance.readAfterHours">
-      id("md")//tr//nobr
+    <target title="Go to section" trigger="listEntry">
+      id("rq-src")
+    </target>
+
+  </list>
+
+  <list title="Market data" next="DOWN j" prev="UP k" fwd="n"
+      back="p">
+
+    <item action="CALL:axsFinance.readMarketData">
+      id("snap-data")/li
     </item>
 
     <target title="Go to section" trigger="listEntry">
@@ -33,318 +80,203 @@
   <list title="News" next="DOWN j" prev="UP k" fwd="n"
       back="p" type="dynamic">
 
-    <item action="CALL:axsFinance.readNewsDesc">
-      id("newsmovingdiv")//div[@class="inner"]//tbody
-    </item>
-
     <item>
-      id("older_news_link")//following-sibling::a[not(./img)]
+      //div[@class="cluster"]
     </item>
 
-    <target title="Go to link" hotkey="ENTER">
-      .//ancestor-or-self::a
+    <target title="View all news" hotkey="a">
+      (id("news-sidebar-footer")//a[text()])[1]
     </target>
 
-    <target title="Related articles" hotkey="r"
-        onEmpty="No related articles available">
-      .//a[@class="g bld" or @class="rl" or @class="rg"]
+    <target title="Subscribe" hotkey="u">
+      (id("news-sidebar-footer")//a[text()])[2]
     </target>
 
     <target title="Go to section" trigger="listEntry">
-       id("news_tab_title")
+      id("companyheader")
     </target>
 
   </list>
 
-  <list title="Blogs" next="DOWN j" prev="UP k" fwd="n"
-      back="p" type="dynamic">
-
-    <item action="CALL:axsFinance.readBlogsDesc">
-      //div[@class="rss-item"]
-    </item>
-
-    <target title="Go to blog" hotkey="ENTER">
-      .//a[./img[@class="rssSprite"]]
-    </target>
-
-    <target title="Go to section" trigger="listEntry">
-      id("blogs_tab_title")
-    </target>
-
-  </list>
-
-  <list title="Feeds" next="DOWN j" prev="UP k" fwd="n"
-      back="p" type="dynamic">
-
-    <item action="CALL:axsFinance.readFeedExampleDesc">
-      //div[./div[contains(@id, "rss-feed-item-snippet")]
-          and not(.//b)]
-    </item>
-
-    <item action="CALL:axsFinance.readFeedSearchResDesc">
-      //div[./div[contains(@id, "rss-feed-item-snippet")]
-         and .//b]
-    </item>
-
-    <item action="CALL:axsFinance.readBlogsDesc">
-      //div[@id="plot_feed_div_cont"]//
-          div[@class="rss-item"]
-    </item>
-
-    <target title="Go to feed source" hotkey="g">
-      .//a[@class="g"]
-    </target>
-
-    <target title="Try this example" hotkey="t">
-      .//a[not(@class)]
-    </target>
-
-    <target title="Go to feed" hotkey="ENTER"
-        onEmpty="The current item is not a feed">
-      .//a[./img[@class="rssSprite"]]
-    </target>
-
-    <target title="Feed search" hotkey="s"
-        action="CALL:axsFinance.focusOnSearchBox">
-      id("rss_query_box")
-    </target>
-
-    <target title="Go to section" trigger="listEntry">
-      id("plot_feeds_title")
-    </target>
-
-  </list>
-
-  <list title="Related companies" next="DOWN j" 
-      prev="UP k" fwd="n" back="p">
+  <list title="Related companies" next="DOWN j" prev="UP k" fwd="n"
+      type ="dynamic" back="p">
 
     <item action="CALL:axsFinance.readRelCompDesc">
-      id("related")//tbody//tr
+      id("cc-table")//tr[./td]
     </item>
 
-    <target title="Go to link" hotkey="ENTER">
-       .//a
+    <target title="Go to section" trigger="listEntry">
+      id("related")
     </target>
 
-    <target title="Go to section" trigger="listEntry">
-      id("related")/div[@class="hdg"]
+    <target title="Add or remove columns" hotkey="a"
+        action="CALL:axsFinance.focusOnColumnSelectionCategry">
+      id("related-edit-col")
+    </target>
+
+    <target title="Cancel" hotkey="v">
+      id("related-save")
+    </target>
+
+    <target title="Cancel" hotkey="c">
+      id("related-cancel")
     </target>
 
   </list>
 
-  <list title="Discussions" next="DOWN j" prev="UP k"
-      fwd="n" back="p">
-
-    <item>
-      id("groups")//div[@class="item"]//a[@id]
-    </item>
-
-    <target title="Go to link" hotkey="ENTER">
-      .//a
-    </target>
-
-    <target title="Go to section" trigger="listEntry">
-      id("groups")/div[@class="hdg"]
-    </target>
-
-    <target title="All discussions" hotkey="a"
-        onEmpty="No more discussions">
-      id("groups")//div[@class="item"]//a[not(@id)]
-    </target>
-
-  </list>
-
-  <list title="Blog posts" next="DOWN j" prev="UP k" fwd="n" back="p">
+  <list title="Discussed on blogs" next="DOWN j" prev="UP k" fwd="n"
+      back="p">
 
     <item>
       id("blogs")//div[@class="item"]
     </item>
 
-    <target title="Go to link" hotkey="ENTER" onEmpty="No
- 
-        link available.">
-      .//a
+    <target title="Go to section" trigger="listEntry">
+      id("blogs")
     </target>
 
-    <target title="Go to section" trigger="listEntry">
-      id("blogs")/div[@class="hdg"]
+    <target title="All blog discussions" hotkey="a"
+        onEmpty="No more blog discussions">
+      id("b-m-")
     </target>
 
   </list>
 
-  <list title="Events" next="DOWN j" prev="UP k" fwd="n" 
-      back="p">
+  <list title="Events" next="DOWN j" prev="UP k" fwd="n" back="p">
 
-    <item action="CALL:axsFinance.readEventsDesc">
-      id("events")//tr
+    <item>
+      //div[@class="event"]
     </item>
 
     <target title="Go to section" trigger="listEntry">
-      id("blogs")/following-sibling::div[@class="content"]
-        /div[@class="hdg"]
-    </target>
-
-    <target title="Go to link" hotkey="ENTER" onEmpty="No
-        link available.">
-      .//descendant-or-self::a
+      //div[@class="g-section g-tpl-25-75 g-split hdg"]
     </target>
 
     <target title="All events from AOL" hotkey="a"
         onEmpty="No more events">
-      id("all_events")
+      //div[@class="events sfe-section"]//table//a
     </target>
 
   </list>
 
-  <list title="Summary" next="DOWN j" prev="UP k" fwd="n"
-      back="p">
-
-    <item action="CALL:axsFinance.readSummaryTextCompDesc">
-      id("summary")//div[@class="item companySummary"]
-    </item>
+  <list title="Discussions" next="DOWN j" prev="UP k" fwd="n" back="p">
 
     <item>
-      id("summary")//div[@class="content"]//td[1]
+      id("groups")//div[@class="item"]
     </item>
-
-    <item action="CALL:axsFinance.readSummarylinksCompDesc">
-      id("summary")//div[@class="content"]//a[contains(@id,"fs-")]
-    </item>
-
-    <target title="Go to link" hotkey="ENTER" onEmpty="No
-        link available.">
-      .//descendant-or-self::a
-    </target>
 
     <target title="Go to section" trigger="listEntry">
-      id("summary")/div[@class="hdg"]
+      id("groups")
+    </target>
+
+    <target title="All discussions" hotkey="a"
+        onEmpty="No more discussions">
+      id("groups")//div[@class="sfe-break-top"]//a
     </target>
 
   </list>
 
-  <list title="Income statement in millions of US dollars"
-      next="DOWN j" prev="UP k" fwd="n" back="p">
-    <item index="1" count="4"
-        action="CALL:axsFinance.readFinancialCompDesc">
-      id("fd")//tr
+  <list title="Key statistics and ratios" next="DOWN j" prev="UP k"
+    fwd="n" back="p">
+
+    <item action="CALL:axsFinance.readKeyStatisticAndRatio">
+      //table[@class="quotes rgt nwp"]//tbody/tr
     </item>
 
-    <target title="Income statement section" trigger="listEntry">
-      id("fd")//tr[1]//td[1]axsFinance.str.BIO
-    </target>
-
-    <target title="Open income statement" hotkey="ENTER">
-      ./../tr[1]//a
-    </target>
-
-    <target title="Go to section" trigger="listEntry">
-      id("fd")//tr[1][//a]
-    </target>
-
-  </list> 
-
-  <list title="Balance sheet in millions of US dollars"
-      next="DOWN j" prev="UP k" fwd="n" back="p">
-
-    <item index="7" count="5"
-        action="CALL:axsFinance.readFinancialCompDesc">
-      id("fd")//tr
-    </item>
-
-    <target title="Open balance sheet" hotkey="ENTER">
-      ./../tr[6]//a
-    </target>
-
-    <target title="Go to section" trigger="listEntry">
-      id("fd")//tr[6][//a]
-    </target>
-
-  </list>
-
-  <list title="Cash flow in millions of US dollars"
-      next="DOWN j" prev="UP k" fwd="n" back="p">
-
-    <item index="12" count="5"
-        action="CALL:axsFinance.readFinancialCompDesc">
-      id("fd")//tr
-    </item>
-
-    <target title="Open cash flow" hotkey="ENTER">
-      ./../tr[12]//a
-    </target>
-
-    <target title="Go to section" trigger="listEntry">
-      id("fd")//tr[12][//a]
-    </target>
-
-  </list>
-
-  <list title="Key statistics and ratios" next="DOWN j"
-      prev="UP k" fwd="n" back="p">
-
-    <item action="CALL:axsFinance.readRatAndStatsCompDesc">
-      id("keyratios")//tr[@class]
-    </item>
-
-    <target title="More ratios from Reuters" hotkey="a"
+    <target title="More ratios from Thomson Reuters" hotkey="a"
         onEmpty="No more ratios">
-      id("keyratios")//a
+      id("m-rratio")
     </target>
 
     <target title="Go to section" trigger="listEntry">
-      id("keyratios")/div[@class="hdg"]
+      //table[@class="quotes rgt nwp"]
+    </target>
+
+    <target title="All ratios" hotkey="a"
+        onEmpty="No more ratios">
+      id("m-rratio")
     </target>
 
   </list>
 
-  <list title="More resources" next="DOWN j" prev="UP k"
+  <list title="Address" next="DOWN j" prev="UP k" fwd="n" back="p">
+
+    <!--fragile - no suitable attribute via which to recognize the node -->
+    <item>
+      (//div[@class="hdg" and .//h3[contains(text(),"Address")]]
+          //following-sibling::div)[1]
+    </item>
+
+    <!--fragile - no suitable attribute via which to recognize the node -->
+    <target title="Go to section" trigger="listEntry">
+      //div[@class="hdg"]//h3[contains(text(),"Address")]
+    </target>
+
+  </list>
+
+  <list title="Description" next="DOWN j" prev="UP k" fwd="n" back="p">
+
+    <item>
+      id("summary")
+    </item>
+
+    <target title="More from Reuters" hotkey="a">
+      id("m-rprofile")
+    </target>
+
+    <target title="Go to section" trigger="listEntry">
+      id("summary-section")
+    </target>
+
+  </list>
+
+  <list title="Officers and directors" next="DOWN j" prev="UP k"
       fwd="n" back="p">
 
     <item>
-      id("m-analyst")/.. | id("m-sec")/.. | id("m-hold")/.. |
-          id("m-options")/.. | id("m-research")/.. |
-          id("m-wiki")/.. | id("m-transcripts")/..
+      id("management")//tr[@class]
     </item>
 
-    <target title="Go to link" hotkey="ENTER">
-      .//a
-    </target>
-
-    <target title="Go to section" trigger="listEntry" >
-      id("keyratios")/following-sibling::div[@class="hdg"]
-    </target>
-
-  </list>
-
-  <list title="Officers and directors" next="DOWN j"
-      prev="UP k" fwd="n" back="p">
-
-    <item action="CALL:axsFinance.readManagementDescription">
-      id("management")//tr[not(@id="hide") and @id]
-    </item>
-
-    <item>
-      id("management")//td/a
-    </item>
-
-    <target title="Biography and compensation" hotkey="b">
-      .//following-sibling::tr[1]//a[@class="e-p"]
-    </target>
-
-    <target title="Trading activity" hotkey="t" onEmpty="
-        No trading activity available.">
-      .//following-sibling::tr[1]//a[@class="e-t"]
-    </target>
-
-    <target title="Go to link" hotkey="ENTER"
-        onEmpty="No link available.">
-      .
+    <target title="Full list on Reuters" hotkey="a">
+      id("management")//div[@class="gb"]//a
     </target>
 
     <target title="Go to section" trigger="listEntry">
-      id("mgmtdiv")
+      id("management")
     </target>
 
   </list>
+
+  <list title="Website links" next="DOWN j" prev="UP k"
+      fwd="n" back="p">
+
+    <!-- fragile - no suitable attribute via which to recognize the node -->
+    <item>
+      (//div[@class="hdg" and .//h3[contains(text(),"Website links")]]
+          //following-sibling::div)[1]//div[@class="item"]
+    </item>
+
+    <!-- fragile - no suitable attribute via which to recognize the node -->
+    <target title="Go to section" trigger="listEntry">
+      //div[@class="hdg"]//h3[contains(text(),"Website links")]
+    </target>
+
+  </list>
+
+  <list title="External links" next="DOWN j" prev="UP k"
+      fwd="n" back="p">
+
+      <!-- fragile - no suitable attribute via which to recognize the node -->
+    <item>
+      (//div[@class="hdg" and .//h3[contains(text(),"External links")]]
+          //following-sibling::div)[1]//a
+    </item>
+
+    <!-- fragile - no suitable attribute via which to recognize the node  -->
+    <target title="Go to section" trigger="listEntry">
+      //div[@class="hdg"]//h3[contains(text(),"External links")]
+    </target>
+
+   </list>
 
 </cnr>

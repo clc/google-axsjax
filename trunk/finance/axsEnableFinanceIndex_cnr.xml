@@ -1,132 +1,94 @@
 <cnr next="RIGHT l" prev="LEFT h">
 
+  <target title="Markets" hotkey="m">
+    (//li[@class="nav-item"])[1]//a
+  </target>
+
+  <target title="News" hotkey="e">
+    (//li[@class="nav-item"])[2]//a
+  </target>
+
+  <target title="Portfolios" hotkey="o">
+    (//li[@class="nav-item"])[3]//a
+  </target>
+
   <target title="Stock screener" hotkey="s">
-    //a[@href="/finance/stockscreener"]
+    (//li[@class="nav-item"])[4]//a
+  </target>
+
+  <target title="Google domestic trends" hotkey="g">
+    (//li[@class="nav-item"])[5]//a
+  </target>
+
+  <target title="Go to link" hotkey="ENTER">
+    .//descendant-or-self::a
   </target>
 
   <target title="Read current quote" hotkey="q"
       action="CALL:axsFinance.readCurrentQuote">
-    /html"]
+    id("price-panel")
   </target>
 
-  <list title="Market data" next="DOWN j" prev="UP k" fwd="n" back="p">
+  <target title="Create portfolio from quotes" hotkey="t"
+      onEmpty="No recent quotes.">
+    id("rq-create")
+  </target>
 
-    <item action="CALL:axsFinance.readCurrentQuote">
-      id("md")//span[@class="pr"]/..
+  <list title="Recent quotes" next="DOWN j" prev="UP k" fwd="n" back="p"
+       type="dynamic" onEmpty="No recent quotes">
+
+    <item action="CALL:axsFinance.readRecentQuote">
+      id("rq")//tr
     </item>
-
-    <item action="CALL:axsFinance.readMarketDataItem">
-      id("md")//tr/td[@class="key"]
-    </item>
-
-    <item action="CALL:axsFinance.readAfterHours">
-      id("md")//tr//nobr
-    </item>
-
-    <target title="Go to section" trigger="listEntry">
-      id("companyheader")
-    </target>
 
   </list>
 
-  <list title="News" next="DOWN j" prev="UP k" fwd="n" back="p" type="dynamic">
-
-    <item action="CALL:axsFinance.readNewsDesc">
-      id("newsmovingdiv")//div[@class="inner"]//tbody
-    </item>
+  <list title="Recent activity" next="DOWN j" prev="UP k" fwd="n"
+      back="p" type="dynamic" onEmpty="No recent activities">
 
     <item>
-      id("older_news_link")//following-sibling::a[not(./img)]
+      //li[@class="ra-entry"]//a
     </item>
-
-    <target title="Go to link" hotkey="ENTER">
-      .//ancestor-or-self::a
-    </target>
-
-    <target title="Related articles" hotkey="r" onEmpty="No related
-        articles available">
-      .//a[@class="g bld" or @class="rl" or @class="rg"]
-    </target>
-
-    <target title="Go to section" trigger="listEntry">
-      id("news_tab_title")
-    </target>
 
   </list>
 
-  <list title="Blogs" next="DOWN j" prev="UP k" fwd="n"
+  <list title="Market data" next="DOWN j" prev="UP k" fwd="n"
+      back="p">
+
+    <item action="CALL:axsFinance.readMarketData">
+      id("snap-data")/li
+    </item>
+
+  </list>
+
+  <list title="News" next="DOWN j" prev="UP k" fwd="n"
       back="p" type="dynamic">
 
-    <item action="CALL:axsFinance.readBlogsDesc">
-      //div[@class="rss-item"]
+    <item>
+      //div[@class="cluster"]
     </item>
 
-    <target title="Go to blog" hotkey="ENTER">
-      .//a[./img[@class="rssSprite"]]
+    <target title="View all news" hotkey="a">
+      (id("news-sidebar-footer")//a[text()])[1]
     </target>
 
-    <target title="Go to section" trigger="listEntry">
-       id("blogs_tab_title")
+    <target title="Subscribe" hotkey="u">
+      (id("news-sidebar-footer")//a[text()])[2]
     </target>
 
   </list>
 
-  <list title="Feeds" next="DOWN j" prev="UP k" fwd="n"
+  <list title="Discussions" next="DOWN j" prev="UP k" fwd="n"
       back="p" type="dynamic">
-
-    <item action="CALL:axsFinance.readFeedExampleDesc">
-      //div[./div[contains(@id, "rss-feed-item-snippet")]
-          and not(.//b)]
-    </item>
-
-    <item action="CALL:axsFinance.readFeedSearchResDesc">
-      //div[./div[contains(@id, "rss-feed-item-snippet")]
-         and .//b]
-    </item>
-
-    <item action="CALL:axsFinance.readBlogsDesc">
-      //div[@id="plot_feed_div_cont"]//
-          div[@class="rss-item"]
-    </item>
-
-    <target title="Go to feed source" hotkey="g">
-      .//a[@class="g"]
-    </target>
-
-    <target title="Try this example" hotkey="t">
-      .//a[not(@class)]
-    </target>
-
-    <target title="Go to feed" hotkey="ENTER"
-        onEmpty="The current item is not a feed">
-      .//a[./img[@class="rssSprite"]]
-    </target>
-
-    <target title="Feed search" hotkey="s"
-        action="CALL:axsFinance.focusOnSearchBox">
-      id("rss_query_box")
-    </target>
-
-    <target title="Go to section" trigger="listEntry">
-      id("plot_feeds_title")
-    </target>
-
-  </list>
-
-  <list title="Discussions" next="DOWN j" prev="UP k" fwd="n" back="p">
 
     <item>
       id("groups")//div[@class="item"]
     </item>
 
-    <target title="Go to link" hotkey="ENTER">
-      .//a
-    </target>
-
-    <target title="Go to section" trigger="listEntry">
-      id("groups")/div[@class="hdg"]
+    <target title="All discussions" hotkey="a">
+      //div[@class="sfe-break-top"]//a
     </target>
 
   </list>
 
-  </cnr>
+</cnr>

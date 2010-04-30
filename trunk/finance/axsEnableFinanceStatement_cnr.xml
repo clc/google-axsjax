@@ -1,149 +1,96 @@
 <!-- The CNR for axsEnableFinanceStatement.js id generated dynamically -->
 <!-- since the document has three sections with specific data table.   -->
-<!-- This is a sample of a generated CNR file.                         -->
+<!-- NOTE: This is not a valid XML file.                               -->
 
-<!-- 
-<cnr next="RIGHT l" prev="LEFT h">
+<!-- This is the header of the CNR file -->
+  <cnr next="RIGHT l" prev="LEFT h">
 
-  <target title="Quarterly data" hotkey="q"
-      onEmpty="Quarterly data already opened"
-      action="CALL:axsFinance.storeCurrentPositionAndClickOnLink"> +
-    id("interim")[@class="nac"] +
-  </target> +
+    <target title="Markets" hotkey="m">
+      (//li[@class="nav-item"])[1]//a
+    </target>
 
-  <target title="Annual data" hotkey="a"
-      onEmpty="Annual data already opened"
-      action="CALL:axsFinance.storeCurrentPositionAndClickOnLink"> +
-    id("annual")[@class="nac"] +
-  </target> +
+    <target title="News" hotkey="e">
+      (//li[@class="nav-item"])[2]//a
+    </target>
 
-  <target title="Income statement" hotkey="i"
-      onEmpty="Income statement already opened"> +
-    id("inc")[@class="nac"] +
-  </target> +
+    <target title="Portfolios" hotkey="o">
+      (//li[@class="nav-item"])[3]//a
+    </target>
 
-  <target title="Balance sheet" hotkey="b"
-      onEmpty="Balance sheet already opened"> +
-    id("bal")[@class="nac"] +
-  </target> +
+    <target title="Stock screener" hotkey="s">
+      (//li[@class="nav-item"])[4]//a
+    </target>
 
-  <target title="Cash flow" hotkey="c"
-      onEmpty="Cash flow already opened"> +
-    id("cas")[@class="nac"] +
-  </target> +
+    <target title="Google domestic trends" hotkey="g">
+      (//li[@class="nav-item"])[5]//a
+    </target>
 
-  <target title="Stock screener" hotkey="s"> +
-    //a[@class="screener-link"] +
-  </target>;
+    <target title="Create portfolio from quotes" hotkey="t"
+        onEmpty="No recent quotes.">
+      id("rq-create")
+    </target>
 
-  <list title="Total Revenue" fwd="DOWN j n" back="UP k p">
+    <target title="Go to link" hotkey="ENTER">
+      .//descendant-or-self::a
+    </target>
 
-    <item action="CALL:axsFinance.readTableRow">
-      id("incinterimdiv")//tr[position() &gt;= 2 and position() &lt;= 4]
-    </item>
+    <target title="Quarterly data" hotkey="q"
+        onEmpty="Quarterly data already opened"
+        action="CALL:axsFinance.storeCurrentPositionAndClickOnLink">
+      id("interim")[@class="nac"]
+    </target>
 
-  </list>
+    <target title="Annual data" hotkey="a"
+        onEmpty="Annual data already opened"
+        action="CALL:axsFinance.storeCurrentPositionAndClickOnLink">
+      id("annual")[@class="nac"]
+    </target>
 
-  <list title="Gross Profit" fwd="DOWN j n" back="UP k p">
+    <target title="Income statement" hotkey="i"
+        onEmpty="Income statement already opened">
+      id("fs-type-tabs")//div[@id=":0" and
+          not(contains(@class, "selected"))]/a
+    </target>
 
-    <item action="CALL:axsFinance.readTableRow">
-      id("incinterimdiv")//tr[position() &gt;= 5 and position() &lt;= 7]
-    </item>
+    <target title="Balance sheet" hotkey="b"
+        onEmpty="Balance sheet already opened">
+      id("fs-type-tabs")//div[@id=":1" and
+          not(contains(@class, "selected"))]/a
+    </target>
 
-  </list>
+    <target title="Cash flow" hotkey="c"
+        onEmpty="Cash flow already opened">
+      id("fs-type-tabs")//div[@id=":2" and
+          not(contains(@class, "selected"))]/a
+    </target>
 
-  <list title="Total Operating Expense" fwd="DOWN j n" back="UP k p">
+    <list title="Recent quotes" next="DOWN j" prev="UP k" fwd="n" back="p"
+         type="dynamic" onEmpty="No recent quotes">
 
-    <item action="CALL:axsFinance.readTableRow">
-      id("incinterimdiv")//tr[position() &gt;= 8 and position() &lt;= 15]
-    </item>
+      <item action="CALL:axsFinance.readRecentQuote">
+        id("rq")//tr
+      </item>
 
-  </list>
+    </list>
 
-  <list title="Operating Income" fwd="DOWN j n" back="UP k p">
+    <list title="Recent activity" next="DOWN j" prev="UP k" fwd="n"
+        back="p" type="dynamic" onEmpty="No recent activities">
 
-    <item action="CALL:axsFinance.readTableRow">
-      id("incinterimdiv")//tr[position() &gt;= 16 and position() &lt;= 17]
-    </item>
+      <item>
+        //li[@class="ra-entry"]//a
+      </item>
 
-  </list>
+    </list>
 
-  <list title="Income Before Tax" fwd="DOWN j n" back="UP k p">
+ <!-- This is the template body of the CNR file populated for each category
+      in the data table-->
+    <list title="{0}" fwd="DOWN j n" back="UP k p">
 
-    <item action="CALL:axsFinance.readTableRow">
-      id("incinterimdiv")//tr[position() &gt;= 18 and position() &lt;= 22]
-    </item>
+      <item action="CALL:axsFinance.readTableRow">
+        {1}
+      </item>
 
-  </list>
+    </list>
 
-  <list title="Income After Tax" fwd="DOWN j n" back="UP k p">
-
-    <item action="CALL:axsFinance.readTableRow">
-      id("incinterimdiv")//tr[position() &gt;= 23 and position() &lt;= 24]
-    </item>
-
-  </list>
-
-  <list title="Net Income Before Extra. Items" fwd="DOWN j n" back="UP k p">
-
-    <item action="CALL:axsFinance.readTableRow">
-      id("incinterimdiv")//tr[position() &gt;= 25 and position() &lt;= 28]
-    </item>
-
-  </list>
-
-  <list title="Net Income" fwd="DOWN j n" back="UP k p">
-
-    <item action="CALL:axsFinance.readTableRow">
-      id("incinterimdiv")//tr[position() &gt;= 29 and position() &lt;= 33]
-    </item>
-
-  </list>
-
-  <list title="Income Available to Common Excl. Extra Items" fwd="DOWN j n" 
-      back="UP k p">
-
-    <item action="CALL:axsFinance.readTableRow">
-      id("incinterimdiv")//tr[position() &gt;= 34 and position() &lt;= 36]
-    </item>
-
-  </list>
-
-  <list title="Income Available to Common Incl. Extra Items" fwd="DOWN j n"
-      back="UP k p">
-
-    <item action="CALL:axsFinance.readTableRow">
-      id("incinterimdiv")//tr[position() &gt;= 37 and position() &lt;= 38]
-    </item>
-
-  </list>
-
-  <list title="Basic EPS Including Extraordinary Items" fwd="DOWN j n"
-     back="UP k p">
-
-    <item action="CALL:axsFinance.readTableRow">
-      id("incinterimdiv")//tr[position() &gt;= 39 and position() &lt;= 42]
-    </item>
-
-  </list>
-
-  <list title="Diluted EPS Excluding Extraordinary Items" fwd="DOWN j n"
-      back="UP k p">
-
-    <item action="CALL:axsFinance.readTableRow">
-      id("incinterimdiv")//tr[position() &gt;= 43 and position() &lt;= 46]
-    </item>
-
-  </list>
-
-  <list title="Diluted EPS Including Extraordinary Items" fwd="DOWN j n"
-      back="UP k p">
-
-    <item action="CALL:axsFinance.readTableRow">
-      id("incinterimdiv")//tr[position() &gt;= 47 and position() &lt;= 48]
-    </item>
-
-  </list>
-
-</cnr>
- -->
+<!-- This is the footer of the CNR file-->
+  </cnr>

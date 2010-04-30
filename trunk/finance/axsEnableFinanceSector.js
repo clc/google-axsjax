@@ -3,9 +3,9 @@
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
-// 
+//
 //      http://www.apache.org/licenses/LICENSE-2.0
-// 
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -13,7 +13,7 @@
 // limitations under the License.
 
 /**
- * @fileoverview AxsJAX script intended to enhance accessibility of 
+ * @fileoverview AxsJAX script intended to enhance accessibility of
  * the Sector page of Google Finance.
  *
  * @author svetoslavganov@google.com (Svetoslav R. Ganov)
@@ -32,36 +32,35 @@ axsFinance.HELP = 'The following shortcut keys are available. ';
  * Strings for enhancing the presentation
  */
 axsFinance.str = {
-  OR : 'or',
-  UP : ' up by ',
+  UP : 'up by',
   UP_ABBR : '+',
-  DOWN : ' down by ',
+  DOWN : 'down by',
   DOWN_ABBR : '-',
   NOT_ANN : 'Not announced',
   NOT_ANN_ABBR : '-',
-  PRCNT : ' percent',
+  PRCNT : 'percent',
   PRCNT_ABBR : '%',
   MILION : ' million',
   MILLION_ABR : 'M',
-  BILLION : ' billion',
+  BILLION : 'billion',
   BILLION_ABR : 'B',
-  MOVERS_TEMPLATE : '{0} abbreviated {1} was last traded at ' +
-      '{2} and is {3}. Market cap {4}',
+  TRILION : 'trillion',
+  TRILION_ABR : 'T',
   SORTED_BY : 'Sorted by',
   IN_DESCENDING_ORDER : 'in descending order',
   IN_ASCENDING_ORDER : 'in ascending order',
-  GOOGLE_FINANCE : 'Google Finance',
-  SECTOR : 'Sector',
+  GOOGLE_FINANCE_SECTOR : 'Google Finance Sector',
   TO : 'to',
   SEARCH_COMPANY : 'Search for row by company name',
   SEARCH_CRITERIA : 'Search for a criteria',
   SEARCH_CRITERIA_VALUE : 'Search for a criteria value',
   SEARCH_CRITERIA_BY_VALUE : 'Search for a criteria by value',
-  ITEM_SND : 'item',
-  WRAP_SND : 'wrap',
   SECTOR_SECTION_ACTIVE : 'Sector section active.',
   COMPANY_SECTION_ACTIVE : 'Companies section active',
-  SUB_CATEGORY : 'sub category'
+  SUB_CATEGORY : 'sub category',
+  RECENT_QUOTE_TEMPLATE : '{0}, {1}, change {2}.',
+  MOVER_TEMPLATE : '{0}, {1}, was last traded at {2} with change {3} or {4}.' +
+       ' Market capitalization {5}/'
 };
 
 /**
@@ -75,49 +74,89 @@ axsFinance.phrasesMap[axsFinance.str.NOT_ANN_ABBR] = axsFinance.str.NOT_ANN;
  * Map from prefix characters to strings.
  * @type {Object}
  */
-axsFinance.charPrefixMap = new Object();
-axsFinance.charPrefixMap[axsFinance.str.DOWN_ABBR] = axsFinance.str.DOWN;
-axsFinance.charPrefixMap[axsFinance.str.UP_ABBR] = axsFinance.str.UP;
+axsFinance.prefixMap = new Object();
+axsFinance.prefixMap[axsFinance.str.DOWN_ABBR] = axsFinance.str.DOWN;
+axsFinance.prefixMap[axsFinance.str.UP_ABBR] = axsFinance.str.UP;
 
 /**
  * Map from suffix characters to strings.
  * @type {Object}
  */
-axsFinance.charSuffixMap = new Object();
-axsFinance.charSuffixMap[axsFinance.str.PRCNT_ABBR] = axsFinance.str.PRCNT;
-axsFinance.charSuffixMap[axsFinance.str.BILLION_ABR] = axsFinance.str.BILLION;
-axsFinance.charSuffixMap[axsFinance.str.MILLION_ABR] = axsFinance.str.MILION;
-axsFinance.charSuffixMap[axsFinance.str.PERCENT_ABR] = axsFinance.str.PERCENT;
+axsFinance.suffixMap = new Object();
+axsFinance.suffixMap[axsFinance.str.PRCNT_ABBR] = axsFinance.str.PRCNT;
+axsFinance.suffixMap[axsFinance.str.TRILION_ABR] = axsFinance.str.TRILION;
+axsFinance.suffixMap[axsFinance.str.BILLION_ABR] = axsFinance.str.BILLION;
+axsFinance.suffixMap[axsFinance.str.MILLION_ABR] = axsFinance.str.MILION;
+axsFinance.suffixMap[axsFinance.str.PERCENT_ABR] = axsFinance.str.PERCENT;
 
 /**
  * CNR for the 'Sector' section.
  * @type {string}
  */
-axsFinance.SECTOR_CNR = '<cnr next="RIGHT l" prev="LEFT h">' +
+axsFinance.SECTOR_CNR =
+    '<cnr next="RIGHT l" prev="LEFT h">' +
 
-      '<target title="Go to the companies section" hotkey="s" ' +
+      '<target title="Go to the companies section" hotkey="y" ' +
           'action="CALL:axsFinance.setActiveCompaniesSection">' +
         '/html' +
       '</target>' +
+
+      '<target title="Markets" hotkey="m">' +
+        '(//li[@class="nav-item"])[1]//a' +
+      '</target>' +
+
+      '<target title="News" hotkey="e">' +
+        '(//li[@class="nav-item"])[2]//a' +
+      '</target>' +
+
+      '<target title="Portfolios" hotkey="o">' +
+        '(//li[@class="nav-item"])[3]//a' +
+      '</target>' +
+
+      '<target title="Stock screener" hotkey="s">' +
+        '(//li[@class="nav-item"])[4]//a' +
+      '</target>' +
+
+      '<target title="Google domestic trends" hotkey="g">' +
+        '(//li[@class="nav-item"])[5]//a' +
+      '</target>' +
+
+      '<target title="Go to link" hotkey="ENTER">' +
+        './/descendant-or-self::a' +
+      '</target>' +
+
+      '<target title="Create portfolio from quotes" hotkey="t" ' +
+           'onEmpty="No recent quotes.">' +
+        'id("rq-create")' +
+      '</target>' +
+
+      '<list title="Recent quotes" next="DOWN j" prev="UP k" fwd="n" back="p"' +
+          ' type="dynamic" onEmpty="No recent quotes">' +
+
+        '<item action="CALL:axsFinance.readRecentQuote">' +
+          'id("rq")//tr' +
+        '</item>' +
+
+      '</list>' +
+
+       '<list title="Recent activity" next="DOWN j" prev="UP k" fwd="n" ' +
+          'back="p" type="dynamic" onEmpty="No recent activities">' +
+
+        '<item>' +
+          '//li[@class="ra-entry"]//a' +
+        '</item>' +
+
+      '</list>' +
 
       '<list title="News" next="DOWN j" prev="UP k" fwd="n" ' +
           'back="p">' +
 
         '<item action="CALL:axsFinance.readNews">' +
-          '//tr[contains(@class, "news")]//tbody//tr[1]' +
+          'id("category-news")//div[@class="title"]' +
         '</item>' +
 
-        '<target title="Go to link" hotkey="ENTER">' +
-          './/a' +
-        '</target>' +
-
-        '<target title="Related articles" hotkey="r" onEmpty="No ' +
-           'related articles">' +
-          './/a[@class="rg"]' +
-        '</target>' +
-
         '<target title="View all news" hotkey="a">' +
-          'id("news")/tbody/tr[not(@class)]//a' +
+          'id("category-news")/div[not(@class)]//a' +
         '</target>' +
 
       '</list>' +
@@ -130,36 +169,26 @@ axsFinance.SECTOR_CNR = '<cnr next="RIGHT l" prev="LEFT h">' +
               '::tr[@class="beginsec"])]' +
         '</item>' +
 
-        '<target title="Stock screener for this company" hotkey="ENTER">' +
-          './/a' +
-        '</target>' +
-
       '</list>' +
 
       '<list title="Top movers losers" next="DOWN j" prev="UP k" fwd="n" ' +
           'back="p">' +
 
         '<item action="CALL:axsFinance.readTopMover">' +
-          '//table[@class="topmovers"]//tr[.//span[@class="chr"]]' +
+          '//table[@class="topmovers"]//tr[.//a and ' +
+            './preceding-sibling::tr[@class="beginsec"] and ' +
+            './following-sibling::tr[@class="beginsec"]]' +
         '</item>' +
-
-        '<target title="Stock screener for this company" hotkey="ENTER">' +
-          './/a' +
-        '</target>' +
 
       '</list>' +
 
-      '<list title="Top movers most active" next="DOWN j" prev="UP k" ' +
+      '<list title="Most active" next="DOWN j" prev="UP k" ' +
           'fwd="n" back="p">' +
 
         '<item action="CALL:axsFinance.readTopMover">' +
           '//table[@class="topmovers"]//tr[.//a and not(./following-sibling' +
               '::tr[@class="beginsec"])]' +
         '</item>' +
-
-        '<target title="Stock screener for this company" hotkey="ENTER">' +
-          './/a' +
-        '</target>' +
 
       '</list>' +
 
@@ -170,10 +199,6 @@ axsFinance.SECTOR_CNR = '<cnr next="RIGHT l" prev="LEFT h">' +
           'id("subcategory")//a' +
         '</item>' +
 
-        '<target title="Stock screener for this company" hotkey="ENTER">' +
-          '.' +
-        '</target>' +
-
       '</list>' +
 
     '</cnr>';
@@ -181,7 +206,8 @@ axsFinance.SECTOR_CNR = '<cnr next="RIGHT l" prev="LEFT h">' +
 /**
  * CNR for the 'Companies' section.
  */
-axsFinance.COMPANIES_CNR = '<cnr next="RIGHT l" prev="LEFT h">' +
+axsFinance.COMPANIES_CNR =
+    '<cnr next="RIGHT l" prev="LEFT h">' +
 
       '<target title="Go to the sector section" hotkey="s" ' +
           'action="CALL:axsFinance.setActiveSectorSection">' +
@@ -208,7 +234,12 @@ axsFinance.COMPANIES_CNR = '<cnr next="RIGHT l" prev="LEFT h">' +
         '/html' +
       '</target>' +
 
-      '<list title="Company" fwd="DOWN j n" back="UP k p" type="dynamic">' +
+      '<target title="Go to link" hotkey="ENTER">' +
+        './/descendant-or-self::a' +
+      '</target>' +
+
+      '<list title="Company" next="DOWN j" prev="UP k" fwd="n" back="p" ' +
+          'type="dynamic">' +
 
         '<item action="CALL:axsFinance.readCompanyTableCellValue">' +
           'id("main")/tbody/tr/td[position()=1 and @class and not' +
@@ -220,28 +251,22 @@ axsFinance.COMPANIES_CNR = '<cnr next="RIGHT l" prev="LEFT h">' +
           '/html' +
         '</target>' +
 
-        '<target title="Go to link" hotkey="ENTER" onEmpty="No link ' +
-            'available">' +
-          './/a' +
-        '</target>' +
-
         '<target title="Reverse sorting order" hotkey="r">' +
           'id("main")//a[./b[text()="Company"]]' +
         '</target>' +
 
-        '<target title="Next page" trigger="listTail" ' +
-            'action="CALL:axsFinance.wrapAround">' +
-           '//a[.//u[text()="Next"]] | //div[@class="footerLinks"]' +
+        '<target title="Next page" trigger="listTail">' +
+           'id("navbar")//a[not(./../following-sibling::*)]' +
         '</target>' +
 
-        '<target title="Previous page" trigger="listHead" ' +
-            'action="CALL:axsFinance.wrapAround">' +
+        '<target title="Previous page" trigger="listHead">' +
           '//a[.//u[text()="Previous"]] | //div[@class="footerLinks"]' +
         '</target>' +
 
       '</list>' +
 
-      '<list title="Quote" fwd="DOWN j n" back="UP k p" type="dynamic">' +
+      '<list title="Quote" next="DOWN j" prev="UP k" fwd="n" back="p" ' +
+          'type="dynamic">' +
 
         '<item action="CALL:axsFinance.readCompanyTableCellValue">' +
           'id("main")/tbody/tr/td[position()=2 and @class and not' +
@@ -257,19 +282,18 @@ axsFinance.COMPANIES_CNR = '<cnr next="RIGHT l" prev="LEFT h">' +
           'id("main")//a[.//nobr[text()="Quote"]]' +
         '</target>' +
 
-        '<target title="Next page" trigger="listTail" ' +
-            'action="CALL:axsFinance.wrapAround">' +
-           '//a[.//u[text()="Next"]] | //div[@class="footerLinks"]' +
+        '<target title="Next page" trigger="listTail">' +
+           'id("navbar")//a[not(./../following-sibling::*)]' +
         '</target>' +
 
-        '<target title="Previous page" trigger="listHead" ' +
-            'action="CALL:axsFinance.wrapAround">' +
-          '//a[.//u[text()="Previous"]] | //div[@class="footerLinks"]' +
+        '<target title="Previous page" trigger="listHead">' +
+          'id("navbar")//a[not(./../preceding-sibling::*)]' +
         '</target>' +
 
       '</list>' +
 
-      '<list title="Change" fwd="DOWN j n" back="UP k p" type="dynamic">' +
+      '<list title="Change" next="DOWN j" prev="UP k" fwd="n" back="p" ' +
+          'type="dynamic">' +
 
         '<item action="CALL:axsFinance.readCompanyTableCellValue">' +
           'id("main")/tbody/tr/td[position()=3 and @class and not' +
@@ -281,14 +305,12 @@ axsFinance.COMPANIES_CNR = '<cnr next="RIGHT l" prev="LEFT h">' +
           '/html' +
         '</target>' +
 
-        '<target title="Next page" trigger="listTail" ' +
-            'action="CALL:axsFinance.wrapAround">' +
-           '//a[.//u[text()="Next"]] | //div[@class="footerLinks"]' +
+        '<target title="Next page" trigger="listTail">' +
+           'id("navbar")//a[not(./../following-sibling::*)]' +
         '</target>' +
 
-        '<target title="Previous page" trigger="listHead" ' +
-            'action="CALL:axsFinance.wrapAround">' +
-          '//a[.//u[text()="Previous"]] | //div[@class="footerLinks"]' +
+        '<target title="Previous page" trigger="listHead">' +
+          'id("navbar")//a[not(./../preceding-sibling::*)]' +
         '</target>' +
 
         '<target title="Reverse sorting order" hotkey="r">' +
@@ -297,8 +319,8 @@ axsFinance.COMPANIES_CNR = '<cnr next="RIGHT l" prev="LEFT h">' +
 
       '</list>' +
 
-      '<list title="Percent change" fwd="DOWN j n" back="UP k p" ' +
-          'type="dynamic">' +
+      '<list title="Percent change" next="DOWN j" prev="UP k" fwd="n" ' +
+          'back="p" type="dynamic">' +
 
         '<item action="CALL:axsFinance.readCompanyTableCellValue">' +
           'id("main")/tbody/tr/td[position()=4 and @class and not' +
@@ -314,19 +336,17 @@ axsFinance.COMPANIES_CNR = '<cnr next="RIGHT l" prev="LEFT h">' +
           'id("main")//a[.//nobr[text()="Change%"]]' +
         '</target>' +
 
-        '<target title="Next page" trigger="listTail" ' +
-            'action="CALL:axsFinance.wrapAround">' +
-           '//a[.//u[text()="Next"]] | //div[@class="footerLinks"]' +
+        '<target title="Next page" trigger="listTail">' +
+           'id("navbar")//a[not(./../following-sibling::*)]' +
         '</target>' +
 
-        '<target title="Previous page" trigger="listHead" ' +
-            'action="CALL:axsFinance.wrapAround">' +
-          '//a[.//u[text()="Previous"]] | //div[@class="footerLinks"]' +
+        '<target title="Previous page" trigger="listHead">' +
+          'id("navbar")//a[not(./../preceding-sibling::*)]' +
         '</target>' +
 
       '</list>' +
 
-      '<list title="Market cap" fwd="DOWN j n" back="UP k p" ' +
+      '<list title="Market cap" next="DOWN j" prev="UP k" fwd="n" back="p" ' +
           'type="dynamic">' +
 
         '<item action="CALL:axsFinance.readCompanyTableCellValue">' +
@@ -343,20 +363,18 @@ axsFinance.COMPANIES_CNR = '<cnr next="RIGHT l" prev="LEFT h">' +
           'id("main")//a[.//nobr[text()="Market Cap"]]' +
         '</target>' +
 
-        '<target title="Next page" trigger="listTail" ' +
-            'action="CALL:axsFinance.wrapAround">' +
-           '//a[.//u[text()="Next"]] | //div[@class="footerLinks"]' +
+        '<target title="Next page" trigger="listTail">' +
+           'id("navbar")//a[not(./../following-sibling::*)]' +
         '</target>' +
 
-        '<target title="Previous page" trigger="listHead" ' +
-            'action="CALL:axsFinance.wrapAround">' +
-          '//a[.//u[text()="Previous"]] | //div[@class="footerLinks"]' +
+        '<target title="Previous page" trigger="listHead">' +
+          'id("navbar")//a[not(./../preceding-sibling::*)]' +
         '</target>' +
 
       '</list>' +
 
-      '<list title="Price to earnings ratio T T M" fwd="DOWN j n" ' +
-          'back="UP k p" type="dynamic">' +
+      '<list title="Price to earnings ratio T T M" next="DOWN j" ' +
+          'prev="UP k" fwd="n" back="p" type="dynamic">' +
 
         '<item action="CALL:axsFinance.readCompanyTableCellValue">' +
           'id("main")/tbody/tr/td[position()=6 and @class and not' +
@@ -372,20 +390,18 @@ axsFinance.COMPANIES_CNR = '<cnr next="RIGHT l" prev="LEFT h">' +
           'id("main")//a[.//nobr[text()="P/E (ttm)"]]' +
         '</target>' +
 
-        '<target title="Next page" trigger="listTail" ' +
-           'action="CALL:axsFinance.wrapAround">' +
-           '//a[.//u[text()="Next"]] | //div[@class="footerLinks"]' +
+        '<target title="Next page" trigger="listTail">' +
+           'id("navbar")//a[not(./../following-sibling::*)]' +
         '</target>' +
 
-        '<target title="Previous page" trigger="listHead" ' +
-            'action="CALL:axsFinance.wrapAround">' +
-          '//a[.//u[text()="Previous"]] | //div[@class="footerLinks"]' +
+        '<target title="Previous page" trigger="listHead">' +
+          'id("navbar")//a[not(./../preceding-sibling::*)]' +
         '</target>' +
 
       '</list>' +
 
-      '<list title="Annual revenue" fwd="DOWN j n" back="UP k p" ' +
-          'type="dynamic">' +
+      '<list title="Annual revenue" next="DOWN j" prev="UP k" fwd="n" ' +
+          'back="p" type="dynamic">' +
 
         '<item action="CALL:axsFinance.readCompanyTableCellValue">' +
           'id("main")/tbody/tr/td[position()=7 and @class and not' +
@@ -401,20 +417,18 @@ axsFinance.COMPANIES_CNR = '<cnr next="RIGHT l" prev="LEFT h">' +
           'id("main")//a[.//nobr[text()="Ann. Revenue"]]' +
         '</target>' +
 
-        '<target title="Next page" trigger="listTail" ' +
-           'action="CALL:axsFinance.wrapAround">' +
-           '//a[.//u[text()="Next"]] | //div[@class="footerLinks"]' +
+        '<target title="Next page" trigger="listTail">' +
+           'id("navbar")//a[not(./../following-sibling::*)]' +
         '</target>' +
 
-        '<target title="Previous page" trigger="listHead" ' +
-            'action="CALL:axsFinance.wrapAround">' +
-          '//a[.//u[text()="Previous"]] | //div[@class="footerLinks"]' +
+        '<target title="Previous page" trigger="listHead">' +
+          'id("navbar")//a[not(./../preceding-sibling::*)]' +
         '</target>' +
 
       '</list>' +
 
-      '<list title="Annual net income" fwd="DOWN j n" back="UP k p" ' +
-          'type="dynamic">' +
+      '<list title="Annual net income" next="DOWN j" prev="UP k" fwd="n" ' +
+          'back="p" type="dynamic">' +
 
         '<item action="CALL:axsFinance.readCompanyTableCellValue">' +
           'id("main")/tbody/tr/td[position()=8 and @class and not' +
@@ -430,14 +444,12 @@ axsFinance.COMPANIES_CNR = '<cnr next="RIGHT l" prev="LEFT h">' +
           'id("main")//a[.//nobr[text()="Ann. Net Income"]]' +
         '</target>' +
 
-        '<target title="Next page" trigger="listTail" ' +
-           'action="CALL:axsFinance.wrapAround">' +
-           '//a[.//u[text()="Next"]] | //div[@class="footerLinks"]' +
+        '<target title="Next page" trigger="listTail">' +
+           'id("navbar")//a[not(./../following-sibling::*)]' +
         '</target>' +
 
-        '<target title="Previous page" trigger="listHead" ' +
-            'action="CALL:axsFinance.wrapAround">' +
-          '//a[.//u[text()="Previous"]] | //div[@class="footerLinks"]' +
+        '<target title="Previous page" trigger="listHead">' +
+          'id("navbar")//a[not(./../preceding-sibling::*)]' +
         '</target>' +
 
       '</list>' +
@@ -514,8 +526,8 @@ axsFinance.categoryInputElements = null;
 axsFinance.currencyConverterOpened = false;
 
 /**
- * Stores the row list index to enable handling the multiple lists that compose 
- * the companies as a table i.e. traversal is performed column by column on the 
+ * Stores the row list index to enable handling the multiple lists that compose
+ * the companies as a table i.e. traversal is performed column by column on the
  * same row (i.e. the current row does not change)
  */
 axsFinance.companiesRowIdx = -1;
@@ -532,7 +544,7 @@ axsFinance.prevCompaniesListIdx = 0;
 /**
  * Initializes the AxsJAX script for Google Finance - Sector page.
  */
-axsFinance.init = function() {
+axsFinance.initAxsJAX = function() {
   //Initialize AxsJAX object
   axsFinance.axsJAXObj = new AxsJAX(true);
 
@@ -546,7 +558,7 @@ axsFinance.init = function() {
   axsFinance.axsNavCompaniesObj.disableNavKeys();
 
   //Set the active AxsNav
-  axsFinance.setActiveSectorSection();
+  axsFinance.setActiveCompaniesSection();
 
   //Initialize AxsLens object
   axsFinance.axsLensObj = new AxsLens(axsFinance.axsJAXObj);
@@ -570,6 +582,9 @@ axsFinance.init = function() {
   //Add event listeners
   document.addEventListener('keypress', axsFinance.keyHandler, true);
 
+  document.addEventListener('DOMNodeInserted',
+      axsFinance.refreshRecentQuotesEventListener, false);
+
   var searchBox = document.getElementById('searchbox');
   var func = axsFinance.initialFocusWorkaroundEventHandler;
   searchBox.addEventListener('keypress', func, true);
@@ -581,14 +596,14 @@ axsFinance.init = function() {
  * Announces the introduction.
  */
 axsFinance.announceIntroduction = function() {
-  var text = axsFinance.str.GOOGLE_FINANCE + '.';
+  var text = axsFinance.str.GOOGLE_FINANCE_SECTOR + '.';
 
   var xPath = '(//h3)[1]';
   var sectorElem = axsFinance.axsJAXObj.evalXPath(xPath, document. body)[0];
   var sector = axsFinance.normalizeString(sectorElem.textContent);
   //In case the page represents a sector sub-category
   sector = sector.replace('>', axsFinance.str.SUB_CATEGORY);
-  text = text + ' ' + axsFinance.str.SECTOR + ' ' + sector + '.';
+  text = text + ' ' + sector + '.';
 
   xPath = '(id("main")//tr)[1]';
   var resultElem = axsFinance.axsJAXObj.evalXPath(xPath, document. body)[0];
@@ -605,7 +620,6 @@ axsFinance.announceIntroduction = function() {
     var index = axsFinance.axsJAXObj.evalXPath(xPath, document.body).length - 1;
 
     //Position on the top of the sorted column
-    axsFinance.setActiveAxsNavObj(axsFinance.axsNavCompaniesObj);
     axsFinance.activeAxsNavObj.navListIdx = index;
 
     var criteria = axsFinance.activeAxsNavObj.navArray[index].title;
@@ -621,39 +635,30 @@ axsFinance.announceIntroduction = function() {
 };
 
 /**
+ * This is a listener that refreshed the 'Recent quotes' list
+ * and is registered for the event of inserting the recent quotes
+ * table.
+ *
+ * @param {Event} evt A DOMNodeInserted event.
+ */
+axsFinance.refreshRecentQuotesEventListener = function(evt) {
+  if (evt.target.className === 'd-quotes') {
+    axsFinance.axsNavObj.refreshList('Recent quotes');
+  }
+};
+
+/**
  * Callback handler for reading the 'News' list.
  * @param {Object} item A wrapper for the current DOM node.
  */
 axsFinance.readNews = function(item) {
-  var element = item.elem;
-  var text = axsFinance.normalizeString(element.textContent);
-  //Remove the double angle bracket
-  text = text.replace(String.fromCharCode(187), '');
-  axsFinance.speakAndGo(element, text);
-};
+  var title = item.elem;
+  var xPath = './following-sibling::div';
+  var description = axsFinance.axsJAXObj.evalXPath(xPath, title)[0];
 
-/**
- * Callback handler for reading the 'Top movers gainers', 'Top movers losers',
- * and 'Top movers most active' lists.
- * @param {Object} item A wrapper for the current DOM node.
- */
-axsFinance.readTopMover = function(item) {
-  var element = item.elem;
-
-  var company = element.childNodes[1].textContent;
-  var abbr = element.childNodes[3].textContent;
-  abbr = axsFinance.addSpaceBetweenChars(abbr);
-  var lastTrade = element.childNodes[5].textContent;
-  var change = element.childNodes[7].textContent;
-  change = change.replace('(', axsFinance.str.OR + ' (');
-  change = axsFinance.parseSpecChrsAndTkns(change);
-  var marketCap = element.childNodes[9].textContent;
-  marketCap = axsFinance.parseSpecChrsAndTkns(marketCap);
-
-  var phrases = new Array(company, abbr, lastTrade, change, marketCap);
-  var text = axsFinance.populateTemplate(axsFinance.str.MOVERS_TEMPLATE,
-                                         phrases);
-  axsFinance.speakAndGo(element, text);
+  var text = axsFinance.normalizeString(title.textContent) + ' ' +
+      axsFinance.normalizeString(description.textContent);
+  axsFinance.speakAndGo(title, text);
 };
 
 /**
@@ -680,9 +685,9 @@ axsFinance.readCompanyTableCellValueListEntry = function() {
   var listsNmbr = axsFinance.axsNavCompaniesObj.navArray.length;
   if ((axsFinance.prevCompaniesListIdx === 0 && navListIdx === listsNmbr - 1) ||
       (axsFinance.prevCompaniesListIdx === listsNmbr - 1 && navListIdx === 0)) {
-    axsFinance.axsSoundObj.play(axsFinance.str.WRAP_SND);
+    axsFinance.axsSoundObj.play('wrap');
   } else {
-    axsFinance.axsSoundObj.play(axsFinance.str.ITEM_SND);
+    axsFinance.axsSoundObj.play('item');
   }
   axsFinance.prevCompaniesListIdx = navListIdx;
 };
@@ -711,6 +716,67 @@ axsFinance.readCompanyTableCellValue = function(item) {
 };
 
 /**
+ * Reads an item from the 'Recent quotes' list.
+ * @param {Object} item A wrapper for the current DOM node.
+ */
+axsFinance.readRecentQuote = function(item) {
+  axsFinance.readNodeDescendantsViaTemplate(item.elem, './td[not(.//b)]',
+      axsFinance.str.RECENT_QUOTE_TEMPLATE);
+};
+
+/**
+ * Reads an item from the 'Top gainers'/'Top losers'/'Most active' lists.
+ * @param {Object} item A wrapper for the current DOM node.
+ */
+axsFinance.readTopMover = function(item) {
+  axsFinance.readNodeDescendantsViaTemplate(item.elem,
+      '. //*[self::td[not(.//span)] or self::span]',
+      axsFinance.str.MOVER_TEMPLATE);
+};
+
+/**
+ * Reads the descendants of a given node selected via an XPath and populating
+ * their values is a template.
+ * @param {Node} rootNode The root node from which to evaluate the XPath.
+ * @param {string} xPath The XPath.
+ * @param {string} template The template.
+ */
+axsFinance.readNodeDescendantsViaTemplate = function(rootNode, xPath,
+    template) {
+  var childNodes = axsFinance.axsJAXObj.evalXPath(xPath, rootNode);
+  var values = new Array();
+
+  for (var i = 0, childNode; childNode = childNodes[i]; i++) {
+    values[i] = axsFinance.getSpaceSeparatedVisibleDescendantsTextContent(
+        childNode);
+    values[i] = axsFinance.parseSpecialCharsAndTokens(values[i]);
+  }
+
+  var text = axsFinance.populateTemplate(template, values);
+  axsFinance.speakAndGo(rootNode, text);
+};
+
+/**
+ * Gets the text content of the DOM tree rooted at a given node selecting
+ * only visible nodes (i.e. display != none). The text content of all the
+ * nodes is concatenated and separated with space.
+ * @param {Node} node The root node.
+ * @return {string} The text content.
+ */
+axsFinance.getSpaceSeparatedVisibleDescendantsTextContent = function(node) {
+  var text = '';
+  var xPath = './/descendant-or-self::*[not(contains(@style,"display: ' +
+      'none;"))]/text()';
+  var textNodes = axsFinance.axsJAXObj.evalXPath(xPath, node);
+
+  for (var i = 0, count = textNodes.length; i < count; i++) {
+    text = text + textNodes[i].textContent + ' ';
+  }
+
+  return text;
+};
+
+/**
  * Returns the current value in a table cell.
  * @param {Node} element A DOM node object representing the table cell.
  * @return {string} The value of the table cell.
@@ -720,23 +786,9 @@ axsFinance.getCellValue = function(element) {
   if (element == element.parentNode.firstChild) {
     columnValue = axsFinance.normalizeString(columnValue);
   } else {
-    columnValue = axsFinance.parseSpecChrsAndTkns(columnValue);
+    columnValue = axsFinance.parseSpecialCharsAndTokens(columnValue);
   }
   return columnValue;
-};
-
-/**
- * Wraps around an item list traversed with the fwd and back keys
- * @param {Object} item A wrapper for the current DOM node.
- */
-axsFinance.wrapAround = function(item) {
-  var element = item.elem;
-  if (element.tagName == 'A') {
-    axsFinance.axsJAXObj.clickElem(element, false);
-  } else {
-    var currentItem = axsFinance.axsNavCompaniesObj.currentItem();
-    axsFinance.axsNavCompaniesObj.actOnItem(currentItem);
-  }
 };
 
 /**
@@ -992,29 +1044,35 @@ axsFinance.addSpaceBetweenChars = function(text) {
  * @param {string} text The text to be processed.
  * @return {string} The text with replaced phrases/tokens/symbols.
  */
-axsFinance.parseSpecChrsAndTkns = function(text) {
+axsFinance.parseSpecialCharsAndTokens = function(text) {
   var parsedText = '';
+
   //check input
   if (text === '') {
     return text;
   }
+
   //remove leading and trailing spaces
   text = axsFinance.normalizeString(text);
+
   //check for phrase word mapping
   var phraseMapping = axsFinance.phrasesMap[text];
-  if (phraseMapping !== undefined) {
+  if (phraseMapping != undefined) {
     return phraseMapping;
   }
+
   //process every word separately
   var tokens = text.split(' ');
-  for (var i = 0, token; token = tokens[i]; i++) {
+  for (var i = 0, t; t = tokens[i]; i++) {
+    var token = tokens[i];
+
     //check for whole word mapping
     var tokenMapping = axsFinance.phrasesMap[token];
     if (tokenMapping != undefined) {
       token = tokenMapping;
     } else {
 
-      //remove parentheses
+      //remove brackets
       if (token.length > 0 && token.charAt(0) === '(') {
         token = token.substring(1);
       }
@@ -1023,20 +1081,21 @@ axsFinance.parseSpecChrsAndTkns = function(text) {
       }
 
       //parse the first character
-      var prefixMapping = axsFinance.charPrefixMap[token.charAt(0)];
+      var prefixMapping = axsFinance.prefixMap[token.charAt(0)];
       if (prefixMapping != undefined) {
         token = prefixMapping + ' ' + token.substring(1);
       }
 
       //parse the last character
       var lastCharacter = token.charAt(token.length - 1);
-      var suffixMapping = axsFinance.charSuffixMap[lastCharacter];
+      var suffixMapping = axsFinance.suffixMap[lastCharacter];
       if (suffixMapping != undefined) {
         token = token.substring(0, token.length - 1) + ' ' + suffixMapping;
       }
     }
     parsedText = parsedText + ' ' + token;
   }
+
   return parsedText;
 };
 
@@ -1117,33 +1176,32 @@ axsFinance.keyHandler = function(evt) {
 axsFinance.charCodeMap = {
   // Map additional keyboard behavior that involves char codes here
   // / (slash symbol)
- 47 : function() {
-       axsFinance.searchBoxFocusEnabled = true;
-       document.getElementById('searchbox').focus();
-       document.getElementById('searchbox').select();
-       return false;
-     },
+  47 : function() {
+        document.getElementById('searchbox').focus();
+        document.getElementById('searchbox').select();
+        return false;
+      },
   // ? (question mark)
   63 : function() {
-         var helpStr = axsFinance.HELP +
-             axsFinance.axsNavSectorObj.localHelpString() +
-             axsFinance.axsNavSectorObj.globalHelpString();
-         axsFinance.axsJAXObj.speakTextViaNode(helpStr);
-         return false;
-      },
+        var helpStr = axsFinance.HELP +
+            axsFinance.axsNavSectorObj.localHelpString() +
+            axsFinance.axsNavSectorObj.globalHelpString();
+        axsFinance.axsJAXObj.speakTextViaNode(helpStr);
+        return false;
+     },
   // - (minus symbol)
   45 : function() {
-         axsFinance.magSize -= 0.10;
-         axsFinance.axsLensObj.setMagnification(axsFinance.magSize);
-         return false;
-       },
+        axsFinance.magSize -= 0.10;
+        axsFinance.axsLensObj.setMagnification(axsFinance.magSize);
+        return false;
+      },
   // = (equal symbol)
   61 : function() {
-         axsFinance.magSize += 0.10;
-         axsFinance.axsLensObj.setMagnification(axsFinance.magSize);
-         return false;
-       }
+        axsFinance.magSize += 0.10;
+        axsFinance.axsLensObj.setMagnification(axsFinance.magSize);
+        return false;
+      }
 };
 
 //Run the initialization routine of the script
-window.addEventListener('load', axsFinance.init, true);
+window.addEventListener('load', axsFinance.initAxsJAX, true);

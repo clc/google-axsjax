@@ -1,11 +1,11 @@
 // Copyright 2008 Google Inc.
-// 
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
-// 
+//
 //      http://www.apache.org/licenses/LICENSE-2.0
-// 
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,7 +15,7 @@
 /**
  * @fileoverview AxsJAX script intended to enhance accessibility of the Quotes
  * page of Google Finance.
- * 
+ *
  * @author svetoslavganov@google.com (Svetoslav R. Ganov)
  */
 
@@ -32,12 +32,6 @@ axsFinance.HELP = 'The following shortcut keys are available. ';
  * Strings for enhancing the presentation
  */
 axsFinance.str = {
-  BIO : 'Bio',
-  GT : '>',
-  OR : 'or',
-  STATUS : '. Status',
-  PRICE : ' Price ',
-  DATE : ' Date ',
   UP : ' up by ',
   UP_ABBR : '+',
   DOWN : ' down by ',
@@ -48,20 +42,6 @@ axsFinance.str = {
   MLN_ABBR : 'M',
   BLN : ' billion',
   BLN_ABBR : 'B',
-  EXCHANGE : 'Traded on',
-  SYMBOL : 'Symbol',
-  LAST_TRADE : 'Last trade',
-  CHANGE : 'Change',
-  MKT_CAP : 'Market cap',
-  DELAY : ' Note that the last trade is delayed ' +
-    'up to 20 minutes. ',
-  USD : 'US dollars',
-  TTM : 'TTM',
-  TTM_SPACES : 'T T M',
-  EXAMPLE : 'Example',
-  DEFINITION : 'Definition',
-
-  //Strings for stock exchanges
   NYSE : 'New York Stock Exchange',
   NYSE_ABBR : 'NYSE',
   NASDAQ : 'NASDAQ Stock Market',
@@ -76,67 +56,41 @@ axsFinance.str = {
   EPA_ABBR : 'EPA',
   ASX : 'Australian Securities Exchange',
   ASX_ABBR : 'ASX',
-  UNDEFINED_ABBR : '-',
-  UNDEFINED : 'undefined',
-
-  //Strings for market data
-  MKT_CAP : 'Market cap',
-  MKT_CAP_ABBR : 'Mkt Cap:',
-  P_E : 'Price earnings ratio',
-  P_E_ABBR : 'P/E:',
-  F_P_E : 'Forward price to earnings ratio',
+  P_E : 'Price to earnings',
+  P_E_ABBR : 'P/E',
+  F_P_E : 'Forward price to earnings',
   F_P_E_ABBR : 'F P/E:',
   VOL : 'Volume',
   VOL_ABBR : 'Vol:',
-  WEEKS : 'Fifty two week',
-  WEEKS_ABBR : '52Wk',
-  AVG_VOL : 'Average volume',
-  AVG_VOL_ABBR : 'Avg Vol:',
-  NA_ABBR : '-',
-  NA : 'Not available',
-  INST_OWN : 'Institutional Ownership',
-  INST_OWN_ABBR : 'Inst. Own:',
-  EPS : 'E P S',
-  EPS_ABBR : 'EPS:'
+  SELECTED : 'selected',
+  NOT_SELECTED : 'not selected',
+  DASH : 'dash',
+  DASH_ABBR : '-',
+  CHANGE_ABBR : 'Chg',
+  CHANGE : 'Change',
+  LONG_TERM_ABBR : 'Lt',
+  LONG_TERM : 'Long term',
+  MARKET_ABBR : 'Mkt',
+  MARKET : 'Market',
+  CAP_ABBR : 'Cap',
+  CAP : 'capitalization',
+  AVRG_ABBR : 'avg',
+  AVRG : 'average',
+  EBITD_ABBR : 'EBITD',
+  EBITD : 'Earnings before interest, tax, and depreciation',
+  EBITDA_ABBR : 'EBITDA',
+  EBITDA : 'Earnings before interest, tax, depreciation and amortization',
+  GOOGLE_FINANCE_QUOTES : 'Google Finance Quotes',
+  RECENT_QUOTE_TEMPLATE : '{0}, {1}, change {2}.',
+  KEY_STATISTIC_TEMPLATE : '{0}, last quarter {1}, last year {2}.',
+  SELECT_COLUMNS : 'Select which columns to be shown and press Enter when ' +
+      'ready.',
+  V_TO_SAVE_C_TO_CANCEL : 'Press v to save or c to cancel.',
+  DISCLAIMER : '- Disclaimer',
+  PM : 'PM',
+  AM : 'AM',
+  OR : 'or'
 };
-
-/**
- * XPath for retrieving the current quote
- * @type string
- */
-axsFinance.QUOTE_XPATH = "id('md')//span[@class='pr']/..";
-
-/**
- * Array for building a sentence for the 'Data description' section
- * @type Array
- */
-axsFinance.marketDataDescArray = new Array(axsFinance.str.PRICE,
-                                          axsFinance.str.CHANGE,
-                                          axsFinance.str.OR,
-                                          axsFinance.str.DATE);
-/**
- * Array for building a sentence for the Related companies section  
- * @type Array
- */
-axsFinance.relatedCompaniesDescArray = new Array('',
-                                                axsFinance.str.EXCHANGE,
-                                                axsFinance.str.SYMBOL,
-                                                axsFinance.str.LAST_TRADE,
-                                                '',
-                                                axsFinance.str.OR,
-                                                axsFinance.str.MKT_CAP,
-                                                axsFinance.str.USD);
-/**
- * Array for building a sentence for the 'Financials' section
- * @type Array
- */
-axsFinance.financialsDescArray = new Array();
-
-/**
- * Array for building a sentence for the 'Ratios and Stats' section
- * @type Array
- */
-axsFinance.ratAndStatDescArray = new Array();
 
 /**
  * Map from abbreviated phrases to expanded phrases
@@ -150,406 +104,325 @@ axsFinance.phrasesMap[axsFinance.str.OTC_ABBR] = axsFinance.str.OTC;
 axsFinance.phrasesMap[axsFinance.str.AMEX_ABBR] = axsFinance.str.AMEX;
 axsFinance.phrasesMap[axsFinance.str.EPA_ABBR] = axsFinance.str.EPA;
 axsFinance.phrasesMap[axsFinance.str.ASX_ABBR] = axsFinance.str.ASX;
-axsFinance.phrasesMap[axsFinance.str.MKT_CAP_ABBR] = axsFinance.str.MKT_CAP;
 axsFinance.phrasesMap[axsFinance.str.WEEKS_ABBR] = axsFinance.str.WEEKS;
-axsFinance.phrasesMap[axsFinance.str.NA_ABBR] = axsFinance.str.NA;
 axsFinance.phrasesMap[axsFinance.str.P_E_ABBR] = axsFinance.str.P_E;
 axsFinance.phrasesMap[axsFinance.str.F_P_E_ABBR] = axsFinance.str.F_P_E;
 axsFinance.phrasesMap[axsFinance.str.VOL_ABBR] = axsFinance.str.VOL;
 axsFinance.phrasesMap[axsFinance.str.AVG_VOL_ABBR] = axsFinance.str.AVG_VOL;
 axsFinance.phrasesMap[axsFinance.str.INST_OWN_ABBR] = axsFinance.str.INST_OWN;
 axsFinance.phrasesMap[axsFinance.str.EPS_ABBR] = axsFinance.str.EPS;
-axsFinance.phrasesMap[axsFinance.str.UNDEFINED_ABBR] = axsFinance.str.UNDEFINED;
+axsFinance.phrasesMap[axsFinance.str.PRCNT_ABBR] = axsFinance.str.PRCNT;
+axsFinance.phrasesMap[axsFinance.str.DASH_ABBR] = axsFinance.str.DASH;
+axsFinance.phrasesMap[axsFinance.str.CHANGE_ABBR] = axsFinance.str.CHANGE;
+axsFinance.phrasesMap[axsFinance.str.LONG_TERM_ABBR] = axsFinance.str.LONG_TERM;
+axsFinance.phrasesMap[axsFinance.str.MARKET_ABBR] = axsFinance.str.MARKET;
+axsFinance.phrasesMap[axsFinance.str.CAP_ABBR] = axsFinance.str.CAP;
+axsFinance.phrasesMap[axsFinance.str.AVRG_ABBR] = axsFinance.str.AVRG;
+axsFinance.phrasesMap[axsFinance.str.EBITD_ABBR] = axsFinance.str.EBITD;
+axsFinance.phrasesMap[axsFinance.str.EBITDA_ABBR] = axsFinance.str.EBITDA;
+axsFinance.phrasesMap[axsFinance.str.PM] = axsFinance.str.PM;
+axsFinance.phrasesMap[axsFinance.str.AM] = axsFinance.str.AM;
 
 /**
- * Map from prefix characters to strings 
+ * Map from prefix characters to strings
  */
-axsFinance.charPrefixMap = new Object();
-axsFinance.charPrefixMap[axsFinance.str.DOWN_ABBR] = axsFinance.str.DOWN;
-axsFinance.charPrefixMap[axsFinance.str.UP_ABBR] = axsFinance.str.UP;
+axsFinance.prefixMap = new Object();
+axsFinance.prefixMap[axsFinance.str.DOWN_ABBR] = axsFinance.str.DOWN;
+axsFinance.prefixMap[axsFinance.str.UP_ABBR] = axsFinance.str.UP;
 
 /**
- * Map from suffix characters to strings 
+ * Map from suffix characters to strings
  */
-axsFinance.charSuffixMap = new Object();
-axsFinance.charSuffixMap[axsFinance.str.BLN_ABBR] = axsFinance.str.BLN;
-axsFinance.charSuffixMap[axsFinance.str.MLN_ABBR] = axsFinance.str.MLN;
-axsFinance.charSuffixMap[axsFinance.str.PRCNT_ABBR] = axsFinance.str.PRCNT;
+axsFinance.suffixMap = new Object();
+axsFinance.suffixMap[axsFinance.str.BLN_ABBR] = axsFinance.str.BLN;
+axsFinance.suffixMap[axsFinance.str.MLN_ABBR] = axsFinance.str.MLN;
+axsFinance.suffixMap[axsFinance.str.PRCNT_ABBR] = axsFinance.str.PRCNT;
 
 /**
- * CNR 
+ * CNR
  */
 axsFinance.CNR = '<cnr next="RIGHT l" prev="LEFT h">' +
-    '' +
-    '  <target title="Stock screener" hotkey="s">' +
-    '    //a[@href="/finance/stockscreener"]' +
-    '  </target>' +
-    '' +
-    '  <target title="Read current quote" hotkey="q"' +
-    '      action="CALL:axsFinance.readCurrentQuote">' +
-    '    /html' +
-    '  </target>' +
-    '' +
-    '  <list title="Market data" next="DOWN j" prev="UP k" fwd' +
-    '="n" back="p">' +
-    '' +
-    '    <item action="CALL:axsFinance.readCurrentQuote">' +
-    '      /html' +
-    '    </item>' +
-    '' +
-    '    <item action="CALL:axsFinance.readMarketDataItem">' +
-    '      id("md")//tr/td[@class="key"]' +
-    '    </item>' +
-    '' +
-    '    <item action="CALL:axsFinance.readAfterHours">' +
-    '      id("md")//tr//nobr' +
-    '    </item>' +
-    '' +
-    '    <target title="Go to section" trigger="listEntry">' +
-    '      id("companyheader")' +
-    '    </target>' +
-    '' +
-    '  </list>' +
-    '' +
-    '  <list title="News" next="DOWN j" prev="UP k" fwd="n" ba' +
-    'ck="p" type="dynamic">' +
-    '' +
-    '    <item action="CALL:axsFinance.readNewsDesc">' +
-    '      //div[@class="newsCluster"]' +
-    '    </item>' +
-    '' +
-    '    <target title="View all news" hotkey="a">' +
-    '      id("older_news_link")//following-sibling::a[not(./img)]' +
-    '    </target>' +
-    '' +
-    '    <target title="Go to link" hotkey="ENTER">' +
-    '      .//ancestor-or-self::a' +
-    '    </target>' +
-    '' +
-    '    <target title="Related articles" hotkey="r" onEmpty="' +
-    'No related' +
-    '        articles available">' +
-    '      .//a[@class="g bld" or @class="rl" or @class="rg"]' +
-    '    </target>' +
-    '' +
-    '    <target title="Go to section" trigger="listEntry">' +
-    '       id("news_tab_title")' +
-    '    </target>' +
-    '' +
-    '  </list>' +
-    '' +
-    '  <list title="Blogs" next="DOWN j" prev="UP k" fwd="n" ba' +
-    'ck="p" type="dynamic">' +
-    '' +
-    '    <item action="CALL:axsFinance.readBlogsDesc">' +
-    '      //div[@class="rss-item"]' +
-    '    </item>' +
-    '' +
-    '    <target title="Go to blog" hotkey="ENTER">' +
-    '      .//a[./img[@class="rssSprite"]]' +
-    '    </target>' +
-    '' +
-    '    <target title="Go to section" trigger="listEntry">' +
-    '      id("blogs_tab_title")' +
-    '    </target>' +
-    '' +
-    '  </list>' +
-    '' +
-    '  <list title="Feeds" next="DOWN j" prev="UP k" fwd="n" ba' +
-    'ck="p" type="dynamic">' +
-    '' +
-    '    <item action="CALL:axsFinance.readFeedExampleDesc">' +
-    '      //div[./div[contains(@id, "rss-feed-item-snippet")]  ' +
-    '          and .//a[contains(text(), "Try this example")]]' +
-    '    </item>' +
-    '' +
-    '    <item action="CALL:axsFinance.readFeedSearchResDesc">' +
-    '    id("plot_feed_div_cont")//div[contains' +
-    '          (@id,"rss-feed-item-snippet")]/..' +
-    '    </item>' +
-    '' +
-    '    <item action="CALL:axsFinance.readBlogsDesc">' +
-    '      //div[@id="plot_feed_div_cont"]//' +
-    '          div[@class="rss-item"]' +
-    '    </item>' +
-    '' +
-    '    <target title="Go to feed source" hotkey="g">' +
-    '      .//a[@class="g"]' +
-    '    </target>' +
-    '' +
-    '    <target title="Try this example" hotkey="t" ' +
-    '        onEmpty="This item is not an example">' +
-    '      .//a[text()="Try this example"]' +
-    '    </target>' +
-    '' +
-    '    <target title="Go to feed" hotkey="f"' +
-    '        onEmpty="This item is not a feed">' +
-    '      .//a[./img[@class="rssSprite"]]' +
-    '    </target>' +
-    '' +
-    '    <target title="Go to source" hotkey="ENTER"' +
-    '        onEmpty="No associated source">' +
-    '      .//a[@class="g"]' +
-    '    </target>' +
-    '' +
-    '    <target title="Feed search" hotkey="s"' +
-    '        action="CALL:axsFinance.focusOnSearchBox">' +
-    '      id("rss_query_box")' +
-    '    </target>' +
-    '' +
-    '    <target title="Go to section" trigger="listEntry">' +
-    '      id("plot_feeds_title")' +
-    '    </target>' +
-    '' +
-    '  </list>' +
-    '' +
-    '  <list title="Related companies" next="DOWN j" prev="UP ' +
-    'k" fwd="n"' +
-    '      back="p">' +
-    '' +
-    '    <item action="CALL:axsFinance.readRelCompDesc">' +
-    '      id("related")//tbody//tr' +
-    '    </item>' +
-    '' +
-    '    <target title="Go to link" hotkey="ENTER">' +
-    '       .//a' +
-    '    </target>' +
-    '' +
-    '    <target title="Go to section" trigger="listEntry">' +
-    '      id("related")/div[@class="hdg"]' +
-    '    </target>' +
-    '' +
-    '  </list>' +
-    '' +
-    '  <list title="Discussions" next="DOWN j" prev="UP k" fwd' +
-    '="n" back="p">' +
-    '' +
-    '    <item>' +
-    '      id("groups")//div[@class="item"]//a[@id]' +
-    '    </item>' +
-    '' +
-    '    <target title="Go to link" hotkey="ENTER">' +
-    '      .' +
-    '    </target>' +
-    '' +
-    '    <target title="Go to section" trigger="listEntry">' +
-    '      id("groups")/div[@class="hdg"]' +
-    '    </target>' +
-    '' +
-    '    <target title="All discussions" hotkey="a" ' +
-    '        onEmpty="No more discussions">' +
-    '      id("groups")//div[@class="item"]//a[not(@id)]' +
-    '    </target>' +
-    '' +
-    '  </list>' +
-    '' +
-    '  <list title="Blog posts" next="DOWN j" prev="UP k" fwd=' +
-    '"n" back="p">' +
-    '' +
-    '    <item>' +
-    '      id("blogs")//div[@class="item"]' +
-    '    </item>' +
-    '' +
-    '    <target title="Go to link" hotkey="ENTER" onEmpty="No' +
-    ' ' +
-    '        link available.">' +
-    '      .//a' +
-    '    </target>' +
-    '' +
-    '    <target title="Go to section" trigger="listEntry">' +
-    '      id("blogs")/div[@class="hdg"]' +
-    '    </target>' +
-    '' +
-    '  </list>' +
-    '' +
-    '  <list title="Events" next="DOWN j" prev="UP k" fwd="n" ' +
-    'back="p">' +
-    '' +
-    '    <item action="CALL:axsFinance.readEventsDesc">' +
-    '      id("events")//tr' +
-    '    </item>' +
-    '' +
-    '    <target title="Go to section" trigger="listEntry">' +
-    '      id("blogs")/following-sibling::div[@class="content"' +
-    ']' +
-    '        /div[@class="hdg"]' +
-    '    </target>' +
-    '' +
-    '    <target title="Go to link" hotkey="ENTER" onEmpty="No' +
-    '        link available.">' +
-    '      .//descendant-or-self::a' +
-    '    </target>' +
-    '' +
-    '    <target title="All events from AOL" hotkey="a" ' +
-    '        onEmpty="No more events">' +
-    '      id("all_events")' +
-    '    </target>' +
-    '' +
-    '  </list>' +
-    '' +
-    '  <list title="Summary" next="DOWN j" prev="UP k" fwd="n"' +
-    ' back="p">' +
-    '' +
-    '    <item action="CALL:axsFinance.readSummaryTextCompDesc"' +
-    '>' +
-    '      id("summary")//div[@class="item companySummary"]' +
-    '    </item>' +
-    '' +
-    '    <item>' +
-    '      id("summary")//div[@class="content"]//td[1]' +
-    '    </item>' +
-    '' +
-    '    <item action="CALL:axsFinance.readSummarylinksCompDesc' +
-    '">' +
-    '      id("summary")//div[@class="content"]//a[contains(@i' +
-    'd,"fs-")]' +
-    '    </item>' +
-    '' +
-    '    <target title="Go to link" hotkey="ENTER" onEmpty="No' +
-    '        link available.">' +
-    '      .//descendant-or-self::a' +
-    '    </target>' +
-    '' +
-    '    <target title="Go to section" trigger="listEntry">' +
-    '      id("summary")/div[@class="hdg"]' +
-    '    </target>' +
-    '' +
-    '  </list>' +
-    '' +
-    '  <list title="Income statement in millions of US dollars' +
-    '"' +
-    '      next="DOWN j" prev="UP k" fwd="n" back="p">' +
-    '    <item action="CALL:axsFinance.readFinancialCompDesc">' +
-    '      id("fd")//tr[@class and following-sibling::tr[.//a[@id="bal"]]]' +
-    '    </item>' +
-    '' +
-    '    <target title="Income statement section" trigger="lis' +
-    'tEntry">' +
-    '      id("fd")//tr[1]//td[1]axsFinance.str.BIO' +
-    '    </target>' +
-    '' +
-    '    <target title="Open income statement" hotkey="ENTER">' +
-    '      id("inc")' +
-    '    </target>' +
-    '' +
-    '    <target title="Go to section" trigger="listEntry">' +
-    '      id("fd")//tr[1][//a]' +
-    '    </target>' +
-    '' +
-    '  </list> ' +
-    '' +
-    '  <list title="Balance sheet in millions of US dollars"' +
-    '      next="DOWN j" prev="UP k" fwd="n" back="p">' +
-    '' +
-    '    <item action="CALL:axsFinance.readFinancialCompDesc">' +
-    '      id("fd")//tr[@class and preceding-sibling::tr[.//a[@id="bal"]]' +
-    '        and following-sibling::tr[.//a[@id="cash"]]]' +
-    '    </item>' +
-    '' +
-    '    <target title="Open balance sheet" hotkey="ENTER">' +
-    '      id("bal")' +
-    '    </target>' +
-    '' +
-    '    <target title="Go to section" trigger="listEntry">' +
-    '      id("fd")//tr[6][//a]' +
-    '    </target>' +
-    '' +
-    '  </list>' +
-    '' +
-    '  <list title="Cash flow in millions of US dollars" next=' +
-    '"DOWN j" ' +
-    '      prev="UP k" fwd="n" back="p">' +
-    '' +
-    '    <item action="CALL:axsFinance.readFinancialCompDesc">' +
-    '      id("fd")//tr[@class and preceding-sibling::tr[.//a[@id="cash"]]]' +
-    '    </item>' +
-    '' +
-    '    <target title="Open cash flow" hotkey="ENTER">' +
-    '      id("cash")' +
-    '    </target>' +
-    '' +
-    '    <target title="Go to section" trigger="listEntry">' +
-    '      id("fd")//tr[12][//a]' +
-    '    </target>' +
-    '' +
-    '  </list>' +
-    '' +
-    '  <list title="Key statistics and ratios" next="DOWN j" p' +
-    'rev="UP k"' +
-    '      fwd="n" back="p">' +
-    '' +
-    '    <item action="CALL:axsFinance.readRatAndStatsCompDesc"' +
-    '>' +
-    '      id("keyratios")//tr[@class]' +
-    '    </item>' +
-    '' +
-    '    <target title="More ratios from Reuters" hotkey="a"' +
-    '        onEmpty="No more ratios">' +
-    '      id("keyratios")//a' +
-    '    </target>' +
-    '' +
-    '    <target title="Go to section" trigger="listEntry">' +
-    '      id("keyratios")/div[@class="hdg"]' +
-    '    </target>' +
-    '' +
-    '  </list>' +
-    '' +
-    '  <list title="More resources" next="DOWN j" prev="UP k"' +
-    '      fwd="n" back="p">' +
-    '' +
-    '    <item>' +
-    '      id("m-analyst")/.. | id("m-sec")/.. | id("m-hold")/' +
-    '.. |' +
-    '          id("m-options")/.. | id("m-research")/.. |' +
-    '          id("m-wiki")/.. | id("m-transcripts")/..' +
-    '    </item>' +
-    '' +
-    '    <target title="Go to link" hotkey="ENTER">' +
-    '      .//a' +
-    '    </target>' +
-    '' +
-    '    <target title="Go to section" trigger="listEntry" >' +
-    '      id("keyratios")/following-sibling::div[@class="hdg"' +
-    ']' +
-    '    </target>' +
-    '' +
-    '  </list>' +
-    '' +
-    '  <list title="Officers and directors" next="DOWN j"' +
-    '      prev="UP k" fwd="n" back="p">' +
-    '' +
-    '    <item action="CALL:axsFinance.readManagementDescriptio' +
-    'n">' +
-    '      id("management")//tr[not(@id="hide") and @id]' +
-    '    </item>' +
-    '' +
-    '    <item>' +
-    '      id("management")//td/a' +
-    '    </item>' +
-    '' +
-    '    <target title="Biography and compensation" hotkey="b"' +
-    '>' +
-    '      .//following-sibling::tr[1]//a[@class="e-p"]' +
-    '    </target>' +
-    '' +
-    '    <target title="Trading activity" hotkey="t" onEmpty="' +
-    'No trading' +
-    '        activity available.">' +
-    '      .//following-sibling::tr[1]//a[@class="e-t"]' +
-    '    </target>' +
-    '' +
-    '    <target title="Go to link" hotkey="ENTER"' +
-    '        onEmpty="No link available.">' +
-    '      .' +
-    '    </target>' +
-    '' +
-    '    <target title="Go to section" trigger="listEntry">' +
-    '      id("mgmtdiv")' +
-    '    </target>' +
-    '' +
-    '  </list>' +
-    '' +
-    '  </cnr>';
+
+    '<target title="Read current quote" hotkey="q" ' +
+        'action="CALL:axsFinance.readCurrentQuote">' +
+      'id("price-panel")' +
+    '</target>' +
+
+    '<target title="Markets" hotkey="m">' +
+      '(//li[@class="nav-item"])[1]//a' +
+    '</target>' +
+
+    '<target title="News" hotkey="e">' +
+      '(//li[@class="nav-item"])[2]//a' +
+    '</target>' +
+
+    '<target title="Portfolios" hotkey="o">' +
+      '(//li[@class="nav-item"])[3]//a' +
+    '</target>' +
+
+    '<target title="Stock screener" hotkey="s">' +
+      '(//li[@class="nav-item"])[4]//a' +
+    '</target>' +
+
+    '<target title="Google domestic trends" hotkey="g">' +
+      '(//li[@class="nav-item"])[5]//a' +
+    '</target>' +
+
+    '<target title="Financials" hotkey="f">' +
+      'id("nav-cf")' +
+    '</target>' +
+
+    '<target title="Go to link" hotkey="ENTER">' +
+      './/descendant-or-self::a' +
+    '</target>' +
+
+    '<list title="Recent quotes" next="DOWN j" prev="UP k" fwd="n" back="p"' +
+        ' type="dynamic" onEmpty="No recent quotes">' +
+
+      '<item action="CALL:axsFinance.readRecentQuote">' +
+        'id("rq")//tr' +
+      '</item>' +
+
+      '<target title="Go to section" trigger="listEntry">' +
+        'id("rq-box")' +
+      '</target>' +
+
+      '<target title="Create portfolio from quotes" hotkey="p" ' +
+          'onEmpty="No recent quotes.">' +
+        'id("rq-create")' +
+      '</target>' +
+
+    '</list>' +
+
+    '<list title="Recent activity" next="DOWN j" prev="UP k" fwd="n" ' +
+        'back="p" type="dynamic">' +
+
+      '<item>' +
+        '//li[@class="ra-entry"]//a' +
+      '</item>' +
+
+      '<target title="Go to section" trigger="listEntry">' +
+        'id("rq-src")' +
+      '</target>' +
+
+    '</list>' +
+
+    '<list title="Market data" next="DOWN j" prev="UP k" fwd="n" ' +
+        'back="p">' +
+
+      '<item action="CALL:axsFinance.readMarketData">' +
+        'id("snap-data")/li' +
+      '</item>' +
+
+      '<target title="Go to section" trigger="listEntry">' +
+        'id("companyheader")' +
+      '</target>' +
+
+    '</list>' +
+
+    '<list title="News" next="DOWN j" prev="UP k" fwd="n" ' +
+        'back="p" type="dynamic">' +
+
+      '<item>' +
+        '//div[@class="cluster"]' +
+      '</item>' +
+
+      '<target title="View all news" hotkey="a">' +
+        '(id("news-sidebar-footer")//a[text()])[1]' +
+      '</target>' +
+
+      '<target title="Subscribe" hotkey="u">' +
+        '(id("news-sidebar-footer")//a[text()])[2]' +
+      '</target>' +
+
+      '<target title="Go to section" trigger="listEntry">' +
+        'id("companyheader")' +
+      '</target>' +
+
+    '</list>' +
+
+    '<list title="Related companies" next="DOWN j" prev="UP k" fwd="n" ' +
+        'type ="dynamic" back="p">' +
+
+      '<item action="CALL:axsFinance.readRelCompDesc">' +
+        'id("cc-table")//tr[./td]' +
+      '</item>' +
+
+      '<target title="Go to section" trigger="listEntry">' +
+        'id("related")' +
+      '</target>' +
+
+      '<target title="Add or remove columns" hotkey="a" ' +
+          'action="CALL:axsFinance.focusOnColumnSelectionCategry">' +
+        'id("related-edit-col")' +
+      '</target>' +
+
+      '<target title="Cancel" hotkey="v">' +
+        'id("related-save")' +
+      '</target>' +
+
+      '<target title="Cancel" hotkey="c">' +
+        'id("related-cancel")' +
+      '</target>' +
+
+    '</list>' +
+
+    '<list title="Discussed on blogs" next="DOWN j" prev="UP k" fwd="n" ' +
+        'back="p">' +
+
+      '<item>' +
+        'id("blogs")//div[@class="item"]' +
+      '</item>' +
+
+      '<target title="Go to section" trigger="listEntry">' +
+        'id("blogs")' +
+      '</target>' +
+
+      '<target title="All blog discussions" hotkey="a" ' +
+          'onEmpty="No more blog discussions">' +
+        'id("b-m-")' +
+      '</target>' +
+
+    '</list>' +
+
+    '<list title="Events" next="DOWN j" prev="UP k" fwd="n" back="p">' +
+
+      '<item>' +
+        '//div[@class="event"]' +
+      '</item>' +
+
+      '<target title="Go to section" trigger="listEntry">' +
+        '//div[@class="g-section g-tpl-25-75 g-split hdg"]' +
+      '</target>' +
+
+      '<target title="All events from AOL" hotkey="a" ' +
+          'onEmpty="No more events">' +
+        '//div[@class="events sfe-section"]//table//a' +
+      '</target>' +
+
+    '</list>' +
+
+    '<list title="Discussions" next="DOWN j" prev="UP k" fwd="n" back="p">' +
+
+      '<item>' +
+        'id("groups")//div[@class="item"]' +
+      '</item>' +
+
+      '<target title="Go to section" trigger="listEntry">' +
+        'id("groups")' +
+      '</target>' +
+
+      '<target title="All discussions" hotkey="a" ' +
+          'onEmpty="No more discussions">' +
+        'id("groups")//div[@class="sfe-break-top"]//a' +
+      '</target>' +
+
+    '</list>' +
+
+    '<list title="Key statistics and ratios" next="DOWN j" prev="UP k" ' +
+      'fwd="n" back="p">' +
+
+      '<item action="CALL:axsFinance.readKeyStatisticAndRatio">' +
+        '//table[@class="quotes rgt nwp"]//tbody/tr' +
+      '</item>' +
+
+      '<target title="More ratios from Thomson Reuters" hotkey="a" ' +
+          'onEmpty="No more ratios">' +
+        'id("m-rratio")' +
+      '</target>' +
+
+      '<target title="Go to section" trigger="listEntry">' +
+        '//table[@class="quotes rgt nwp"]' +
+      '</target>' +
+
+      '<target title="All ratios" hotkey="a" ' +
+          'onEmpty="No more ratios">' +
+        'id("m-rratio")' +
+      '</target>' +
+
+    '</list>' +
+
+    '<list title="Address" next="DOWN j" prev="UP k" fwd="n" back="p">' +
+
+      // fragile - no suitable attribute via which to recognize the node
+      '<item>' +
+        '(//div[@class="hdg" and .//h3[contains(text(),"Address")]]' +
+            '//following-sibling::div)[1]' +
+      '</item>' +
+
+      // fragile - no suitable attribute via which to recognize the node
+      '<target title="Go to section" trigger="listEntry">' +
+        '//div[@class="hdg"]//h3[contains(text(),"Address")]' +
+      '</target>' +
+
+    '</list>' +
+
+    '<list title="Description" next="DOWN j" prev="UP k" fwd="n" back="p">' +
+
+      '<item>' +
+        'id("summary")' +
+      '</item>' +
+
+      '<target title="More from Reuters" hotkey="a">' +
+        'id("m-rprofile")' +
+      '</target>' +
+
+      '<target title="Go to section" trigger="listEntry">' +
+        'id("summary-section")' +
+      '</target>' +
+
+    '</list>' +
+
+    '<list title="Officers and directors" next="DOWN j" prev="UP k" ' +
+        'fwd="n" back="p">' +
+
+      '<item>' +
+        'id("management")//tr[@class]' +
+      '</item>' +
+
+      '<target title="Full list on Reuters" hotkey="a">' +
+        'id("management")//div[@class="gb"]//a' +
+      '</target>' +
+
+      '<target title="Go to section" trigger="listEntry">' +
+        'id("management")' +
+      '</target>' +
+
+    '</list>' +
+
+    '<list title="Website links" next="DOWN j" prev="UP k" ' +
+        'fwd="n" back="p">' +
+
+      // fragile - no suitable attribute via which to recognize the node
+      '<item>' +
+        '(//div[@class="hdg" and .//h3[contains(text(),"Website links")]]' +
+            '//following-sibling::div)[1]//a' +
+      '</item>' +
+
+      // fragile - no suitable attribute via which to recognize the node
+      '<target title="Go to section" trigger="listEntry">' +
+        '//div[@class="hdg"]//h3[contains(text(),"Website links")]' +
+      '</target>' +
+
+    '</list>' +
+
+    '<list title="External links" next="DOWN j" prev="UP k" ' +
+        'fwd="n" back="p">' +
+
+      // fragile - no suitable attribute via which to recognize the node
+      '<item>' +
+        '(//div[@class="hdg" and .//h3[contains(text(),"External links")]]' +
+            '//following-sibling::div)[1]//div[@class="item"]' +
+      '</item>' +
+
+      // fragile - no suitable attribute via which to recognize the node
+      '<target title="Go to section" trigger="listEntry">' +
+        '//div[@class="hdg"]//h3[contains(text(),"External links")]' +
+      '</target>' +
+
+    '</list>' +
+
+  '</cnr>';
 
 /**
  * The AxsJAX object that will do the tickling and speaking.
@@ -609,7 +482,7 @@ axsFinance.eventHandlerToEventMap = new Object();
 /**
  * Initializes the AxsJAX script for Google finance - quotes page.
  */
-axsFinance.init = function() {
+axsFinance.initAxsJAX = function() {
   //Initialize AxsJAX object
   axsFinance.axsJAXObj = new AxsJAX(true);
 
@@ -633,96 +506,252 @@ axsFinance.init = function() {
   //Add event listeners
   document.addEventListener('keypress', axsFinance.keyHandler, true);
 
-  var func = axsFinance.DOMSubtreeModifiedEventDispatch;
-  document.addEventListener('DOMSubtreeModified', func, true);
-
-  var func = axsFinance.DOMNodeInsertedEventDispatch;
+  var func = axsFinance.domNodeInsertedEventDispatch;
   document.addEventListener('DOMNodeInserted', func, true);
-
-  //Table columns are static for the page but change over time
-  axsFinance.populateFinancialsDescArray();
-  axsFinance.populateRatAndStatDescArray();
 
   //Handle the focus in the search box performed by the page script during init
   var searchBox = document.getElementById('searchbox');
   searchBox.addEventListener('focus', axsFinance.searchBoxKeyHandler, false);
 
   //read the current quote
-  window.setTimeout(axsFinance.speakIntroduction, 200);
+  axsFinance.announceIntro();
 };
 
 /**
- * Handles the DOMSubtreeModified event. This method serves as an
- * event dispatch and delegates to specialized event handlers.
- * @param {Event} evt A DOMSubtreeModified event.
+ * Announces the page title and the index quote.
  */
-axsFinance.DOMSubtreeModifiedEventDispatch = function(evt) {
+axsFinance.announceIntro = function() {
+  var xPath = 'id("companyheader")//h3';
+  var titleNode = axsFinance.axsJAXObj.evalXPath(xPath, document.body)[0];
+
+  if (titleNode) {
+    var title = axsFinance.parseSpecialCharsAndTokens(titleNode.textContent);
+    title = axsFinance.str.GOOGLE_FINANCE_QUOTES + '. ' + title;
+
+    var quote = axsFinance.getIndexQuote();
+    var text = title + ' ' + quote;
+
+    var conversionResult = document.getElementById('price-panel');
+    axsFinance.speakAndGo(conversionResult, text);
+  }
+};
+
+/**
+ * Returns the index quote.
+ * @return {string} The index quote.
+ */
+axsFinance.getIndexQuote = function() {
+  var pricePanel = document.getElementById('price-panel');
+  var text = axsFinance.normalizeString(pricePanel.textContent);
+  // do this since the DOM has structure that would require quite fragile XPath
+  // we prevent mapping the last character to suffix
+  text = text.replace(axsFinance.str.DISCLAIMER, '');
+  text = text.replace(axsFinance.str.AM, ' ' + axsFinance.str.AM);
+  text = text.replace(axsFinance.str.PM, ' ' + axsFinance.str.PM);
+  // due to inconsistency in showing up changes as percent
+  // (sometimes the + is there and sometimes omitted)
+  text = text.replace(' (', ' ' + axsFinance.str.OR + ' ');
+  return axsFinance.parseSpecialCharsAndTokens(text);
+};
+
+/**
+ * Reads the current quote.
+ * @param {Object} item A wrapper for the current DOM node.
+ */
+axsFinance.readCurrentQuote = function(item) {
+  var text = axsFinance.getIndexQuote();
+  axsFinance.speakAndGo(item.elem, text);
+};
+
+/**
+ * Reads an item from the 'Recent quotes' list.
+ * @param {Object} item A wrapper for the current DOM node.
+ */
+axsFinance.readRecentQuote = function(item) {
+  axsFinance.pupulateTemplateAndAnnounce(item.elem, './td[not(.//b)]',
+      axsFinance.str.RECENT_QUOTE_TEMPLATE);
+};
+
+/**
+ * Reads an item from the 'Key statistics and ratios' list.
+ * @param {Object} item A wrapper for the current DOM node.
+ */
+axsFinance.readKeyStatisticAndRatio = function(item) {
+  axsFinance.pupulateTemplateAndAnnounce(item.elem, './td',
+      axsFinance.str.KEY_STATISTIC_TEMPLATE);
+};
+
+/**
+ * Selects nodes with a given xPath expression starting from the node
+ * wrapper by an item and populates their values in a template.
+ * @param {rootNode} rootNode A wrapper for the current DOM node.
+ * @param {string} xPath XPath expression for selecting nodes with values.
+ * @param {string} template The template to populate.
+ */
+axsFinance.pupulateTemplateAndAnnounce = function(rootNode, xPath,
+    template) {
+  var columns = axsFinance.axsJAXObj.evalXPath(xPath, rootNode);
+  var values = new Array();
+
+  for (var i = 0, length = columns.length; i < length; i++) {
+    values[i] = axsFinance.getSpaceSeparatedVisibleDescendantsTextContent(
+        columns[i]);
+    values[i] = axsFinance.parseSpecialCharsAndTokens(values[i]);
+  }
+
+  var text = axsFinance.populateTemplate(template, values);
+  axsFinance.speakAndGo(rootNode, text);
+};
+
+/**
+ * Gets the text content of the DOM tree rooted at a given node selecting
+ * only visible nodes (i.e. display != none). The text content of all the
+ * nodes is concatenated and separated with space.
+ * @param {Node} node The root node.
+ * @return {string} The text content.
+ */
+axsFinance.getSpaceSeparatedVisibleDescendantsTextContent = function(node) {
+  var text = '';
+  var xPath = './/descendant-or-self::*[not(contains(@style,"display: ' +
+      'none;"))]/text()';
+  var textNodes = axsFinance.axsJAXObj.evalXPath(xPath, node);
+
+  for (var i = 0, textNode; textNode = textNodes[i]; i++) {
+    text = text + textNode.textContent + ' ';
+  }
+
+  return text;
+};
+
+/**
+ * Callback handler for reading elements in the 'Market data' list.
+ * @param {Object} item A wrapper for the current DOM node.
+ */
+axsFinance.readMarketData = function(item) {
+  var element = item.elem;
+  var text = axsFinance.parseSpecialCharsAndTokens(element.textContent);
+  axsFinance.speakAndGo(element, text);
+};
+
+/**
+ * Callback handler for reading the 'Related companies' list.
+ * @param {Object} item A wrapper for the current DOM node.
+ */
+axsFinance.readRelCompDesc = function(item) {
+  var element = item.elem;
+
+  var xPath = 'id("cc-table")//th[contains(@class,"cth-sec") and not(./a)]';
+  var headerNodes = axsFinance.axsJAXObj.evalXPath(xPath, document.body);
+  xPath = './/td[not(.//span[@class="sparkline"])]';
+  var valueNodes = axsFinance.axsJAXObj.evalXPath(xPath, element);
+  var text = '';
+
+  for (var i = 0, count = headerNodes.length; i < count; i++) {
+    text = text + axsFinance.parseSpecialCharsAndTokens(
+        headerNodes[i].textContent) +
+        ': ' +
+        axsFinance.parseSpecialCharsAndTokens(valueNodes[i].textContent) + ', ';
+  }
+
+   axsFinance.speakAndGo(element, text);
+};
+
+/**
+ * Callback handler for adding or removing columns in the
+ * 'Related companies' list.
+ * @param {Object?} item A wrapper for the current DOM node.
+ */
+axsFinance.focusOnColumnSelectionCategry = function(item) {
+  // clear the lens to make the edited field visible
+  axsFinance.axsLensObj.view(null);
+
+  axsFinance.axsJAXObj.clickElem(item.elem, false);
+};
+
+/**
+ * Returns the value of the currently focused header of
+ * the 'Related companies' table.
+ * @return {string} The header value.
+ */
+axsFinance.getAddRemoveColumnHeaderValue = function() {
+  // we are trapping the TAB and Shift + TAB, so this is safe
+  var inputNode = axsFinance.axsJAXObj.lastFocusedNode;
+  var xPath = './/ancestor::th';
+  var titleNode = axsFinance.axsJAXObj.evalXPath(xPath, inputNode)[0];
+  var text = axsFinance.parseSpecialCharsAndTokens(titleNode.textContent);
+
+  if (inputNode.checked) {
+    text = text + ' ' + axsFinance.str.SELECTED;
+  } else {
+    text = text + ' ' + axsFinance.str.NOT_SELECTED;
+  }
+
+  return text;
+};
+
+/**
+ * Handles the DOMNodeInserted event. This method serves as an event dispatch
+ * and delegates event processing to specialized event handlers.
+ * @param {Event} evt A DOMNodeInserted event.
+ */
+axsFinance.domNodeInsertedEventDispatch = function(evt) {
   var target = evt.target;
 
-  if (target.id == 'ac-list') {
+  //We detect special nodes by id
+  if (!target.id) {
+    return;
+  }
 
-    axsFinance.announceAutoCompletionValueEventHandler(evt);
+  if (target.id === 'cc-table') {
 
-  } else if (target.className == 'goog-tab-selected') {
-
-    axsFinance.refreshNewsBlogsFeedsListEventHandler(evt);
+   axsFinance.addColumnHeaderListenersAndRefreshListEventHandler(evt);
 
   }
 };
 
 /**
- * Event handler for announcing the value in an auto completion box.
+ * Event handler for adding listeners to the input elements is the header
+ * of of the 'Related companies' table. This handler also refreshes the
+ * 'Related companies' list.
  * @param {Event} evt A DOMSubtreeModified event.
  */
-axsFinance.announceAutoCompletionValueEventHandler = function(evt) {
-  var target = evt.target;
-  for (var i = 0, child; child = target.childNodes[i]; i++){
-    if (child.className == 'selected'){
-      axsFinance.axsJAXObj.speakNode(child);
-      return;
+axsFinance.addColumnHeaderListenersAndRefreshListEventHandler = function(evt) {
+  var xPath = 'id("cc-table")/thead//th//input';
+  var inputNodes = axsFinance.axsJAXObj.evalXPath(xPath, document.body);
+
+  if (inputNodes.length > 0) {
+    axsFinance.categoryInputElements = inputNodes;
+
+    var announceValueListener = function(evt) {
+      var text = axsFinance.getAddRemoveColumnHeaderValue();
+      axsFinance.axsJAXObj.speakTextViaNode(text);
+    };
+
+    var stopEditListener = function(evt) {
+      if (evt.keyCode == 13) { // ENTER
+        evt.target.blur();
+        axsFinance.axsJAXObj.speakTextViaNode(
+            axsFinance.str.V_TO_SAVE_C_TO_CANCEL);
+
+        // Swallow the event
+        evt.stopPropagation();
+        evt.preventDefault();
+      }
+    };
+
+    // add listeners for confirming and announcing the header value
+    for (var i = 0, inputNode; inputNode = inputNodes[i]; i++) {
+      inputNode.removeEventListener('focus', announceValueListener, true);
+      inputNode.addEventListener('focus', announceValueListener, true);
+
+      inputNode.removeEventListener('keypress', stopEditListener, true);
+      inputNode.addEventListener('keypress', stopEditListener, true);
     }
+
+    axsFinance.axsJAXObj.speakTextViaNode(axsFinance.str.SELECT_COLUMNS);
+  } else {
+    axsFinance.categoryInputElements = null;
   }
-};
-
-/**
- * Announces the title of the current feed list.
- */
-axsFinance.announceFeedListTitle = function() {
-  var xPath = '//div[@id="feed_list_title" and .//ancestor::div[contains' +
-      '(@id, "_div_cont") and not(contains(@style, "display: none"))]]';
-  var titles = axsFinance.axsJAXObj.evalXPath(xPath, document.body);
-
-  if (titles.length > 0) {
-    var text = titles[0].textContent;
-    axsFinance.axsJAXObj.speakTextViaNode(text);
-    axsFinance.axsJAXObj.lastFocusedNode.blur();
-  }
-};
-
-/**
- * Handles the DOMNodeInserted event. This method serves as an
- * event dispatch and delegates to specialized event handlers.
- * @param {Event} evt A DOMSubtreeModified event.
- */
-axsFinance.DOMNodeInsertedEventDispatch = function(evt) {
-  var target = evt.target;
-
-  if (target.parentNode.parentNode.parentNode.id == 'scrollingListTd') {
-    axsFinance.refreshNewsBlogsFeedsListEventHandler(evt);
-  }
-};
-
-/**
- * Event handler for refreshing the current list using the current refresh 
- * mode of the list.
- * @param {Event} evt A DOMSubtreeModified event.
- */
-axsFinance.refreshNewsBlogsFeedsListEventHandler = function(evt) {
-  var func = function() {
-               axsFinance.refreshCurrentList();
-               axsFinance.announceFeedListTitle();
-  };
-  axsFinance.executeFunctionAfterMostRecentEvent(func, evt);
 };
 
 /**
@@ -738,455 +767,9 @@ axsFinance.searchBoxKeyHandler = function(evt) {
 };
 
 /**
- * Reads the company name and the current quote.
- */
-axsFinance.speakIntroduction = function() {
-    var text = '';
-    var xpath = 'id("companyheader")//h1';
-    var headerElems = axsFinance.axsJAXObj.evalXPath(xpath, document.body);
-    var quoteElems = axsFinance.axsJAXObj.evalXPath(axsFinance.QUOTE_XPATH,
-        document.body);
-
-    text = headerElems[0].textContent + ' ';
-    text = text + axsFinance.parseCurrentQuote(quoteElems[0]);
-
-    axsFinance.speakAndGo(quoteElems[0], text);
-};
-
-/**
- * Populates the array used for building a sentence for presenting the
- * 'Balance sheet in millions of US dollars', Cash flow in millions
- * of US dollars' lists (Financial section). 
- * NOTE: The array is built dynamically since the captions of the Financials
- * table vary over time.
- */
-axsFinance.populateFinancialsDescArray = function() {
-  var xpath = 'id("fd")//tr[1]';
-  var elements = axsFinance.axsJAXObj.evalXPath(xpath, document.body);
-  var tableRow = elements[0];
-  var currentCaption = tableRow.childNodes[3].textContent;
-  currentCaption = currentCaption.replace('(', ' ').replace(')', ' ');
-  currentCaption = axsFinance.normalizeString(currentCaption) + ', ';
-  var oneYearOldCaption = tableRow.childNodes[5].textContent;
-  oneYearOldCaption = oneYearOldCaption.replace('(', ' ').replace(')', ' ');
-  oneYearOldCaption = axsFinance.normalizeString(oneYearOldCaption) + ', ';
-  var twoYearsOldCaption = tableRow.childNodes[7].textContent;
-  twoYearsOldCaption = twoYearsOldCaption.replace('(', ' ').replace(')', ' ');
-  twoYearsOldCaption = axsFinance.normalizeString(twoYearsOldCaption) + ', ';
-
-  axsFinance.financialsDescArray = new Array('',
-                                            currentCaption,
-                                            oneYearOldCaption,
-                                            twoYearsOldCaption);
-};
-
-/**
- * Populates the array used for building a sentence for presenting the
- * 'Key statistics and ratios' list section (Key Stats & Ratios). 
- * NOTE: The array is built dynamically since the captions of the 'Key Stats & 
- * Ratios' table vary over time.
- */
-axsFinance.populateRatAndStatDescArray = function() {
-  var xpath = 'id("keyratios")//tr[1]';
-  var elements = axsFinance.axsJAXObj.evalXPath(xpath, document.body);
-  var tableRow = elements[0];
-  var currentCaption = tableRow.childNodes[3].textContent;
-  currentCaption = currentCaption.replace('(', ' ').replace(')', ' ');
-  currentCaption = axsFinance.normalizeString(currentCaption) + ', ';
-  var oneYearCaption = tableRow.childNodes[5].textContent;
-  oneYearCaption = oneYearCaption.replace('(', ' ').replace(')', ' ');
-  oneYearCaption = axsFinance.normalizeString(oneYearCaption) + ', ';
-  var twoYearsCaption = tableRow.childNodes[7].textContent;
-  twoYearsCaption = twoYearsCaption.replace('(', ' ').replace(')', ' ');
-  twoYearsCaption = axsFinance.normalizeString(twoYearsCaption) + ', ';
-  if (twoYearsCaption.indexOf(axsFinance.str.TTM) != -1) {
-    twoYearsCaption = twoYearsCaption.replace(axsFinance.str.TTM,
-                                              axsFinance.str.TTM_SPACES);
-  }
-  axsFinance.ratAndStatDescArray = new Array('',
-                                            currentCaption,
-                                            oneYearCaption,
-                                            twoYearsCaption);
-};
-
-/**
- * Callback handler for reading criteria items in the 'Market data' list.
- * @param {Object?} item A wrapper for the current DOM node.
- */
-axsFinance.readMarketDataItem = function(item) {
-  var criteria = item.elem;
-  var xPath = './/following-sibling::td[1]';
-  var value = axsFinance.axsJAXObj.evalXPath(xPath, criteria)[0];
-
-  var criteriaText = axsFinance.parseSpecChrsAndTkns(criteria.textContent);
-  var valueText = axsFinance.parseSpecChrsAndTkns(value.textContent);
-
-  var text = criteriaText + ' ' + valueText + '.';
-  axsFinance.speakAndGo(criteria, text);
-};
-
-/**
- * Callback handler for reading the after hours information in 
- * the 'Market data' list.
- * @param {Object} item A wrapper for the current DOM node.
- */
-axsFinance.readAfterHours = function(item) {
-  var text = '';
-  var element = item.elem;
-  var afterHours = element.childNodes[0].textContent;
-  afterHours = axsFinance.parseSpecChrsAndTkns(afterHours);
-  afterHours = afterHours + ' ' + axsFinance.str.OR + ' ';
-  var percent = element.childNodes[2].textContent;
-  percent = axsFinance.parseSpecChrsAndTkns(percent);
-  percent = percent + ', ';
-  var time = element.childNodes[4].textContent;
-  text = afterHours + percent + time;
-
-  axsFinance.speakAndGo(element, text);
-};
-
-/**
- * Reads the current quote.
- */
-axsFinance.readCurrentQuote = function() {
-  var elements = axsFinance.axsJAXObj.evalXPath(axsFinance.QUOTE_XPATH,
-      document.body);
-  var text = axsFinance.parseCurrentQuote(elements[0]);
-  axsFinance.speakAndGo(elements[0], text);
-};
-
-/**
- * Parses the current quote (the first element in the first and second items 
- * in the Market data list and read via pressing the 'q' key) and generates
- * a readable string.
- * @param {Node} element The current DOM node.
- * @return {string} The readable text generated from the quote.
- */
-axsFinance.parseCurrentQuote = function(element) {
-  var text = '';
-  var rate = element.childNodes[1].textContent;
-  rate = axsFinance.parseSpecChrsAndTkns(rate) + ', ';
-
-  var change = element.childNodes[4].textContent;
-  change = axsFinance.parseSpecChrsAndTkns(change) + ' ';
-
-  var percent = element.childNodes[6].textContent;
-  percent = axsFinance.parseSpecChrsAndTkns(percent) + ', ';
-
-  var dateAndStatus = element.childNodes[8].textContent;
-  dateAndStatus = dateAndStatus.replace(' -', axsFinance.str.STATUS);
-  dateAndStatus = axsFinance.parseSpecChrsAndTkns(dateAndStatus) + ', ';
-
-  var time = '';
-  if (element.childNodes.length > 9) {
-    time = element.childNodes[9].textContent;
-  }
-
-  var docTextPhrases = new Array(rate, change, percent, dateAndStatus, time);
-  text = axsFinance.buildTableRowText(docTextPhrases,
-      axsFinance.marketDataDescArray);
-
-  return text;
-};
-
-/**
- * Callback handler for reading the 'News' list.
- * @param {Object} item A wrapper for the current DOM node.
- */
-axsFinance.readNewsDesc = function(item) {
-  var element = item.elem;
-  var text = '';
-  var xpath = './/td[@class="title" or @class="source"]';
-  var contents = axsFinance.axsJAXObj.evalXPath(xpath, element);
-  text = contents[0].textContent + '. ';
-  text = text + contents[1].childNodes[0].textContent;
-  text = text + contents[1].childNodes[1].textContent;
-  axsFinance.speakAndGo(item.elem, text);
-};
-
-/**
- * Callback handler for reading the 'Blogs' list.
- * @param {Object} item A wrapper for the current DOM node.
- */
-axsFinance.readBlogsDesc = function(item) {
-  var element = item.elem;
-  var xPath = './/div[@class="content"]';
-  var content = axsFinance.axsJAXObj.evalXPath(xPath, element)[0];
-
-  xPath = './/div[@class="date"]';
-  var date = axsFinance.axsJAXObj.evalXPath(xPath, element)[0];
-
-  var text = content.textContent + ' ' + date.textContent;
-  axsFinance.speakAndGo(element, text);
-};
-
-/**
- * Callback handler for reading the examples in the 'Feeds' list.
- * @param {Object} item A wrapper for the current DOM node.
- */
-axsFinance.readFeedExampleDesc = function(item) {
-  var element = item.elem;
-
-  var example = element.firstChild;
-  var xPath = './div[contains(@id, "rss-feed-item-snippet")]';
-  var definition = axsFinance.axsJAXObj.evalXPath(xPath, element)[0].firstChild;
-
-  var text = axsFinance.str.EXAMPLE + '. ' + example.textContent + ' ';
-  text = text + axsFinance.str.DEFINITION + '. ' + definition.textContent;
-
-  axsFinance.speakAndGo(element, text);
-};
-
-/**
- * Callback handler for reading the search results in the 'Feeds' list.
- * @param {Object} item A wrapper for the current DOM node.
- */
-axsFinance.readFeedSearchResDesc = function(item) {
-  var element = item.elem;
-
-  var text = element.textContent;
-  var xPath = './/a';
-  var links = axsFinance.axsJAXObj.evalXPath(xPath, element);
-  for (var i = 0, link; link = links[i]; i++) {
-    text = text.replace(link.textContent, '');
-  }
-
-  axsFinance.speakAndGo(element, text);
-};
-
-/**
- * Callback handler for focusing on the search feed box.
- * @param {Object} item A wrapper for the current DOM node.
- */
-axsFinance.focusOnSearchBox = function(item) {
-  var element = item.elem;
-  element.title = 'Search box';
-  element.focus();
-  element.select();
-};
-
-/**
- * Callback handler for reading the 'Related companies' list.
- * @param {Object} item A wrapper for the current DOM node.
- */
-axsFinance.readRelCompDesc = function(item) {
-  var element = item.elem;
-  var rowColumns = element.childNodes;
-  var companyName = axsFinance.normalizeString(rowColumns[1].textContent);
-  var exchange = axsFinance.normalizeString(rowColumns[5].textContent);
-  var exchangeFullName = axsFinance.phrasesMap[exchange];
-  if (exchangeFullName !== undefined) {
-    exchange = exchangeFullName;
-  }
-  var symbol = axsFinance.normalizeString(rowColumns[7].textContent);
-  symbol = axsFinance.addSpaceBetweenChars(symbol);
-  var lastTrade = axsFinance.normalizeString(rowColumns[9].textContent) ||
-                  axsFinance.str.NA;
-  var note = '';
-  if (rowColumns[11].textContent.indexOf('*') != -1) {
-    note = axsFinance.str.DELAY;
-  }
-  var index = rowColumns[13].textContent.indexOf('(');
-  var absoluteChange = rowColumns[13].textContent.substring(0, index);
-  absoluteChange = axsFinance.parseSpecChrsAndTkns(absoluteChange) ||
-                   axsFinance.str.NA;
-  var relativeChange = rowColumns[13].textContent.substring(index);
-  relativeChange = axsFinance.parseSpecChrsAndTkns(relativeChange) ||
-                   axsFinance.str.NA;
-  var marketCap = axsFinance.parseSpecChrsAndTkns(rowColumns[15].textContent) ||
-                  axsFinance.str.NA;
-  var docTextPhrases = new Array(companyName,
-                                 exchange,
-                                 symbol,
-                                 lastTrade,
-                                 absoluteChange,
-                                 relativeChange,
-                                 marketCap,
-                                 note);
-  var rowText = axsFinance.buildTableRowText(docTextPhrases,
-      axsFinance.relatedCompaniesDescArray);
-  axsFinance.speakAndGo(element, rowText);
-};
-
-/**
- * Callback handler for reading the 'Income statement in millions of
- * US dollars', 'Balance sheet in millions of US dollars', Cash flow in
- * millions of US dollars' lists.
- * @param {Object} item A wrapper for the current DOM node.
- */
-axsFinance.readFinancialCompDesc = function(item) {
-  var element = item.elem;
-
-  var metricName = element.childNodes[1].textContent;
-  metricName = axsFinance.parseSpecChrsAndTkns(metricName) + ', ';
-
-  var currentValue = element.childNodes[3].textContent;
-  currentValue = axsFinance.parseSpecChrsAndTkns(currentValue) + ', ';
-
-  var oneYearValue = element.childNodes[5].textContent;
-  oneYearValue = axsFinance.parseSpecChrsAndTkns(oneYearValue) + ', ';
-
-  var twoYearsValue = element.childNodes[7].textContent;
-  twoYearsValue = axsFinance.parseSpecChrsAndTkns(twoYearsValue) + ', ';
-
-  var columnsText = new Array(metricName,
-                              currentValue,
-                              oneYearValue,
-                              twoYearsValue);
-
-  var rowText = axsFinance.buildTableRowText(columnsText,
-                                             axsFinance.financialsDescArray);
-
-  axsFinance.speakAndGo(element, rowText);
-};
-
-/**
- * Callback handler for reading the 'Key ratios and Stats' list.
- * @param {Object} item A wrapper for the current DOM node.
- */
-axsFinance.readRatAndStatsCompDesc = function(item) {
-  var element = item.elem;
-  var metricName = element.childNodes[1].textContent;
-  metricName = axsFinance.parseSpecChrsAndTkns(metricName) + ', ';
-  var currentValue = element.childNodes[3].textContent;
-  currentValue = axsFinance.parseSpecChrsAndTkns(currentValue) + ', ';
-  var oneYearValue = element.childNodes[5].textContent;
-  oneYearValue = axsFinance.parseSpecChrsAndTkns(oneYearValue) + ', ';
-  var twoYearsValue = element.childNodes[7].textContent;
-  twoYearsValue = axsFinance.parseSpecChrsAndTkns(twoYearsValue) + ', ';
-
-  var columnsText = new Array(metricName,
-                              currentValue,
-                              oneYearValue,
-                              twoYearsValue);
-
-  var rowText = axsFinance.buildTableRowText(columnsText,
-                                         axsFinance.ratAndStatDescArray);
-
-  axsFinance.speakAndGo(element, rowText);
-};
-
-/**
- * Callback handler for reading the names and information of the people
- * in the 'Officers and directors' list.
- * @param {Object} item A wrapper for the current DOM node.
- */
-axsFinance.readManagementDescription = function(item) {
-  var element = item.elem;
-  var personName = element.childNodes[1].textContent;
-  personName = personName.replace(axsFinance.str.GT, '');
-  personName = axsFinance.normalizeString(personName);
-  var position = element.childNodes[3].textContent;
-  var info = element.nextSibling.nextSibling.textContent;
-  var index = info.indexOf(axsFinance.str.BIO);
-  info = info.substring(0, index);
-  info = axsFinance.normalizeString(info);
-  var columnsText = new Array(personName, position, info);
-  var rowText = axsFinance.buildTableRowText(columnsText, null);
-  axsFinance.speakAndGo(element, rowText);
-};
-
-/**
- * Callback handler for reading the events in the 'Events' list.
- * @param {Object} item A wrapper for the current DOM node.
- */
-axsFinance.readEventsDesc = function(item) {
-  var element = item.elem;
-  var text = '';
-  var dateAndTime = element.childNodes[1].textContent;
-  dateAndTime = axsFinance.normalizeString(dateAndTime);
-  var eventName = element.childNodes[3].childNodes[0].textContent;
-  eventName = axsFinance.normalizeString(eventName);
-  text = dateAndTime + ', ' + eventName;
-  axsFinance.speakAndGo(element, text);
-};
-
-/**
- * Callback handler for reading the company web site links in the 'Summary' 
- * list.
- * @param {Object} item A wrapper for the current DOM node.
- */
-axsFinance.readSummarylinksCompDesc = function(item) {
-  var element = item.elem;
-  var text = axsFinance.normalizeString(element.textContent);
-  axsFinance.speakAndGo(element, text);
-};
-
-/**
- * Callback handler for reading the company description in the 'Summary' list.
- * @param {Object} item A wrapper for the current DOM node.
- */
-axsFinance.readSummaryTextCompDesc = function(item) {
-  var element = item.elem;
-  var text = element.childNodes[0].textContent;
-  axsFinance.speakAndGo(element, text);
-};
-
-/**
- * Adds white spaces between the characters of a string
- * @param {string} text The processed text.
- * @return {string} The processed text with white spaces added between its 
- * characters.
- */
-axsFinance.addSpaceBetweenChars = function(text) {
-  var textWithSpaces = '';
-  for (var i = 0; i < text.length; i++) {
-    textWithSpaces = textWithSpaces + text.charAt(i);
-    if (i < text.length - 1) {
-      textWithSpaces = textWithSpaces + ' ';
-    }
-  }
-  return textWithSpaces;
-};
-
-/**
- * Executes a function mapped to an event. Since some events are generated
- * too frequently, taking actions on each event may cause significant
- * overhead. This method is mapping the event in the function call to a
- * handling function. Also the event has a timestamp indicating the time for
- * planned execution (obtained by adding an offset to the current system time)
- * of the function to which it is mapped (and will potentially handle it).
- * The handling function is executed after the event timestamp expires.
- * Subsequent requests for executing the same function remap the function to the
- * event parameter in the call and the event timestamp is set as described
- * above. After execution of the mapped function its mapping to an event is
- * removed. Such an implementation ensures processing the last event mapped to
- * the handling function after a certain timeout.
- *
- * @param {Function} func The handling function to execute.
- * @param {Event} evt Event to be propagated to the handlingFunction.
- */
- axsFinance.executeFunctionAfterMostRecentEvent = function(func, evt) {
-  if (axsFinance.eventHandlerToEventMap[func.toString()]) {
-    evt.timeToHandle = new Date().getTime() + axsFinance.EVT_HANDL_TIMEOUT_INT;
-    axsFinance.eventHandlerToEventMap[func.toString()] = evt;
-    return;
-  }
-
-  evt.timeToHandle = new Date().getTime() + axsFinance.EVT_HANDL_TIMEOUT_INT;
-  axsFinance.eventHandlerToEventMap[func.toString()] = evt;
-
-  var delegFunc = function() {
-                    var currentTime = new Date().getTime();
-                    var key = func.toString();
-                    var event = axsFinance.eventHandlerToEventMap[key];
-
-                    if (event.timeToHandle > currentTime) {
-                      var executionTimeout = event.timeToHandle - currentTime;
-                      window.setTimeout(delegFunc, executionTimeout);
-                    } else {
-                      func(event);
-                      axsFinance.eventHandlerToEventMap[func.toString()] = null;
-                    }
-  };
-
-   window.setTimeout(delegFunc, axsFinance.EVT_HANDL_TIMEOUT_INT);
-};
-
-/**
  * Speaks a text and positions the screen to an element.
  * @param {Node} element DOM node.
- * @param {string} text The text to be spoken. 
+ * @param {string} text The text to be spoken.
  * characters.
  */
 axsFinance.speakAndGo = function(element, text) {
@@ -1197,98 +780,88 @@ axsFinance.speakAndGo = function(element, text) {
 };
 
 /**
- * Builds a sentence for presenting (speaking) a table row. The sentence is
- * built by alternating a phrase and a column content. 
- * @param {Array?} textContents Array with the contents of table columns. 
- * @param {Array?} columnDesc Array of phrases to be added between the
- * column values.
- * @return {string} The assembled sentence.
+ * Populates a template replacing special tokens (like {i} where i is is an
+ * index) with concrete values.
+ * @param {string} template The template string to populate.
+ * @param {Array} values The array with replacement (concrete) values.
+ * @return {string} The string generated from populating the template.
  */
-axsFinance.buildTableRowText = function(textContents, columnDesc) {
-  //check inputs
-  if (textContents === null) {
-    return '';
+axsFinance.populateTemplate = function(template, values) {
+  var sentence = new String(template);
+  for (var i = 0, count = values.length; i < count; i++) {
+    sentence = sentence.replace('{' + i + '}', values[i]);
   }
-  //assemble text
-  var rowText = '';
-  for (var i = 0, textContent; textContent = textContents[i]; i++) {
-    if (columnDesc !== null && i < columnDesc.length) {
-       rowText = rowText + ' ' + columnDesc[i];
-    }
-    rowText = rowText + ' ' + textContents[i];
-  }
-  if (columnDesc !== null && i < columnDesc.length) {
-    rowText = rowText + ' ' + columnDesc[i];
-  }
-  return rowText;
-};
-
-/**
- * Refreshes the current list of the active AxsNav object. 
- */
-axsFinance.refreshCurrentList = function() {
-  var list = axsFinance.axsNavObj.currentList();
-  axsFinance.axsNavObj.refreshList(list.title);
+  return sentence;
 };
 
 /**
  * Replaces phrases (i.e. the entire text), tokens (i.e. words), and symbols
  * (i.e. characters) of the processed text with predefined values (mappings).
- * built by alternating a phrase and a column content. 
+ * built by alternating a phrase and a column content.
  * @param {string} text The text to be processed.
  * @return {string} The text with replaced phrases/tokens/symbols.
  */
-axsFinance.parseSpecChrsAndTkns = function(text) {
+axsFinance.parseSpecialCharsAndTokens = function(text) {
   var parsedText = '';
+
   //check input
   if (text === '') {
     return text;
   }
+
   //remove leading and trailing spaces
   text = axsFinance.normalizeString(text);
+
   //check for phrase word mapping
   var phraseMapping = axsFinance.phrasesMap[text];
   if (phraseMapping != undefined) {
     return phraseMapping;
   }
+
   //process every word separately
   var tokens = text.split(' ');
-  for (var i = 0, token; token = tokens[i]; i++) {
+  for (var i = 0, t; t = tokens[i]; i++) {
+    var token = tokens[i];
+
     //check for whole word mapping
     var tokenMapping = axsFinance.phrasesMap[token];
     if (tokenMapping != undefined) {
       token = tokenMapping;
     } else {
-      //remove parentheses
+
+      //remove brackets
       if (token.length > 0 && token.charAt(0) === '(') {
         token = token.substring(1);
       }
       if (token.length > 1 && token.charAt(token.length - 1) === ')') {
         token = token.substring(0, token.length - 1);
       }
+
       //parse the first character
-      var prefixMapping = axsFinance.charPrefixMap[token.charAt(0)];
+      var prefixMapping = axsFinance.prefixMap[token.charAt(0)];
       if (prefixMapping != undefined) {
         token = prefixMapping + ' ' + token.substring(1);
       }
+
       //parse the last character
       var lastCharacter = token.charAt(token.length - 1);
-      var suffixMapping = axsFinance.charSuffixMap[lastCharacter];
+      var suffixMapping = axsFinance.suffixMap[lastCharacter];
       if (suffixMapping != undefined) {
         token = token.substring(0, token.length - 1) + ' ' + suffixMapping;
       }
     }
     parsedText = parsedText + ' ' + token;
   }
+
   return parsedText;
 };
 
 /**
- * Normalizes a string to enable correct presentation (i.e. speaking). All 
- * leading and trailing spaces are truncated, all types of white space 
- * characters are replaced by ' ', and all carriage returns ('\r') and line 
+ * Normalizes a string to enable correct presentation (i.e. speaking). All
+ * leading and trailing spaces are truncated, all types of white space
+ * characters are replaced by ' ', and all carriage returns ('\r') and line
  * feeds(\n) are removed.
- * @param {string} text The text to be normalized. 
+ * @param {string} text The text to be normalized.
  * @return {string} The normalized version of the text.
  */
 axsFinance.normalizeString = function(text) {
@@ -1301,19 +874,68 @@ axsFinance.normalizeString = function(text) {
 };
 
 /**
+ * Event handler for the TAB and Shift + TAB keypress events
+ * used for navigation in the current category.
+ * @param {Event} evt A keypress event.
+ */
+axsFinance.tabAndShiftTabWrapEventHandler = function(evt) {
+  var target = evt.target;
+  var inputs = axsFinance.categoryInputElements;
+  var inputsLength = inputs.length;
+
+  var nextInputIndex = -1;
+
+  for (var i = 0, input; input = inputs[i]; i++) {
+    if (target === input) {
+      nextInputIndex = i;
+      break;
+    }
+  }
+
+  if (evt.shiftKey) {
+    nextInputIndex--;
+    if (nextInputIndex < 0) {
+      nextInputIndex = inputsLength - 1;
+    }
+  } else {
+     nextInputIndex++;
+    if (nextInputIndex == inputsLength) {
+      nextInputIndex = 0;
+    }
+  }
+
+  var nextInput = inputs[nextInputIndex];
+  nextInput.focus();
+  if (nextInput.tagName == 'INPUT') {
+    nextInput.select();
+  }
+
+  //Swallow the event
+  evt.stopPropagation();
+  evt.preventDefault();
+};
+
+/**
  * Handler for key events. 'ESC' unfocuses the current focused element and
  * 'q' reads (speaks) the current quote.
  * @param {Event} evt A keypress event.
  * @return {boolean} If true, indicates that the event should be propagated.
  */
 axsFinance.keyHandler = function(evt) {
-  //If Ctrl is held, it must be for some AT. 
+  //If Ctrl is held, it must be for some AT.
   if (evt.ctrlKey) return true;
 
   if (evt.keyCode == 27) { // ESC
     axsFinance.axsJAXObj.lastFocusedNode.blur();
     return false;
   }
+
+  if (evt.keyCode == 9) { // TAB
+    if (axsFinance.categoryInputElements !== null) {
+      axsFinance.tabAndShiftTabWrapEventHandler(evt);
+    }
+  }
+
   if (axsFinance.axsJAXObj.inputFocused) {
     return true;
   }
@@ -1332,38 +954,38 @@ axsFinance.keyHandler = function(evt) {
 
 /**
  * Map from character codes to functions
- * @return {boolean} Always returns false to indicate 
+ * @return {boolean} Always returns false to indicate
  *                   that the keycode has been handled.
  */
 axsFinance.charCodeMap = {
   // Map additional keyboard behavior that involves char codes here
   // / (slash symbol)
- 47 : function() {
-       axsFinance.searchBoxFocusEnabled = true;
-       document.getElementById('searchbox').focus();
-       document.getElementById('searchbox').select();
-       return false;
-     },
+  47 : function() {
+        axsFinance.searchBoxFocusEnabled = true;
+        document.getElementById('searchbox').focus();
+        document.getElementById('searchbox').select();
+        return false;
+      },
   // ? (question mark)
   63 : function() {
-       var helpStr = axsFinance.HELP + axsFinance.axsNavObj.localHelpString() +
-                     axsFinance.axsNavObj.globalHelpString();
-       axsFinance.axsJAXObj.speakTextViaNode(helpStr);
-       return false;
-    },
+        var helpStr = axsFinance.HELP + axsFinance.axsNavObj.localHelpString() +
+            axsFinance.axsNavObj.globalHelpString();
+        axsFinance.axsJAXObj.speakTextViaNode(helpStr);
+        return false;
+      },
   // - (minus symbol)
   45 : function() {
-         axsFinance.magSize -= 0.10;
-         axsFinance.axsLensObj.setMagnification(axsFinance.magSize);
-         return false;
-       },
+        axsFinance.magSize -= 0.10;
+        axsFinance.axsLensObj.setMagnification(axsFinance.magSize);
+        return false;
+      },
   // = (equal symbol)
   61 : function() {
-         axsFinance.magSize += 0.10;
-         axsFinance.axsLensObj.setMagnification(axsFinance.magSize);
-         return false;
-       }
+        axsFinance.magSize += 0.10;
+        axsFinance.axsLensObj.setMagnification(axsFinance.magSize);
+        return false;
+      }
 };
 
 //Run the initialization routine of the script
-window.addEventListener('load', axsFinance.init, true);
+window.addEventListener('load', axsFinance.initAxsJAX, true);

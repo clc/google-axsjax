@@ -3,9 +3,9 @@
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
-// 
+//
 //      http://www.apache.org/licenses/LICENSE-2.0
-// 
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -13,7 +13,7 @@
 // limitations under the License.
 
 /**
- * @fileoverview AxsJAX script intended to enhance accessibility of 
+ * @fileoverview AxsJAX script intended to enhance accessibility of
  * the Currency page of Google Finance.
  *
  * @author svetoslavganov@google.com (Svetoslav R. Ganov)
@@ -39,11 +39,15 @@ axsFinance.str = {
   DOWN_ABBR : '-',
   PRCNT : ' percent',
   PRCNT_ABBR : '%',
-  GOOGLE_FINANCE : 'Google Finance',
+  GOOGLE_FINANCE_CURRENCY : 'Google Finance Currency',
   CONVERTER_OPENED : 'Currency converter opened',
   CONVERTER_CLOSED : 'Currency converter closed',
   AMOUNT : 'Amount',
-  CONVERTER_RESULT : 'Conversion result.'
+  CONVERTER_RESULT : 'Conversion result.',
+  CURRENCY_TEMPLATE : '{0}, {1}, {2} or {3}.',
+  QUOTE_TEMPLATE : '{0}, {1}, or {2}.',
+  PM : 'PM',
+  AM : 'AM'
 };
 
 /**
@@ -56,22 +60,42 @@ axsFinance.phrasesMap = new Object();
  * Map from prefix characters to strings.
  * @type {Object}
  */
-axsFinance.charPrefixMap = new Object();
-axsFinance.charPrefixMap[axsFinance.str.DOWN_ABBR] = axsFinance.str.DOWN;
-axsFinance.charPrefixMap[axsFinance.str.UP_ABBR] = axsFinance.str.UP;
+axsFinance.prefixMap = new Object();
+axsFinance.prefixMap[axsFinance.str.DOWN_ABBR] = axsFinance.str.DOWN;
+axsFinance.prefixMap[axsFinance.str.UP_ABBR] = axsFinance.str.UP;
 
 /**
  * Map from suffix characters to strings.
  * @type {Object}
  */
-axsFinance.charSuffixMap = new Object();
-axsFinance.charSuffixMap[axsFinance.str.PRCNT_ABBR] = axsFinance.str.PRCNT;
+axsFinance.suffixMap = new Object();
+axsFinance.suffixMap[axsFinance.str.PRCNT_ABBR] = axsFinance.str.PRCNT;
 
 /**
  * CNR
  * @type {string}
  */
 axsFinance.CNR = '<cnr next="RIGHT l" prev="LEFT h">' +
+
+    '<target title="Markets" hotkey="m">' +
+      '(//li[@class="nav-item"])[1]//a' +
+    '</target>' +
+
+    '<target title="News" hotkey="e">' +
+      '(//li[@class="nav-item"])[2]//a' +
+    '</target>' +
+
+    '<target title="Portfolios" hotkey="o">' +
+      '(//li[@class="nav-item"])[3]//a' +
+    '</target>' +
+
+    '<target title="Stock screener" hotkey="s">' +
+      '(//li[@class="nav-item"])[4]//a' +
+    '</target>' +
+
+    '<target title="Google domestic trends" hotkey="g">' +
+      '(//li[@class="nav-item"])[5]//a' +
+    '</target>' +
 
     '<target title="Announce currency ratio" hotkey="t" ' +
         'action="CALL:axsFinance.announceCurrencyRatio">' +
@@ -87,28 +111,46 @@ axsFinance.CNR = '<cnr next="RIGHT l" prev="LEFT h">' +
       '//html' +
     '</target>' +
 
-    '<list title="News" next="DOWN j" prev="UP k" fwd="n" ' +
-        'back="p" type="dynamic">' +
+    '<target title="Go to link" hotkey="ENTER">' +
+      './/descendant-or-self::a' +
+    '</target>' +
 
-      '<item action="CALL:axsFinance.readNewsDesc">' +
-        'id("newsmovingdiv")//div[@class="inner"]//tbody' +
+    '<target title="Create portfolio from quotes" hotkey="r" ' +
+        'onEmpty="No recent quotes.">' +
+      'id("rq-create")' +
+    '</target>' +
+
+    '<list title="Recent quotes" next="DOWN j" prev="UP k" fwd="n" back="p"' +
+        ' type="dynamic" onEmpty="No recent quotes">' +
+
+      '<item action="CALL:axsFinance.readRecentQuote">' +
+        'id("rq")//tr' +
       '</item>' +
 
-      '<target title="Go to link" hotkey="ENTER">' +
-        './/a' +
-      '</target>' +
+    '</list>' +
+
+    '<list title="Recent activity" next="DOWN j" prev="UP k" fwd="n" ' +
+        'back="p" type="dynamic">' +
+
+      '<item>' +
+        '//li[@class="ra-entry"]//a' +
+      '</item>' +
+
+    '</list>' +
+
+    '<list title="News" next="DOWN j" prev="UP k" fwd="n" ' +
+        'back="p">' +
+
+      '<item action="CALL:axsFinance.readNews">' +
+        '//div[@class="news-item"]' +
+      '</item>' +
 
       '<target title="View all news" hotkey="a">' +
         '//a[contains(text(), "View all news for")]' +
       '</target>' +
 
-      '<target title="Subscribe" hotkey="s">' +
+      '<target title="Subscribe" hotkey="u">' +
         '//a[./img[@id="subscribe"]]' +
-      '</target>' +
-
-      '<target title="Related articles" hotkey="r" ' +
-          'onEmpty="No related articles available">' +
-        './../../..//a[@class="g bld" or @class="rl" or @class="rg"]' +
       '</target>' +
 
     '</list>' +
@@ -117,12 +159,8 @@ axsFinance.CNR = '<cnr next="RIGHT l" prev="LEFT h">' +
         'fwd="n" back="p" type="dynamic">' +
 
       '<item action="CALL:axsFinance.readInOtherCurrency">' +
-        '//table[@class="related-currencies"]//tr' +
+        '//table[@class="currencies"]//tr' +
       '</item>' +
-
-      '<target title="See ratio with that currency" hotkey="ENTER">' +
-        './/a' +
-      '</target>' +
 
     '</list>' +
 
@@ -181,7 +219,7 @@ axsFinance.currencyConverterOpened = false;
 /**
  * Initializes the AxsJAX script for Google Finance - Currency page.
  */
-axsFinance.init = function() {
+axsFinance.initAxsJAX = function() {
   //Initialize AxsJAX object
   axsFinance.axsJAXObj = new AxsJAX(true);
 
@@ -209,6 +247,9 @@ axsFinance.init = function() {
   var func = axsFinance.initialFocusWorkaroundEventHandler;
   searchBox.addEventListener('keypress', func, true);
 
+  document.addEventListener('DOMNodeInserted',
+    axsFinance.refreshRecentQuotesEventListener, false);
+
   //Initialize the page
   axsFinance.announceIntro();
   axsFinance.instrumentInnerIframe();
@@ -218,23 +259,29 @@ axsFinance.init = function() {
  * Announces the page title and the currency ratio.
  */
 axsFinance.announceIntro = function() {
-  var xPath = 'id("companyheader")//h1';
-  var titleNode = axsFinance.axsJAXObj.evalXPath(xPath, document.body)[0];
-  if (titleNode) {
-    var title = axsFinance.parseSpecChrsAndTkns(titleNode.textContent);
-    title = axsFinance.str.GOOGLE_FINANCE + '. ' + title;
+  var text = axsFinance.str.GOOGLE_FINANCE_CURRENCY + ' ' +
+      axsFinance.getCurrencyRatio();
 
-    var ratio = axsFinance.getCurrencyRatio();
-    var text = title + ' ' + ratio;
+  var conversionResult = document.getElementById('currency_value');
+  axsFinance.speakAndGo(conversionResult, text);
+};
 
-    var conversionResult = document.getElementById('currency_value');
-    axsFinance.speakAndGo(conversionResult, text);
+/**
+ * This is a listener that refreshed the 'Recent quotes' list
+ * and is registered for the event of inserting the recent quotes
+ * table.
+ *
+ * @param {Event} evt A DOMNodeInserted event.
+ */
+axsFinance.refreshRecentQuotesEventListener = function(evt) {
+  if (evt.target.className === 'd-quotes') {
+    axsFinance.axsNavObj.refreshList('Recent quotes');
   }
 };
 
 /**
  * Instruments the inner iframe by adding event listeners which
- * delegate to functions of this script. We listen for key events 
+ * delegate to functions of this script. We listen for key events
  * to enable trapping of the TAB, Shift + TAB in the inner iframe,
  * blurring the currently focused element on ESC, and navigation.
  * We also listen for the submit event since on pressing the 'Convert'
@@ -242,7 +289,9 @@ axsFinance.announceIntro = function() {
  * as well as the result of the conversion should be read.
  */
 axsFinance.instrumentInnerIframe = function() {
-  var iframe = document.getElementsByTagName('IFRAME')[0];
+  var xPath = '//iframe[contains(@src,"/finance/converter")]';
+  var iframe = axsFinance.axsJAXObj.evalXPath(xPath, document.body)[0];
+
   var id = 'currency_converter_result';
   var result = iframe.contentDocument.getElementById(id);
 
@@ -302,7 +351,9 @@ axsFinance.instrumentInnerIframe = function() {
  * Read the result of the currency conversion.
  */
 axsFinance.readConversionResult = function() {
-  var iframe = document.getElementsByTagName('IFRAME')[0];
+  var xPath = '//iframe[contains(@src,"/finance/converter")]';
+  var iframe = axsFinance.axsJAXObj.evalXPath(xPath, document.body)[0];
+
   var id = 'currency_converter_result';
   var resultElem = iframe.contentDocument.getElementById(id);
   var result = axsFinance.normalizeString(resultElem.textContent);
@@ -356,7 +407,8 @@ axsFinance.initialFocusWorkaroundEventHandler = function(evt) {
  */
 axsFinance.announceCurrencyRatio = function(item) {
   var text = axsFinance.getCurrencyRatio();
-  axsFinance.axsJAXObj.speakTextViaNode(text);
+  var conversionResult = document.getElementById('currency_value');
+  axsFinance.speakAndGo(conversionResult, text);
 };
 
 /**
@@ -364,64 +416,102 @@ axsFinance.announceCurrencyRatio = function(item) {
  * @return {string} The currency ratio.
  */
 axsFinance.getCurrencyRatio = function() {
-  var ratioNode = document.getElementById('currency_value');
-
-  var ratio = ratioNode.textContent;
-  ratio = ratio.replace('(', axsFinance.str.OR + ' ');
-
-  //remove the text of the link
-  var link = ratioNode.childNodes[9].textContent;
-  var index = ratio.indexOf(link);
-  ratio = ratio.substring(0, index - 2);
-
-  ratio = axsFinance.parseSpecChrsAndTkns(ratio);
-  return ratio;
+  var currencyValue = document.getElementById('currency_value');
+  var text = axsFinance.normalizeString(currencyValue.textContent);
+  // we prevent mapping the last character to suffix
+  text = text.replace(axsFinance.str.AM, ' ' + axsFinance.str.AM);
+  text = text.replace(axsFinance.str.PM, ' ' + axsFinance.str.PM);
+  // due to inconsistency in showing up changes as percent
+  // (sometimes the + is there and sometimes omitted)
+  text = text.replace(' (', ' ' + axsFinance.str.OR + ' ');
+  return axsFinance.parseSpecialCharsAndTokens(text);
 };
 
 /**
- * Callback handler for reading the 'News' list.
+ * Reads rows from a table and populates the values in a given template.
  * @param {Object} item A wrapper for the current DOM node.
  */
-axsFinance.readNewsDesc = function(item) {
-  var element = item.elem;
-  var xPath = './/td[@class="title" or @class="source"]';
-  var contents = axsFinance.axsJAXObj.evalXPath(xPath, element);
+axsFinance.readRecentQuote = function(item) {
+  var row = item.elem;
 
-  var text = contents[0].textContent + '. ';
-  text = text + contents[1].childNodes[0].textContent;
-  text = text + contents[1].childNodes[1].textContent;
-  text = axsFinance.normalizeString(text);
-  axsFinance.speakAndGo(item.elem, text);
+  var xPath = './td[not(.//b)]';
+  var columns = axsFinance.axsJAXObj.evalXPath(xPath, row);
+  var values = new Array();
+
+  for (var i = 0, length = columns.length; i < length; i++) {
+    values[i] = axsFinance.getSpaceSeparatedVisibleDescendantsTextContent(
+        columns[i]);
+    values[i] = axsFinance.normalizeString(values[i]);
+  }
+
+  var text = axsFinance.populateTemplate(axsFinance.str.QUOTE_TEMPLATE, values);
+  axsFinance.speakAndGo(row, text);
 };
 
 /**
- * Callback handler for reading the 'In other currencies' list.
+ * Reads an item from the 'News' list.
+ * @param {Object} item A wrapper for the current DOM node.
+ */
+axsFinance.readNews = function(item) {
+  // this does the default action the framework is supposed to do but for
+  // some reason it fails: The first time the list is traversed nothing
+  // is spoken but earcons are played.
+  // FIXME (svetoslavganov): Remove after the above issue is resolved.
+  var element = item.elem;
+  var xPath = './/div[@class="cluster"]';
+  var newsNode = axsFinance.axsJAXObj.evalXPath(xPath, element)[0];
+  axsFinance.speakAndGo(element, newsNode.textContent);
+};
+
+/**
+ * Gets the text content of the DOM tree rooted at a given node selecting
+ * only visible nodes (i.e. display != none). The text content of all the
+ * nodes is concatenated and separated with space.
+ * @param {Node} node The root node.
+ * @return {string} The text content.
+ */
+axsFinance.getSpaceSeparatedVisibleDescendantsTextContent = function(node) {
+  var text = '';
+  var xPath = './/descendant-or-self::*[not(contains(@style,"display: ' +
+      'none;"))]/text()';
+  var textNodes = axsFinance.axsJAXObj.evalXPath(xPath, node);
+
+  for (var i = 0, count = textNodes.length; i < count; i++) {
+    text = text + textNodes[i].textContent + ' ';
+  }
+
+  return text;
+};
+
+/**
+ * Reads rows from a table and populates the values in a given template.
  * @param {Object} item A wrapper for the current DOM node.
  */
 axsFinance.readInOtherCurrency = function(item) {
-  var element = item.elem;
+  var row = item.elem;
 
-  var currency = element.childNodes[1].textContent;
-  var value = element.childNodes[3].textContent;
-  value = axsFinance.normalizeString(value);
+  var xPath = './td[not(.//b)]';
+  var columns = axsFinance.axsJAXObj.evalXPath(xPath, row);
+  var values = new Array();
+  var valueIndex = 0;
 
-  //Remove currency symbol if exists
-  var index = value.indexOf(' ');
-  if (index > -1) {
-      value = value.substring(index);
+  for (var i = 0, length = columns.length; i < length; i++) {
+    var value = axsFinance.normalizeString(columns[i].textContent);
+    if (value == '') {
+      continue;
+    }
+    if (value.indexOf('(') > 0) {
+      var split = value.split('(');
+      values[valueIndex++] = axsFinance.parseSpecialCharsAndTokens(split[0]);
+      value = axsFinance.parseSpecialCharsAndTokens(split[1]);
+    }
+    values[valueIndex++] = value;
   }
 
-  var abbreviation = element.childNodes[5].textContent;
-  abbreviation = axsFinance.addSpaceBetweenChars(abbreviation);
-  var absChange = element.childNodes[7].childNodes[1].textContent;
-  absChange = axsFinance.parseSpecChrsAndTkns(absChange);
-  var relChange = element.childNodes[7].childNodes[3].textContent;
-  relChange = axsFinance.parseSpecChrsAndTkns(relChange);
+  var text = axsFinance.populateTemplate(axsFinance.str.CURRENCY_TEMPLATE,
+      values);
 
-  var text = currency + ' ' + value + ' ' + abbreviation;
-  text = text + ' ' + absChange + ' ' + axsFinance.str.OR + ' ' + relChange;
-
-  axsFinance.speakAndGo(element, text);
+  axsFinance.speakAndGo(row, text);
 };
 
 /**
@@ -438,19 +528,21 @@ axsFinance.openCloseCurrencyConverter = function(item) {
     input.blur();
   } else {
     axsFinance.currencyConverterOpened = true;
-    var iframe = document.getElementsByTagName('IFRAME')[0];
+    var xPath = '//iframe[contains(@src,"/finance/converter")]';
+    var iframe = axsFinance.axsJAXObj.evalXPath(xPath, document.body)[0];
     var input = iframe.contentDocument.getElementsByTagName('INPUT')[0];
 
     //The screen reader lacks queuing. Use the title as a workaround.
     var oldTitle = input.title;
     input.title = axsFinance.str.CONVERTER_OPENED + '. ' + input.title;
-    input.title = oldTitle;
 
     var func = function() {
-                 input.focus();
-                 input.select();
-               };
-    window.setTimeout(func, 0);
+          input.focus();
+          input.select();
+          // restore the title - see above
+          input.title = oldTitle;
+        };
+    window.setTimeout(func, 1000);
   }
 };
 
@@ -472,7 +564,7 @@ axsFinance.setCurrentCatogoryInputs = function(categoryNode) {
   var labelText = document.createTextNode('From currency: ');
   var id = axsFinance.axsJAXObj.assignId(fromCurrency);
   var selectLabel = document.createElement('LABEL');
-  selectLabel.setAttribute('for', id);
+  selectLabel.setAttribute('for', String(id));
   selectLabel.appendChild(labelText);
   fromCurrency.parentNode.insertBefore(selectLabel, fromCurrency);
   //To currency
@@ -480,12 +572,27 @@ axsFinance.setCurrentCatogoryInputs = function(categoryNode) {
   var labelText = document.createTextNode('To currency: ');
   var id = axsFinance.axsJAXObj.assignId(toCurrency);
   var selectLabel = document.createElement('LABEL');
-  selectLabel.setAttribute('for', id);
+  selectLabel.setAttribute('for', String(id));
   selectLabel.appendChild(labelText);
   toCurrency.parentNode.insertBefore(selectLabel, toCurrency);
 
   var inputElements = new Array(amount, fromCurrency, toCurrency, convert);
   axsFinance.categoryInputElements = inputElements;
+};
+
+/**
+ * Populates a template replacing special tokens (like {i} where i is is an
+ * index) with concrete values.
+ * @param {string} template The template string to populate.
+ * @param {Array} values The array with replacement (concrete) values.
+ * @return {string} The string generated from populating the template.
+ */
+axsFinance.populateTemplate = function(template, values) {
+  var sentence = new String(template);
+  for (var i = 0, value; i < values.length; i++) {
+    sentence = sentence.replace('{' + i + '}', values[i]);
+  }
+  return sentence;
 };
 
 /**
@@ -544,71 +651,64 @@ axsFinance.speakAndGo = function(element, text) {
 };
 
 /**
- * Adds white spaces between the characters of a string
- * @param {string} text The processed text.
- * @return {string} The processed text with white spaces added between its
- * characters.
- */
-axsFinance.addSpaceBetweenChars = function(text) {
-  var textWithSpaces = '';
-  for (var i = 0; i < text.length; i++) {
-    textWithSpaces = textWithSpaces + text.charAt(i);
-    if (i < text.length - 1) {
-      textWithSpaces = textWithSpaces + ' ';
-    }
-  }
-  return textWithSpaces;
-};
-
-/**
  * Replaces phrases (i.e. the entire text), tokens (i.e. words), and symbols
  * (i.e. characters) of the processed text with predefined values (mappings).
  * built by alternating a phrase and a column content.
  * @param {string} text The text to be processed.
  * @return {string} The text with replaced phrases/tokens/symbols.
  */
-axsFinance.parseSpecChrsAndTkns = function(text) {
+axsFinance.parseSpecialCharsAndTokens = function(text) {
   var parsedText = '';
+
   //check input
   if (text === '') {
     return text;
   }
+
   //remove leading and trailing spaces
   text = axsFinance.normalizeString(text);
+
   //check for phrase word mapping
   var phraseMapping = axsFinance.phrasesMap[text];
   if (phraseMapping != undefined) {
     return phraseMapping;
   }
+
   //process every word separately
   var tokens = text.split(' ');
-  for (var i = 0, token; token = tokens[i]; i++) {
+  for (var i = 0, t; t = tokens[i]; i++) {
+    var token = tokens[i];
+
     //check for whole word mapping
     var tokenMapping = axsFinance.phrasesMap[token];
     if (tokenMapping != undefined) {
       token = tokenMapping;
     } else {
-      //remove parentheses
+
+      //remove brackets
       if (token.length > 0 && token.charAt(0) === '(') {
         token = token.substring(1);
       }
       if (token.length > 1 && token.charAt(token.length - 1) === ')') {
         token = token.substring(0, token.length - 1);
       }
+
       //parse the first character
-      var prefixMapping = axsFinance.charPrefixMap[token.charAt(0)];
+      var prefixMapping = axsFinance.prefixMap[token.charAt(0)];
       if (prefixMapping != undefined) {
         token = prefixMapping + ' ' + token.substring(1);
       }
+
       //parse the last character
       var lastCharacter = token.charAt(token.length - 1);
-      var suffixMapping = axsFinance.charSuffixMap[lastCharacter];
+      var suffixMapping = axsFinance.suffixMap[lastCharacter];
       if (suffixMapping != undefined) {
         token = token.substring(0, token.length - 1) + ' ' + suffixMapping;
       }
     }
     parsedText = parsedText + ' ' + token;
   }
+
   return parsedText;
 };
 
@@ -667,39 +767,38 @@ axsFinance.keyHandler = function(evt) {
 
 /**
  * Map from character codes to functions
- * @return {boolean} Always returns false to indicate that the keycode 
+ * @return {boolean} Always returns false to indicate that the keycode
  * has been handled.
  */
 axsFinance.charCodeMap = {
   // Map additional keyboard behavior that involves char codes here
   // / (slash symbol)
- 47 : function() {
-       axsFinance.searchBoxFocusEnabled = true;
-       document.getElementById('searchbox').focus();
-       document.getElementById('searchbox').select();
-       return false;
-     },
+  47 : function() {
+        document.getElementById('searchbox').focus();
+        document.getElementById('searchbox').select();
+        return false;
+      },
   // ? (question mark)
   63 : function() {
-         var helpStr = axsFinance.HELP +
-                       axsFinance.axsNavObj.localHelpString() +
-                       axsFinance.axsNavObj.globalHelpString();
-         axsFinance.axsJAXObj.speakTextViaNode(helpStr);
-         return false;
+        var helpStr = axsFinance.HELP +
+            axsFinance.axsNavObj.localHelpString() +
+            axsFinance.axsNavObj.globalHelpString();
+        axsFinance.axsJAXObj.speakTextViaNode(helpStr);
+        return false;
       },
   // - (minus symbol)
-   45 : function() {
-          axsFinance.magSize -= 0.10;
-          axsFinance.axsLensObj.setMagnification(axsFinance.magSize);
-          return false;
-        },
-   // = (equal symbol)
-   61 : function() {
-          axsFinance.magSize += 0.10;
-          axsFinance.axsLensObj.setMagnification(axsFinance.magSize);
-          return false;
-        }
+  45 : function() {
+        axsFinance.magSize -= 0.10;
+        axsFinance.axsLensObj.setMagnification(axsFinance.magSize);
+        return false;
+      },
+  // = (equal symbol)
+  61 : function() {
+        axsFinance.magSize += 0.10;
+        axsFinance.axsLensObj.setMagnification(axsFinance.magSize);
+        return false;
+      }
 };
 
 //Run the initialization routine of the script
-window.addEventListener('load', axsFinance.init, true);
+window.addEventListener('load', axsFinance.initAxsJAX, true);

@@ -1,84 +1,108 @@
 <cnr next="RIGHT l" prev="LEFT h">
 
-   <target title="Go to the companies section" hotkey="s"
-       action="CALL:axsFinance.setActiveCompaniesSection">
-     /html
-   </target>
+  <target title="Go to the companies section" hotkey="y"
+      action="CALL:axsFinance.setActiveCompaniesSection">
+    /html
+  </target>
 
-   <list title="News" next="DOWN j" prev="UP k" fwd="n"
-       back="p">
+  <target title="Markets" hotkey="m">
+    (//li[@class="nav-item"])[1]//a
+  </target>
 
-     <item action="CALL:axsFinance.readNews">
-       //tr[contains(@class, "news")]//tbody//tr[1]
-     </item>
+  <target title="News" hotkey="e">
+    (//li[@class="nav-item"])[2]//a
+  </target>
 
-     <target title="Go to link" hotkey="ENTER">
-       .//a
-     </target>
+  <target title="Portfolios" hotkey="o">
+    (//li[@class="nav-item"])[3]//a
+  </target>
 
-     <target title="Related articles" hotkey="r" onEmpty="No
-        related articles">
-       .//a[@class="rg"]
-     </target>
+  <target title="Stock screener" hotkey="s">
+    (//li[@class="nav-item"])[4]//a
+  </target>
 
-     <target title="View all news" hotkey="a">
-       id("news")/tbody/tr[not(@class)]//a
-     </target>
+  <target title="Google domestic trends" hotkey="g">
+    (//li[@class="nav-item"])[5]//a
+  </target>
 
-   </list>
+  <target title="Go to link" hotkey="ENTER">
+    .//descendant-or-self::a
+  </target>
 
-   <list title="Top movers gainers" next="DOWN j" prev="UP k" fwd="n"
-       back="p">
+  <target title="Create portfolio from quotes" hotkey="t"
+       onEmpty="No recent quotes.">
+    id("rq-create")
+  </target>
 
-   <item action="CALL:axsFinance.readTopMover">
-     //table[@class="topmovers"]//tr[.//a and not(./preceding-sibling
-         ::tr[@class="beginsec"])]
-   </item>
+  <list title="Recent quotes" next="DOWN j" prev="UP k" fwd="n" back="p"
+       type="dynamic" onEmpty="No recent quotes">
 
-   <target title="Stock screener for this company" hotkey="ENTER">
-     .//a
-   </target>
+    <item action="CALL:axsFinance.readRecentQuote">
+      id("rq")//tr
+    </item>
 
-   </list>
+  </list>
 
-   <list title="Top movers losers" next="DOWN j" prev="UP k" fwd="n"
-       back="p">
+   <list title="Recent activity" next="DOWN j" prev="UP k" fwd="n"
+      back="p" type="dynamic" onEmpty="No recent activities">
 
-     <item action="CALL:axsFinance.readTopMover">
-       //table[@class="topmovers"]//tr[.//span[@class="chr"]]
-     </item>
+    <item>
+      //li[@class="ra-entry"]//a
+    </item>
 
-     <target title="Stock screener for this company" hotkey="ENTER">
-       .//a
-     </target>
+  </list>
 
-   </list>
+  <list title="News" next="DOWN j" prev="UP k" fwd="n"
+      back="p">
 
-   <list title="Top movers most active" next="DOWN j" prev="UP k"
-       fwd="n" back="p">
+    <item action="CALL:axsFinance.readNews">
+      id("category-news")//div[@class="title"]
+    </item>
 
-     <item action="CALL:axsFinance.readTopMover">
-       //table[@class="topmovers"]//tr[.//a and not(./following-sibling
-           ::tr[@class="beginsec"])]
-     </item>
+    <target title="View all news" hotkey="a">
+      id("category-news")/div[not(@class)]//a
+    </target>
 
-     <target title="Stock screener for this company" hotkey="ENTER">
-       .//a
-     </target>
+  </list>
 
-   </list>
+  <list title="Top movers gainers" next="DOWN j" prev="UP k" fwd="n"
+      back="p">
 
-   <list title="Subcategories" next="DOWN j" prev="UP k" fwd="n"
-       back="p">
+    <item action="CALL:axsFinance.readTopMover">
+      //table[@class="topmovers"]//tr[.//a and not(./preceding-sibling
+          ::tr[@class="beginsec"])]
+    </item>
 
-     <item>
-       id("subcategory")//a
-     </item>
+  </list>
 
-     <target title="Stock screener for this company" hotkey="ENTER">
-       .
-     </target>
+  <list title="Top movers losers" next="DOWN j" prev="UP k" fwd="n"
+      back="p">
 
-   </list>
+    <item action="CALL:axsFinance.readTopMover">
+      //table[@class="topmovers"]//tr[.//a and
+        ./preceding-sibling::tr[@class="beginsec"] and
+        ./following-sibling::tr[@class="beginsec"]]
+    </item>
 
- </cnr>
+  </list>
+
+  <list title="Most active" next="DOWN j" prev="UP k"
+      fwd="n" back="p">
+
+    <item action="CALL:axsFinance.readTopMover">
+      //table[@class="topmovers"]//tr[.//a and not(./following-sibling
+          ::tr[@class="beginsec"])]
+    </item>
+
+  </list>
+
+  <list title="Subcategories" next="DOWN j" prev="UP k" fwd="n"
+      back="p">
+
+    <item>
+      id("subcategory")//a
+    </item>
+
+  </list>
+
+</cnr>

@@ -1,262 +1,248 @@
 <cnr next="RIGHT l" prev="LEFT h">
 
-   <target title="Go to the sector section" hotkey="s"
-       action="CALL:axsFinance.setActiveSectorSection">
-     /html
-   </target>
+  <target title="Go to the sector section" hotkey="s"
+      action="CALL:axsFinance.setActiveSectorSection">
+    /html
+  </target>
 
-   <target title="Search for row by company name" hotkey="f"
-        action="CALL:axsFinance.goToRow">
-     /html
-   </target>
+  <target title="Search for row by company name" hotkey="f"
+       action="CALL:axsFinance.goToRow">
+    /html
+  </target>
 
-   <target title="Search for a criteria" hotkey="c"
-       action="CALL:axsFinance.goToColumn">
-     /html
-   </target>
+  <target title="Search for a criteria" hotkey="c"
+      action="CALL:axsFinance.goToColumn">
+    /html
+  </target>
 
-   <target title="Search for a criteria value" hotkey="v"
-       action="CALL:axsFinance.goToValueInColumn">
-     /html
-   </target>
+  <target title="Search for a criteria value" hotkey="v"
+      action="CALL:axsFinance.goToValueInColumn">
+    /html
+  </target>
 
-   <target title="Search criteria by value" hotkey="z"
-       action="CALL:axsFinance.goToValueInRow">
-     /html
-   </target>
+  <target title="Search criteria by value" hotkey="z"
+      action="CALL:axsFinance.goToValueInRow">
+    /html
+  </target>
 
-   <list title="Company" fwd="DOWN j n" back="UP k p" type="dynamic">
+  <target title="Go to link" hotkey="ENTER">
+    .//descendant-or-self::a
+  </target>
 
-     <item action="CALL:axsFinance.readCompanyTableCellValue">
-       id("main")/tbody/tr/td[position()=1 and @class and not
-           (@class="hdg")]
-     </item>
+  <list title="Company" next="DOWN j" prev="UP k" fwd="n" back="p"
+      type="dynamic">
 
-     <target title="Go to section" trigger="listEntry"
-         action="CALL:axsFinance.readCompanyTableCellValueListEntry">
-       /html
-     </target>
+    <item action="CALL:axsFinance.readCompanyTableCellValue">
+      id("main")/tbody/tr/td[position()=1 and @class and not
+          (@class="hdg")]
+    </item>
 
-     <target title="Go to link" hotkey="ENTER" onEmpty="No link
-         available">
-       .//a
-     </target>
+    <target title="Go to section" trigger="listEntry"
+        action="CALL:axsFinance.readCompanyTableCellValueListEntry">
+      /html
+    </target>
 
-     <target title="Reverse sorting order" hotkey="r">
-       id("main")//a[./b[text()="Company"]]
-     </target>
+    <target title="Reverse sorting order" hotkey="r">
+      id("main")//a[./b[text()="Company"]]
+    </target>
 
-     <target title="Next page" trigger="listTail"
-         action="CALL:axsFinance.wrapAround">
-        //a[.//u[text()="Next"]] | //div[@class="footerLinks"]
-     </target>
+    <target title="Next page" trigger="listTail">
+       id("navbar")//a[not(./../following-sibling::*)]
+    </target>
 
-     <target title="Previous page" trigger="listHead"
-         action="CALL:axsFinance.wrapAround">
-       //a[.//u[text()="Previous"]] | //div[@class="footerLinks"]
-     </target>
+    <target title="Previous page" trigger="listHead">
+      //a[.//u[text()="Previous"]] | //div[@class="footerLinks"]
+    </target>
 
-   </list>
+  </list>
 
-   <list title="Quote" fwd="DOWN j n" back="UP k p" type="dynamic">
+  <list title="Quote" next="DOWN j" prev="UP k" fwd="n" back="p"
+      type="dynamic">
 
-     <item action="CALL:axsFinance.readCompanyTableCellValue">
-       id("main")/tbody/tr/td[position()=2 and @class and not
-           (@class="hdg")]
-     </item>
+    <item action="CALL:axsFinance.readCompanyTableCellValue">
+      id("main")/tbody/tr/td[position()=2 and @class and not
+          (@class="hdg")]
+    </item>
 
-     <target title="Go to section" trigger="listEntry"
-         action="CALL:axsFinance.readCompanyTableCellValueListEntry">
-       /html
-     </target>
+    <target title="Go to section" trigger="listEntry"
+        action="CALL:axsFinance.readCompanyTableCellValueListEntry">
+      /html
+    </target>
 
-     <target title="Reverse sorting order" hotkey="r">
-       id("main")//a[.//nobr[text()="Quote"]]
-     </target>
+    <target title="Reverse sorting order" hotkey="r">
+      id("main")//a[.//nobr[text()="Quote"]]
+    </target>
 
-     <target title="Next page" trigger="listTail"
-         action="CALL:axsFinance.wrapAround">
-        //a[.//u[text()="Next"]] | //div[@class="footerLinks"]
-     </target>
+    <target title="Next page" trigger="listTail">
+       id("navbar")//a[not(./../following-sibling::*)]
+    </target>
 
-     <target title="Previous page" trigger="listHead"
-         action="CALL:axsFinance.wrapAround">
-       //a[.//u[text()="Previous"]] | //div[@class="footerLinks"]
-     </target>
+    <target title="Previous page" trigger="listHead">
+      id("navbar")//a[not(./../preceding-sibling::*)]
+    </target>
 
-   </list>
+  </list>
 
-   <list title="Change" fwd="DOWN j n" back="UP k p" type="dynamic">
+  <list title="Change" next="DOWN j" prev="UP k" fwd="n" back="p"
+      type="dynamic">
 
-     <item action="CALL:axsFinance.readCompanyTableCellValue">
-       id("main")/tbody/tr/td[position()=3 and @class and not
-           (@class="hdg")]
-     </item>
+    <item action="CALL:axsFinance.readCompanyTableCellValue">
+      id("main")/tbody/tr/td[position()=3 and @class and not
+          (@class="hdg")]
+    </item>
 
-     <target title="Go to section" trigger="listEntry"
-         action="CALL:axsFinance.readCompanyTableCellValueListEntry">
-       /html
-     </target>
+    <target title="Go to section" trigger="listEntry"
+        action="CALL:axsFinance.readCompanyTableCellValueListEntry">
+      /html
+    </target>
 
-     <target title="Next page" trigger="listTail"
-         action="CALL:axsFinance.wrapAround">
-        //a[.//u[text()="Next"]] | //div[@class="footerLinks"]
-     </target>
+    <target title="Next page" trigger="listTail">
+       id("navbar")//a[not(./../following-sibling::*)]
+    </target>
 
-     <target title="Previous page" trigger="listHead"
-         action="CALL:axsFinance.wrapAround">
-       //a[.//u[text()="Previous"]] | //div[@class="footerLinks"]
-     </target>
+    <target title="Previous page" trigger="listHead">
+      id("navbar")//a[not(./../preceding-sibling::*)]
+    </target>
 
-     <target title="Reverse sorting order" hotkey="r">
-       id("main")//a[.//nobr[text()="Change"]]
-     </target>
+    <target title="Reverse sorting order" hotkey="r">
+      id("main")//a[.//nobr[text()="Change"]]
+    </target>
 
-   </list>
+  </list>
 
-   <list title="Percent change" fwd="DOWN j n" back="UP k p"
-       type="dynamic">
+  <list title="Percent change" next="DOWN j" prev="UP k" fwd="n"
+      back="p" type="dynamic">
 
-     <item action="CALL:axsFinance.readCompanyTableCellValue">
-       id("main")/tbody/tr/td[position()=4 and @class and not
-           (@class="hdg")]
-     </item>
+    <item action="CALL:axsFinance.readCompanyTableCellValue">
+      id("main")/tbody/tr/td[position()=4 and @class and not
+          (@class="hdg")]
+    </item>
 
-     <target title="Go to section" trigger="listEntry"
-         action="CALL:axsFinance.readCompanyTableCellValueListEntry">
-       /html
-     </target>
+    <target title="Go to section" trigger="listEntry"
+        action="CALL:axsFinance.readCompanyTableCellValueListEntry">
+      /html
+    </target>
 
-     <target title="Reverse sorting order" hotkey="r">
-       id("main")//a[.//nobr[text()="Change%"]]
-     </target>
+    <target title="Reverse sorting order" hotkey="r">
+      id("main")//a[.//nobr[text()="Change%"]]
+    </target>
 
-     <target title="Next page" trigger="listTail"
-         action="CALL:axsFinance.wrapAround">
-        //a[.//u[text()="Next"]] | //div[@class="footerLinks"]
-     </target>
+    <target title="Next page" trigger="listTail">
+       id("navbar")//a[not(./../following-sibling::*)]
+    </target>
 
-     <target title="Previous page" trigger="listHead"
-         action="CALL:axsFinance.wrapAround">
-       //a[.//u[text()="Previous"]] | //div[@class="footerLinks"]
-     </target>
+    <target title="Previous page" trigger="listHead">
+      id("navbar")//a[not(./../preceding-sibling::*)]
+    </target>
 
-   </list>
+  </list>
 
-   <list title="Market cap" fwd="DOWN j n" back="UP k p"
-       type="dynamic">
+  <list title="Market cap" next="DOWN j" prev="UP k" fwd="n" back="p"
+      type="dynamic">
 
-     <item action="CALL:axsFinance.readCompanyTableCellValue">
-       id("main")/tbody/tr/td[position()=5 and @class and not
-           (@class="hdg")]
-     </item>
+    <item action="CALL:axsFinance.readCompanyTableCellValue">
+      id("main")/tbody/tr/td[position()=5 and @class and not
+          (@class="hdg")]
+    </item>
 
-     <target title="Go to section" trigger="listEntry"
-         action="CALL:axsFinance.readCompanyTableCellValueListEntry">
-       /html
-     </target>
+    <target title="Go to section" trigger="listEntry"
+        action="CALL:axsFinance.readCompanyTableCellValueListEntry">
+      /html
+    </target>
 
-     <target title="Reverse sorting order" hotkey="r">
-       id("main")//a[.//nobr[text()="Market Cap"]]
-     </target>
+    <target title="Reverse sorting order" hotkey="r">
+      id("main")//a[.//nobr[text()="Market Cap"]]
+    </target>
 
-     <target title="Next page" trigger="listTail"
-         action="CALL:axsFinance.wrapAround">
-        //a[.//u[text()="Next"]] | //div[@class="footerLinks"]
-     </target>
+    <target title="Next page" trigger="listTail">
+       id("navbar")//a[not(./../following-sibling::*)]
+    </target>
 
-     <target title="Previous page" trigger="listHead"
-         action="CALL:axsFinance.wrapAround">
-       //a[.//u[text()="Previous"]] | //div[@class="footerLinks"]
-     </target>
+    <target title="Previous page" trigger="listHead">
+      id("navbar")//a[not(./../preceding-sibling::*)]
+    </target>
 
-   </list>
+  </list>
 
-   <list title="Price to earnings ratio T T M" fwd="DOWN j n"
-       back="UP k p" type="dynamic">
+  <list title="Price to earnings ratio T T M" next="DOWN j"
+      prev="UP k" fwd="n" back="p" type="dynamic">
 
-     <item action="CALL:axsFinance.readCompanyTableCellValue">
-       id("main")/tbody/tr/td[position()=6 and @class and not
-           (@class="hdg")]
-     </item>
+    <item action="CALL:axsFinance.readCompanyTableCellValue">
+      id("main")/tbody/tr/td[position()=6 and @class and not
+          (@class="hdg")]
+    </item>
 
-     <target title="Go to section" trigger="listEntry"
-         action="CALL:axsFinance.readCompanyTableCellValueListEntry">
-       /html
-     </target>
+    <target title="Go to section" trigger="listEntry"
+        action="CALL:axsFinance.readCompanyTableCellValueListEntry">
+      /html
+    </target>
 
-     <target title="Reverse sorting order" hotkey="r">
-       id("main")//a[.//nobr[text()="P/E (ttm)"]]
-     </target>
-    
-     <target title="Next page" trigger="listTail"
-        action="CALL:axsFinance.wrapAround">
-        //a[.//u[text()="Next"]] | //div[@class="footerLinks"]
-     </target>
+    <target title="Reverse sorting order" hotkey="r">
+      id("main")//a[.//nobr[text()="P/E (ttm)"]]
+    </target>
 
-     <target title="Previous page" trigger="listHead"
-         action="CALL:axsFinance.wrapAround">
-       //a[.//u[text()="Previous"]] | //div[@class="footerLinks"]
-     </target>
+    <target title="Next page" trigger="listTail">
+       id("navbar")//a[not(./../following-sibling::*)]
+    </target>
 
-   </list>
+    <target title="Previous page" trigger="listHead">
+      id("navbar")//a[not(./../preceding-sibling::*)]
+    </target>
 
-   <list title="Annual revenue" fwd="DOWN j n" back="UP k p"
-       type="dynamic">
+  </list>
 
-     <item action="CALL:axsFinance.readCompanyTableCellValue">
-       id("main")/tbody/tr/td[position()=7 and @class and not
-           (@class="hdg")]
-     </item>
+  <list title="Annual revenue" next="DOWN j" prev="UP k" fwd="n"
+      back="p" type="dynamic">
 
-     <target title="Go to section" trigger="listEntry"
-         action="CALL:axsFinance.readCompanyTableCellValueListEntry">
-       /html
-     </target>
+    <item action="CALL:axsFinance.readCompanyTableCellValue">
+      id("main")/tbody/tr/td[position()=7 and @class and not
+          (@class="hdg")]
+    </item>
 
-     <target title="Reverse sorting order" hotkey="r">
-       id("main")//a[.//nobr[text()="Ann. Revenue"]]
-     </target>
-    
-     <target title="Next page" trigger="listTail"
-        action="CALL:axsFinance.wrapAround">
-        //a[.//u[text()="Next"]] | //div[@class="footerLinks"]
-     </target>
+    <target title="Go to section" trigger="listEntry"
+        action="CALL:axsFinance.readCompanyTableCellValueListEntry">
+      /html
+    </target>
 
-     <target title="Previous page" trigger="listHead"
-         action="CALL:axsFinance.wrapAround">
-       //a[.//u[text()="Previous"]] | //div[@class="footerLinks"]
-     </target>
+    <target title="Reverse sorting order" hotkey="r">
+      id("main")//a[.//nobr[text()="Ann. Revenue"]]
+    </target>
 
-   </list>
+    <target title="Next page" trigger="listTail">
+       id("navbar")//a[not(./../following-sibling::*)]
+    </target>
 
-   <list title="Annual net income" fwd="DOWN j n" back="UP k p"
-       type="dynamic">
+    <target title="Previous page" trigger="listHead">
+      id("navbar")//a[not(./../preceding-sibling::*)]
+    </target>
 
-     <item action="CALL:axsFinance.readCompanyTableCellValue">
-       id("main")/tbody/tr/td[position()=8 and @class and not
-           (@class="hdg")]
-     </item>
+  </list>
 
-     <target title="Go to section" trigger="listEntry"
-         action="CALL:axsFinance.readCompanyTableCellValueListEntry">
-       /html
-     </target>
+  <list title="Annual net income" next="DOWN j" prev="UP k" fwd="n"
+      back="p" type="dynamic">
 
-     <target title="Reverse sorting order" hotkey="r">
-       id("main")//a[.//nobr[text()="Ann. Net Income"]]
-     </target>
+    <item action="CALL:axsFinance.readCompanyTableCellValue">
+      id("main")/tbody/tr/td[position()=8 and @class and not
+          (@class="hdg")]
+    </item>
 
-     <target title="Next page" trigger="listTail"
-        action="CALL:axsFinance.wrapAround">
-        //a[.//u[text()="Next"]] | //div[@class="footerLinks"]
-     </target>
+    <target title="Go to section" trigger="listEntry"
+        action="CALL:axsFinance.readCompanyTableCellValueListEntry">
+      /html
+    </target>
 
-     <target title="Previous page" trigger="listHead"
-         action="CALL:axsFinance.wrapAround">
-       //a[.//u[text()="Previous"]] | //div[@class="footerLinks"]
-     </target>
+    <target title="Reverse sorting order" hotkey="r">
+      id("main")//a[.//nobr[text()="Ann. Net Income"]]
+    </target>
 
-   </list>
+    <target title="Next page" trigger="listTail">
+       id("navbar")//a[not(./../following-sibling::*)]
+    </target>
 
- </cnr>
+    <target title="Previous page" trigger="listHead">
+      id("navbar")//a[not(./../preceding-sibling::*)]
+    </target>
+
+  </list>
+
+</cnr>
