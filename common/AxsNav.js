@@ -98,14 +98,14 @@ AxsNav.prototype.setPowerKey = function(powerKeyObj, shortcutKey) {
 /**
  * Returns whether the specified navigation list is valid.
  * If the navigation list is dynamic and appears to not be valid,
- * this function will try to reload it and check whether or 
+ * this function will try to reload it and check whether or
  * not it becomes valid.
  * @param {Object} navList The specified list object to check.
  * @return {boolean} Whether the specified list object is valid.
  */
-AxsNav.prototype.validateList = function(navList) {
+AxsNav.prototype.validateList = function(navList) {	
   var valid = true;
-  //Reload dynamic lists  
+  //Reload dynamic lists
   if ((navList.type == 'dynamic') && (navList.items.length === 0)){
     //Clear the lens to avoid its contents interfering with the xpath
     if (this.lens_ !== null){
@@ -181,7 +181,7 @@ AxsNav.prototype.prevList = function(){
   if (this.navArray.length < 1){
     return null;
   }
-  //Find the next list with item 
+  //Find the next list with item
   for (var i = 0, list; list = this.navArray[i]; i++) {
     this.navListIdx--;
     if (this.navListIdx < 0){
@@ -224,7 +224,8 @@ AxsNav.prototype.nextItem = function(){
     return null;
   }
   if (this.lastItem){
-    var syncedIndex = this.lastItem.elem.AxsNavInfo[this.navListIdx];
+    var currentListId = this.getListId(currentList);
+    var syncedIndex = this.lastItem.elem.AxsNavInfo[currentListId];
     if (typeof(syncedIndex) != 'undefined'){
       this.navItemIdxs[this.navListIdx] = syncedIndex;
     }
@@ -290,7 +291,8 @@ AxsNav.prototype.prevItem = function(){
     return null;
   }
   if (this.lastItem){
-    var syncedIndex = this.lastItem.elem.AxsNavInfo[this.navListIdx];
+    var currentListId = this.getListId(currentList);
+    var syncedIndex = this.lastItem.elem.AxsNavInfo[currentListId];
     if (typeof(syncedIndex) != 'undefined'){
       this.navItemIdxs[this.navListIdx] = syncedIndex;
     }
@@ -349,13 +351,14 @@ AxsNav.prototype.currentItem = function(){
   if (this.navArray.length < 1){
     return null;
   }
+  var currentList = this.navArray[this.navListIdx];
   if (this.lastItem){
-    var syncedIndex = this.lastItem.elem.AxsNavInfo[this.navListIdx];
+    var currentListId = this.getListId(currentList);
+    var syncedIndex = this.lastItem.elem.AxsNavInfo[currentListId];
     if (typeof(syncedIndex) != 'undefined'){
       this.navItemIdxs[this.navListIdx] = syncedIndex;
     }
   }
-  var currentList = this.navArray[this.navListIdx];
   var items = currentList.items;
   var itemIndex = this.navItemIdxs[this.navListIdx];
   this.lastItem = items[itemIndex];
@@ -375,8 +378,8 @@ AxsNav.prototype.getCallbackFunction = function(actionString){
       (actionString.indexOf('CALL:') === 0) &&
       (actionString.indexOf('(') === -1)){
     try{
-      callbackFunc = eval(actionString.substring(5));
-    } catch(e) { }
+      callbackFunc = /** @type {Function} */ (eval(actionString.substring(5)));
+    } catch (e) { }
   }
   return callbackFunc;
 };
@@ -385,7 +388,7 @@ AxsNav.prototype.getCallbackFunction = function(actionString){
  * This function will act on the item based on what action was specified
  * in the Content Navigation Listing.
  *
- * @param {Object?} item The item to act on. 
+ * @param {Object?} item The item to act on.
  *      Use item.elem to get at the DOM node.
  */
 AxsNav.prototype.actOnItem = function(item){
@@ -407,8 +410,8 @@ AxsNav.prototype.actOnItem = function(item){
         // be sent to the wrong place.
         if (this.axs_.lastFocusedNode && this.axs_.lastFocusedNode.blur){
           var oldNode = this.axs_.lastFocusedNode;
-          // Set the lastFocusedNode to null to prevent AxsJAX's blur handler 
-          // from kicking in as that blur handler will conflict with the 
+          // Set the lastFocusedNode to null to prevent AxsJAX's blur handler
+          // from kicking in as that blur handler will conflict with the
           // temporary blur handler which results in screen readers not
           // speaking properly due to how the eventing system works.
           // Because we are not allowing the regular blur handler to work,
@@ -450,9 +453,9 @@ AxsNav.prototype.actOnItem = function(item){
  *
  * @param {Function} method  Method to be be associated with the array of keys.
  */
-AxsNav.prototype.assignKeysToMethod = function(keyArray, 
-                                               charMap, 
-                                               keyMap, 
+AxsNav.prototype.assignKeysToMethod = function(keyArray,
+                                               charMap,
+                                               keyMap,
                                                method){
   for (var i = 0, key; key = keyArray[i]; i++){
     if (key == 'LEFT'){
@@ -517,14 +520,20 @@ AxsNav.prototype.assignItemKeys = function(keyStr, navListIdx, navTaskStr){
                             this.charCodeMaps[navListIdx],
                             this.keyCodeMaps[navListIdx],
                             function(){
-                              self.actOnItem(self.backItem());
+                              var backItem = self.backItem();
+                              if (backItem !== null) {
+                                self.actOnItem(backItem);
+                              }
                             });
   } else {
     this.assignKeysToMethod(keys,
                             this.charCodeMaps[navListIdx],
                             this.keyCodeMaps[navListIdx],
                             function(){
-                              self.actOnItem(self.fwdItem());
+                              var fwdItem = self.fwdItem();
+                              if (fwdItem != null) {
+                                self.actOnItem(fwdItem);
+                              }
                             });
   }
 };
@@ -620,35 +629,73 @@ AxsNav.prototype.assignTargetKeys = function(target, charMap, keyMap){
 /**
  * This function will act on the target specified.
  *
- * @param {Object?} target The target to act on.
+ * @param {?Object} target The target to act on.
  */
 AxsNav.prototype.actOnTarget = function(target){
+  if (target.action == 'click') {
+    this.clickOnTarget(target);
+  } else {
+    this.callActionOnTarget(target);
+  }
+};
+
+/**
+ * Calls the appropriate action on a target.
+ *
+ * @param {Object} target the target to act upon.
+ */
+AxsNav.prototype.callActionOnTarget = function(target) {
+  var elems = this.getElementsForTarget(target);
+  if (elems.length < 1){
+    this.axs_.speakTextViaNode(target.onEmpty);
+  } else {
+    var func = this.getCallbackFunction(target.action);
+    if (func){
+      var item = new Object();
+      item.action = target.action;
+      item.elem = elems[0];
+      func(item);
+      this.axs_.markPosition(elems[0]);
+    } else {
+      throw new Error('Invalid action: ' + target.action);
+    }
+  }
+};
+
+/**
+ * Performs the click action of a target.
+ *
+ * @param {Object} target the target to act upon.
+ */
+AxsNav.prototype.clickOnTarget = function(target) {
+  var elems = this.getElementsForTarget(target);
+  if (elems.length < 1){
+    this.axs_.speakTextViaNode(target.onEmpty);
+  } else {
+    this.axs_.clickElem(elems[0], false);
+    elems[0].scrollIntoView(true);
+    this.axs_.markPosition(elems[0]);
+  }
+};
+
+/**
+ * Returns the elements referenced by a target
+ *
+ * @param {?Object} target a target element.
+ * @return {Array} an array of elements.
+ */
+AxsNav.prototype.getElementsForTarget = function(target) {
   var xpath = target.xpath;
   var rootNode = this.axs_.getActiveDocument().documentElement;
   if (xpath.indexOf('.') === 0){
     rootNode = this.currentItem().elem;
   }
-  var elems = this.axs_.evalXPath(xpath, rootNode);
-  if (elems.length < 1){
-    this.axs_.speakTextViaNode(target.onEmpty);
-  } else {
-      var func = this.getCallbackFunction(target.action);
-      if (func){
-        var item = new Object();
-        item.action = target.action;
-        item.elem = elems[0];
-        func(item);
-    } else {
-      this.axs_.clickElem(elems[0], false);
-      elems[0].scrollIntoView(true);
-    }
-    this.axs_.markPosition(elems[0]);
-  }
+  return this.axs_.evalXPath(xpath, rootNode);
 };
 
 
 /**
- * Returns a function mapped to a key. 
+ * Returns a function mapped to a key.
  * @param {number} keyCode A key code.
  * @param {number} charCode A char code.
  * @return {Function?} A function mapped to the keyCode or charCode,
@@ -676,16 +723,16 @@ AxsNav.prototype.getFunctionForKey = function(keyCode, charCode) {
  *
  * @param {string} cnrString  An XML string that contains the information needed
  *                            to build up the content navigation rule.
- *                            
+ *
  * @notypecheck {Function?} opt_customNavMethod.
  *
- * @param {Function?} opt_customNavMethod A custom navigation 
- *                             method provided by the caller. This navigation 
+ * @param {Function?} opt_customNavMethod A custom navigation
+ *                             method provided by the caller. This navigation
  *                             method will be given the DOM created from the
- *                             cnrString, the navigation array of lists of 
+ *                             cnrString, the navigation array of lists of
  *                             items, an array of all the lists which had zero
  *                             items, and an an array of targets. If this is
- *                             null, the default AxsJAX nav handler will be 
+ *                             null, the default AxsJAX nav handler will be
  *                             used.
  */
 AxsNav.prototype.navInit = function(cnrString, opt_customNavMethod){
@@ -872,7 +919,7 @@ AxsNav.prototype.setLens = function(lens){
  * This function sets the lens to be used when going to an item's element.
  *
  * @param {Object?} snd   The AxsSound object to be used.
- *                        The AxsSound object should already have its 
+ *                        The AxsSound object should already have its
  *                        verbosity set and be initialized.
  *                        If null, no sound object will be used.
  */
@@ -890,19 +937,18 @@ AxsNav.prototype.refreshList = function(listTitle){
     return false;
   }
   var reloaded = false;
-  for (var i = 0, navList; navList = this.navArray[i]; i++) {
-    if (navList.title == listTitle) {
-      navList.items = new Array();
-      navList.targets = new Array();
-      reloaded = this.validateList(navList);
-      break;
-    }
+  var listId = this.findListIndexByTitle(listTitle);
+  if(listId > -1) {
+    var navList = this.navArray[listId];
+    navList.items = new Array();
+    navList.targets = new Array();
+    reloaded = this.validateList(navList);
   }
   return reloaded;
 };
 
 /**
- * Disables the default keyboard handler for the AxsNav object by detaching it 
+ * Disables the default keyboard handler for the AxsNav object by detaching it
  * from the keypress event listener for the current document.
  */
 AxsNav.prototype.disableNavKeys = function() {
@@ -929,7 +975,7 @@ AxsNav.prototype.enableNavKeys = function() {
 };
 
 /**
- * Shows a PowerKey input box for selecting an available action. 
+ * Shows a PowerKey input box for selecting an available action.
  * Available actions are those that have nodes when their xPaths
  * are evaluated when this function is called.
  */
@@ -1115,10 +1161,10 @@ AxsNav.prototype.isValidTargetAction = function(target) {
  * @param {Object} cnrJson  The CNR as a JSON.
  *
  * @notypecheck {Function?} opt_customNavMethod.
- * 
- * @param {Function?} opt_customNavMethod A custom navigation 
+ *
+ * @param {Function?} opt_customNavMethod A custom navigation
  *                              method provided by the caller. This navigation
- *                              method will be given the original cnrJson, the 
+ *                              method will be given the original cnrJson, the
  *                              navigation array of lists of items, an array of
  *                              all the lists which had zero items, and an array
  *                              of targets. If this is null, the default AxsJAX
@@ -1135,6 +1181,7 @@ AxsNav.prototype.navInitJson = function(cnrJson, opt_customNavMethod){
   var currentList;
   for (i = 0, currentList; currentList = cnrJson.lists[i]; i++){
     var navList = new Object();
+    currentList.listId = i; // create an id for the list
     navList.cnrNode = null;
     navList.origListObj = currentList;
     navList.title = currentList.title || '';
@@ -1240,13 +1287,16 @@ AxsNav.prototype.makeItemsArray = function(jsonListObj){
           if (typeof(item.elem.AxsNavInfo) == 'undefined'){
             item.elem.AxsNavInfo = new Object();
           }
-          item.elem.AxsNavInfo[this.navArray.length] = itemsArray.length;
+          if (typeof(jsonListObj.listId) == 'undefined'){
+            throw new Error('list does not have an id');
+          }
+          item.elem.AxsNavInfo[jsonListObj.listId] = itemsArray.length;
           itemsArray.push(item);
         }
         idx++;
       }
     }
-    catch(err){ }
+    catch (err){ }
   }
   return itemsArray;
 };
@@ -1356,11 +1406,77 @@ AxsNav.prototype.setUpNavKeys = function(cnrJson, emptyLists){
 
                      var command = self.getFunctionForKey(evt.keyCode,
                                                           evt.charCode);
-                                           
+
                      if (command) {
                        return command();
                      }
                    };
 
   document.addEventListener('keypress', this.keyHandler, true);
+};
+
+/**
+ * Returns the id of a given list
+ * @param {Object} list a list.
+ * @return {Number} the id of the list.
+ */
+AxsNav.prototype.getListId = function(list){
+  return list.origListObj.listId;
+};
+
+/**
+ * Takes the cursor before the beginning of the specified list.
+ *
+ * @param {Number} listIndex  the index of the given list.
+ */
+AxsNav.prototype.goToListHead = function(listIndex){
+  if (this.navArray.length < 1){
+    return;
+  }
+  //Clear the last item
+  this.lastItem = null;
+  // Set the current list
+  this.navListIdx = listIndex;
+  // Update the list
+  this.validateList(this.navArray[listIndex]);
+  this.doListEntryActions();
+//Set the item at the top
+  this.navItemIdxs[listIndex] = -1;
+};
+
+/**
+ * Takes the cursor to the end of the specified list.
+ *
+ * @param {Number} listIndex  the index of the given list.
+ */
+AxsNav.prototype.goToListTail = function(listIndex){
+  if (this.navArray.length < 1){
+    return;
+  }
+  this.goToListHead(listIndex);
+  //The navList object
+  var list = this.navArray[listIndex];
+  // Set the item at the bottom
+  this.navItemIdxs[listIndex] = list.items.length - 1;
+};
+
+/**
+ * Finds a list id given it's name
+ *
+ * @param {String} listTitle the name of the list.
+ * @return {number} The index of the list with the given title or -1 if no
+ *                  list with the given title exists.
+ */
+AxsNav.prototype.findListIndexByTitle = function(listTitle){
+  for (var i = 0; i < this.navArray.length; i++) {
+    var list = this.navArray[i];
+    if (list.title == listTitle){
+      break;
+    }
+  }
+  if (i < this.navArray.length) {
+    return i;
+  } else {
+    return -1;
+  }
 };
