@@ -157,11 +157,11 @@ axsFinance.CNR =
           'back="p" >' +
 
         '<item>' +
-          'id("market-news")//li' +
+          'id("market-news-stream")//div[@class="cluster"]' +
         '</item>' +
 
         '<target title = "Market top stories" trigger="listEntry">' +
-          '(id("news-tabs")/div)[2]' +
+          '(id("mk-news")//div[@role="tab"])[1]' +
         '</target>' +
 
         '<target title="Related articles"  hotkey="r" ' +
@@ -179,11 +179,11 @@ axsFinance.CNR =
           'fwd="n" back="p">' +
 
         '<item>' +
-          'id("portfolio-news")//li' +
+          'id("portfolio-news-stream")//div[@class="cluster"]' +
         '</item>' +
 
         '<target title = "Portfolio related top stories" trigger="listEntry">' +
-          '(id("news-tabs")/div)[3]' +
+          '(id("mk-news")//div[@role="tab"])[2]' +
         '</target>' +
 
         '<target title="Related articles"  hotkey="r" onEmpty="No related ' +
