@@ -403,9 +403,7 @@ axsFinance.init = function() {
 
   // announce the current list
   window.setTimeout(function() {
-        var text = axsFinance.str.GOOGLE_FINANCE_HOME + ' ' +
-           axsFinance.axsNavObj.currentList().title;
-        axsFinance.axsJAXObj.speakText(text);
+        axsFinance.axsJAXObj.speakText(axsFinance.str.GOOGLE_FINANCE_HOME);
       },
       0);
 };
