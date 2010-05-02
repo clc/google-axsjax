@@ -92,8 +92,6 @@ function injectScript(scriptURL, scriptElements, parent) {
   scriptElement.type = 'text/javascript';
   scriptElement.src = scriptURL;
   parent.appendChild(scriptElement);
-  
-  console.log("Injecting: " + scriptURL);
 }
 
 pickScript();
