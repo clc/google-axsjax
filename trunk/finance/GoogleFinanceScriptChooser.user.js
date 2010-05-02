@@ -67,7 +67,7 @@ function pickScript() {
         + 'finance/axsEnableFinanceHistoricalPrices.js');
     injectScripts(scriptUrlsArray);
   } else if (path === '/finance/portfolio' && search.length > 0) {
-    injectScripts.push(baseURL + 'finance/axsEnableFinancePortfolios.js');
+    scriptUrlsArray.push(baseURL + 'finance/axsEnableFinancePortfolios.js');
     injectScripts(scriptUrlsArray);
   }
 }
