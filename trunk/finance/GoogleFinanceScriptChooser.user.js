@@ -51,11 +51,11 @@ function pickScript() {
   } else if (path === '/finance' && search.indexOf('fstype=') > -1) {
     scriptUrlsArray.push(baseURL + 'finance/axsEnableFinanceStatement.js');
     injectScripts(scriptUrlsArray);
-  } else if (path === '/finance' && search.match('q=[A-Z:]+')) {
-    scriptUrlsArray.push(baseURL + 'finance/axsEnableFinanceQuotes.js');
-    injectScripts(scriptUrlsArray);
   } else if (path === '/finance' && search.match('q=[a-z]+$')) {
     scriptUrlsArray.push(baseURL + 'finance/axsEnableFinanceSearchResults.js');
+    injectScripts(scriptUrlsArray);
+  } else if (path === '/finance' && search.length > 0) {
+    scriptUrlsArray.push(baseURL + 'finance/axsEnableFinanceQuotes.js');
     injectScripts(scriptUrlsArray);
   } else if (path === '/finance/stockscreener' && search === '') {
 	scriptUrlsArray.push(baseURL + 'finance/axsEnableFinanceStockScreener.js');
