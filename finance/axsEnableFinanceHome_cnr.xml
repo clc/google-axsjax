@@ -6,7 +6,7 @@
   </target>
 
   <target title="News" hotkey="e">
-    (//li[@class="nav-item"])[1]//a
+     (//li[@class="nav-item"])[1]//a
   </target>
 
   <target title="Portfolios" hotkey="o">
