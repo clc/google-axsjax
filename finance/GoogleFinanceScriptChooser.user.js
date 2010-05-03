@@ -17,7 +17,7 @@
 function pickScript() {
   var baseURL =
       'http://google-axsjax.googlecode.com/svn/trunk/';
-
+	  
   var scriptUrlsArray = new Array();
   scriptUrlsArray.push(baseURL + 'common/AxsJAX.js');
   scriptUrlsArray.push(baseURL + 'common/AxsNav.js');
@@ -38,49 +38,38 @@ function pickScript() {
   if (path === '/finance' && search === '') {
 	scriptUrlsArray.push(baseURL + 'finance/axsEnableFinanceHome.js');
 	injectScripts(scriptUrlsArray);
-	console.log("axsEnableFinanceHome.js");
   } else if (path === '/finance' && isCurrency(search)) {
     scriptUrlsArray.push(baseURL + 'finance/axsEnableFinanceCurrency.js');
     injectScripts(scriptUrlsArray);
-    console.log("axsEnableFinanceCurrency.js");
-  } else if (path === '/finance' && (search.match('^q=[A-Z]+:.[A-Z]+[0-9]*$') ||
-        search === 'q=SHA:000001')) {
+  } else if (path === '/finance' && (search.match('q=[A-Z]+:.[A-Z]+[0-9]*$') ||
+        search === '?q=SHA:000001')) {
     scriptUrlsArray.push(baseURL + 'finance/axsEnableFinanceIndex.js');
     injectScripts(scriptUrlsArray);
-    console.log("axsEnableFinanceIndex.js");
   } else if (path === '/finance' && search.indexOf('?catid=') > -1) {
     scriptUrlsArray.push(baseURL + 'finance/axsEnableFinanceSector.js');
     injectScripts(scriptUrlsArray);
-    console.log("axsEnableFinanceSector.js");
   } else if (path === '/finance' && search.indexOf('fstype=') > -1) {
     scriptUrlsArray.push(baseURL + 'finance/axsEnableFinanceStatement.js');
     injectScripts(scriptUrlsArray);
-    console.log("axsEnableFinanceStatement.js");
-  } else if (path === '/finance' && search.match('q=[A-Z]+:[A-Z]+')) {
+  } else if (path === '/finance' && search.match('q=[A-Z:]+')) {
     scriptUrlsArray.push(baseURL + 'finance/axsEnableFinanceQuotes.js');
     injectScripts(scriptUrlsArray);
-    console.log("axsEnableFinanceQuotes.js");
-  } else if (path === '/finance' && search.match('q=[a-z]+')) {
+  } else if (path === '/finance' && search.match('q=[a-z]+$')) {
     scriptUrlsArray.push(baseURL + 'finance/axsEnableFinanceSearchResults.js');
     injectScripts(scriptUrlsArray);
-    console.log("axsEnableFinanceSearchResults.js");
   } else if (path === '/finance/stockscreener' && search === '') {
 	scriptUrlsArray.push(baseURL + 'finance/axsEnableFinanceStockScreener.js');
 	injectScripts(scriptUrlsArray);
-    console.log("axsEnableFinanceStockScreener.js");
   } else if (path.match('^/finance/[a-z]+_news$') && search === '') {
 	scriptUrlsArray.push(baseURL + 'finance/axsEnableFinanceNews.js');
 	injectScripts(scriptUrlsArray);
-	console.log("axsEnableFinanceNews.js");
   } else if (path === '/finance/historical' && search.length > 0) {
  	scriptUrlsArray.push(baseURL
         + 'finance/axsEnableFinanceHistoricalPrices.js');
 	injectScripts(scriptUrlsArray);
- 	console.log("axsEnableFinanceHistoricalPrices.js");
   } else if (path === '/finance/portfolio' && search.length > 0) {
 	scriptUrlsArray.push(baseURL + 'finance/axsEnableFinancePortfolios.js');
     injectScripts(scriptUrlsArray);
-    console.log("axsEnableFinancePortfolios.js");
   }
 }
 
@@ -97,9 +86,9 @@ function isCurrency(search) {
   currencyMap['CHF'] = true;
   currencyMap['INR'] = true;
 
-  return search.substr(0, 2) === 'q='
-      && currencyMap[search.substr(2, 3)]
-      && currencyMap[search.substr(5, 3)];
+  return search.substr(0, 3) === '?q='
+      && currencyMap[search.substr(3, 3)]
+      && currencyMap[search.substr(6, 3)];
 }
 
 function injectScripts(scriptUrls) {
@@ -122,8 +111,6 @@ function injectScript(scriptURL, scriptElements, parent) {
   scriptElement.type = 'text/javascript';
   scriptElement.src = scriptURL;
   parent.appendChild(scriptElement);
-  
-  console.log("Injecting: " + scriptURL);
 }
 
 pickScript();
