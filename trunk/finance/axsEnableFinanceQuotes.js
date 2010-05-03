@@ -198,7 +198,7 @@ axsFinance.CNR = '<cnr next="RIGHT l" prev="LEFT h">' +
         'back="p" type="dynamic">' +
 
       '<item>' +
-        '//li[@class="ra-entry"]//a' +
+        '//li[@class="ra-entry"]' +
       '</item>' +
 
       '<target title="Go to section" trigger="listEntry">' +
