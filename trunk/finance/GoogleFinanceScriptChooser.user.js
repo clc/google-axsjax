@@ -41,7 +41,7 @@ function pickScript() {
   } else if (path === '/finance' && isCurrency(search)) {
     scriptUrlsArray.push(baseURL + 'finance/axsEnableFinanceCurrency.js');
     injectScripts(scriptUrlsArray);
-  } else if (path === '/finance' && (search.match('q=[A-Z]+:\.[A-Z]+[0-9]*$') ||
+  } else if (path === '/finance' && (search.match('q=[A-Z]+:[.][A-Z]+[0-9]*$') ||
         search === '?q=SHA:000001')) {
     scriptUrlsArray.push(baseURL + 'finance/axsEnableFinanceIndex.js');
     injectScripts(scriptUrlsArray);
