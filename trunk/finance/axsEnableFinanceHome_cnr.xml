@@ -6,7 +6,7 @@
   </target>
 
   <target title="News" hotkey="e">
-     (//li[@class="nav-item"])[1]//a
+    (//li[@class="nav-item"])[1]//a
   </target>
 
   <target title="Portfolios" hotkey="o">
@@ -120,7 +120,7 @@
       onEmpty="No portfolios" fwd="n" back="p">
 
     <item action="CALL:axsFinance.readPortfolioTemplate">
-      id("portfolios")//table[contains(@id,"portfolio")]//tr
+      id("home-portfolios")//div[@class="miniPort"]
     </item>
 
   </list>
