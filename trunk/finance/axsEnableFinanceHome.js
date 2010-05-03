@@ -18,6 +18,7 @@
  * @author svetoslavganov@google.com (Svetoslav R. Ganov)
  */
 
+
 // create namespace
 var axsFinance = {};
 
