@@ -121,7 +121,7 @@ axsFinance.CNR =
           'back="p" type="dynamic">' +
 
         '<item>' +
-          '//li[@class="ra-entry"]//a' +
+          '//li[@class="ra-entry"]' +
         '</item>' +
 
       '</list>' +
