@@ -68,7 +68,7 @@ axsFinance.str = {
   FIVE_YEAR_ABBR : '5y',
   FIVE_YEAR : 'five year',
   RECENT_QUOTE_TEMPLATE : '{0}, {1}, change {2}.',
-  GOOGLE_FINANCE : 'Google Finance',
+  GOOGLE_FINANCE_PROTFOLIO : 'Google Finance Portfolio',
   ENTER_TO_EDIT_AND_CONFIRM : 'Press Enter to edit, Tab to traverse, and ' +
       'Enter to confirm.',
   TRANSACTION_CONFIRMED : 'Transaction confirmed',
@@ -453,7 +453,7 @@ axsFinance.announceIntro = function() {
   var xPath = '//h3';
   var title = axsFinance.axsJAXObj.evalXPath(xPath, document.body)[0];
 
-  var text = axsFinance.str.GOOGLE_FINANCE + '. ' +
+  var text = axsFinance.str.GOOGLE_FINANCE_PROTFOLIO + '. ' +
       axsFinance.normalizeString(title.textContent) + '. ';
 
   xPath = 'id("pf-tabs")//div[contains(@class,"goog-tab-selected")]//a';
