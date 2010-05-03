@@ -128,7 +128,7 @@ axsFinance.CNR_TOP = '<cnr next="RIGHT l" prev="LEFT h">' +
       'back="p" type="dynamic" onEmpty="No recent activities">' +
 
     '<item>' +
-      '//li[@class="ra-entry"]//a' +
+      '//li[@class="ra-entry"]' +
     '</item>' +
 
   '</list>';
