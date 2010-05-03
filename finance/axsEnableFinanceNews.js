@@ -124,6 +124,19 @@ axsFinance.CNR = '<cnr next="RIGHT l" prev="LEFT h">' +
 
   '</list>' +
 
+  '<list title="Top News" next="DOWN j" prev="UP k" fwd="n" ' +
+      'back="p" onEmpty="No top news">' +
+
+    '<item>' +
+      '//div[@class="sfe-section news"]/div' +
+    '</item>' +
+
+    '<target title="More news" hotkey="r" onEmpty="No more news">' +
+      'id("n-mn-m-")' +
+    '</target>' +
+
+  '</list>' +
+
   '<list title="Published articles" next="DOWN j" prev="UP k" fwd="n" ' +
     'back="p">' +
 
