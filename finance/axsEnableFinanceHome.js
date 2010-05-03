@@ -202,7 +202,7 @@ axsFinance.CNR =
           'onEmpty="No portfolios" fwd="n" back="p">' +
 
         '<item action="CALL:axsFinance.readPortfolioTemplate">' +
-          'id("portfolios")//table[contains(@id,"portfolio")]//tr' +
+          'id("home-portfolios")//div[@class="miniPort"]' +
         '</item>' +
 
       '</list>' +
