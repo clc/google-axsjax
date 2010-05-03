@@ -32,46 +32,76 @@ function pickScript() {
 
   // if not a Google URL we are done 
   if (prefix != 'www.google.com') {
-        return;
+	return;
   }
 
   if (path === '/finance' && search === '') {
-    scriptUrlsArray.push(baseURL + 'finance/axsEnableFinanceHome.js');
-    injectScripts(scriptUrlsArray);
-  } else if (path === '/finance' && search.indexOf(':') === 0) {
+	scriptUrlsArray.push(baseURL + 'finance/axsEnableFinanceHome.js');
+	injectScripts(scriptUrlsArray);
+	console.log("axsEnableFinanceHome.js");
+  } else if (path === '/finance' && isCurrency(search)) {
     scriptUrlsArray.push(baseURL + 'finance/axsEnableFinanceCurrency.js');
     injectScripts(scriptUrlsArray);
-  } else if (path.indexOf('/finance') === 0 && search.indexOf(':') > -1) {
+    console.log("axsEnableFinanceCurrency.js");
+  } else if (path === '/finance' && (search.match('^q=[A-Z]+:.[A-Z]+[0-9]*$') ||
+        search === 'q=SHA:000001')) {
     scriptUrlsArray.push(baseURL + 'finance/axsEnableFinanceIndex.js');
     injectScripts(scriptUrlsArray);
-  } else if (path.indexOf('/finance') === 0 && search.indexOf('?catid=') > -1) {
+    console.log("axsEnableFinanceIndex.js");
+  } else if (path === '/finance' && search.indexOf('?catid=') > -1) {
     scriptUrlsArray.push(baseURL + 'finance/axsEnableFinanceSector.js');
     injectScripts(scriptUrlsArray);
-  } else if (path.indexOf('/finance') === 0 && search.indexOf('fstype=') > -1) {
+    console.log("axsEnableFinanceSector.js");
+  } else if (path === '/finance' && search.indexOf('fstype=') > -1) {
     scriptUrlsArray.push(baseURL + 'finance/axsEnableFinanceStatement.js');
     injectScripts(scriptUrlsArray);
-  } else if (path.indexOf('/finance') === 0 && search.match('q=[A-Z]+')) {
+    console.log("axsEnableFinanceStatement.js");
+  } else if (path === '/finance' && search.match('q=[A-Z]+:[A-Z]+')) {
     scriptUrlsArray.push(baseURL + 'finance/axsEnableFinanceQuotes.js');
     injectScripts(scriptUrlsArray);
+    console.log("axsEnableFinanceQuotes.js");
   } else if (path === '/finance' && search.match('q=[a-z]+')) {
     scriptUrlsArray.push(baseURL + 'finance/axsEnableFinanceSearchResults.js');
     injectScripts(scriptUrlsArray);
+    console.log("axsEnableFinanceSearchResults.js");
   } else if (path === '/finance/stockscreener' && search === '') {
-    scriptUrlsArray.push(baseURL + 'finance/axsEnableFinanceStockScreener.js');
-    injectScripts(scriptUrlsArray);
+	scriptUrlsArray.push(baseURL + 'finance/axsEnableFinanceStockScreener.js');
+	injectScripts(scriptUrlsArray);
+    console.log("axsEnableFinanceStockScreener.js");
   } else if (path.match('^/finance/[a-z]+_news$') && search === '') {
-    scriptUrlsArray.push(baseURL + 'finance/axsEnableFinanceNews.js');
-    injectScripts(scriptUrlsArray);
+	scriptUrlsArray.push(baseURL + 'finance/axsEnableFinanceNews.js');
+	injectScripts(scriptUrlsArray);
+	console.log("axsEnableFinanceNews.js");
   } else if (path === '/finance/historical' && search.length > 0) {
-    scriptUrlsArray.push(baseURL
+ 	scriptUrlsArray.push(baseURL
         + 'finance/axsEnableFinanceHistoricalPrices.js');
-    injectScripts(scriptUrlsArray);
+	injectScripts(scriptUrlsArray);
+ 	console.log("axsEnableFinanceHistoricalPrices.js");
   } else if (path === '/finance/portfolio' && search.length > 0) {
-    scriptUrlsArray.push(baseURL + 'finance/axsEnableFinancePortfolios.js');
+	scriptUrlsArray.push(baseURL + 'finance/axsEnableFinancePortfolios.js');
     injectScripts(scriptUrlsArray);
+    console.log("axsEnableFinancePortfolios.js");
   }
 }
-        
+
+function isCurrency(search) {
+  var currencyMap = new Object();
+  currencyMap['EUR'] = true;
+  currencyMap['USD'] = true;
+  currencyMap['JPY'] = true;
+  currencyMap['GBP'] = true;
+  currencyMap['CAD'] = true;
+  currencyMap['HKD'] = true;
+  currencyMap['CNY'] = true;
+  currencyMap['AUD'] = true;
+  currencyMap['CHF'] = true;
+  currencyMap['INR'] = true;
+
+  return search.substr(0, 2) === 'q='
+      && currencyMap[search.substr(2, 3)]
+      && currencyMap[search.substr(5, 3)];
+}
+
 function injectScripts(scriptUrls) {
   var headElement = document.getElementsByTagName('head')[0];
   var scriptElements = document.getElementsByTagName('script');
@@ -84,14 +114,16 @@ function injectScripts(scriptUrls) {
 function injectScript(scriptURL, scriptElements, parent) {
   for (var i = 0, scriptElement; scriptElement = scriptElements[i]; i++) {
     if (scriptElement.src == scriptURL) {
-          return;
-    }
+	  return;
+	}
   }
 
   var scriptElement = document.createElement('script');
   scriptElement.type = 'text/javascript';
   scriptElement.src = scriptURL;
   parent.appendChild(scriptElement);
+  
+  console.log("Injecting: " + scriptURL);
 }
 
 pickScript();
