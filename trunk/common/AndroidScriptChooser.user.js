@@ -19,12 +19,12 @@ function pickScript() {
       'javascript/axsjax/';
 
   var scriptUrlsArray = new Array();
-  scriptUrlsArray.push(baseURL + 'AxsJAX.js');
-  scriptUrlsArray.push(baseURL + 'AxsNav.js');
-  scriptUrlsArray.push(baseURL + 'AxsLens.js');
-  scriptUrlsArray.push(baseURL + 'AxsSound.js');
-  scriptUrlsArray.push(baseURL + 'PowerKey.js');
-  scriptUrlsArray.push(baseURL + 'accessibility.js');
+  scriptUrlsArray.push(baseURL + 'common/AxsJAX.js');
+  scriptUrlsArray.push(baseURL + 'common/AxsNav.js');
+  scriptUrlsArray.push(baseURL + 'common/AxsLens.js');
+  scriptUrlsArray.push(baseURL + 'common/AxsSound.js');
+  scriptUrlsArray.push(baseURL + 'common/PowerKey.js');
+  scriptUrlsArray.push(baseURL + 'common/accessibility.js');
 
   var currentURL = document.baseURI;
   var path = document.location.pathname;
