@@ -27,7 +27,6 @@
  *                                tab key.
  * @constructor
  */
-  alert("AJ");
 var AxsJAX = function(useTabKeyFix){
   this.ID_NUM_ = 0;
   this.tabbingStartPosNode = null;
