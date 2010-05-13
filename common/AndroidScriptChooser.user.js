@@ -119,7 +119,7 @@ function injectScript(scriptURL, scriptElements, parent) {
 var headElement = document.getElementsByTagName('head')[0];
 var scriptElement = document.createElement('script');
 scriptElement.type = 'text/javascript';
-scriptElement.src = 'http://www.corp.google.com/~svetoslavganov/axsjax/google3/javascript/axsjax/';
+scriptElement.src = 'http://www.corp.google.com/~svetoslavganov/axsjax/google3/javascript/axsjax/common/accessibility.js';
 headElement.appendChild(scriptElement);
 
 
