@@ -19,11 +19,11 @@ function pickScript() {
       'javascript/axsjax/';
 
   var scriptUrlsArray = new Array();
-  scriptUrlsArray.push(baseURL + 'finance/AxsJAX.js');
-  scriptUrlsArray.push(baseURL + 'finance/AxsNav.js');
-  scriptUrlsArray.push(baseURL + 'finance/AxsLens.js');
-  scriptUrlsArray.push(baseURL + 'finance/AxsSound.js');
-  scriptUrlsArray.push(baseURL + 'finance/PowerKey.js');
+  scriptUrlsArray.push(baseURL + 'AxsJAX.js');
+  scriptUrlsArray.push(baseURL + 'AxsNav.js');
+  scriptUrlsArray.push(baseURL + 'AxsLens.js');
+  scriptUrlsArray.push(baseURL + 'AxsSound.js');
+  scriptUrlsArray.push(baseURL + 'PowerKey.js');
   scriptUrlsArray.push(baseURL + 'accessibility.js');
 
   var currentURL = document.baseURI;
