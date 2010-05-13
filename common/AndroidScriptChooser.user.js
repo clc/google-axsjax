@@ -7,7 +7,7 @@
 // @description   Uses WAI-ARIA and AxsJAX to enhance accessibility for Finance
 // @include       *
 // ==/UserScript==
-
+alert("KUR");
 /**
  * @fileoverview The Google Script Loader Greasemonkey script
  * for injecting AxsJAX script into Google Finance.
