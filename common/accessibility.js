@@ -24,7 +24,7 @@
 // @description   Initializes the accessibility layer and exposes it as navigator.accessibility
 // @include       (.)+
 // ==/UserScript==
-
+alert("ffffffff");
 var Accessibility = function() {
   this.debug = Accessibility.debug.DISABLED;
 
@@ -71,4 +71,4 @@ Accessibility.debug = {
 };
 
 navigator.accessibility = new Accessibility();
-alert("DDDDDDDDDDDDDDDDDDDdd")
+alert("DDDDDDDDDDDDDDDDDDDdd");
