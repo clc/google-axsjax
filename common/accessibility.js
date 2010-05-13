@@ -54,14 +54,14 @@ Accessibility.prototype.augmentAxsJAX = function() {
   AxsJAX.prototype.speakTextViaNode = function(textString, opt_anchorNode) {
     this.speakText(textString);
   };
-}
+};
 
 Accessibility.prototype.log = function(msg) {
   if (this.debug === Accessibility.debug.DISABLED) {
     return;  
   }
   var log = document.createElement('p');
-  log.innerText = msg
+  log.innerText = msg;
   document.body.appendChild(log);
 };
 
