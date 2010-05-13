@@ -837,4 +837,3 @@ axsFinance.charCodeMap = {
 //window.addEventListener('load', axsFinance.init, true);
 // Temporary for testing commenting the above line and adding the one below
 axsFinance.init();
-alert("DDDD");
