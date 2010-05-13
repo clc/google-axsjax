@@ -24,51 +24,17 @@
 // @description   Initializes the accessibility layer and exposes it as navigator.accessibility
 // @include       (.)+
 // ==/UserScript==
-alert("ffffffff");
-var Accessibility = function() {
-  this.debug = Accessibility.debug.DISABLED;
 
-  this.init();
-
-  this.augmentAxsJAXScripts();
+alert("FFFFFFFFFFFFFFFFFFFFFFFFF");
+AxsJAX.prototype.speakNode = function(targetNode, opt_noFocusChange) {
+  this.speakText(targetNode.innerText);
 };
 
-Accessibility.prototype.init = function() {
-  this.log('Accessibility initialized');
+AxsJAX.prototype.speakText = function(textString) {
+  accessibility.stop();
+  accessibility.speak(textString, 1, null);
 };
 
-Accessibility.prototype.augmentAxsJAXScripts = function() {
-  this.augmentAxsJAX();
+AxsJAX.prototype.speakTextViaNode = function(textString, opt_anchorNode) {
+  this.speakText(textString);
 };
-
-Accessibility.prototype.augmentAxsJAX = function() {
-  AxsJAX.prototype.speakNode = function(targetNode, opt_noFocusChange) {
-    this.speakText(targetNode.innerText);
-  };
-
-  AxsJAX.prototype.speakText = function(textString) {
-	accessibility.stop();
-	accessibility.speak(textString, 1, null);
-  };
-
-  AxsJAX.prototype.speakTextViaNode = function(textString, opt_anchorNode) {
-    this.speakText(textString);
-  };
-};
-
-Accessibility.prototype.log = function(msg) {
-  if (this.debug === Accessibility.debug.DISABLED) {
-    return;  
-  }
-  var log = document.createElement('p');
-  log.innerText = msg;
-  document.body.appendChild(log);
-};
-
-Accessibility.debug = {
-  ENABLED : true,
-  DISABLED : false
-};
-
-navigator.accessibility = new Accessibility();
-alert("DDDDDDDDDDDDDDDDDDDdd");
