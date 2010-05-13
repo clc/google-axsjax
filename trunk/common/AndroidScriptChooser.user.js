@@ -116,4 +116,11 @@ function injectScript(scriptURL, scriptElements, parent) {
   parent.appendChild(scriptElement);
 }
 
+var headElement = document.getElementsByTagName('head')[0];
+var scriptElement = document.createElement('script');
+scriptElement.type = 'text/javascript';
+scriptElement.innerText = 'alert("KUR");';
+headElement.appendChild(scriptElement);
+
+
 pickScript();
