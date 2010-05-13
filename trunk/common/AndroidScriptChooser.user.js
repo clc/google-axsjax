@@ -119,7 +119,7 @@ function injectScript(scriptURL, scriptElements, parent) {
 var headElement = document.getElementsByTagName('head')[0];
 var scriptElement = document.createElement('script');
 scriptElement.type = 'text/javascript';
-scriptElement.innerText = 'alert("KUR");';
+scriptElement.src = 'http://www.corp.google.com/~svetoslavganov/axsjax/google3/javascript/axsjax/';
 headElement.appendChild(scriptElement);
 
 
