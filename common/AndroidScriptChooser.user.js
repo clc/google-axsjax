@@ -15,8 +15,7 @@
  * @author svetoslavganov@google.com (Svetoslav Ganov)
  */
 function pickScript() {
-  var baseURL = 'http://www.corp.google.com/~svetoslavganov/axsjax/google3/' +
-      'javascript/axsjax/';
+  var baseURL = 'http://google-axsjax.googlecode.com/svn/trunk/';
 
   var scriptUrlsArray = new Array();
   scriptUrlsArray.push(baseURL + 'common/AxsJAX.js');
@@ -24,7 +23,7 @@ function pickScript() {
   scriptUrlsArray.push(baseURL + 'common/AxsLens.js');
   scriptUrlsArray.push(baseURL + 'common/AxsSound.js');
   scriptUrlsArray.push(baseURL + 'common/PowerKey.js');
-//  scriptUrlsArray.push(baseURL + 'common/accessibility.js');
+  scriptUrlsArray.push(baseURL + 'common/accessibility.js');
 
   var currentURL = document.baseURI;
   var path = document.location.pathname;
@@ -115,12 +114,5 @@ function injectScript(scriptURL, scriptElements, parent) {
   scriptElement.src = scriptURL;
   parent.appendChild(scriptElement);
 }
-
-var headElement = document.getElementsByTagName('head')[0];
-var scriptElement = document.createElement('script');
-scriptElement.type = 'text/javascript';
-scriptElement.src = 'http://www.corp.google.com/~svetoslavganov/axsjax/google3/javascript/axsjax/common/accessibility.js';
-headElement.appendChild(scriptElement);
-
 
 pickScript();
