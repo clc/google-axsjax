@@ -71,3 +71,4 @@ Accessibility.debug = {
 };
 
 navigator.accessibility = new Accessibility();
+alert("DDDDDDDDDDDDDDDDDDDdd")
