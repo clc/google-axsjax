@@ -26,15 +26,15 @@
 // ==/UserScript==
 
 alert("FFFFFFFFFFFFFFFFFFFFFFFFF");
-AxsJAX.prototype.speakNode = function(targetNode, opt_noFocusChange) {
-  this.speakText(targetNode.innerText);
-};
-
-AxsJAX.prototype.speakText = function(textString) {
-  accessibility.stop();
-  accessibility.speak(textString, 1, null);
-};
-
-AxsJAX.prototype.speakTextViaNode = function(textString, opt_anchorNode) {
-  this.speakText(textString);
-};
+//AxsJAX.prototype.speakNode = function(targetNode, opt_noFocusChange) {
+//  this.speakText(targetNode.innerText);
+//};
+//
+//AxsJAX.prototype.speakText = function(textString) {
+//  accessibility.stop();
+//  accessibility.speak(textString, 1, null);
+//};
+//
+//AxsJAX.prototype.speakTextViaNode = function(textString, opt_anchorNode) {
+//  this.speakText(textString);
+//};
