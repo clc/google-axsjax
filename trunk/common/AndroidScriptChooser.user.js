@@ -95,7 +95,7 @@ function isCurrency(search) {
 }
 
 function injectScripts(scriptUrls) {
-  var headElement = document.getElementsByTagName('head')[0];
+  var headElement = document.getElementsByTagName('body')[0];
   var scriptElements = document.getElementsByTagName('script');
 
   for (var i = 0, scriptUrl; scriptUrl = scriptUrls[i]; i++) {
@@ -114,8 +114,6 @@ function injectScript(scriptURL, scriptElements, parent) {
   scriptElement.type = 'text/javascript';
   scriptElement.src = scriptURL;
   parent.appendChild(scriptElement);
-  
-  alert(scriptElement.src);
 }
 
 pickScript();
