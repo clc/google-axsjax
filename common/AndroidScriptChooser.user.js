@@ -114,8 +114,6 @@ function injectScript(scriptURL, scriptElements, parent) {
   scriptElement.type = 'text/javascript';
   scriptElement.src = scriptURL;
   parent.appendChild(scriptElement);
-  
-  alert(scriptElement.src);
 }
 
 pickScript();
