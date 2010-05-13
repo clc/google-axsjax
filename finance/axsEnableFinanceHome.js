@@ -834,4 +834,6 @@ axsFinance.charCodeMap = {
 };
 
 //Run the initialization routine of the script
-window.addEventListener('load', axsFinance.init, true);
+//window.addEventListener('load', axsFinance.init, true);
+// Temporary for testing commenting the above line and adding the one below
+axsFinance.init();
