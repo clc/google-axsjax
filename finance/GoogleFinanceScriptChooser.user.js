@@ -24,7 +24,7 @@ function pickScript() {
   scriptUrlsArray.push(baseURL + 'common/AxsLens.js');
   scriptUrlsArray.push(baseURL + 'common/AxsSound.js');
   scriptUrlsArray.push(baseURL + 'common/PowerKey.js');
-  // TODO: This is temporary for a demo
+  // TODO(svetoslavganov@google.com): This is temporary for a demo
   scriptUrlsArray.push(baseURL + 'common/accessibility.js');
 
   var currentURL = document.baseURI;
@@ -71,6 +71,11 @@ function pickScript() {
 	injectScripts(scriptUrlsArray);
   } else if (path === '/finance/portfolio' && search.length > 0) {
 	scriptUrlsArray.push(baseURL + 'finance/axsEnableFinancePortfolios.js');
+    injectScripts(scriptUrlsArray);
+  }
+  // TODO(svetoslavganov@google.com): This is temporary for a demo
+  if (path === '/search') {
+    scriptUrlsArray.push(baseURL + 'websearch/axsEnableWebSearch.js');
     injectScripts(scriptUrlsArray);
   }
 }
