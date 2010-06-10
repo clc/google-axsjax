@@ -24,6 +24,8 @@ function pickScript() {
   scriptUrlsArray.push(baseURL + 'common/AxsLens.js');
   scriptUrlsArray.push(baseURL + 'common/AxsSound.js');
   scriptUrlsArray.push(baseURL + 'common/PowerKey.js');
+  // TODO: This is temporary for a demo
+  scriptUrlsArray.push(baseURL + 'common/accessibility.js');
 
   var currentURL = document.baseURI;
   var path = document.location.pathname;
