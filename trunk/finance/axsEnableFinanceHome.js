@@ -794,6 +794,10 @@ axsFinance.keyHandler = function(evt) {
   if (command) {
     return command();
   }
+
+  // TEMPORARY FOR TESTING TEST
+  event.preventDefault();
+  //END
   return true;
 };
 
