@@ -1426,6 +1426,10 @@ AxsNav.prototype.setUpNavKeys = function(cnrJson, emptyLists) {
 		if (command) {
 			return command();
 		}
+
+		// TEMPORARY FOR TESTING TEST
+		event.preventDefault();
+		//END
 	};
 
 	document.addEventListener('keypress', this.keyHandler, true);

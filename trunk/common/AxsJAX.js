@@ -468,6 +468,11 @@ AxsJAX.prototype.tabKeyHandler = function(evt, selfRef){
     selfRef.tabbingStartPosNode.focus();
     selfRef.tabbingStartPosNode = null;
   }
+  
+	// TEMPORARY FOR TESTING TEST
+	event.preventDefault();
+	//END
+  
   return true;
 };
 
