@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <script>
+      var count = 0;
+
+      function register() {
+        document.addEventListener('keydown',
+                            function(event) {
+                              if (count > 4) {
+                                return false;
+                              }
+                              count++;
+                              event.preventDefault();
+                              alert('keydown');
+                            },
+                            false);
+      }
+  </script>
+  </head>
+  <body onLoad="register()">
+      <input>Some input</input>
+      <button>A button</button>
+    </p>
+  </body>
+</html>
+
